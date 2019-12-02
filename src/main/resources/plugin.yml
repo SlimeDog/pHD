@@ -1,0 +1,30 @@
+# PluginVersions
+#
+# See http://wiki.bukkit.org/Plugin_YAML for a complete list of requirements and options.
+
+name: ${project.name}
+version: ${project.version}
+api-version: 1.13
+main: ${project.groupId}.${project.artifactId}.${project.name}
+description: ${project.description}
+authors: [SlimeDog, drives_a_ford]
+depend: [HolographicDisplays]
+
+commands:
+  periodicholographicdisplays:
+    description: Main command
+    usage: /<command> <subcommand> args
+    permission: phd.command.phd
+    aliases: [phd]
+
+permissions:
+  phd.command.phd:
+    description: Allows using the main command
+    default: op
+  phd.command.phd.adopt:
+    description: Allows using the adopt subcommand
+    default: op
+  phd.commands.phd.create:
+    description: Allows using the create subcommand
+    default: op
+    
