@@ -27,4 +27,10 @@ permissions:
   phd.commands.phd.create:
     description: Allows using the create subcommand
     default: op
+  phd.commands.phd.list:
+    description: Allows using the list subcommand
+    default: op
+  phd.commands.phd.info:
+    description: Allows using the info subcommand
+    default: op
     
