@@ -12,6 +12,7 @@ import org.bukkit.World;
 import me.ford.periodicholographicdisplays.holograms.EverytimeHologram;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.OnJoinHologram;
+import me.ford.periodicholographicdisplays.holograms.OnWorldJoinHologram;
 import me.ford.periodicholographicdisplays.holograms.OnceHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
@@ -71,6 +72,11 @@ public class Settings {
                         .replace("{name}", name).replace("{time}", String.format("%4.2f", showTimeTicks/20.0));
     }
 
+    public String getAdoptedOnWorldJoinMessage(String name, long showTimeTicks) {
+        return getMessage("adopted-onworldjoin", "Adopted the hologram '{name}'. It'll be displayed when a player joins the world and gets into range for {time}s")
+                        .replace("{name}", name).replace("{time}", String.format("%4.2f", showTimeTicks/20.0));
+    }
+
     public String getNeedAPlayerMessage() {
         return getMessage("need-a-player", "Only a player can use this command!");
     }
@@ -102,6 +108,11 @@ public class Settings {
                         .replace("{name}", name).replace("{time}", String.format("%4.2f", showTimeTicks/20.0));
     }
 
+    public String getCreatedOnWorldJoinMessage(String name, long showTimeTicks) {
+        return getMessage("adopted-onworldjoin", "Created the hologram '{name}'. It'll be displayed when a player joins the world and gets into range for {time}s")
+                        .replace("{name}", name).replace("{time}", String.format("%4.2f", showTimeTicks/20.0));
+    }
+
     public String getWorldNotFoundMessage(String name) {
         return getMessage("world-not-found", "World not found: {name}").replace("{name}", name);
     }
@@ -126,16 +137,37 @@ public class Settings {
             case ONJOIN:
             typeinfo = getOnJoinTypeInfo((OnJoinHologram) hologram);
             break;
+            case WORLDJOIN:
+            typeinfo = getOnWorldJoinTypeInfo((OnWorldJoinHologram) hologram);
+            break;
             case EVERYTIME:
             typeinfo = getEverytimeTypeInfo((EverytimeHologram) hologram);
             break;
             default:
             typeinfo = "N/A"; // this shouldn't happen!
+            pl.getLogger().warning("Unable to get info for hologram of type " + hologram.getType() + " - " + hologram);
         }
         return getMessage("hologram-info", "A hologram named '{name}':\nWorld: {world}\nType:{type}\nShowTime:{time}s\nTypeInfo:{typeinfo}")
                         .replace("{name}", hologram.getName()).replace("{world}", hologram.getLocation().getWorld().getName())
                         .replace("{type}", hologram.getType().name()).replace("{time}", String.valueOf(hologram.getShowTimeTicks()/20))
                         .replace("{typeinfo}", typeinfo);
+    }
+
+    private String getOnWorldJoinTypeInfo(OnWorldJoinHologram hologram) {
+        String msg = getMessage("typeinfo.WORLDJOIN", "Shown to: {players}");
+        if (msg.contains("{players}")) {
+            List<String> players = new ArrayList<>();
+            for (UUID id : hologram.getShownTo()) {
+                OfflinePlayer player = pl.getServer().getOfflinePlayer(id);
+                if (player == null || !player.hasPlayedBefore()) {
+                    players.add("UNKNOWNPLAYER");
+                } else {
+                    players.add(player.getName());
+                }
+            }
+            msg = msg.replace("{players}", String.join(", ", players));
+        }
+        return msg;
     }
 
     public String getOnJoinTypeInfo(OnJoinHologram hologram) {

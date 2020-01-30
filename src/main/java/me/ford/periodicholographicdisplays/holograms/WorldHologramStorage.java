@@ -87,6 +87,12 @@ public class WorldHologramStorage {
             addShownToTimes(ntimes, section.getConfigurationSection("shown-to"));
             holo = ntimes;
             break;
+        case ONJOIN:
+            holo = new OnJoinHologram(name, distance, showTimeTicks, loc);
+            break;
+        case WORLDJOIN:
+            holo = new OnWorldJoinHologram(name, distance, showTimeTicks, loc);
+            break;
         default: // ALWAYS
             holo = new EverytimeHologram(name, distance, showTimeTicks, loc);
             break;
@@ -154,11 +160,20 @@ public class WorldHologramStorage {
         return world;
     }
 
-    public void left(Player player) {
+    public void leftWorld(Player player) {
+        for (PeriodicHologramBase holo : holograms.values()) {
+            if (holo instanceof OnWorldJoinHologram) {
+                ((OnWorldJoinHologram) holo).left(player);
+            }
+        }
+    }
+
+    public void left(Player player) {// left server
         for (PeriodicHologramBase holo : holograms.values()) {
             if (holo instanceof OnJoinHologram) {
-                OnJoinHologram onJoin = (OnJoinHologram) holo;
-                onJoin.left(player);
+                ((OnJoinHologram) holo).left(player);
+            } else if (holo instanceof OnWorldJoinHologram) {
+                ((OnWorldJoinHologram) holo).left(player); // left server -> left world
             }
         }
     }

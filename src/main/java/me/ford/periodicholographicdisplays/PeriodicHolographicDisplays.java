@@ -6,6 +6,7 @@ import me.ford.periodicholographicdisplays.commands.PHDCommand;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.listeners.HologramListener;
 import me.ford.periodicholographicdisplays.listeners.JoinLeaveListener;
+import me.ford.periodicholographicdisplays.listeners.WorldListener;
 
 /**
  * PeriodicHolographicDisplays
@@ -22,6 +23,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         getCommand("phd").setExecutor(new PHDCommand(this)); // TODO - set executor
         this.getServer().getPluginManager().registerEvents(new HologramListener(holograms), this);
         this.getServer().getPluginManager().registerEvents(new JoinLeaveListener(holograms), this);
+        this.getServer().getPluginManager().registerEvents(new WorldListener(holograms), this);
     }
 
     @Override

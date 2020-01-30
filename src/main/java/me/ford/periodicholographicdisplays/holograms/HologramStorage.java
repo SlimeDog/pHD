@@ -79,6 +79,13 @@ public class HologramStorage {
         return holo;
     }
 
+    public OnWorldJoinHologram adoptOnWorldJoin(Hologram oldHologram, String name, double activationDistance, long showTimeTicks) {
+        Hologram newHolo = cloneHologram(oldHologram);
+        OnWorldJoinHologram holo = new OnWorldJoinHologram(newHolo, name, activationDistance, showTimeTicks, newHolo.getLocation());
+        adoptBase(oldHologram, newHolo, holo);
+        return holo;
+    }
+
     private void adoptBase(Hologram oldHologram, Hologram newHolo, PeriodicHologramBase holo) {
         oldHologram.delete();
         addHologram(holo);
@@ -134,6 +141,11 @@ public class HologramStorage {
         for (WorldHologramStorage ws : holograms.values()) {
             ws.left(player);
         }
+    }
+
+    public void leftWorld(Player player, World world) {
+        WorldHologramStorage wh = getHolograms(world);
+        wh.leftWorld(player);
     }
     
 }
