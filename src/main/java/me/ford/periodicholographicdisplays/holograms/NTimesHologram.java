@@ -40,11 +40,6 @@ public class NTimesHologram extends PeriodicHologramBase {
         }   
     }
 
-    @Override
-    public PeriodicType getType() {
-        return PeriodicType.NTIMES;
-    }
-
     public int getTimesToShow() {
         return timesToShow;
     }

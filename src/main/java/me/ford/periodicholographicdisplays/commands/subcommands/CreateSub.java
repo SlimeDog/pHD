@@ -20,6 +20,7 @@ import me.ford.periodicholographicdisplays.commands.SubCommand;
 import me.ford.periodicholographicdisplays.holograms.EverytimeHologram;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
+import me.ford.periodicholographicdisplays.holograms.OnJoinHologram;
 import me.ford.periodicholographicdisplays.holograms.OnceHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
@@ -85,6 +86,8 @@ public class CreateSub extends SubCommand {
             return createEverytime(player, name, args);
             case NTIMES:
             return createNTimes(player, name, args);
+            case ONJOIN:
+            return createOnJoin(player, name, args);
         }
         return false;
     }
@@ -188,6 +191,37 @@ public class CreateSub extends SubCommand {
         hologram.appendTextLine(settings.color(msg));
         storage.addHologram(new EverytimeHologram(hologram, name, activationDistance, showTimeTicks, hologram.getLocation()));
         sender.sendMessage(settings.getCreatedEveryTimeMessage(name, showTimeTicks));
+        return true;
+    }
+
+    private boolean createOnJoin(Player sender, String name, String[] args) {
+        String usage = "/phd create ONJOIN <name> <distance> <time> <msg>";
+        if (args.length < 5) {
+            sender.sendMessage(usage);
+            return true;
+        }
+        double activationDistance;
+        try {
+            activationDistance = Double.parseDouble(args[2]);
+        } catch (NumberFormatException e) {
+            sender.sendMessage(settings.getNeedANumberMessage(args[2]));
+            sender.sendMessage(usage); // TODO - should this be here?
+            return true;
+        }
+        long showTimeMS;
+        try {
+            showTimeMS = TimeUtils.parseDateDiff(args[3]);
+        } catch (IllegalArgumentException e) {
+            sender.sendMessage(settings.getIllegalTimeMessage(args[3]));
+            sender.sendMessage(usage); // TODO - should this be here?
+            return true;
+        }
+        long showTimeTicks = showTimeMS/50L; // /1000L*20
+        String msg = String.join(" ", Arrays.copyOfRange(args, 4, args.length));
+        Hologram hologram = HologramsAPI.createHologram(plugin, sender.getLocation());
+        hologram.appendTextLine(settings.color(msg));
+        storage.addHologram(new OnJoinHologram(hologram, name, activationDistance, showTimeTicks, hologram.getLocation()));
+        sender.sendMessage(settings.getCreatedOnJoinMessage(name, showTimeTicks));
         return true;
     }
 

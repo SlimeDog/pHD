@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import me.ford.periodicholographicdisplays.commands.PHDCommand;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.listeners.HologramListener;
+import me.ford.periodicholographicdisplays.listeners.JoinLeaveListener;
 
 /**
  * PeriodicHolographicDisplays
@@ -20,6 +21,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         holograms = new HologramStorage(this);
         getCommand("phd").setExecutor(new PHDCommand(this)); // TODO - set executor
         this.getServer().getPluginManager().registerEvents(new HologramListener(holograms), this);
+        this.getServer().getPluginManager().registerEvents(new JoinLeaveListener(holograms), this);
     }
 
     @Override

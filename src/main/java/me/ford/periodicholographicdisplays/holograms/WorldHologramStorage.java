@@ -18,6 +18,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 
@@ -137,7 +138,7 @@ public class WorldHologramStorage {
         return holograms.get(name);
     }
 
-    public List<PeriodicHologramBase> getHolograms() {
+    public List<PeriodicHologramBase> getHolograms() { // TODO - potentially only show those in loaded chunks
         return new ArrayList<>(holograms.values());
     }
 
@@ -151,6 +152,15 @@ public class WorldHologramStorage {
 
     public World getWorld() {
         return world;
+    }
+
+    public void left(Player player) {
+        for (PeriodicHologramBase holo : holograms.values()) {
+            if (holo instanceof OnJoinHologram) {
+                OnJoinHologram onJoin = (OnJoinHologram) holo;
+                onJoin.left(player);
+            }
+        }
     }
 
     private void saveHolograms() {

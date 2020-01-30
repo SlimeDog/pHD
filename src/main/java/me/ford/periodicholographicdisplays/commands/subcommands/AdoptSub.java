@@ -77,6 +77,8 @@ public class AdoptSub extends SubCommand {
             return adoptEverytime(sender, name, holo, args);
             case NTIMES:
             return adoptNTimes(sender, name, holo, args);
+            case ONJOIN:
+            return adoptOnJoin(sender, name, holo, args);
         }
         return false;
     }
@@ -110,6 +112,34 @@ public class AdoptSub extends SubCommand {
         }
         storage.adoptNTimes(holo, name, activationDistance, showTimeTicks, showTimes);
         sender.sendMessage(settings.getAdoptedNTimesMessage(name, showTimeTicks, showTimes));
+        return true;
+    }
+
+    private boolean adoptOnJoin(CommandSender sender, String name, NamedHologram holo, String[] args) {
+        String usage = "/phd adopt ONJOIN <name> <distance> <time>";
+        if (args.length < 4) {
+            sender.sendMessage(usage);
+            return true;
+        }
+        double activationDistance;
+        try {
+            activationDistance = Double.parseDouble(args[2]);
+        } catch (NumberFormatException e) {
+            sender.sendMessage(settings.getNeedANumberMessage(args[2]));
+            sender.sendMessage(usage); // TODO - should this be here?
+            return true;
+        }
+        long showTimeMS;
+        try {
+            showTimeMS = TimeUtils.parseDateDiff(args[3]);
+        } catch (IllegalArgumentException e) {
+            sender.sendMessage(settings.getIllegalTimeMessage(args[3]));
+            sender.sendMessage(usage); // TODO - should this be here?
+            return true;
+        }
+        long showTimeTicks = showTimeMS/50L; // /1000L * 20
+        storage.adoptOnJoin(holo, name, activationDistance, showTimeTicks);
+        sender.sendMessage(settings.getAdoptedOnJoinMessage(name, showTimeTicks));
         return true;
     }
 

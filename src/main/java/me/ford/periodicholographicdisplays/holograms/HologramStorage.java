@@ -13,6 +13,7 @@ import com.gmail.filoghost.holographicdisplays.api.line.TextLine;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 
@@ -71,6 +72,13 @@ public class HologramStorage {
         return holo;
     }
 
+    public OnJoinHologram adoptOnJoin(Hologram oldHologram, String name, double activationDistance, long showTimeTicks) {
+        Hologram newHolo = cloneHologram(oldHologram);
+        OnJoinHologram holo = new OnJoinHologram(newHolo, name, activationDistance, showTimeTicks, newHolo.getLocation());
+        adoptBase(oldHologram, newHolo, holo);
+        return holo;
+    }
+
     private void adoptBase(Hologram oldHologram, Hologram newHolo, PeriodicHologramBase holo) {
         oldHologram.delete();
         addHologram(holo);
@@ -113,6 +121,18 @@ public class HologramStorage {
     public void save() {
         for (WorldHologramStorage storage : holograms.values()) {
             storage.save();
+        }
+    }
+
+    // onJoin holgorams
+
+    public void joined(Player player) {
+        // nothing really...
+    }
+
+    public void left(Player player) {
+        for (WorldHologramStorage ws : holograms.values()) {
+            ws.left(player);
         }
     }
     
