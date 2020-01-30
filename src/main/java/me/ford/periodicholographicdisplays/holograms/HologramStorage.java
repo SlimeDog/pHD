@@ -64,6 +64,13 @@ public class HologramStorage {
         return holo;
     }
 
+    public PeriodicHologramBase adoptNTimes(Hologram oldHologram, String name, double activationDistance, long showTimeTicks, int showTimes) {
+        Hologram newHolo = cloneHologram(oldHologram);
+        PeriodicHologramBase holo = new NTimesHologram(newHolo, name, activationDistance, showTimeTicks, newHolo.getLocation(), showTimes);
+        adoptBase(oldHologram, newHolo, holo);
+        return holo;
+    }
+
     private void adoptBase(Hologram oldHologram, Hologram newHolo, PeriodicHologramBase holo) {
         oldHologram.delete();
         addHologram(holo);

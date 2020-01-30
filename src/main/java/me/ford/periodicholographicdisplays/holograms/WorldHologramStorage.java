@@ -80,6 +80,12 @@ public class WorldHologramStorage {
             addShownTo(once, section.getStringList("shown-to"));
             holo = once;
             break;
+        case NTIMES:
+            int timesToShow = section.getInt("times-to-show", 1);
+            NTimesHologram ntimes = new NTimesHologram(name, distance, showTimeTicks, loc, timesToShow);
+            addShownToTimes(ntimes, section.getConfigurationSection("shown-to"));
+            holo = ntimes;
+            break;
         default: // ALWAYS
             holo = new EverytimeHologram(name, distance, showTimeTicks, loc);
             break;
@@ -98,6 +104,19 @@ public class WorldHologramStorage {
                 continue;
             }
             holo.addShownTo(id, section.getLong(uuid));
+        }
+    }
+
+    private void addShownToTimes(NTimesHologram holo, ConfigurationSection section) {
+        for (String uuid : section.getKeys(false)) {
+            UUID id;
+            try {
+                id = UUID.fromString(uuid);
+            } catch (IllegalArgumentException e) {
+                plugin.getLogger().warning("Unable to parse UUID of Periodic hologram " + holo.getName() + " : " + uuid);
+                continue;
+            }
+            holo.addShownTo(id, section.getInt(uuid));
         }
     }
 
@@ -165,6 +184,14 @@ public class WorldHologramStorage {
                 shownTo.add(id.toString());
             }
             section.set("shown-to", shownTo);
+        } else if (hologram instanceof NTimesHologram) {
+            NTimesHologram ntimes = (NTimesHologram) hologram;
+            section.set("times-to-show", ntimes.getTimesToShow()); // seconds->ms
+            ConfigurationSection shownToSection = section.createSection("shown-to"); 
+            for (Map.Entry<UUID, Integer> entry : ntimes.getShownTo().entrySet()) {
+                shownToSection.set(entry.getKey().toString(), entry.getValue());
+            }
+
         }
     }
 

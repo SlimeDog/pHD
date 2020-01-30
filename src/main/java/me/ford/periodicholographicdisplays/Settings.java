@@ -10,6 +10,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 
 import me.ford.periodicholographicdisplays.holograms.EverytimeHologram;
+import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.OnceHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
@@ -58,6 +59,12 @@ public class Settings {
                         .replace("{name}", name).replace("{time}", String.format("%4.2f", showTimeTicks/20.0));
     }
 
+    public String getAdoptedNTimesMessage(String name, long showTimeTicks, int timesToShow) {
+        return getMessage("adopted-ntimes", "Adopted the hologram '{name}'. It'll be displayed {times} to each player for {time}s")
+                        .replace("{name}", name).replace("{times}", String.valueOf(timesToShow))
+                        .replace("{time}", String.format("%4.2f", showTimeTicks/20.0));
+    }
+
     public String getNeedAPlayerMessage() {
         return getMessage("need-a-player", "Only a player can use this command!");
     }
@@ -78,6 +85,12 @@ public class Settings {
                         .replace("{name}", name).replace("{time}", String.format("%4.2f", showTimeTicks/20.0));
     }
 
+    public String getCreatedNTimes(String name, long showTimeTicks, int timesToShow) {
+        return getMessage("created-ntimes", "Created the hologram '{name}'. It'll be displayed {times} to each player for {time}s")
+                        .replace("{name}", name).replace("{times}", String.valueOf(timesToShow))
+                        .replace("{time}", String.format("%4.2f", showTimeTicks/20.0));
+    }
+
     public String getWorldNotFoundMessage(String name) {
         return getMessage("world-not-found", "World not found: {name}").replace("{name}", name);
     }
@@ -96,6 +109,9 @@ public class Settings {
             case ONCE:
             typeinfo = getOnceTypeInfo((OnceHologram) hologram);
             break;
+            case NTIMES:
+            typeinfo = getNTimesTypeInfo((NTimesHologram) hologram);
+            break;
             case EVERYTIME:
             default:
             typeinfo = getEverytimeTypeInfo((EverytimeHologram) hologram);
@@ -105,6 +121,20 @@ public class Settings {
                         .replace("{name}", hologram.getName()).replace("{world}", hologram.getLocation().getWorld().getName())
                         .replace("{type}", hologram.getType().name()).replace("{time}", String.valueOf(hologram.getShowTimeTicks()/20))
                         .replace("{typeinfo}", typeinfo);
+    }
+
+    public String getNTimesTypeInfo(NTimesHologram hologram) {
+        String msg = getMessage("typeinfo.NTIMES", "Shown to:{players:times}");
+        if (msg.contains("{players:times}")) {
+            List<String> playersAndTimes = new ArrayList<>();
+            for (Entry<UUID, Integer> entry : hologram.getShownTo().entrySet()) {
+                OfflinePlayer player = pl.getServer().getOfflinePlayer(entry.getKey());
+                String playerName = (player == null || !player.hasPlayedBefore()) ? "UNKOWNPLAYER" : player.getName();
+                playersAndTimes.add(playerName + ": " + entry.getValue());
+            }
+            msg = msg.replace("{players:times}", String.join(", ", playersAndTimes));
+        }
+        return msg;
     }
     
     public String getPeriodicTypeInfo(PeriodicHologram hologram) {
