@@ -93,6 +93,10 @@ public abstract class PeriodicHologramBase {
 
     public abstract void attemptToShow(Player player);
 
+    public boolean isBeingShownTo(Player player) {
+        return beingShownTo.contains(player.getUniqueId());
+    }
+
     public void show(Player player) {
         if (player == null) return;
         UUID id = player.getUniqueId();

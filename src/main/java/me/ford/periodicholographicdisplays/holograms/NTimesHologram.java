@@ -30,6 +30,7 @@ public class NTimesHologram extends PeriodicHologramBase {
 
     @Override
     public void attemptToShow(Player player) {
+        if (isBeingShownTo(player)) return;
         UUID id = player.getUniqueId();
         Integer shown = shownTo.get(id);
         if (shown == null || shown < timesToShow) {
