@@ -3,7 +3,7 @@
   <groupId>me.ford</groupId>
   <artifactId>periodicholographicdisplays</artifactId>
   <version>0.0.2</version>
-  <name>PeriodicHolographicDisplays</name>
+  <name>pHD</name>
   <description>Periodically show holographic displays to players.</description>
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
@@ -25,13 +25,13 @@
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
-      <version>1.14.4-R0.1-SNAPSHOT</version>
+      <version>1.15.2-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.bukkit</groupId>
-      <artifactId>craftbukkit</artifactId>
-      <version>1.14.4-R0.1-SNAPSHOT</version>
+      <artifactId>bukkit</artifactId>
+      <version>1.15.2-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
