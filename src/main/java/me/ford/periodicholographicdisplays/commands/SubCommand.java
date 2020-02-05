@@ -1,7 +1,10 @@
 package me.ford.periodicholographicdisplays.commands;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import com.gmail.filoghost.holographicdisplays.object.NamedHologramManager;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -26,6 +29,14 @@ public abstract class SubCommand implements TabExecutor {
 		} else {
 			return null;
 		}
+	}
+
+	public List<String> getNamedHolograms() {
+		List<String> holograms = new ArrayList<>();
+		for (int i = 0; i < NamedHologramManager.size(); i++) {
+			holograms.add(NamedHologramManager.get(i).getName());
+		}
+		return holograms;
 	}
 	
 	public abstract List<String> onTabComplete(CommandSender sender, String[] args);

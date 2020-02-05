@@ -6,25 +6,18 @@ import java.util.UUID;
 
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 /**
  * NTimesHologram
  */
 public class NTimesHologram extends PeriodicHologramBase {
-    private final int timesToShow;
+    private int timesToShow;
     private final Map<UUID, Integer> shownTo = new HashMap<>();
 
-    public NTimesHologram(Hologram hologram, String name, double activationDistance, long showTimeTicks,
-            Location location, int timesToShow) {
-        super(hologram, name, activationDistance, showTimeTicks, PeriodicType.NTIMES, location);
-        this.timesToShow = timesToShow;
-    }
-
-    public NTimesHologram(String name, double activationDistance, long showTimeTicks,
-            Location location, int timesToShow) {
-        super(name, activationDistance, showTimeTicks, PeriodicType.NTIMES, location);
+    public NTimesHologram(Hologram hologram, String name, double activationDistance, long showTime,
+            int timesToShow, boolean isNew) {
+        super(hologram, name, activationDistance, showTime, PeriodicType.NTIMES, isNew);
         this.timesToShow = timesToShow;
     }
 
@@ -33,11 +26,17 @@ public class NTimesHologram extends PeriodicHologramBase {
         if (isBeingShownTo(player)) return;
         UUID id = player.getUniqueId();
         Integer shown = shownTo.get(id);
-        if (shown == null || shown < timesToShow) {
+        // -1 -> infinitely
+        if (timesToShow == -1 || shown == null || shown < timesToShow) {
             if (shown == null) shown = 0;
             show(player);
-            shownTo.put(id, shown + 1);
+            if (timesToShow > 0) addShownTo(id, shown + 1);
         }   
+    }
+
+    public void setTimesToShow(int times) {
+        timesToShow = times;
+        markChanged();
     }
 
     public int getTimesToShow() {
@@ -50,6 +49,7 @@ public class NTimesHologram extends PeriodicHologramBase {
 
     public void addShownTo(UUID id, int timesShown) {
         shownTo.put(id, timesShown);
+        markChanged();
     }
     
 }

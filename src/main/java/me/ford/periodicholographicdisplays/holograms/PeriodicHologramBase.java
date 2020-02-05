@@ -1,15 +1,10 @@
 package me.ford.periodicholographicdisplays.holograms;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
-import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
-import com.gmail.filoghost.holographicdisplays.api.line.HologramLine;
-import com.gmail.filoghost.holographicdisplays.api.line.TextLine;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
@@ -25,32 +20,33 @@ public abstract class PeriodicHologramBase {
     private final PeriodicHolographicDisplays plugin = JavaPlugin.getPlugin(PeriodicHolographicDisplays.class);
     private final Set<UUID> beingShownTo = new HashSet<>();
     private final String name;
-    private final double activationDistance;
-    private final double squareDistance;
-    private final long showTimeTicks;
-    private final PeriodicType type;
-    private final Location location;
+    private double activationDistance;
+    private double squareDistance;
+    private long showTimeTicks;
+    private boolean hasChanged = false;
+    private final PeriodicType type; // in order to change this, I'll create a new instance
     private final Hologram hologram;
 
-    public PeriodicHologramBase(String name, double activationDistance, long showTimeTicks, PeriodicType type, Location location) {
-        this(HologramsAPI.createHologram(JavaPlugin.getPlugin(PeriodicHolographicDisplays.class), location), 
-                                        name, activationDistance, showTimeTicks, type, location);
-    }
-
-    public PeriodicHologramBase(Hologram hologram, String name, double activationDistance, long showTimeTicks, PeriodicType type, Location location) {
+    public PeriodicHologramBase(Hologram hologram, String name, double activationDistance, long showTime, PeriodicType type, boolean isNew) {
         Validate.notNull(hologram, "Hologram cannot be null!");
         this.hologram = hologram;
         this.name = name;
         this.activationDistance = activationDistance;
         this.squareDistance = activationDistance * activationDistance;
-        this.showTimeTicks = showTimeTicks;
+        this.showTimeTicks = showTime * 20L;// seconds -> ticks
         this.type = type;
-        this.location = location;
+        this.hasChanged = isNew;
         hologram.getVisibilityManager().setVisibleByDefault(false);
     }
     
     public String getName() {
         return name;
+    }
+    
+    public void setActivationDistance(double distance) {
+        this.activationDistance = distance;
+        this.squareDistance = distance * distance;
+        markChanged();
     }
 
     public double getActivationDistance() {
@@ -61,6 +57,11 @@ public abstract class PeriodicHologramBase {
         return squareDistance;
     }
 
+    public void setShowTime(int time) {
+        showTimeTicks = time * 20L; // second -> ticks
+        markChanged();
+    }
+
     public long getShowTimeTicks() {
         return showTimeTicks;
     }
@@ -69,26 +70,20 @@ public abstract class PeriodicHologramBase {
         return type;
     }
 
+    public void markSaved() {
+        hasChanged = false;
+    }
+
+    protected void markChanged() {
+        hasChanged = true;
+    }
+
+    public boolean needsSaved() {
+        return hasChanged;
+    }
+
     public Location getLocation() {
-        return location;
-    }
-
-    public void addLines(List<String> lines) {
-        for (String line : lines) {
-            hologram.appendTextLine(plugin.getSettings().color(line));
-        }
-    }
-
-    public List<String> getLines() {
-        List<String> lines = new ArrayList<>();
-        for (int i = 0; i < hologram.size(); i++) {
-            HologramLine line = hologram.getLine(i);
-            if (!(line instanceof TextLine)) {
-                throw new IllegalStateException("Can only use text lines for periodic holograms (for now at least!)");
-            }
-            lines.add(((TextLine) line).getText());
-        }
-        return lines;
+        return hologram.getLocation();
     }
 
     public abstract void attemptToShow(Player player);

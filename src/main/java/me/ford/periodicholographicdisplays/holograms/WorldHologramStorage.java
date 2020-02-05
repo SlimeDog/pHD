@@ -12,13 +12,15 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import com.gmail.filoghost.holographicdisplays.commands.CommandValidator;
+import com.gmail.filoghost.holographicdisplays.exception.CommandException;
+import com.gmail.filoghost.holographicdisplays.object.NamedHologram;
+
 import org.apache.commons.lang.Validate;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 
@@ -39,25 +41,34 @@ public class WorldHologramStorage {
         this.plugin = plugin;
         this.fileName = fileBase + world.getName() + ".yml";
         storageFile = new File(this.plugin.getDataFolder(), fileName);
-        for (String name : getConfig().getKeys(false)) {
-            PeriodicHologramBase holo;
-            try {
-                holo = loadHologram(name);
-            } catch (HologramLoadException e) {
-                plugin.getLogger().log(Level.WARNING, "Problem loading hologram from file", e);
-                continue;
+        scheduleLoad();
+        scheduleSave();
+    }
+
+    private void scheduleLoad() { // TODO - maybe there's an event?
+        plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+            for (String name : getConfig().getKeys(false)) {
+                PeriodicHologramBase holo;
+                try {
+                    holo = loadHologram(name);
+                } catch (HologramLoadException e) {
+                    plugin.getLogger().log(Level.WARNING, "Problem loading hologram from file", e);
+                    continue;
+                }
+                if (holo == null)
+                    continue;
+                holograms.put(name, holo);
             }
-            if (holo == null) continue;
-            holograms.put(name, holo);
-        }
+        }, 40L); // need to do this later so the holograms are loaded
+    }
+
+    private void scheduleSave() {
+        long delay = plugin.getSettings().getSaveDelay() * 20L;
+        plugin.getServer().getScheduler().runTaskTimer(plugin, () -> save(), delay, delay);
     }
 
     private PeriodicHologramBase loadHologram(String name) throws HologramLoadException {
         ConfigurationSection section = getConfig().getConfigurationSection(name);
-        Location loc = section.getLocation("location");
-        if (loc == null) {
-            throw new HologramLoadException("Unable to parse Location for hologram:" + name);
-        }
         String strType = section.getString("type", "EVERYTIME");
         PeriodicType type;
         try {
@@ -65,39 +76,36 @@ public class WorldHologramStorage {
         } catch (IllegalArgumentException e) {
             throw new HologramLoadException("Unable to parse type of hologram: " + strType);
         }
+        NamedHologram hologram;
+        try {
+            hologram = CommandValidator.getNamedHologram(name);
+        } catch (CommandException e) {
+            throw new HologramLoadException("Hologram by the name of '" + name + "' does not exist'");
+        }
         double distance = section.getDouble("activation-distance", 10);
-        long showTimeTicks = section.getLong("show-time-ticks", 60);
-        List<String> lines = section.getStringList("lines");
+        long showTime = section.getLong("show-time", 60);
         final PeriodicHologramBase holo;
         switch (type) {
         case PERIODIC:
             long delay = section.getLong("delay", 86400); // in seconds
-            PeriodicHologram periodic = new PeriodicHologram(name, distance, showTimeTicks, loc, delay);
+            PeriodicHologram periodic = new PeriodicHologram(hologram, name, distance, showTime, delay, false);
             addShownTo(periodic, section.getConfigurationSection("last-shown"));
             holo = periodic;
             break;
-        case ONCE:
-            OnceHologram once = new OnceHologram(name, distance, showTimeTicks, loc);
-            addShownTo(once, section.getStringList("shown-to"));
-            holo = once;
-            break;
+        case ALWAYS:
         case NTIMES:
-            int timesToShow = section.getInt("times-to-show", 1);
-            NTimesHologram ntimes = new NTimesHologram(name, distance, showTimeTicks, loc, timesToShow);
+        default:
+            int timesToShow;
+            if (type == PeriodicType.ALWAYS) {
+                timesToShow = -1;
+            } else {
+                timesToShow = section.getInt("times-to-show", 1);
+            }
+            NTimesHologram ntimes = new NTimesHologram(hologram, name, distance, showTime, timesToShow, false);
             addShownToTimes(ntimes, section.getConfigurationSection("shown-to"));
             holo = ntimes;
             break;
-        case ONJOIN:
-            holo = new OnJoinHologram(name, distance, showTimeTicks, loc);
-            break;
-        case WORLDJOIN:
-            holo = new OnWorldJoinHologram(name, distance, showTimeTicks, loc);
-            break;
-        default: // ALWAYS
-            holo = new EverytimeHologram(name, distance, showTimeTicks, loc);
-            break;
         }
-        holo.addLines(lines);
         return holo;
     }
 
@@ -127,19 +135,6 @@ public class WorldHologramStorage {
         }
     }
 
-    private void addShownTo(OnceHologram holo, List<String> uuids) {
-        for (String uuid : uuids) {
-            UUID id;
-            try {
-                id = UUID.fromString(uuid);
-            } catch (IllegalArgumentException e) {
-                plugin.getLogger().warning("Unable to parse UUID of Periodic hologram " + holo.getName() + " : " + uuid);
-                continue;
-            }
-            holo.addShownTo(id);
-        }
-    }
-
     public PeriodicHologramBase getHologram(String name) {
         return holograms.get(name);
     }
@@ -160,28 +155,16 @@ public class WorldHologramStorage {
         return world;
     }
 
-    public void leftWorld(Player player) {
-        for (PeriodicHologramBase holo : holograms.values()) {
-            if (holo instanceof OnWorldJoinHologram) {
-                ((OnWorldJoinHologram) holo).left(player);
-            }
-        }
-    }
-
-    public void left(Player player) {// left server
-        for (PeriodicHologramBase holo : holograms.values()) {
-            if (holo instanceof OnJoinHologram) {
-                ((OnJoinHologram) holo).left(player);
-            } else if (holo instanceof OnWorldJoinHologram) {
-                ((OnWorldJoinHologram) holo).left(player); // left server -> left world
-            }
-        }
-    }
-
-    private void saveHolograms() {
+    private boolean saveHolograms() {
+        boolean madeChanges = false;
         for (PeriodicHologramBase hologram : holograms.values()) {
-            saveHologram(hologram);
+            if (hologram.needsSaved()){
+                saveHologram(hologram);
+                hologram.markSaved();
+                madeChanges = true;
+            }
         }
+        return madeChanges;
     }
 
     private void saveHologram(PeriodicHologramBase hologram) {
@@ -190,11 +173,9 @@ public class WorldHologramStorage {
             return;
         }
         ConfigurationSection section = getConfig().createSection(hologram.getName());
-        section.set("location", hologram.getLocation());
         section.set("type", hologram.getType().toString());
         section.set("activation-distance", hologram.getActivationDistance());
-        section.set("show-time-ticks", hologram.getShowTimeTicks());
-        section.set("lines", hologram.getLines());
+        section.set("show-time", hologram.getShowTimeTicks()/20L);
         if (hologram instanceof PeriodicHologram) {
             PeriodicHologram periodic = (PeriodicHologram) hologram;
             section.set("delay", periodic.getShowDelay()/1000L); // seconds->ms
@@ -202,13 +183,6 @@ public class WorldHologramStorage {
             for (Map.Entry<UUID, Long> entry : periodic.getLastShown().entrySet()) {
                 lastShownSection.set(entry.getKey().toString(), entry.getValue());
             }
-        } else if (hologram instanceof OnceHologram) {
-            OnceHologram once = (OnceHologram) hologram;
-            List<String> shownTo = new ArrayList<>();
-            for (UUID id : once.getShownTo()) {
-                shownTo.add(id.toString());
-            }
-            section.set("shown-to", shownTo);
         } else if (hologram instanceof NTimesHologram) {
             NTimesHologram ntimes = (NTimesHologram) hologram;
             section.set("times-to-show", ntimes.getTimesToShow()); // seconds->ms
@@ -257,11 +231,12 @@ public class WorldHologramStorage {
         if (storage == null || storageFile == null) {
             return;
         }
-        saveHolograms();
-        try {
-            getConfig().save(storageFile);
-        } catch (IOException ex) {
-            plugin.getLogger().log(Level.SEVERE, "Could not save config to " + storageFile, ex);
+        if (saveHolograms()) { // something was saved/changed   
+            try {
+                getConfig().save(storageFile);
+            } catch (IOException ex) {
+                plugin.getLogger().log(Level.SEVERE, "Could not save config to " + storageFile, ex);
+            }
         }
     }
 

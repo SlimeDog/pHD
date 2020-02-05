@@ -5,32 +5,44 @@
 name: ${project.name}
 version: ${project.version}
 api-version: 1.13
-main: ${project.groupId}.${project.artifactId}.${project.name}
+main: ${project.groupId}.${project.artifactId}.PeriodicHolographicDisplays
 description: ${project.description}
 authors: [SlimeDog, drives_a_ford]
 depend: [HolographicDisplays]
 
 commands:
-  periodicholographicdisplays:
+  phd:
     description: Main command
     usage: /<command> <subcommand> args
     permission: phd.command.phd
-    aliases: [phd]
 
 permissions:
-  phd.command.phd:
-    description: Allows using the main command
+  phd.*:
+    description: All phd permissions
     default: op
-  phd.command.phd.adopt:
-    description: Allows using the adopt subcommand
+    children:
+      phd.list: true
+      phd.info: true
+      phd.set: true
+      phd.unset: true
+      phd.unmanage: true
+      phd.reload: true
+  phd.list:
+    description: Allows listing of pHD holograms
     default: op
-  phd.commands.phd.create:
-    description: Allows using the create subcommand
+  phd.info:
+    description: Allows listing of attributes of specified hologram
     default: op
-  phd.commands.phd.list:
-    description: Allows using the list subcommand
+  phd.set:
+    description: Allows setting a parameter of a hologram
     default: op
-  phd.commands.phd.info:
-    description: Allows using the info subcommand
+  phd.unset:
+    description: Allows setting a parameter of a hologram to its default
+    default: op
+  phd.unmanage:
+    description: Allows dropping all pHD parameters of a hologram
+    default: op
+  phd.reload:
+    description: Allows reloading the config
     default: op
     

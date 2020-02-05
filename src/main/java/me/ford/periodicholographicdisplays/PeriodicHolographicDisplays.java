@@ -14,10 +14,12 @@ import me.ford.periodicholographicdisplays.listeners.WorldListener;
 public class PeriodicHolographicDisplays extends JavaPlugin {
     private HologramStorage holograms;
     private Settings settings;    
+    private Messages messages;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
+        messages = new Messages(this);
         settings = new Settings(this);
         holograms = new HologramStorage(this);
         getCommand("phd").setExecutor(new PHDCommand(this)); // TODO - set executor
@@ -37,6 +39,10 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
 
     public Settings getSettings() {
         return settings;
+    }
+
+    public Messages getMessages() {
+        return messages;
     }
     
 }

@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 /**
@@ -14,16 +13,16 @@ import org.bukkit.entity.Player;
  */
 public class PeriodicHologram extends PeriodicHologramBase {
     private final Map<UUID, Long> lastShown = new HashMap<>();
-    private final long showDelay;
+    private long showDelay;
 
-    public PeriodicHologram(Hologram hologram, String name, double activationDistance, long showTimeTicks, Location location, long showDelay) { 
-        super(hologram, name, activationDistance, showTimeTicks, PeriodicType.PERIODIC, location);
+    public PeriodicHologram(Hologram hologram, String name, double activationDistance, long showTime, long showDelay, boolean isNew) { 
+        super(hologram, name, activationDistance, showTime, PeriodicType.PERIODIC, isNew);
         this.showDelay = showDelay * 1000L; // seconds-> milliseconds
     }
 
-    public PeriodicHologram(String name, double activationDistance, long showTimeTicks, Location location, long showDelay) {
-        super(name, activationDistance, showTimeTicks, PeriodicType.PERIODIC, location);
-        this.showDelay = showDelay * 1000L; // seconds-> milliseconds
+    public void setShowDelay(long delay) {
+        showDelay = delay * 1000L; // second -> milliseconds
+        markChanged();
     }
 
     public long getShowDelay() {
@@ -32,6 +31,7 @@ public class PeriodicHologram extends PeriodicHologramBase {
 
     public void addShownTo(UUID id, long time) {
         lastShown.put(id, time);
+        markChanged();
     }
 
     public Map<UUID, Long> getLastShown() {
