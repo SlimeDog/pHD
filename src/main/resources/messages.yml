@@ -40,8 +40,5 @@ hologram-info: "A hologram named '{name}':\nWorld: {world}\nType:{type}\nShowTim
 hologram-list: "Holograms: {holograms}"
 typeinfo:
   PERIODIC: "{delay} delay, on cooldown: {players}"
-  ONCE: "Shown to: {players}"
-  EVERYTIME: "N/A"
+  ALWAYS: "Always shown"
   NTIMES: "Shown to: {players:times}"
-  ONJOIN: "Shown to: {players}"
-  WORLDJOIN: "Shown to: {players}"
