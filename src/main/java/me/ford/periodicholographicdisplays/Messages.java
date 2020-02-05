@@ -123,8 +123,10 @@ public class Messages {
             typeinfo = getPeriodicTypeInfo((PeriodicHologram) hologram);
             break;
             case NTIMES:
-            case ALWAYS:
             typeinfo = getNTimesTypeInfo((NTimesHologram) hologram);
+            break;
+            case ALWAYS:
+            typeinfo = getNTimesTypeInfo((NTimesHologram) hologram, true);
             break;
             default:
             typeinfo = "N/A"; // this shouldn't happen!
@@ -137,7 +139,11 @@ public class Messages {
     }
 
     public String getNTimesTypeInfo(NTimesHologram hologram) {
-        String msg = getMessage("typeinfo.NTIMES", "Shown to: {players:times}");
+        return getNTimesTypeInfo(hologram, false);
+    }
+
+    public String getNTimesTypeInfo(NTimesHologram hologram, boolean always) {
+        String msg = getMessage(always?"typeinfo.ALWAYS":"typeinfo.NTIMES", "Shown to: {players:times}");
         if (msg.contains("{players:times}")) {
             List<String> playersAndTimes = new ArrayList<>();
             for (Entry<UUID, Integer> entry : hologram.getShownTo().entrySet()) {
