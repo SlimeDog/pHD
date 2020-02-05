@@ -16,10 +16,13 @@ import me.ford.periodicholographicdisplays.util.TimeUtils;
 /**
  * Messages
  */
-public class Messages {
+public class Messages extends CustomConfigHandler {
+    private final static String FILE_NAME = "messages.yml";
     private final PeriodicHolographicDisplays phd;
 
     public Messages(PeriodicHolographicDisplays phd) {
+        super(phd, FILE_NAME);
+        saveDefaultConfig();
         this.phd = phd;
     }
 
@@ -68,10 +71,11 @@ public class Messages {
             typeinfo = "N/A"; // this shouldn't happen!
             phd.getLogger().warning("Unable to get info for hologram of type " + hologram.getType() + " - " + hologram);
         }
-        return getMessage("hologram-info", "A hologram named '{name}':\nWorld: {world}\nType:{type}\nShowTime:{time}s\nTypeInfo:{typeinfo}")
+        return getMessage("hologram-info", "A hologram named '{name}':\nWorld: {world}\nType:{type}\nShowTime:{time}s\nActivationDistnace:{distance}\nPermission:{perms}\nTypeInfo:{typeinfo}")
                         .replace("{name}", hologram.getName()).replace("{world}", hologram.getLocation().getWorld().getName())
                         .replace("{type}", hologram.getType().name()).replace("{time}", String.valueOf(hologram.getShowTimeTicks()/20))
-                        .replace("{typeinfo}", typeinfo);
+                        .replace("{typeinfo}", typeinfo).replace("{distance}", String.format("%3.2f", hologram.getActivationDistance()))
+                        .replace("{perms}", hologram.hasPermissions() ? hologram.getPermissions() : "");
     }
 
     public String getNTimesTypeInfo(NTimesHologram hologram) {
@@ -113,7 +117,7 @@ public class Messages {
     }
 
     public String getMessage(String path, String def) {
-        return ChatColor.translateAlternateColorCodes('&', (phd.getConfig().getString(path, def)));
+        return ChatColor.translateAlternateColorCodes('&', (getCustomConfig().getString(path, def)));
     }
     
 }
