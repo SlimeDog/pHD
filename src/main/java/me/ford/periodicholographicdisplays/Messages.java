@@ -40,72 +40,8 @@ public class Messages {
                         .replace("{msg}", msg);
     }
 
-    public String getAdoptedPeriodicMessage(String name, long showTimeTicks, long showDelaySeconds) {
-        return getMessage("adopted-periodic", "Adopted the periodic hologram '{name}'. It'll be displayed for {time}s no more often than {delay}")
-                        .replace("{name}", name).replace("{time}", String.format("%4.2f", showTimeTicks/20.0))
-                        .replace("{delay}", TimeUtils.formatDateFromDiff(showDelaySeconds * 1000L));
-    }
-
-    public String getAdoptedOnceMessage(String name, long showTimeTicks) {
-        return getMessage("adopted-once", "Adopted the once activated hologram '{name}'. It'll be displayed for {time}s on first encounter")
-                        .replace("{name}", name).replace("{time}", String.format("%4.2f", showTimeTicks/20.0));
-    }
-
-    public String getAdoptedEveryTimeMessage(String name, long showTimeTicks) {
-        return getMessage("adopted-everytime", "Adopted the hologram '{name}'. It'll be displayed for {time}s on every encounter")
-                        .replace("{name}", name).replace("{time}", String.format("%4.2f", showTimeTicks/20.0));
-    }
-
-    public String getAdoptedNTimesMessage(String name, long showTimeTicks, int timesToShow) {
-        return getMessage("adopted-ntimes", "Adopted the hologram '{name}'. It'll be displayed {times} to each player for {time}s")
-                        .replace("{name}", name).replace("{times}", String.valueOf(timesToShow))
-                        .replace("{time}", String.format("%4.2f", showTimeTicks/20.0));
-    }
-
-    public String getAdoptedOnJoinMessage(String name, long showTimeTicks) {
-        return getMessage("adopted-onjoin", "Adopted the hologram '{name}'. It'll be displayed when a player joins and gets into range for {time}s")
-                        .replace("{name}", name).replace("{time}", String.format("%4.2f", showTimeTicks/20.0));
-    }
-
-    public String getAdoptedOnWorldJoinMessage(String name, long showTimeTicks) {
-        return getMessage("adopted-onworldjoin", "Adopted the hologram '{name}'. It'll be displayed when a player joins the world and gets into range for {time}s")
-                        .replace("{name}", name).replace("{time}", String.format("%4.2f", showTimeTicks/20.0));
-    }
-
     public String getNeedAPlayerMessage() {
         return getMessage("need-a-player", "Only a player can use this command!");
-    }
-
-    public String getCreatedPeriodicMessage(String name, long showTimeTicks, long showDelaySeconds) {
-        return getMessage("created-periodic", "Created the periodic hologram '{name}'. It'll be displayed for {time}s no more often than {delay}")
-                    .replace("{name}", name).replace("{time}", String.format("%4.2f", showTimeTicks/20.0))
-                    .replace("{delay}", TimeUtils.formatDateFromDiff(showDelaySeconds * 1000L));
-    }
-
-    public String getCreatedOnceMessage(String name, long showTimeTicks) {
-        return getMessage("created-once", "Created the once activated hologram '{name}'. It'll be displayed for {time}s on first encounter")
-                        .replace("{name}", name).replace("{time}", String.format("%4.2f", showTimeTicks/20.0));
-    }
-
-    public String getCreatedEveryTimeMessage(String name, long showTimeTicks) {
-        return getMessage("created-everytime", "Created the hologram '{name}'. It'll be displayed for {time}s on every encounter")
-                        .replace("{name}", name).replace("{time}", String.format("%4.2f", showTimeTicks/20.0));
-    }
-
-    public String getCreatedNTimes(String name, long showTimeTicks, int timesToShow) {
-        return getMessage("created-ntimes", "Created the hologram '{name}'. It'll be displayed {times} to each player for {time}s")
-                        .replace("{name}", name).replace("{times}", String.valueOf(timesToShow))
-                        .replace("{time}", String.format("%4.2f", showTimeTicks/20.0));
-    }
-
-    public String getCreatedOnJoinMessage(String name, long showTimeTicks) {
-        return getMessage("created-onjoin", "Created the hologram '{name}'. It'll be displayed when a player joins and gets into range for {time}s")
-                        .replace("{name}", name).replace("{time}", String.format("%4.2f", showTimeTicks/20.0));
-    }
-
-    public String getCreatedOnWorldJoinMessage(String name, long showTimeTicks) {
-        return getMessage("adopted-onworldjoin", "Created the hologram '{name}'. It'll be displayed when a player joins the world and gets into range for {time}s")
-                        .replace("{name}", name).replace("{time}", String.format("%4.2f", showTimeTicks/20.0));
     }
 
     public String getWorldNotFoundMessage(String name) {
