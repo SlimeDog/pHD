@@ -185,8 +185,8 @@ public class SetSub extends SubCommand {
                 }
                 holo.setShowTime(time);
                 break;
-                case "permissions":
-                // TODO - not implemented
+                case "permission":
+                holo.setPermissions(result);
                 break;
                 default:
                 sender.sendMessage("Unable to set option " + entry.getKey() + " TODO - messaging");

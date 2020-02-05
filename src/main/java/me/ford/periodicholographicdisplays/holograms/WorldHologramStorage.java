@@ -84,11 +84,12 @@ public class WorldHologramStorage {
         }
         double distance = section.getDouble("activation-distance", 10);
         long showTime = section.getLong("show-time", 60);
+        String perms = section.getString("permission"); // defaults to null
         final PeriodicHologramBase holo;
         switch (type) {
         case PERIODIC:
             long delay = section.getLong("delay", 86400); // in seconds
-            PeriodicHologram periodic = new PeriodicHologram(hologram, name, distance, showTime, delay, false);
+            PeriodicHologram periodic = new PeriodicHologram(hologram, name, distance, showTime, delay, false, perms);
             addShownTo(periodic, section.getConfigurationSection("last-shown"));
             holo = periodic;
             break;
@@ -101,7 +102,7 @@ public class WorldHologramStorage {
             } else {
                 timesToShow = section.getInt("times-to-show", 1);
             }
-            NTimesHologram ntimes = new NTimesHologram(hologram, name, distance, showTime, timesToShow, false);
+            NTimesHologram ntimes = new NTimesHologram(hologram, name, distance, showTime, timesToShow, false, perms);
             addShownToTimes(ntimes, section.getConfigurationSection("shown-to"));
             holo = ntimes;
             break;
@@ -176,6 +177,7 @@ public class WorldHologramStorage {
         section.set("type", hologram.getType().toString());
         section.set("activation-distance", hologram.getActivationDistance());
         section.set("show-time", hologram.getShowTimeTicks()/20L);
+        section.set("permission", hologram.getPermissions());
         if (hologram instanceof PeriodicHologram) {
             PeriodicHologram periodic = (PeriodicHologram) hologram;
             section.set("delay", periodic.getShowDelay()/1000L); // seconds->ms

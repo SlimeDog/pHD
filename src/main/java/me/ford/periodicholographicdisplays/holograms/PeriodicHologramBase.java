@@ -26,8 +26,13 @@ public abstract class PeriodicHologramBase {
     private boolean hasChanged = false;
     private final PeriodicType type; // in order to change this, I'll create a new instance
     private final Hologram hologram;
+    private String perms;
 
     public PeriodicHologramBase(Hologram hologram, String name, double activationDistance, long showTime, PeriodicType type, boolean isNew) {
+        this(hologram, name, activationDistance, showTime, type, isNew, null);
+    }
+
+    public PeriodicHologramBase(Hologram hologram, String name, double activationDistance, long showTime, PeriodicType type, boolean isNew, String perms) {
         Validate.notNull(hologram, "Hologram cannot be null!");
         this.hologram = hologram;
         this.name = name;
@@ -36,6 +41,7 @@ public abstract class PeriodicHologramBase {
         this.showTimeTicks = showTime * 20L;// seconds -> ticks
         this.type = type;
         this.hasChanged = isNew;
+        this.perms = perms;
         hologram.getVisibilityManager().setVisibleByDefault(false);
     }
     
@@ -70,6 +76,19 @@ public abstract class PeriodicHologramBase {
         return type;
     }
 
+    public boolean hasPermissions() {
+        return perms != null;
+    }
+
+    public void setPermissions(String perms) {
+        this.perms = perms;
+        markChanged();
+    }
+
+    public String getPermissions() {
+        return perms;
+    }
+
     public void markSaved() {
         hasChanged = false;
     }
@@ -90,6 +109,10 @@ public abstract class PeriodicHologramBase {
 
     public boolean isBeingShownTo(Player player) {
         return beingShownTo.contains(player.getUniqueId());
+    }
+
+    public boolean canSee(Player player) {
+        return (!hasPermissions() || player.hasPermission(getPermissions()));
     }
 
     public void show(Player player) {

@@ -17,12 +17,18 @@ public class NTimesHologram extends PeriodicHologramBase {
 
     public NTimesHologram(Hologram hologram, String name, double activationDistance, long showTime,
             int timesToShow, boolean isNew) {
-        super(hologram, name, activationDistance, showTime, PeriodicType.NTIMES, isNew);
+        this(hologram, name, activationDistance, showTime, timesToShow, isNew, null);
+    }
+
+    public NTimesHologram(Hologram hologram, String name, double activationDistance, long showTime,
+            int timesToShow, boolean isNew, String perms) {
+        super(hologram, name, activationDistance, showTime, PeriodicType.NTIMES, isNew, perms);
         this.timesToShow = timesToShow;
     }
 
     @Override
     public void attemptToShow(Player player) {
+        if (!canSee(player)) return;
         if (isBeingShownTo(player)) return;
         UUID id = player.getUniqueId();
         Integer shown = shownTo.get(id);
