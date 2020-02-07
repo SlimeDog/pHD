@@ -15,7 +15,7 @@ public class Settings {
     }
 
     public int getDefaultShowTime() {
-        return phd.getConfig().getInt("defaults.showtime", 10);
+        return phd.getConfig().getInt("defaults.show-time", 10);
     }
 
     public long getSaveDelay() {
