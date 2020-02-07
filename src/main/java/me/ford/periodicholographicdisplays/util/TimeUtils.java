@@ -148,5 +148,13 @@ public final class TimeUtils {
         long minutes = ((time%1000) * 60)/1000;
         return String.format("%02d:%02d", hours, minutes);
     }
+
+    public static long parseHoursAndMinutesToSeconds(String time) {
+        Matcher matcher = mcTimePattern.matcher(time);
+        if (!matcher.matches()) throw new IllegalArgumentException("The time does not match the pattern 'hh:mm' : " + time);
+        int hours = Integer.parseInt(matcher.group(1)); // NumberFormatException should be avoided due to the pattern matching
+        int minutes = Integer.parseInt(matcher.group(2));
+        return hours * 3600 + minutes * 60;
+    }
     
 }

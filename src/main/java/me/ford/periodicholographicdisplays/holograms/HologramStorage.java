@@ -20,6 +20,7 @@ public class HologramStorage {
 
     public HologramStorage(PeriodicHolographicDisplays plugin) {
         this.plugin = plugin;
+        initWorldStorage();
     }
 
     private void initWorldStorage() {

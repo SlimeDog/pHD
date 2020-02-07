@@ -82,13 +82,16 @@ public class WorldHologramStorage {
         String perms = section.getString("permission"); // defaults to null
         final PeriodicHologramBase holo;
         switch (type) {
+        case IRLTIME:
+            long atTime = section.getLong("show-at", 0); // seconds from 00:00
+            holo = new IRLTimeHologram(hologram, name, distance, showTime, atTime, false, perms);
+            break;
         case MCTIME:
             long time = section.getLong("show-at", 0);
-            holo = new MCTimeHologram(hologram, name,distance, showTime, time, false, perms);
+            holo = new MCTimeHologram(hologram, name, distance, showTime, time, false, perms);
             break;
         case ALWAYS:
         case NTIMES:
-        default:
             int timesToShow;
             if (type == PeriodicType.ALWAYS) {
                 timesToShow = -1;
@@ -99,6 +102,9 @@ public class WorldHologramStorage {
             addShownToTimes(ntimes, section.getConfigurationSection("shown-to"));
             holo = ntimes;
             break;
+        default:
+            plugin.getLogger().info("Undefined loading behavour with type: " + type);
+            return null;
         }
         return holo;
     }
@@ -190,6 +196,9 @@ public class WorldHologramStorage {
         } else if (holo instanceof MCTimeHologram) {
             MCTimeHologram mctime = (MCTimeHologram) holo;
             section.set("show-at", mctime.getTime());
+        } else if (holo instanceof IRLTimeHologram) {
+            IRLTimeHologram irltime = (IRLTimeHologram) holo;
+            section.set("show-at", irltime.getTime());
         }
     }
 

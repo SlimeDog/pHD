@@ -18,6 +18,7 @@ import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.Settings;
 import me.ford.periodicholographicdisplays.commands.SubCommand;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
+import me.ford.periodicholographicdisplays.holograms.IRLTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.MCTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
@@ -105,6 +106,21 @@ public class SetSub extends SubCommand {
         double defaultDistance = settings.getDefaultActivationDistance();
         int showTime = settings.getDefaultShowTime();
         switch (type) {
+            case IRLTIME:
+            String tResult = optionPairs.get("time");
+            if (tResult == null) {
+                sender.sendMessage("Need to specify time for IRLTIME type of pHD - TODO - messaging");
+                return null;
+            }
+            long time;
+            try {
+                time = TimeUtils.parseHoursAndMinutesToSeconds(tResult);
+            } catch (IllegalArgumentException e) {
+                sender.sendMessage("Unable to parse IRLTIME: " + tResult + " - TODO - messaging");
+                return null;
+            }
+            existing = new IRLTimeHologram(holo, holo.getName(), defaultDistance, showTime, time, true);
+            break;
             case MCTIME:
             String timeResult = optionPairs.get("time");
             if (timeResult == null) {
@@ -155,15 +171,19 @@ public class SetSub extends SubCommand {
                 ((NTimesHologram) holo).setTimesToShow(times);
                 continue;
             }
-            if (holo.getType() == PeriodicType.MCTIME && entry.getKey().equalsIgnoreCase("time")) {
+            if ((holo.getType() == PeriodicType.MCTIME || holo.getType() == PeriodicType.IRLTIME) 
+                                && entry.getKey().equalsIgnoreCase("time")) {
+                boolean mcTime = holo.getType() == PeriodicType.MCTIME;
                 long time;
                 try {
-                    time = TimeUtils.parseMCTime(result);
+                    if (mcTime) time = TimeUtils.parseMCTime(result);
+                    else time = TimeUtils.parseHoursAndMinutesToSeconds(result);
                 } catch (IllegalArgumentException e) {
-                    sender.sendMessage("Unable to parse MCTIME: " + result + " - TODO - messaging");
+                    sender.sendMessage("Unable to parse TIME: " + result + " - TODO - messaging");
                     return;
                 }
-                ((MCTimeHologram) holo).setTime(time);
+                if (mcTime) ((MCTimeHologram) holo).setTime(time);
+                else ((IRLTimeHologram) holo).setTime(time);
                 continue;
             }
             switch (entry.getKey()) {
