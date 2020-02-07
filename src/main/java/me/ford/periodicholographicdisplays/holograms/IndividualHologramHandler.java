@@ -15,8 +15,9 @@ public class IndividualHologramHandler {
     private final Map<PeriodicType, PeriodicHologramBase> holograms = new HashMap<>();
 
     public IndividualHologramHandler(PeriodicType type, PeriodicHologramBase holo) {
-        addHologram(type, holo);
+        Validate.notNull(holo, "Periodic hologram cannot be null");
         name = holo.getName();
+        addHologram(type, holo);
     }
 
     public void addHologram(PeriodicType type, PeriodicHologramBase holo) {
@@ -37,6 +38,10 @@ public class IndividualHologramHandler {
 
     public Set<PeriodicHologramBase> getHolograms() {
         return new HashSet<>(holograms.values());
+    }
+
+    public Set<PeriodicType> getTypes() {
+        return new HashSet<>(holograms.keySet());
     }
 
     public boolean needsSaved() {

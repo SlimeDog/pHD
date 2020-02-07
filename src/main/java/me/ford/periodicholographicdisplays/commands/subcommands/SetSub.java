@@ -68,7 +68,7 @@ public class SetSub extends SubCommand {
         try {
             holo = CommandValidator.getNamedHologram(args[0]);
         } catch (CommandException e) {
-            sender.sendMessage(messages.getHologramNotFoundMessage(args[0]));
+            sender.sendMessage(messages.getHDHologramNotFoundMessage(args[0]));
             return true;
         }
         PeriodicType type;

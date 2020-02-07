@@ -12,17 +12,18 @@ import me.ford.periodicholographicdisplays.Settings;
 import me.ford.periodicholographicdisplays.commands.SubCommand;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
+import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 
 /**
  * UnsetSub
  */
 public class UnsetSub extends SubCommand {
     private static final String PERMS = "phd.set";
-    private static final String USAGE = "phd unset {hologram} [distance] [time] [permission]";
+    private static final String USAGE = "phd unset {hologram} {type} [times] [seconds] [distance] [permission] [playercount {player}]";
     private final HologramStorage storage;
     private final Settings settings;
     private final Messages messages;
-    private final List<String> optionList = Arrays.asList("distance", "time", "permission");
+    private final List<String> optionList = Arrays.asList("times", "seconds", "distance", "permission", "playercount");
 
     public UnsetSub(HologramStorage storage, Settings settings, Messages messages) {
         this.storage = storage;
@@ -37,8 +38,12 @@ public class UnsetSub extends SubCommand {
         case 1:
             return StringUtil.copyPartialMatches(args[0], storage.getNames(), list);
         case 2:
+            return StringUtil.copyPartialMatches(args[1], PeriodicType.names(), list);
         case 3:
         case 4:
+        case 5:
+        case 6:
+        case 7:
             return StringUtil.copyPartialMatches(args[args.length - 1], optionList, list);
         }
         return list;
@@ -46,10 +51,17 @@ public class UnsetSub extends SubCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
-        if (args.length < 2) return false;
-        PeriodicHologramBase hologram = storage.getHologram(args[0]);
+        if (args.length < 3) return false;
+        PeriodicType type;
+        try {
+            type = PeriodicType.valueOf(args[1]);
+        } catch (IllegalArgumentException e) {
+            sender.sendMessage(messages.getTypeNotRecognizedMessage(args[1]));
+            return true;
+        }
+        PeriodicHologramBase hologram = storage.getHologram(args[0], type);
         if (hologram == null) {
-            sender.sendMessage(messages.getHologramNotFoundMessage(args[0]));
+            sender.sendMessage(messages.getHologramNotFoundMessage(args[0], type));
             return true;
         }
         String[] opts = Arrays.copyOfRange(args, 1, args.length);

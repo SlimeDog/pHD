@@ -11,6 +11,7 @@ import org.bukkit.OfflinePlayer;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
+import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.util.TimeUtils;
 
 /**
@@ -26,8 +27,14 @@ public class Messages extends CustomConfigHandler {
         this.phd = phd;
     }
 
-    public String getHologramNotFoundMessage(String name) {
-        return getMessage("hologram-not-found", "Hologram not found: {name}").replace("{name}", name);
+    public String getHDHologramNotFoundMessage(String name) {
+        return getMessage("hd-hologram-not-found", "HolographicDisplays hologram by the name of {name} was not found")
+                        .replace("{name}", name);
+    }
+
+    public String getHologramNotFoundMessage(String name, PeriodicType type) {
+        return getMessage("hologram-not-found", "Hologram not found: {name} of type {type}")
+                        .replace("{name}", name).replace("{type}", type.name());
     }
 
 	public String getTypeNotRecognizedMessage(String type) {

@@ -10,13 +10,14 @@ import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.commands.SubCommand;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
+import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 
 /**
  * InfoSub
  */
 public class InfoSub extends SubCommand {
     private static final String PERMS = "phd.commands.phd.info";
-    private static final String USAGE = "/phd info <world> <name>";
+    private static final String USAGE = "/phd info <name> <type>";
     private final HologramStorage storage;
     private final Messages messages;
 
@@ -28,20 +29,30 @@ public class InfoSub extends SubCommand {
     @Override
     public List<String> onTabComplete(CommandSender sender, String[] args) {
         List<String> list = new ArrayList<>();
-        if (args.length == 1) {
+        switch(args.length) {
+        case 1:
             return StringUtil.copyPartialMatches(args[0], storage.getNames(), list);
-        }
+        case 2:
+            return StringUtil.copyPartialMatches(args[1], PeriodicType.names(), list);
+        } 
         return list;
     }
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
-        if (args.length < 1) {
+        if (args.length < 2) {
             return false;
         }
-        PeriodicHologramBase hologram = storage.getHologram(args[0]);
+        PeriodicType type;
+        try {
+            type = PeriodicType.valueOf(args[1]);
+        } catch (IllegalArgumentException e) {
+            sender.sendMessage(messages.getTypeNotRecognizedMessage(args[1]));
+            return true;
+        }
+        PeriodicHologramBase hologram = storage.getHologram(args[0], type);
         if (hologram == null) {
-            sender.sendMessage(messages.getHologramNotFoundMessage(args[0]));
+            sender.sendMessage(messages.getHologramNotFoundMessage(args[0], type));
             return true;
         }
         sender.sendMessage(messages.getHologramInfoMessage(hologram));

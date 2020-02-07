@@ -52,13 +52,10 @@ public class HologramStorage {
         }
     }
 
-    public PeriodicHologramBase getHologram(String name) {
+    public PeriodicHologramBase getHologram(String name, PeriodicType type) {
         for (WorldHologramStorage storage : holograms.values()) {
-            for (PeriodicHologramBase holo : storage.getHolograms()) {
-                if (holo.getName().equalsIgnoreCase(name)) {
-                    return holo;
-                }
-            }
+            PeriodicHologramBase holo = storage.getHologram(name, type);
+            if (holo != null) return holo;
         }
         return null;
     }
