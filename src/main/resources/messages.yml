@@ -25,7 +25,7 @@ type-not-recognized: "This type for a periodic hologram was not recognized: {typ
 need-a-number: "Expected a number, got {msg}"
 need-a-player: "Only a player can use this command!"
 world-not-found: "World not found: {name}"
-hologram-info: "A hologram named '{name}':\nWorld: {world}\nType:{type}\nShowTime:{time}s\nActivationDistnace:{distance}\nPermission:{perms}\nTypeInfo:{typeinfo}"
+hologram-info: "A hologram named '{name}':\nWorld: {world}\nType:{type}\nShowTime:{time}s\nActivationDistance:{distance}\nPermission:{perms}\nTypeInfo:{typeinfo}"
 hologram-list: "Holograms: {holograms}"
 typeinfo:
   MCTIME: "Shown at: {time}"
