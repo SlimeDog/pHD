@@ -115,7 +115,7 @@ public class SetSub extends SubCommand {
             try {
                 timeAt = TimeUtils.parseMCTime(timeResult);
             } catch (IllegalArgumentException e) {
-                sender.sendMessage("Unable to parse MCTIME: " + timeResult);
+                sender.sendMessage("Unable to parse MCTIME: " + timeResult + " - TODO - messaging");
                 return null;
             }
             existing = new MCTimeHologram(holo, holo.getName(), defaultDistance, showTime, timeAt, true);
@@ -153,6 +153,17 @@ public class SetSub extends SubCommand {
                     return;
                 }
                 ((NTimesHologram) holo).setTimesToShow(times);
+                continue;
+            }
+            if (holo.getType() == PeriodicType.MCTIME && entry.getKey().equalsIgnoreCase("time")) {
+                long time;
+                try {
+                    time = TimeUtils.parseMCTime(result);
+                } catch (IllegalArgumentException e) {
+                    sender.sendMessage("Unable to parse MCTIME: " + result + " - TODO - messaging");
+                    return;
+                }
+                ((MCTimeHologram) holo).setTime(time);
                 continue;
             }
             switch (entry.getKey()) {
