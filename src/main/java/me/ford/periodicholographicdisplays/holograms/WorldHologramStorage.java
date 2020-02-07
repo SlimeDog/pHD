@@ -1,12 +1,6 @@
 package me.ford.periodicholographicdisplays.holograms;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -19,28 +13,18 @@ import com.gmail.filoghost.holographicdisplays.object.NamedHologram;
 import org.apache.commons.lang.Validate;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 
 /**
  * Storage
  */
-public class WorldHologramStorage {
-    private final World world;
-    private final String fileBase = "periodicholograms_";
-    private final String fileName;
+public class WorldHologramStorage extends WorldHologramStorageBase {
     private final PeriodicHolographicDisplays plugin;
-    private final File storageFile;
-    private FileConfiguration storage;
-    private final Map<String, IndividualHologramHandler> holograms = new HashMap<>();
 
     public WorldHologramStorage(PeriodicHolographicDisplays plugin, World world) {
-        this.world = world;
+        super(plugin, world);
         this.plugin = plugin;
-        this.fileName = fileBase + world.getName() + ".yml";
-        storageFile = new File(this.plugin.getDataFolder(), fileName);
         scheduleLoad();
         scheduleSave();
     }
@@ -51,7 +35,7 @@ public class WorldHologramStorage {
                 IndividualHologramHandler holo = loadHologram(name);
                 if (holo == null)
                     continue;
-                holograms.put(name, holo);
+                addHandler(name, holo);
             }
         }, 40L); // need to do this later so the holograms are loaded
     }
@@ -143,7 +127,7 @@ public class WorldHologramStorage {
     }
 
     public PeriodicHologramBase getHologram(String name, PeriodicType type) {
-        IndividualHologramHandler handler = holograms.get(name);
+        IndividualHologramHandler handler = getHandler(name);
         if (handler == null) return null;
         if (type == PeriodicType.ALWAYS) type = PeriodicType.NTIMES;
         return handler.getHologram(type);
@@ -151,7 +135,7 @@ public class WorldHologramStorage {
 
     public List<PeriodicHologramBase> getHolograms() { // TODO - potentially only show those in loaded chunks
         List<PeriodicHologramBase> holos = new ArrayList<>();
-        for (IndividualHologramHandler handler : holograms.values()) {
+        for (IndividualHologramHandler handler : getHandlers()) {
             holos.addAll(handler.getHolograms());
         }
         return holos;
@@ -165,13 +149,10 @@ public class WorldHologramStorage {
         return names;
     }
 
-    public World getWorld() {
-        return world;
-    }
-
-    private boolean saveHolograms() {
+    @Override
+    protected boolean saveHolograms() {
         boolean madeChanges = false;
-        for (IndividualHologramHandler handler : holograms.values()) {
+        for (IndividualHologramHandler handler : getHandlers()) {
             if (handler.needsSaved()){
                 saveHologram(handler);
                 handler.markSaved();
@@ -207,15 +188,18 @@ public class WorldHologramStorage {
         for (PeriodicHologramBase holo : handler.getHolograms()) {
             saveType(section.createSection(holo.getType().name()), holo);
         }
+        if (!handler.hasHolograms()) {
+            removeHandler(handler.getName());
+        }
     }
 
     void addHologram(PeriodicHologramBase hologram) {
         Validate.notNull(hologram, "Cannot add null hologram!");
-        Validate.isTrue(hologram.getLocation().getWorld() == world, "Cannot add holograms in a different world!");
-        IndividualHologramHandler handler = holograms.get(hologram.getName());
+        Validate.isTrue(hologram.getLocation().getWorld() == getWorld(), "Cannot add holograms in a different world!");
+        IndividualHologramHandler handler = getHandler(hologram.getName());
         if (handler == null) {
             handler = new IndividualHologramHandler(hologram.getType(), hologram);
-            holograms.put(hologram.getName(), handler);
+            addHandler(hologram.getName(), handler);
         } else {
             handler.addHologram(hologram.getType(), hologram);
         }
@@ -223,49 +207,9 @@ public class WorldHologramStorage {
 
     void removeHologram(PeriodicHologramBase hologram) {
         Validate.notNull(hologram, "Cannot renove null hologram!");
-        Validate.isTrue(hologram.getLocation().getWorld() == world, "Cannot remove holograms in a different world!");
-        IndividualHologramHandler handler = holograms.get(hologram.getName());
+        Validate.isTrue(hologram.getLocation().getWorld() == getWorld(), "Cannot remove holograms in a different world!");
+        IndividualHologramHandler handler = getHandler(hologram.getName());
         handler.removeHologram(hologram);
-    }
-
-    // config
-
-    public void reload() {
-        storage = YamlConfiguration.loadConfiguration(storageFile);
-
-        // Look for defaults in the jar
-        Reader defConfigStream = null;
-        if (plugin.getResource(fileName) != null) {
-            try {
-                defConfigStream = new InputStreamReader(plugin.getResource(fileName), "UTF8");
-            } catch (UnsupportedEncodingException e) {
-                plugin.getLogger().warning("Unsupported encoding in the holograms storage file!");
-            }
-        }
-        if (defConfigStream != null) {
-            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
-            storage.setDefaults(defConfig);
-        }
-    }
-
-    private FileConfiguration getConfig() {
-        if (storage == null) {
-            reload();
-        }
-        return storage;
-    }
-
-    public void save() {
-        if (storage == null || storageFile == null) {
-            return;
-        }
-        if (saveHolograms()) { // something was saved/changed   
-            try {
-                getConfig().save(storageFile);
-            } catch (IOException ex) {
-                plugin.getLogger().log(Level.SEVERE, "Could not save config to " + storageFile, ex);
-            }
-        }
     }
 
     public class HologramLoadException extends IllegalArgumentException {

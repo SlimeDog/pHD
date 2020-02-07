@@ -5,18 +5,22 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.gmail.filoghost.holographicdisplays.api.Hologram;
+
 import org.apache.commons.lang.Validate;
 
 /**
  * IndividualHologramHandler
  */
 public class IndividualHologramHandler {
+    private final Hologram hologram;
     private final String name;
     private final Map<PeriodicType, PeriodicHologramBase> holograms = new HashMap<>();
     private boolean needsSaved = false; // in case something gets removed
 
     public IndividualHologramHandler(PeriodicType type, PeriodicHologramBase holo) {
         Validate.notNull(holo, "Periodic hologram cannot be null");
+        hologram = holo.getHologram();
         name = holo.getName();
         addHologram(type, holo);
     }
@@ -31,9 +35,14 @@ public class IndividualHologramHandler {
 
     void removeHologram(PeriodicHologramBase hologram) {
         Validate.notNull(hologram, "Cannot remove null hologram");
+        Validate.isTrue(this.hologram == hologram.getHologram(), "Can only add pHD holograms that affect the same HD hologram");
         holograms.remove(hologram.getType());
         hologram.markRemoved();
         needsSaved = true;
+    }
+
+    Hologram getHologram() {
+        return hologram;
     }
 
     public String getName() {
@@ -50,6 +59,10 @@ public class IndividualHologramHandler {
 
     public Set<PeriodicType> getTypes() {
         return new HashSet<>(holograms.keySet());
+    }
+
+    public boolean hasHolograms() {
+        return !holograms.isEmpty();
     }
 
     public boolean needsSaved() {

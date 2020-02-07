@@ -48,6 +48,10 @@ public abstract class PeriodicHologramBase {
     public String getName() {
         return name;
     }
+
+    Hologram getHologram() {
+        return hologram;
+    }
     
     public void setActivationDistance(double distance) {
         this.activationDistance = distance;
