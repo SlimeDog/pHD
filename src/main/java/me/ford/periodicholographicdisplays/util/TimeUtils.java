@@ -142,5 +142,11 @@ public final class TimeUtils {
         int minutes = Integer.parseInt(matcher.group(2));
         return hours * 1000 + (minutes * 1000)/60;
     }
+
+    public static String toMCTime(long time) {
+        long hours = time/1000;
+        long minutes = ((time%1000) * 60)/1000;
+        return String.format("%02d:%02d", hours, minutes);
+    }
     
 }

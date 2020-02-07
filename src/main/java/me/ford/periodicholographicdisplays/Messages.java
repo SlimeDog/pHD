@@ -8,9 +8,11 @@ import java.util.Map.Entry;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 
+import me.ford.periodicholographicdisplays.holograms.MCTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
+import me.ford.periodicholographicdisplays.util.TimeUtils;
 
 /**
  * Messages
@@ -63,6 +65,9 @@ public class Messages extends CustomConfigHandler {
     public String getHologramInfoMessage(PeriodicHologramBase hologram) {
         String typeinfo;
         switch(hologram.getType()) {
+            case MCTIME:
+            typeinfo = getMCTimeTypeInfo((MCTimeHologram) hologram);
+            break;
             case NTIMES:
             typeinfo = getNTimesTypeInfo((NTimesHologram) hologram);
             break;
@@ -78,6 +83,10 @@ public class Messages extends CustomConfigHandler {
                         .replace("{type}", hologram.getType().name()).replace("{time}", String.valueOf(hologram.getShowTimeTicks()/20))
                         .replace("{typeinfo}", typeinfo).replace("{distance}", String.format("%3.2f", hologram.getActivationDistance()))
                         .replace("{perms}", hologram.hasPermissions() ? hologram.getPermissions() : "");
+    }
+
+    private String getMCTimeTypeInfo(MCTimeHologram hologram) {
+        return getMessage("MCTIME", "Shown at: {time}").replace("{time}", TimeUtils.toMCTime(hologram.getTime()));
     }
 
     public String getNTimesTypeInfo(NTimesHologram hologram) {

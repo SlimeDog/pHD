@@ -28,6 +28,6 @@ world-not-found: "World not found: {name}"
 hologram-info: "A hologram named '{name}':\nWorld: {world}\nType:{type}\nShowTime:{time}s\nActivationDistnace:{distance}\nPermission:{perms}\nTypeInfo:{typeinfo}"
 hologram-list: "Holograms: {holograms}"
 typeinfo:
-  PERIODIC: "{delay} delay, on cooldown: {players}"
+  MCTIME: "Shown at: {time}"
   ALWAYS: "Always shown"
   NTIMES: "Shown to: {players:times}"
