@@ -16,12 +16,12 @@ import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 /**
  * ChunkListener
  */
-public class ChunkListener implements Listener {
+public class PerChunkListener implements Listener {
     private final World world;
     private final Consumer<Chunk> chunkLoad;
     private final Consumer<Chunk> chunkUnload;
 
-    public ChunkListener(World world, Consumer<Chunk> chunkLoad, Consumer<Chunk> chunkUnload) {
+    public PerChunkListener(World world, Consumer<Chunk> chunkLoad, Consumer<Chunk> chunkUnload) {
         Validate.notNull(world, "Cannot listen for null world");
         Validate.notNull(chunkLoad, "The loading consumer cannot be null");
         Validate.notNull(chunkUnload, "The unloading consumer cannot be null");
