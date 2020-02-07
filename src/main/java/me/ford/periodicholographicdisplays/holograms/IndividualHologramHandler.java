@@ -13,6 +13,7 @@ import org.apache.commons.lang.Validate;
 public class IndividualHologramHandler {
     private final String name;
     private final Map<PeriodicType, PeriodicHologramBase> holograms = new HashMap<>();
+    private boolean needsSaved = false; // in case something gets removed
 
     public IndividualHologramHandler(PeriodicType type, PeriodicHologramBase holo) {
         Validate.notNull(holo, "Periodic hologram cannot be null");
@@ -20,12 +21,19 @@ public class IndividualHologramHandler {
         addHologram(type, holo);
     }
 
-    public void addHologram(PeriodicType type, PeriodicHologramBase holo) {
+    void addHologram(PeriodicType type, PeriodicHologramBase holo) {
         Validate.notNull(type, "PeriodicType cannot be null");
         Validate.notNull(holo, "Periodic hologram cannot be null");
         Validate.isTrue(holo.getType() == type, "Wrong type of hologram. Expected " + type.name() + " got " + holo.getType().name());
         Validate.isTrue(holo.getName().equals(name), "Can only handle pHD holograms of the same HD hologram");
         holograms.put(type, holo);
+    }
+
+    void removeHologram(PeriodicHologramBase hologram) {
+        Validate.notNull(hologram, "Cannot remove null hologram");
+        holograms.remove(hologram.getType());
+        hologram.markRemoved();
+        needsSaved = true;
     }
 
     public String getName() {
@@ -45,6 +53,7 @@ public class IndividualHologramHandler {
     }
 
     public boolean needsSaved() {
+        if (needsSaved) return true;
         for (PeriodicHologramBase holo : holograms.values()) {
             if (holo.needsSaved()) return true;
         }
@@ -55,6 +64,7 @@ public class IndividualHologramHandler {
         for (PeriodicHologramBase holo : holograms.values()) {
             holo.markSaved();
         }
+        needsSaved = false;
     }
     
 }

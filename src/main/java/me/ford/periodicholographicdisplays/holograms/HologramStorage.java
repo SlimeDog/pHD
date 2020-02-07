@@ -44,6 +44,12 @@ public class HologramStorage {
         storage.save();
     }
 
+    public void removeHologram(PeriodicHologramBase hologram) {
+        Validate.notNull(hologram, "Cannot remove null hologram");
+        WorldHologramStorage storage = holograms.get(hologram.getLocation().getWorld());
+        storage.removeHologram(hologram);
+    }
+
     // saving
 
     public void save() {

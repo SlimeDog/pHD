@@ -212,6 +212,13 @@ public class WorldHologramStorage {
         }
     }
 
+    void removeHologram(PeriodicHologramBase hologram) {
+        Validate.notNull(hologram, "Cannot renove null hologram!");
+        Validate.isTrue(hologram.getLocation().getWorld() == world, "Cannot remove holograms in a different world!");
+        IndividualHologramHandler handler = holograms.get(hologram.getName());
+        handler.removeHologram(hologram);
+    }
+
     // config
 
     public void reload() {

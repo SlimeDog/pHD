@@ -93,6 +93,11 @@ public abstract class PeriodicHologramBase {
         hasChanged = false;
     }
 
+    public void markRemoved() {
+        this.hologram.getVisibilityManager().setVisibleByDefault(true);
+        this.hologram.getVisibilityManager().resetVisibilityAll();
+    }
+
     protected void markChanged() {
         hasChanged = true;
     }
