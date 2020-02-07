@@ -11,6 +11,7 @@ import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.Settings;
 import me.ford.periodicholographicdisplays.commands.SubCommand;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
+import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 
@@ -70,12 +71,18 @@ public class UnsetSub extends SubCommand {
                 case "distance":
                 hologram.setActivationDistance(settings.getDefaultActivationDistance());
                 break;
-                case "time":
+                case "seconds":
                 hologram.setShowTime(settings.getDefaultShowTime());
                 break;
                 case "permission":
                 hologram.setPermissions(null);
                 break;
+                case "times":
+                if (hologram.getType() == PeriodicType.NTIMES) {
+                    sender.sendMessage("pHD of type " + type.name() + " does not have 'times' - need NTIMES for that!");
+                    return true;
+                }
+                ((NTimesHologram) hologram).setTimesToShow(-1); // ALWAYS
                 default:
                 sender.sendMessage("Unable to understand option " + opt + " - TODO - messaging");
                 break;
