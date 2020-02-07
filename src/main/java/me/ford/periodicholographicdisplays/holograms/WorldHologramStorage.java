@@ -82,6 +82,10 @@ public class WorldHologramStorage {
         String perms = section.getString("permission"); // defaults to null
         final PeriodicHologramBase holo;
         switch (type) {
+        case MCTIME:
+            long time = section.getLong("show-at", 0);
+            holo = new MCTimeHologram(hologram, name,distance, showTime, time, false, perms);
+            break;
         case ALWAYS:
         case NTIMES:
         default:
@@ -182,6 +186,9 @@ public class WorldHologramStorage {
             for (Map.Entry<UUID, Integer> entry : ntimes.getShownTo().entrySet()) {
                 shownToSection.set(entry.getKey().toString(), entry.getValue());
             }
+        } else if (holo instanceof MCTimeHologram) {
+            MCTimeHologram mctime = (MCTimeHologram) holo;
+            section.set("show-at", mctime.getTime());
         }
     }
 

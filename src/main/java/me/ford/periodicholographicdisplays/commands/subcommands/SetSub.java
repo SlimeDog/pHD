@@ -18,10 +18,12 @@ import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.Settings;
 import me.ford.periodicholographicdisplays.commands.SubCommand;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
+import me.ford.periodicholographicdisplays.holograms.MCTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.holograms.WorldHologramStorage;
+import me.ford.periodicholographicdisplays.util.TimeUtils;
 
 /**
  * SetSub
@@ -103,6 +105,21 @@ public class SetSub extends SubCommand {
         double defaultDistance = settings.getDefaultActivationDistance();
         int showTime = settings.getDefaultShowTime();
         switch (type) {
+            case MCTIME:
+            String timeResult = optionPairs.get("time");
+            if (timeResult == null) {
+                sender.sendMessage("Need to specify time for MCTIME type of pHD - TODO - messaging");
+                return null;
+            }
+            long timeAt;
+            try {
+                timeAt = TimeUtils.parseMCTime(timeResult);
+            } catch (IllegalArgumentException e) {
+                sender.sendMessage("Unable to parse MCTIME: " + timeResult);
+                return null;
+            }
+            existing = new MCTimeHologram(holo, holo.getName(), defaultDistance, showTime, timeAt, true);
+            break;
             case ALWAYS:
             case NTIMES:
             default:
@@ -149,7 +166,7 @@ public class SetSub extends SubCommand {
                 }
                 holo.setActivationDistance(distance);
                 break;
-                case "time":
+                case "seconds":
                 int time;
                 try {
                     time = Integer.parseInt(result);

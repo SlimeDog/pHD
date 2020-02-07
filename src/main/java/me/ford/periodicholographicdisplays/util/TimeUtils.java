@@ -10,13 +10,15 @@ public final class TimeUtils {
 
     private TimeUtils() { throw new IllegalAccessError("TimeUtils should not be initialized");}
 
-    private static Pattern timePattern = Pattern.compile("(?:([0-9]+)\\s*y[a-z]*[,\\s]*)?" + 
+    private static final Pattern timePattern = Pattern.compile("(?:([0-9]+)\\s*y[a-z]*[,\\s]*)?" + 
                                                         "(?:([0-9]+)\\s*mo[a-z]*[,\\s]*)?" + 
                                                         "(?:([0-9]+)\\s*w[a-z]*[,\\s]*)?" + 
                                                         "(?:([0-9]+)\\s*d[a-z]*[,\\s]*)?" + 
                                                         "(?:([0-9]+)\\s*h[a-z]*[,\\s]*)?" + 
                                                         "(?:([0-9]+)\\s*m[a-z]*[,\\s]*)?" + 
                                                         "(?:([0-9]+)\\s*(?:s[a-z]*)?)?", Pattern.CASE_INSENSITIVE);
+    
+    private static final Pattern mcTimePattern = Pattern.compile("(\\d\\d):(\\d\\d)");
 	    
     public static long parseDateDiff(String time) throws IllegalArgumentException {
     	Matcher m = timePattern.matcher(time);
@@ -131,6 +133,14 @@ public final class TimeUtils {
         	rdiff -= seconds * second;
         }
         return time;
+    }
+
+    public static long parseMCTime(String mcTime) {
+        Matcher matcher = mcTimePattern.matcher(mcTime);
+        if (!matcher.matches()) throw new IllegalArgumentException("The time does not match the pattern 'hh:mm' : " + mcTime);
+        int hours = Integer.parseInt(matcher.group(1)); // NumberFormatException should be avoided deu to the pattern matching
+        int minutes = Integer.parseInt(matcher.group(2));
+        return hours * 1000 + (minutes * 1000)/60;
     }
     
 }

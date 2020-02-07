@@ -7,6 +7,7 @@ import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.listeners.HologramListener;
 import me.ford.periodicholographicdisplays.listeners.JoinLeaveListener;
 import me.ford.periodicholographicdisplays.listeners.WorldListener;
+import me.ford.periodicholographicdisplays.listeners.WorldTimeListener;
 
 /**
  * PeriodicHolographicDisplays
@@ -26,6 +27,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new HologramListener(holograms), this);
         this.getServer().getPluginManager().registerEvents(new JoinLeaveListener(holograms), this);
         this.getServer().getPluginManager().registerEvents(new WorldListener(holograms), this);
+        this.getServer().getPluginManager().registerEvents(new WorldTimeListener(holograms), this);
     }
 
     @Override

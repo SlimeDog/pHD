@@ -60,6 +60,16 @@ public class HologramStorage {
         return null;
     }
 
+    public void mcTimeChanged(World world, long amount) {
+        WorldHologramStorage storage = holograms.get(world);
+        if (storage == null) return; // nothing being tracked
+        for (PeriodicHologramBase holo : storage.getHolograms()) {
+            if (holo.getType() == PeriodicType.MCTIME) {
+                ((MCTimeHologram) holo).timeChanged(amount);
+            }
+        }
+    }
+
     // onJoin holgorams
 
     public void joined(Player player) {
