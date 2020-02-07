@@ -30,6 +30,13 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new WorldTimeListener(holograms), this);
     }
 
+    public boolean reload() {
+        reloadConfig();
+        messages.reloadCustomConfig();
+        holograms.reload();
+        return true; // TODO -> record failures
+    }
+
     @Override
     public void onDisable() {
         holograms.save();

@@ -20,6 +20,9 @@ public class HologramStorage {
 
     public HologramStorage(PeriodicHolographicDisplays plugin) {
         this.plugin = plugin;
+    }
+
+    private void initWorldStorage() {
         for (World world : plugin.getServer().getWorlds()) {
             holograms.put(world, new WorldHologramStorage(plugin, world));
         }
@@ -34,6 +37,16 @@ public class HologramStorage {
             plugin.getLogger().info("Initializing per world holograms at an odd time!");
         }
         return storage;
+    }
+
+    public void reload() {
+        for (WorldHologramStorage storage : holograms.values()) {
+            for (PeriodicHologramBase hologram : storage.getHolograms()) {
+                storage.removeHologram(hologram);
+            }
+        }
+        holograms.clear();
+        initWorldStorage();
     }
 
     // adding
