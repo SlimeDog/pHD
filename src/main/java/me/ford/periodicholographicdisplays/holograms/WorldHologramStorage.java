@@ -34,7 +34,7 @@ public class WorldHologramStorage {
     private final PeriodicHolographicDisplays plugin;
     private final File storageFile;
     private FileConfiguration storage;
-    private final Map<String, PeriodicHologramBase> holograms = new HashMap<>();
+    private final Map<String, IndividualHologramHandler> holograms = new HashMap<>();
 
     public WorldHologramStorage(PeriodicHolographicDisplays plugin, World world) {
         this.world = world;
@@ -48,13 +48,7 @@ public class WorldHologramStorage {
     private void scheduleLoad() { // TODO - maybe there's an event?
         plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
             for (String name : getConfig().getKeys(false)) {
-                PeriodicHologramBase holo;
-                try {
-                    holo = loadHologram(name);
-                } catch (HologramLoadException e) {
-                    plugin.getLogger().log(Level.WARNING, "Problem loading hologram from file", e);
-                    continue;
-                }
+                IndividualHologramHandler holo = loadHologram(name);
                 if (holo == null)
                     continue;
                 holograms.put(name, holo);
@@ -67,14 +61,15 @@ public class WorldHologramStorage {
         plugin.getServer().getScheduler().runTaskTimer(plugin, () -> save(), delay, delay);
     }
 
-    private PeriodicHologramBase loadHologram(String name) throws HologramLoadException {
-        ConfigurationSection section = getConfig().getConfigurationSection(name);
-        String strType = section.getString("type", "EVERYTIME");
+    private PeriodicHologramBase loadType(String name, ConfigurationSection section) throws HologramLoadException {
+        if (section == null) {
+            throw new HologramLoadException("Unable to parse hologram because of incorrect config (using the old system?): " + name);
+        }
         PeriodicType type;
         try {
-            type = PeriodicType.valueOf(strType);
+            type = PeriodicType.valueOf(section.getName());
         } catch (IllegalArgumentException e) {
-            throw new HologramLoadException("Unable to parse type of hologram: " + strType);
+            throw new HologramLoadException("Unable to parse type of hologram: " + section.getName());
         }
         NamedHologram hologram;
         try {
@@ -110,6 +105,26 @@ public class WorldHologramStorage {
         return holo;
     }
 
+    private IndividualHologramHandler loadHologram(String name) {
+        ConfigurationSection section = getConfig().getConfigurationSection(name);
+        IndividualHologramHandler handler = null;
+        for (String typeStr : section.getKeys(false)) {
+            PeriodicHologramBase holo;
+            try {
+                holo = loadType(name, section.getConfigurationSection(typeStr));
+            } catch (HologramLoadException e) {
+                plugin.getLogger().log(Level.WARNING, "Problem loading hologram of type " + typeStr + " from file for hologram " + name, e);
+                continue;
+            }
+            if (handler == null) {
+                handler = new IndividualHologramHandler(holo.getType(), holo);
+            } else {
+                handler.addHologram(holo.getType(), holo);
+            }
+        }
+        return handler;
+    }
+
     private void addShownTo(PeriodicHologram holo, ConfigurationSection section) {
         for (String uuid : section.getKeys(false)) {
             UUID id;
@@ -136,17 +151,23 @@ public class WorldHologramStorage {
         }
     }
 
-    public PeriodicHologramBase getHologram(String name) {
-        return holograms.get(name);
+    public PeriodicHologramBase getHologram(String name, PeriodicType type) {
+        IndividualHologramHandler handler = holograms.get(name);
+        if (handler == null) return null;
+        return handler.getHologram(type);
     }
 
     public List<PeriodicHologramBase> getHolograms() { // TODO - potentially only show those in loaded chunks
-        return new ArrayList<>(holograms.values());
+        List<PeriodicHologramBase> holos = new ArrayList<>();
+        for (IndividualHologramHandler handler : holograms.values()) {
+            holos.addAll(handler.getHolograms());
+        }
+        return holos;
     }
 
-    public List<String> getHologramNames() {
+    public List<String> getHologramNames() { // TODO - potentially only show those in loaded chunks
         List<String> names = new ArrayList<>();
-        for (PeriodicHologramBase holo : holograms.values()) {
+        for (PeriodicHologramBase holo : getHolograms()) {
             names.add(holo.getName());
         }
         return names;
@@ -158,48 +179,55 @@ public class WorldHologramStorage {
 
     private boolean saveHolograms() {
         boolean madeChanges = false;
-        for (PeriodicHologramBase hologram : holograms.values()) {
-            if (hologram.needsSaved()){
-                saveHologram(hologram);
-                hologram.markSaved();
+        for (IndividualHologramHandler handler : holograms.values()) {
+            if (handler.needsSaved()){
+                saveHologram(handler);
+                handler.markSaved();
                 madeChanges = true;
             }
         }
         return madeChanges;
     }
 
-    private void saveHologram(PeriodicHologramBase hologram) {
-        if (hologram == null) {
-            plugin.getLogger().warning("Trying to save a null-hologram!");
-            return;
-        }
-        ConfigurationSection section = getConfig().createSection(hologram.getName());
-        section.set("type", hologram.getType().toString());
-        section.set("activation-distance", hologram.getActivationDistance());
-        section.set("show-time", hologram.getShowTimeTicks()/20L);
-        section.set("permission", hologram.getPermissions());
-        if (hologram instanceof PeriodicHologram) {
-            PeriodicHologram periodic = (PeriodicHologram) hologram;
+    private void saveType(ConfigurationSection section, PeriodicHologramBase holo) {
+        section.set("type", holo.getType().toString());
+        section.set("activation-distance", holo.getActivationDistance());
+        section.set("show-time", holo.getShowTimeTicks()/20L);
+        section.set("permission", holo.getPermissions());
+        if (holo instanceof PeriodicHologram) {
+            PeriodicHologram periodic = (PeriodicHologram) holo;
             section.set("delay", periodic.getShowDelay()/1000L); // seconds->ms
             ConfigurationSection lastShownSection = section.createSection("last-shown"); 
             for (Map.Entry<UUID, Long> entry : periodic.getLastShown().entrySet()) {
                 lastShownSection.set(entry.getKey().toString(), entry.getValue());
             }
-        } else if (hologram instanceof NTimesHologram) {
-            NTimesHologram ntimes = (NTimesHologram) hologram;
+        } else if (holo instanceof NTimesHologram) {
+            NTimesHologram ntimes = (NTimesHologram) holo;
             section.set("times-to-show", ntimes.getTimesToShow()); // seconds->ms
             ConfigurationSection shownToSection = section.createSection("shown-to"); 
             for (Map.Entry<UUID, Integer> entry : ntimes.getShownTo().entrySet()) {
                 shownToSection.set(entry.getKey().toString(), entry.getValue());
             }
+        }
+    }
 
+    private void saveHologram(IndividualHologramHandler handler) {
+        ConfigurationSection section = getConfig().createSection(handler.getName());
+        for (PeriodicHologramBase holo : handler.getHolograms()) {
+            saveType(section.createSection(holo.getType().name()), holo);
         }
     }
 
     void addHologram(PeriodicHologramBase hologram) {
         Validate.notNull(hologram, "Cannot add null hologram!");
         Validate.isTrue(hologram.getLocation().getWorld() == world, "Cannot add holograms in a different world!");
-        holograms.put(hologram.getName(), hologram);
+        IndividualHologramHandler handler = holograms.get(hologram.getName());
+        if (handler == null) {
+            handler = new IndividualHologramHandler(hologram.getType(), hologram);
+            holograms.put(hologram.getName(), handler);
+        } else {
+            handler.addHologram(hologram.getType(), hologram);
+        }
     }
 
     // config

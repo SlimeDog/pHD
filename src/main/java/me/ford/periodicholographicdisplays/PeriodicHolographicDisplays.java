@@ -22,7 +22,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         messages = new Messages(this);
         settings = new Settings(this);
         holograms = new HologramStorage(this);
-        getCommand("phd").setExecutor(new PHDCommand(this)); // TODO - set executor
+        getCommand("phd").setExecutor(new PHDCommand(this));
         this.getServer().getPluginManager().registerEvents(new HologramListener(holograms), this);
         this.getServer().getPluginManager().registerEvents(new JoinLeaveListener(holograms), this);
         this.getServer().getPluginManager().registerEvents(new WorldListener(holograms), this);

@@ -29,11 +29,11 @@ import me.ford.periodicholographicdisplays.holograms.WorldHologramStorage;
  */
 public class SetSub extends SubCommand {
     private static final String PERMS = "phd.set";
-    private static final String USAGE = "/phd set {hologram} [type {type}] [distance {blocks}] [time {seconds}] [permission {permission}]";
+    private static final String USAGE = "/phd set {hologram} {type} [times {integer}] [time {hh:mm}] [seconds {integer}] [distance {integer|decimal}] [permission {string}]";
     private final HologramStorage storage;
     private final Settings settings;
     private final Messages messages;
-    private final List<String> settables = Arrays.asList("type", "distance", "time", "permission");
+    private final List<String> settables = Arrays.asList("times", "time", "seconds", "distance", "permission");
 
     public SetSub(HologramStorage storage, Settings settings, Messages messages) {
         this.storage = storage;
@@ -48,21 +48,20 @@ public class SetSub extends SubCommand {
         case 1:
             return StringUtil.copyPartialMatches(args[0], getNamedHolograms(), list);
         case 2:
-        case 4:
-        case 6:
-        case 8:
-            return StringUtil.copyPartialMatches(args[args.length - 1], settables, list);
+            return StringUtil.copyPartialMatches(args[1], PeriodicType.names(), list);
         case 3:
-            if (args[1].equalsIgnoreCase("type")) {
-                return StringUtil.copyPartialMatches(args[2], PeriodicType.names(), list);
-            }
+        case 5:
+        case 7:
+        case 9:
+        case 11:
+            return StringUtil.copyPartialMatches(args[args.length - 1], settables, list);
         }
         return list;
     }
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
-        if (args.length < 3) {
+        if (args.length < 4) {
             return false;
         }
         NamedHologram holo;
@@ -72,12 +71,25 @@ public class SetSub extends SubCommand {
             sender.sendMessage(messages.getHologramNotFoundMessage(args[0]));
             return true;
         }
-        Map<String, String> optionPairs = getOptionPairs(Arrays.copyOfRange(args, 1, args.length));
+        PeriodicType type;
+        try {
+            type = PeriodicType.valueOf(args[1]);
+        } catch (IllegalArgumentException e) {
+            sender.sendMessage(messages.getTypeNotRecognizedMessage(args[1]));
+            return true;
+        }
+        Map<String, String> optionPairs;
+        try {
+            optionPairs = getOptionPairs(Arrays.copyOfRange(args, 2, args.length));
+        } catch (IllegalArgumentException e) {
+            sender.sendMessage("Need an even number of arguments (pairs)! - TODO - messaging");
+            return true;
+        }
         WorldHologramStorage worldStorage = storage.getHolograms(holo.getWorld());
-        PeriodicHologramBase existing = worldStorage.getHologram(holo.getName());
+        PeriodicHologramBase existing = worldStorage.getHologram(holo.getName(), type);
         boolean existed = existing != null;
         if (!existed) { // keep track of new one
-            existing = adoptHologram(sender, holo, optionPairs);
+            existing = adoptHologram(sender, holo, type, optionPairs);
             if (existing == null) return true;
             storage.addHologram(existing);
         }
@@ -86,19 +98,8 @@ public class SetSub extends SubCommand {
         return true;
     }
 
-    private PeriodicHologramBase adoptHologram(CommandSender sender, NamedHologram holo, Map<String, String> optionPairs) {
-        String typeValue = optionPairs.get("type");
-        if (typeValue == null) {
-            sender.sendMessage("Need to include 'type' for a hologram previously not kept track of by pHD - TODO - messaging");
-            return null;
-        }
-        PeriodicType type;
-        try {
-            type = PeriodicType.valueOf(typeValue);
-        } catch (IllegalArgumentException e) {
-            sender.sendMessage(messages.getTypeNotRecognizedMessage(typeValue));
-            return null;
-        }
+    // TODO - SRP - this should throw exceptions that are caught and the appropriate message sent in onCommand
+    private PeriodicHologramBase adoptHologram(CommandSender sender, NamedHologram holo, PeriodicType type, Map<String, String> optionPairs) {
         PeriodicHologramBase existing;
         double defaultDistance = settings.getDefaultActivationDistance();
         int showTime = settings.getDefaultShowTime();
