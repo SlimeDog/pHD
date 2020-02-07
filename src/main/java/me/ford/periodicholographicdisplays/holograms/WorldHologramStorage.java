@@ -85,7 +85,9 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
                 timesToShow = section.getInt("times-to-show", 1);
             }
             NTimesHologram ntimes = new NTimesHologram(hologram, name, distance, showTime, timesToShow, false, perms);
-            addShownToTimes(ntimes, section.getConfigurationSection("shown-to"));
+            if (type != PeriodicType.ALWAYS) {
+                addShownToTimes(ntimes, section.getConfigurationSection("shown-to"));
+            }
             holo = ntimes;
             break;
         default:
@@ -166,7 +168,8 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
 
     private void saveType(ConfigurationSection section, PeriodicHologramBase holo) {
         Settings settings = plugin.getSettings();
-        section.set("type", holo.getType().toString());
+        String typeStr = (holo.getType() == PeriodicType.NTIMES && ((NTimesHologram) holo).getTimesToShow() < 0) ? PeriodicType.ALWAYS.name() : holo.getType().name();
+        section.set("type", typeStr);
         if (holo.getActivationDistance() != settings.getDefaultActivationDistance()) {
             section.set("activation-distance", holo.getActivationDistance());
         }
@@ -176,10 +179,12 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         section.set("permission", holo.getPermissions());
         if (holo instanceof NTimesHologram) {
             NTimesHologram ntimes = (NTimesHologram) holo;
-            section.set("times-to-show", ntimes.getTimesToShow()); // seconds->ms
-            ConfigurationSection shownToSection = section.createSection("shown-to"); 
-            for (Map.Entry<UUID, Integer> entry : ntimes.getShownTo().entrySet()) {
-                shownToSection.set(entry.getKey().toString(), entry.getValue());
+            if (ntimes.getTimesToShow() > -1) {
+                section.set("times-to-show", ntimes.getTimesToShow());
+                ConfigurationSection shownToSection = section.createSection("shown-to"); 
+                for (Map.Entry<UUID, Integer> entry : ntimes.getShownTo().entrySet()) {
+                    shownToSection.set(entry.getKey().toString(), entry.getValue());
+                }
             }
         } else if (holo instanceof MCTimeHologram) {
             MCTimeHologram mctime = (MCTimeHologram) holo;
