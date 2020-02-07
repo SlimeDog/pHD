@@ -22,7 +22,7 @@ import me.ford.periodicholographicdisplays.holograms.PeriodicType;
  */
 public class UnsetSub extends SubCommand {
     private static final String PERMS = "phd.set";
-    private static final String USAGE = "phd unset {hologram} {type} [times] [seconds] [distance] [permission] [playercount {player}]";
+    private static final String USAGE = "/phd unset {hologram} {type} [times] [seconds] [distance] [permission] [playercount {player}]";
     private final HologramStorage storage;
     private final Settings settings;
     private final Messages messages;
