@@ -80,7 +80,7 @@ public class Messages extends CustomConfigHandler {
             phd.getLogger().warning("Unable to get info for hologram of type " + hologram.getType() + " - " + hologram);
         }
         String typeName = (hologram.getType() == PeriodicType.NTIMES && ((NTimesHologram) hologram).getTimesToShow() < 0) ? PeriodicType.ALWAYS.name() : hologram.getType().name();
-        return getMessage("hologram-info", "A hologram named '{name}':\nWorld: {world}\nType:{type}\nShowTime:{time}s\nActivationDistance:{distance}\nPermission:{perms}\nTypeInfo:{typeinfo}")
+        return getMessage("hologram-info", "Hologram '{name}':\nWorld: {world}\nType:{type}\nShowTime:{time}s\nActivationDistance:{distance}\nPermission:{perms}\nTypeInfo:{typeinfo}")
                         .replace("{name}", hologram.getName()).replace("{world}", hologram.getLocation().getWorld().getName())
                         .replace("{type}", typeName).replace("{time}", String.valueOf(hologram.getShowTimeTicks()/20))
                         .replace("{typeinfo}", typeinfo).replace("{distance}", String.format("%3.2f", hologram.getActivationDistance()))
