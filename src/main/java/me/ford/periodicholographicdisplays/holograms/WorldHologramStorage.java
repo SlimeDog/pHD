@@ -15,6 +15,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
+import me.ford.periodicholographicdisplays.Settings;
 
 /**
  * Storage
@@ -61,8 +62,9 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         } catch (CommandException e) {
             throw new HologramLoadException("Hologram by the name of '" + name + "' does not exist'");
         }
-        double distance = section.getDouble("activation-distance", 10);
-        long showTime = section.getLong("show-time", 60);
+        Settings settings = plugin.getSettings();
+        double distance = section.getDouble("activation-distance", settings.getDefaultActivationDistance());
+        long showTime = section.getLong("show-time", settings.getDefaultShowTime());
         String perms = section.getString("permission"); // defaults to null
         final PeriodicHologramBase holo;
         switch (type) {
@@ -163,9 +165,14 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
     }
 
     private void saveType(ConfigurationSection section, PeriodicHologramBase holo) {
+        Settings settings = plugin.getSettings();
         section.set("type", holo.getType().toString());
-        section.set("activation-distance", holo.getActivationDistance());
-        section.set("show-time", holo.getShowTimeTicks()/20L);
+        if (holo.getActivationDistance() != settings.getDefaultActivationDistance()) {
+            section.set("activation-distance", holo.getActivationDistance());
+        }
+        if (holo.getShowTimeTicks() != settings.getDefaultShowTime() * 20L) {
+            section.set("show-time", holo.getShowTimeTicks()/20L);
+        }
         section.set("permission", holo.getPermissions());
         if (holo instanceof NTimesHologram) {
             NTimesHologram ntimes = (NTimesHologram) holo;
