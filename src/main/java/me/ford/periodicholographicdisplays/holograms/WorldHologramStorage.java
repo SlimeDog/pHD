@@ -169,6 +169,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
     private void saveType(ConfigurationSection section, PeriodicHologramBase holo) {
         Settings settings = plugin.getSettings();
         String typeStr = (holo.getType() == PeriodicType.NTIMES && ((NTimesHologram) holo).getTimesToShow() < 0) ? PeriodicType.ALWAYS.name() : holo.getType().name();
+        section = section.getParent().getConfigurationSection(typeStr);
         section.set("type", typeStr);
         if (holo.getActivationDistance() != settings.getDefaultActivationDistance()) {
             section.set("activation-distance", holo.getActivationDistance());
