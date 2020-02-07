@@ -27,7 +27,7 @@ public abstract class WorldHologramStorageBase {
     private final World world;
     private final PeriodicHolographicDisplays phd;
     private final Map<String, IndividualHologramHandler> holograms = new HashMap<>();
-    private final String fileBase = "periodicholograms_";
+    private final String fileBase = "";
     private final String fileName;
     private final File storageFile;
     private FileConfiguration storage;
