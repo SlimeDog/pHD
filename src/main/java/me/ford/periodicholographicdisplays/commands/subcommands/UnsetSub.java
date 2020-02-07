@@ -83,6 +83,7 @@ public class UnsetSub extends SubCommand {
                     return true;
                 }
                 ((NTimesHologram) hologram).setTimesToShow(-1); // ALWAYS
+                break;
                 default:
                 sender.sendMessage("Unable to understand option " + opt + " - TODO - messaging");
                 break;
