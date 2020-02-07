@@ -19,7 +19,6 @@ import me.ford.periodicholographicdisplays.Settings;
 import me.ford.periodicholographicdisplays.commands.SubCommand;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
-import me.ford.periodicholographicdisplays.holograms.PeriodicHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.holograms.WorldHologramStorage;
@@ -104,21 +103,6 @@ public class SetSub extends SubCommand {
         double defaultDistance = settings.getDefaultActivationDistance();
         int showTime = settings.getDefaultShowTime();
         switch (type) {
-            case PERIODIC:
-            String delayResult = optionPairs.get("delay");
-            if (delayResult == null) {
-                sender.sendMessage("a PERIODIC hologram needs a delay to be set - TODO - messaging");
-                return null;
-            }
-            int showDelay;
-            try {
-                showDelay = Integer.parseInt(delayResult);
-            } catch (NumberFormatException e) {
-                messages.getNeedANumberMessage(delayResult);
-                return null;
-            }
-            existing = new PeriodicHologram(holo, holo.getName(), defaultDistance, showTime, showDelay, true);
-            break;
             case ALWAYS:
             case NTIMES:
             default:
@@ -143,17 +127,6 @@ public class SetSub extends SubCommand {
         
         for (Entry<String, String> entry : options.entrySet()) {
             String result = entry.getValue();
-            if (holo.getType() == PeriodicType.PERIODIC && entry.getKey().equalsIgnoreCase("delay")) {
-                long delay;
-                try {
-                    delay = Long.parseLong(result);
-                } catch (NumberFormatException e) {
-                    sender.sendMessage(messages.getNeedANumberMessage(result));
-                    return;
-                }
-                ((PeriodicHologram) holo).setShowDelay(delay);
-                continue;
-            }
             if (holo.getType() == PeriodicType.NTIMES && entry.getKey().equalsIgnoreCase("times")) {
                 int times;
                 try {

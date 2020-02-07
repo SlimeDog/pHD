@@ -9,10 +9,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
-import me.ford.periodicholographicdisplays.holograms.PeriodicHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
-import me.ford.periodicholographicdisplays.util.TimeUtils;
 
 /**
  * Messages
@@ -65,9 +63,6 @@ public class Messages extends CustomConfigHandler {
     public String getHologramInfoMessage(PeriodicHologramBase hologram) {
         String typeinfo;
         switch(hologram.getType()) {
-            case PERIODIC:
-            typeinfo = getPeriodicTypeInfo((PeriodicHologram) hologram);
-            break;
             case NTIMES:
             typeinfo = getNTimesTypeInfo((NTimesHologram) hologram);
             break;
@@ -99,26 +94,6 @@ public class Messages extends CustomConfigHandler {
                 playersAndTimes.add(playerName + ": " + entry.getValue());
             }
             msg = msg.replace("{players:times}", String.join(", ", playersAndTimes));
-        }
-        return msg;
-    }
-    
-    public String getPeriodicTypeInfo(PeriodicHologram hologram) {
-        String msg = getMessage("typeinfo.PERIODIC", "{delay} delay, on cooldown: {players}");
-        msg = msg.replace("{delay}", TimeUtils.formatDateFromDiff(((PeriodicHologram) hologram).getShowDelay()));
-        if (msg.contains("{players}")) {
-            List<String> players = new ArrayList<>();
-            for (Entry<UUID, Long> entry : hologram.getLastShown().entrySet()) {
-                if (entry.getValue() + hologram.getShowDelay() > System.currentTimeMillis()) {
-                    OfflinePlayer player = phd.getServer().getOfflinePlayer(entry.getKey());
-                    if (player == null || !player.hasPlayedBefore()) {
-                        players.add("UNKNOWNPLAYER");
-                    } else {
-                        players.add(player.getName());
-                    }
-                }
-            }
-            msg = msg.replace("{players}", String.join(", ", players));
         }
         return msg;
     }

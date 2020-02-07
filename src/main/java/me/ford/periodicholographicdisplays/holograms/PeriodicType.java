@@ -8,7 +8,7 @@ import java.util.List;
  */
 public enum PeriodicType {
 
-    PERIODIC, ALWAYS, NTIMES;
+    ALWAYS, NTIMES;
 
     private static final List<String> NAMES = new ArrayList<>();
     static {

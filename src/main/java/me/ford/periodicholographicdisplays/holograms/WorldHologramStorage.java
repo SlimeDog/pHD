@@ -82,12 +82,6 @@ public class WorldHologramStorage {
         String perms = section.getString("permission"); // defaults to null
         final PeriodicHologramBase holo;
         switch (type) {
-        case PERIODIC:
-            long delay = section.getLong("delay", 86400); // in seconds
-            PeriodicHologram periodic = new PeriodicHologram(hologram, name, distance, showTime, delay, false, perms);
-            addShownTo(periodic, section.getConfigurationSection("last-shown"));
-            holo = periodic;
-            break;
         case ALWAYS:
         case NTIMES:
         default:
@@ -123,19 +117,6 @@ public class WorldHologramStorage {
             }
         }
         return handler;
-    }
-
-    private void addShownTo(PeriodicHologram holo, ConfigurationSection section) {
-        for (String uuid : section.getKeys(false)) {
-            UUID id;
-            try {
-                id = UUID.fromString(uuid);
-            } catch (IllegalArgumentException e) {
-                plugin.getLogger().warning("Unable to parse UUID of Periodic hologram " + holo.getName() + " : " + uuid);
-                continue;
-            }
-            holo.addShownTo(id, section.getLong(uuid));
-        }
     }
 
     private void addShownToTimes(NTimesHologram holo, ConfigurationSection section) {
@@ -194,14 +175,7 @@ public class WorldHologramStorage {
         section.set("activation-distance", holo.getActivationDistance());
         section.set("show-time", holo.getShowTimeTicks()/20L);
         section.set("permission", holo.getPermissions());
-        if (holo instanceof PeriodicHologram) {
-            PeriodicHologram periodic = (PeriodicHologram) holo;
-            section.set("delay", periodic.getShowDelay()/1000L); // seconds->ms
-            ConfigurationSection lastShownSection = section.createSection("last-shown"); 
-            for (Map.Entry<UUID, Long> entry : periodic.getLastShown().entrySet()) {
-                lastShownSection.set(entry.getKey().toString(), entry.getValue());
-            }
-        } else if (holo instanceof NTimesHologram) {
+        if (holo instanceof NTimesHologram) {
             NTimesHologram ntimes = (NTimesHologram) holo;
             section.set("times-to-show", ntimes.getTimesToShow()); // seconds->ms
             ConfigurationSection shownToSection = section.createSection("shown-to"); 
