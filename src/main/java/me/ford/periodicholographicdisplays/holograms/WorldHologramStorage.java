@@ -139,6 +139,7 @@ public class WorldHologramStorage {
     public PeriodicHologramBase getHologram(String name, PeriodicType type) {
         IndividualHologramHandler handler = holograms.get(name);
         if (handler == null) return null;
+        if (type == PeriodicType.ALWAYS) type = PeriodicType.NTIMES;
         return handler.getHologram(type);
     }
 

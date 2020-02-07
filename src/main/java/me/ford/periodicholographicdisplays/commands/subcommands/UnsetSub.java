@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import me.ford.periodicholographicdisplays.Messages;
@@ -79,10 +81,32 @@ public class UnsetSub extends SubCommand {
                 break;
                 case "times":
                 if (hologram.getType() == PeriodicType.NTIMES) {
-                    sender.sendMessage("pHD of type " + type.name() + " does not have 'times' - need NTIMES for that!");
+                    sender.sendMessage("pHD of type " + type.name() + " does not have 'times' - need NTIMES for that! - TODO - messaging");
                     return true;
                 }
                 ((NTimesHologram) hologram).setTimesToShow(-1); // ALWAYS
+                break;
+                case "playercount":
+                if (hologram.getType() != PeriodicType.NTIMES) {
+                    sender.sendMessage("pHD of type" + type.name() + " does not have a playercount - need NTIMES for that! - TODO - messaging");
+                    return true;
+                }
+                int optAt = 0;
+                for (String copt : opts) {
+                    if (opt == copt) break;
+                    optAt++;
+                }
+                if (opts.length < optAt + 2) {
+                    sender.sendMessage("Need to specify count after 'playercount' - TODO - messaging");
+                    return true;
+                }
+                String playerName = opts[optAt + 1];
+                Player player = Bukkit.getPlayer(playerName); // TODO - what about offline players?
+                if (player == null) {
+                    sender.sendMessage("Player not found (or not online): " + playerName + " - TODO - messaging");
+                    return true;
+                }
+                ((NTimesHologram) hologram).resetShownTo(player.getUniqueId());
                 break;
                 default:
                 sender.sendMessage("Unable to understand option " + opt + " - TODO - messaging");

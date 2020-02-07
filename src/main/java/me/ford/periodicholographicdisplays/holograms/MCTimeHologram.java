@@ -30,7 +30,8 @@ public class MCTimeHologram extends PeriodicHologramBase {
         this.atTime = atTime;
         plugin = JavaPlugin.getPlugin(PeriodicHolographicDisplays.class);
         displayer = new MCTimeHologramDisplayer();
-        task = plugin.getServer().getScheduler().runTaskTimer(plugin, displayer, DELAY, DELAY);
+        long curDelay = (atTime - hologram.getWorld().getTime())%24000;
+        task = plugin.getServer().getScheduler().runTaskTimer(plugin, displayer, curDelay, DELAY);
     }
 
     public long getTime() {

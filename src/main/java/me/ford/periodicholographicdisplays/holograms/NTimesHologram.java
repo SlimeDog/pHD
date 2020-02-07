@@ -57,5 +57,10 @@ public class NTimesHologram extends PeriodicHologramBase {
         shownTo.put(id, timesShown);
         markChanged();
     }
+
+    public void resetShownTo(UUID id) {
+        shownTo.remove(id);
+        markChanged();
+    }
     
 }
