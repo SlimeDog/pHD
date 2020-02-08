@@ -29,5 +29,6 @@ hologram-info: "Hologram '{name}':\nWorld: {world}\nType:{type}\nShowTime:{time}
 hologram-list: "Holograms: {holograms}"
 typeinfo:
   MCTIME: "Shown at: {time}"
+  IRLTIME: "Shown at: {time}"
   ALWAYS: "Always shown"
   NTIMES: "Shown to: {players:times}"
