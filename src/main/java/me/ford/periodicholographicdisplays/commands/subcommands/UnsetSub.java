@@ -109,7 +109,7 @@ public class UnsetSub extends SubCommand {
                 ((NTimesHologram) hologram).resetShownTo(player.getUniqueId());
                 break;
                 default:
-                sender.sendMessage("Unable to understand option " + opt + " - TODO - messaging");
+                sender.sendMessage(messages.getNoSuchOptionMessage(type, opt));
                 break;
             }
         }
