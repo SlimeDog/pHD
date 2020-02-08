@@ -10,22 +10,26 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
+import me.ford.periodicholographicdisplays.holograms.storage.Storage;
+import me.ford.periodicholographicdisplays.holograms.storage.YAMLStorage;
 
 /**
  * HologramStorage
  */
 public class HologramStorage {
+    private final Storage storage;
     private final PeriodicHolographicDisplays plugin;
     private final Map<World, WorldHologramStorage> holograms = new HashMap<>();
 
     public HologramStorage(PeriodicHolographicDisplays plugin) {
+        this.storage = new YAMLStorage(); // TODO - check config and use database if needed
         this.plugin = plugin;
         initWorldStorage();
     }
 
     private void initWorldStorage() {
         for (World world : plugin.getServer().getWorlds()) {
-            holograms.put(world, new WorldHologramStorage(plugin, world));
+            holograms.put(world, new WorldHologramStorage(plugin, world, storage));
         }
     }
 
@@ -33,9 +37,8 @@ public class HologramStorage {
         Validate.notNull(world, "Cannot get holograms of a null world!");
         WorldHologramStorage storage = holograms.get(world);
         if (storage == null) {
-            storage = new WorldHologramStorage(plugin, world);
+            storage = new WorldHologramStorage(plugin, world, this.storage);
             holograms.put(world, storage);
-            plugin.getLogger().info("Initializing per world holograms at an odd time!");
         }
         return storage;
     }
@@ -55,7 +58,7 @@ public class HologramStorage {
     public void addHologram(PeriodicHologramBase hologram) {
         WorldHologramStorage storage = getHolograms(hologram.getLocation().getWorld());
         storage.addHologram(hologram);
-        storage.save();
+        storage.saveHolograms();
     }
 
     public void removeHologram(PeriodicHologramBase hologram) {
@@ -68,7 +71,7 @@ public class HologramStorage {
 
     public void save() {
         for (WorldHologramStorage storage : holograms.values()) {
-            storage.save();
+            storage.saveHolograms();
         }
     }
 

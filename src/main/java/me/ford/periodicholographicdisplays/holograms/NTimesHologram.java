@@ -3,6 +3,7 @@ package me.ford.periodicholographicdisplays.holograms;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Map.Entry;
 
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 
@@ -51,6 +52,12 @@ public class NTimesHologram extends PeriodicHologramBase {
 
     public Map<UUID, Integer> getShownTo() {
         return new HashMap<>(shownTo);
+    }
+
+    void addAllShownTo(Map<UUID, Integer> shownTo) {
+        for (Entry<UUID, Integer> entry : shownTo.entrySet()) {
+            addShownTo(entry.getKey(), entry.getValue());
+        }
     }
 
     public void addShownTo(UUID id, int timesShown) {

@@ -129,7 +129,7 @@ public class YAMLStorage implements Storage {
             if (type == PeriodicType.ALWAYS) {
                 timesToShow = -1;
             } else {
-                timesToShow = section.getInt("times-to-show", 1);
+                timesToShow = section.getInt("times-to-show", -1);
             }
             typeInfo = new NTimesTypeInfo(timesToShow, getShownToTimes(section.getConfigurationSection("shown-to")));
             break;
@@ -142,6 +142,7 @@ public class YAMLStorage implements Storage {
 
     private Map<UUID, Integer> getShownToTimes(ConfigurationSection section) {
         Map<UUID, Integer> map = new HashMap<>();
+        if (section == null) return map;
         for (String uuid : section.getKeys(false)) {
             UUID id;
             try {

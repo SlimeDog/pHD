@@ -1,9 +1,9 @@
 package me.ford.periodicholographicdisplays.holograms;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.Set;
 import java.util.logging.Level;
 
 import com.gmail.filoghost.holographicdisplays.commands.CommandValidator;
@@ -12,129 +12,48 @@ import com.gmail.filoghost.holographicdisplays.object.NamedHologram;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
-import me.ford.periodicholographicdisplays.Settings;
-import me.ford.periodicholographicdisplays.holograms.storage.HologramLoadException;
+import me.ford.periodicholographicdisplays.holograms.storage.HologramInfo;
+import me.ford.periodicholographicdisplays.holograms.storage.Storage;
+import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo;
+import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.MCTimeTypeInfo;
+import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.IRLTimeTypeInfo;
+import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.NTimesTypeInfo;
+import me.ford.periodicholographicdisplays.holograms.storage.Storage.HDHologramInfo;
 
 /**
  * Storage
  */
 public class WorldHologramStorage extends WorldHologramStorageBase {
     private final PeriodicHolographicDisplays plugin;
+    private final Storage storage;
 
-    public WorldHologramStorage(PeriodicHolographicDisplays plugin, World world) {
+    public WorldHologramStorage(PeriodicHolographicDisplays plugin, World world, Storage storage) {
         super(plugin, world);
         this.plugin = plugin;
+        this.storage = storage;
         scheduleLoad();
         scheduleSave();
     }
 
     private void scheduleLoad() { // TODO - maybe there's an event?
         plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
-            for (String name : getConfig().getKeys(false)) {
-                IndividualHologramHandler holo = loadHologram(name);
-                if (holo == null)
-                    continue;
-                addHandler(name, holo);
-            }
+            storage.loadHolograms((info) -> loaded(info));
         }, 40L); // need to do this later so the holograms are loaded
     }
 
     private void scheduleSave() {
         long delay = plugin.getSettings().getSaveDelay() * 20L;
-        plugin.getServer().getScheduler().runTaskTimer(plugin, () -> save(), delay, delay);
-    }
-
-    private PeriodicHologramBase loadType(String name, ConfigurationSection section) throws HologramLoadException {
-        if (section == null) {
-            throw new HologramLoadException("Unable to parse hologram because of incorrect config (using the old system?): " + name);
-        }
-        PeriodicType type;
-        try {
-            type = PeriodicType.valueOf(section.getName());
-        } catch (IllegalArgumentException e) {
-            throw new HologramLoadException("Unable to parse type of hologram: " + section.getName());
-        }
-        NamedHologram hologram;
-        try {
-            hologram = CommandValidator.getNamedHologram(name);
-        } catch (CommandException e) {
-            throw new HologramLoadException("Hologram by the name of '" + name + "' does not exist'");
-        }
-        Settings settings = plugin.getSettings();
-        double distance = section.getDouble("activation-distance", settings.getDefaultActivationDistance());
-        long showTime = section.getLong("show-time", settings.getDefaultShowTime());
-        String perms = section.getString("permission"); // defaults to null
-        final PeriodicHologramBase holo;
-        switch (type) {
-        case IRLTIME:
-            long atTime = section.getLong("show-at", 0); // seconds from 00:00
-            holo = new IRLTimeHologram(hologram, name, distance, showTime, atTime, false, perms);
-            break;
-        case MCTIME:
-            long time = section.getLong("show-at", 0);
-            holo = new MCTimeHologram(hologram, name, distance, showTime, time, false, perms);
-            break;
-        case ALWAYS:
-        case NTIMES:
-            int timesToShow;
-            if (type == PeriodicType.ALWAYS) {
-                timesToShow = -1;
-            } else {
-                timesToShow = section.getInt("times-to-show", 1);
-            }
-            NTimesHologram ntimes = new NTimesHologram(hologram, name, distance, showTime, timesToShow, false, perms);
-            if (type != PeriodicType.ALWAYS) {
-                addShownToTimes(ntimes, section.getConfigurationSection("shown-to"));
-            }
-            holo = ntimes;
-            break;
-        default:
-            plugin.getLogger().info("Undefined loading behavour with type: " + type);
-            return null;
-        }
-        return holo;
-    }
-
-    private IndividualHologramHandler loadHologram(String name) {
-        ConfigurationSection section = getConfig().getConfigurationSection(name);
-        IndividualHologramHandler handler = null;
-        for (String typeStr : section.getKeys(false)) {
-            PeriodicHologramBase holo;
-            try {
-                holo = loadType(name, section.getConfigurationSection(typeStr));
-            } catch (HologramLoadException e) {
-                plugin.getLogger().log(Level.WARNING, "Problem loading hologram of type " + typeStr + " from file for hologram " + name, e);
-                continue;
-            }
-            if (handler == null) {
-                handler = new IndividualHologramHandler(holo.getType(), holo);
-            } else {
-                handler.addHologram(holo.getType(), holo);
-            }
-        }
-        return handler;
-    }
-
-    private void addShownToTimes(NTimesHologram holo, ConfigurationSection section) {
-        for (String uuid : section.getKeys(false)) {
-            UUID id;
-            try {
-                id = UUID.fromString(uuid);
-            } catch (IllegalArgumentException e) {
-                plugin.getLogger().warning("Unable to parse UUID of Periodic hologram " + holo.getName() + " : " + uuid);
-                continue;
-            }
-            holo.addShownTo(id, section.getInt(uuid));
-        }
+        plugin.getServer().getScheduler().runTaskTimer(plugin, () -> saveHolograms(), delay, delay);
     }
 
     public PeriodicHologramBase getHologram(String name, PeriodicType type) {
         IndividualHologramHandler handler = getHandler(name);
-        if (handler == null) return null;
-        if (type == PeriodicType.ALWAYS) type = PeriodicType.NTIMES;
+        if (handler == null)
+            return null;
+        if (type == PeriodicType.ALWAYS)
+            type = PeriodicType.NTIMES;
         return handler.getHologram(type);
     }
 
@@ -154,57 +73,85 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         return names;
     }
 
+    private void loaded(HDHologramInfo info) {
+        NamedHologram holo;
+        try {
+            holo = CommandValidator.getNamedHologram(info.getHoloName());
+        } catch (CommandException e) {
+            plugin.getLogger().log(Level.WARNING, "Problem loading hologram " + info.getHoloName() + ": HD hologram not found", e);
+            return;
+        }
+        IndividualHologramHandler handler = null;
+        for (HologramInfo hInfo : info.getInfos()) {
+            PeriodicHologramBase hologram;
+            TypeInfo typeInfo = hInfo.getTypeInfo();
+            switch (hInfo.getType()) {
+                case MCTIME:
+                hologram = new MCTimeHologram(holo, info.getHoloName(), hInfo.getActivationDistance(), 
+                                                hInfo.getShowTime(), ((MCTimeTypeInfo) typeInfo).getAtTime(), 
+                                                false, hInfo.getPermissions());
+                break;
+                case IRLTIME:
+                hologram = new IRLTimeHologram(holo, info.getHoloName(), hInfo.getActivationDistance(),
+                                                hInfo.getShowTime(), ((IRLTimeTypeInfo) typeInfo).getAtTime(), 
+                                                false, hInfo.getPermissions());
+                break;
+                case NTIMES:
+                case ALWAYS:
+                NTimesTypeInfo ntimesInfo = (NTimesTypeInfo) typeInfo;
+                NTimesHologram ntimes = new NTimesHologram(holo, info.getHoloName(), hInfo.getActivationDistance(),
+                                                hInfo.getShowTime(), ntimesInfo.getShowTimes(), 
+                                                false, hInfo.getPermissions());
+                ntimes.addAllShownTo(ntimesInfo.getShownToTimes());
+                hologram = ntimes;
+                break;
+                default:
+                throw new IllegalArgumentException("Unexpected pHD type " + hInfo.getType());
+            }
+            if (handler == null) handler = new IndividualHologramHandler(hInfo.getType(), hologram);
+        }
+        if (handler != null) {
+            addHandler(handler.getName(), handler);
+        }
+    }
+
     @Override
     protected boolean saveHolograms() {
-        boolean madeChanges = false;
+        Set<HDHologramInfo> infos = new HashSet<>();
         for (IndividualHologramHandler handler : getHandlers()) {
             if (handler.needsSaved()){
-                saveHologram(handler);
                 handler.markSaved();
-                madeChanges = true;
+                infos.add(getInfo(handler));
             }
         }
-        return madeChanges;
+        storage.saveHolograms(infos);
+        return !infos.isEmpty();
     }
 
-    private void saveType(ConfigurationSection section, PeriodicHologramBase holo) {
-        Settings settings = plugin.getSettings();
-        String typeStr = (holo.getType() == PeriodicType.NTIMES && ((NTimesHologram) holo).getTimesToShow() < 0) ? PeriodicType.ALWAYS.name() : holo.getType().name();
-        section = section.getParent().getConfigurationSection(typeStr);
-        section.set("type", typeStr);
-        if (holo.getActivationDistance() != settings.getDefaultActivationDistance()) {
-            section.set("activation-distance", holo.getActivationDistance());
-        }
-        if (holo.getShowTimeTicks() != settings.getDefaultShowTime() * 20L) {
-            section.set("show-time", holo.getShowTimeTicks()/20L);
-        }
-        section.set("permission", holo.getPermissions());
-        if (holo instanceof NTimesHologram) {
-            NTimesHologram ntimes = (NTimesHologram) holo;
-            if (ntimes.getTimesToShow() > -1) {
-                section.set("times-to-show", ntimes.getTimesToShow());
-                ConfigurationSection shownToSection = section.createSection("shown-to"); 
-                for (Map.Entry<UUID, Integer> entry : ntimes.getShownTo().entrySet()) {
-                    shownToSection.set(entry.getKey().toString(), entry.getValue());
-                }
-            }
-        } else if (holo instanceof MCTimeHologram) {
-            MCTimeHologram mctime = (MCTimeHologram) holo;
-            section.set("show-at", mctime.getTime());
-        } else if (holo instanceof IRLTimeHologram) {
-            IRLTimeHologram irltime = (IRLTimeHologram) holo;
-            section.set("show-at", irltime.getTime());
-        }
-    }
-
-    private void saveHologram(IndividualHologramHandler handler) {
-        ConfigurationSection section = getConfig().createSection(handler.getName());
+    private HDHologramInfo getInfo(IndividualHologramHandler handler) {
+        HDHologramInfo info = new HDHologramInfo(handler.getName());
         for (PeriodicHologramBase holo : handler.getHolograms()) {
-            saveType(section.createSection(holo.getType().name()), holo);
+            TypeInfo typeInfo = getTypeInfo(holo);
+            HologramInfo hInfo = new HologramInfo(holo.getName(), holo.getType(), holo.getActivationDistance(), 
+                                holo.getShowTimeTicks()/20L, holo.getPermissions(), typeInfo);
+            info.addInfo(hInfo);
         }
-        if (!handler.hasHolograms()) {
-            removeHandler(handler.getName());
-        }
+        return info;
+    }
+
+    private TypeInfo getTypeInfo(PeriodicHologramBase holo) {
+        switch (holo.getType()) {
+            case MCTIME:
+            return new MCTimeTypeInfo(((MCTimeHologram) holo).getTime());
+            case IRLTIME:
+            return new IRLTimeTypeInfo(((IRLTimeHologram) holo).getTime());
+            case ALWAYS:
+            case NTIMES:
+            NTimesHologram ntimes = (NTimesHologram) holo;
+            return new NTimesTypeInfo(ntimes.getTimesToShow(), ntimes.getShownTo());
+            default:
+            throw new IllegalArgumentException("Need to specify type of hologram to get type info, got " + holo.getType());
+        } 
     }
 
     void addHologram(PeriodicHologramBase hologram) {
