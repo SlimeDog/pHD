@@ -81,14 +81,14 @@ public class UnsetSub extends SubCommand {
                 break;
                 case "times":
                 if (hologram.getType() == PeriodicType.NTIMES) {
-                    sender.sendMessage("pHD of type " + type.name() + " does not have 'times' - need NTIMES for that! - TODO - messaging");
+                    sender.sendMessage(messages.getNoSuchOptionMessage(type, opt));
                     return true;
                 }
                 ((NTimesHologram) hologram).setTimesToShow(-1); // ALWAYS
                 break;
                 case "playercount":
                 if (hologram.getType() != PeriodicType.NTIMES) {
-                    sender.sendMessage("pHD of type" + type.name() + " does not have a playercount - need NTIMES for that! - TODO - messaging");
+                    sender.sendMessage(messages.getNoSuchOptionMessage(type, opt));
                     return true;
                 }
                 int optAt = 0;
