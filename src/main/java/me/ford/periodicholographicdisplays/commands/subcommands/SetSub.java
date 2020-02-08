@@ -111,7 +111,7 @@ public class SetSub extends SubCommand {
             case IRLTIME:
             String tResult = optionPairs.get("time");
             if (tResult == null) {
-                sender.sendMessage("Need to specify time for IRLTIME type of pHD - TODO - messaging");
+                sender.sendMessage(messages.getOptionMissingMessage(type, "time"));
                 return null;
             }
             long time;
@@ -126,7 +126,7 @@ public class SetSub extends SubCommand {
             case MCTIME:
             String timeResult = optionPairs.get("time");
             if (timeResult == null) {
-                sender.sendMessage("Need to specify time for MCTIME type of pHD - TODO - messaging");
+                sender.sendMessage(messages.getOptionMissingMessage(type, "time"));
                 return null;
             }
             long timeAt;

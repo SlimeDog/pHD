@@ -31,6 +31,7 @@ unmanaged-hologram: "Unmanaged hologram {name} of type {type}"
 no-such-option: "{type} holograms have no {option} option"
 incorrect-set-options: "Need a set of key-value pairs to set (got an odd number of arguments)"
 set-new-values: "Set new values for hologram {name} of type {type}: {options}"
+option-missing: "Need to set {option} for a {type} hologram"
 typeinfo:
   MCTIME: "Shown at: {time}"
   IRLTIME: "Shown at: {time}"

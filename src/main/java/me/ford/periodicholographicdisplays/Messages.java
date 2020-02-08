@@ -78,6 +78,11 @@ public class Messages extends CustomConfigHandler {
         return getMessage("incorrect-set-options", "Need a set of key-value pairs to set (got an odd number of arguments)");
     }
 
+    public String getOptionMissingMessage(PeriodicType type, String option) {
+        return getMessage("option-missing", "Need to set {option} for a {type} hologram")
+                        .replace("{type}", type.name()).replace("{option}", option);
+    }
+
     public String getSetNewOptionsMessage(String name, PeriodicType type, Map<String, String> options) {
         List<String> opts = new ArrayList<>();
         for (Entry<String, String> entry : options.entrySet()) {
