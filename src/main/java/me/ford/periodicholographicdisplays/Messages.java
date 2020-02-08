@@ -92,7 +92,7 @@ public class Messages extends CustomConfigHandler {
     }
 
     private String getIRLTimeTypeInfo(IRLTimeHologram hologram) {
-        return getMessage("IRLTIME", "Shown at: {time}").replace("{time}", TimeUtils.toMCTime(hologram.getTime()));
+        return getMessage("IRLTIME", "Shown at: {time}").replace("{time}", TimeUtils.toIRLTime(hologram.getTime()));
     }
 
     private String getMCTimeTypeInfo(MCTimeHologram hologram) {

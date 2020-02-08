@@ -156,5 +156,11 @@ public final class TimeUtils {
         int minutes = Integer.parseInt(matcher.group(2));
         return hours * 3600 + minutes * 60;
     }
+
+    public static String toIRLTime(long time) {
+        long hours = time/3600;
+        long minutes = (time%3600)/ 60;
+        return String.format("%02d:%02d", hours, minutes);
+    }
     
 }
