@@ -69,8 +69,8 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
 
     public List<String> getHologramNames() { // TODO - potentially only show those in loaded chunks
         List<String> names = new ArrayList<>();
-        for (PeriodicHologramBase holo : getHolograms()) {
-            names.add(holo.getName());
+        for (IndividualHologramHandler handler : getHandlers(false)) {
+            names.add(handler.getName());
         }
         return names;
     }
