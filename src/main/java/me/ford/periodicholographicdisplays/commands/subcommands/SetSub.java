@@ -3,8 +3,10 @@ package me.ford.periodicholographicdisplays.commands.subcommands;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import com.gmail.filoghost.holographicdisplays.commands.CommandValidator;
@@ -96,7 +98,7 @@ public class SetSub extends SubCommand {
             storage.addHologram(existing);
         }
         setAll(sender, existing, optionPairs, existed);
-        sender.sendMessage("Set these: " + optionPairs + " for " + holo.getName() + "; (this might contain extra stuff, not a proper message) - TODO - messaging");
+        sender.sendMessage(messages.getSetNewOptionsMessage(holo.getName(), type, optionPairs));
         return true;
     }
 
@@ -157,7 +159,7 @@ public class SetSub extends SubCommand {
     }
 
     private void setAll(CommandSender sender, PeriodicHologramBase holo, Map<String, String> options, boolean doSpecial) {
-        
+        Set<String> invalidOptions = new HashSet<>();
         for (Entry<String, String> entry : options.entrySet()) {
             String result = entry.getValue();
             if (holo.getType() == PeriodicType.NTIMES && entry.getKey().equalsIgnoreCase("times")) {
@@ -212,9 +214,11 @@ public class SetSub extends SubCommand {
                 break;
                 default:
                 sender.sendMessage(messages.getNoSuchOptionMessage(holo.getType(), entry.getKey()));
+                invalidOptions.add(entry.getKey());
                 break; 
             }
         }
+        for (String opt : invalidOptions) options.remove(opt);
     }
 
     private Map<String, String> getOptionPairs(String[] args) {

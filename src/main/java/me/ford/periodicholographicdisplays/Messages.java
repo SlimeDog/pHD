@@ -2,6 +2,7 @@ package me.ford.periodicholographicdisplays;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.Map.Entry;
 
@@ -75,6 +76,15 @@ public class Messages extends CustomConfigHandler {
 
     public String getNeedPairedOptionsMessage() {
         return getMessage("incorrect-set-options", "Need a set of key-value pairs to set (got an odd number of arguments)");
+    }
+
+    public String getSetNewOptionsMessage(String name, PeriodicType type, Map<String, String> options) {
+        List<String> opts = new ArrayList<>();
+        for (Entry<String, String> entry : options.entrySet()) {
+            opts.add(String.format("%s=%s", entry.getKey(), entry.getValue()));
+        }
+        return getMessage("set-new-values", "Set new values for hologram {name} of type {type}: {options}")
+                        .replace("{name}", name).replace("{type}", type.name()).replace("{options}", String.join(", ", opts));
     }
 
     public String getHologramInfoMessage(PeriodicHologramBase hologram) {
