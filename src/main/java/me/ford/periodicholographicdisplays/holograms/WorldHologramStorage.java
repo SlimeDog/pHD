@@ -56,8 +56,12 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
     }
 
     public List<PeriodicHologramBase> getHolograms() { // TODO - potentially only show those in loaded chunks
+        return getHolograms(false);
+    }
+
+    public List<PeriodicHologramBase> getHolograms(boolean onlyLoaded) {
         List<PeriodicHologramBase> holos = new ArrayList<>();
-        for (IndividualHologramHandler handler : getHandlers()) {
+        for (IndividualHologramHandler handler : getHandlers(onlyLoaded)) {
             holos.addAll(handler.getHolograms());
         }
         return holos;
@@ -117,7 +121,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
     @Override
     protected boolean saveHolograms() {
         Set<HDHologramInfo> infos = new HashSet<>();
-        for (IndividualHologramHandler handler : getHandlers()) {
+        for (IndividualHologramHandler handler : getHandlers(false)) {
             if (handler.needsSaved()){
                 handler.markSaved();
                 infos.add(getInfo(handler));

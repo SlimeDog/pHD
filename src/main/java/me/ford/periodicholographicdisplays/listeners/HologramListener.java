@@ -23,7 +23,7 @@ public class HologramListener implements Listener {
 
     private void movedTo(Player player, Location location) {
         WorldHologramStorage wh = holograms.getHolograms(location.getWorld());
-        for (PeriodicHologramBase base : wh.getHolograms()) {
+        for (PeriodicHologramBase base : wh.getHolograms(true)) {
             double dist2 = base.getLocation().distanceSquared(location);
             if (dist2 < base.getSquareDistance()) {
                 base.attemptToShow(player);

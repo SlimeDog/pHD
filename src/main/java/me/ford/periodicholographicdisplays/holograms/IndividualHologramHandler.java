@@ -1,7 +1,9 @@
 package me.ford.periodicholographicdisplays.holograms;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -78,6 +80,18 @@ public class IndividualHologramHandler {
             holo.markSaved();
         }
         needsSaved = false;
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        List<String> types = new ArrayList<>();
+        for (PeriodicType type : holograms.keySet()) types.add(type.name());
+        return String.format("[IHH:%s;types:%s]", name, String.join(", ", types));
     }
     
 }
