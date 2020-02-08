@@ -52,8 +52,6 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         IndividualHologramHandler handler = getHandler(name);
         if (handler == null)
             return null;
-        if (type == PeriodicType.ALWAYS)
-            type = PeriodicType.NTIMES;
         return handler.getHologram(type);
     }
 

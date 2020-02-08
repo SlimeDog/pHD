@@ -40,8 +40,15 @@ public class InfoSub extends SubCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
-        if (args.length < 2) {
+        if (args.length < 1) {
             return false;
+        }
+        if (args.length == 1) {
+            List<PeriodicType> availableTypes = storage.getAvailableTypes(args[0]);
+            List<String> types = new ArrayList<>();
+            for (PeriodicType type : availableTypes) types.add(type.name());
+            sender.sendMessage("Types available for " + args[0] + ": " + String.join(", ", types));
+            return true;
         }
         PeriodicType type;
         try {

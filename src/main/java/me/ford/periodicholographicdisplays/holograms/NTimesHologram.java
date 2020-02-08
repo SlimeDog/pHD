@@ -41,6 +41,12 @@ public class NTimesHologram extends PeriodicHologramBase {
         }   
     }
 
+    @Override
+    public PeriodicType getType() {
+        if (timesToShow == -1) return PeriodicType.ALWAYS;
+        return super.getType();
+    }
+
     public void setTimesToShow(int times) {
         timesToShow = times;
         markChanged();

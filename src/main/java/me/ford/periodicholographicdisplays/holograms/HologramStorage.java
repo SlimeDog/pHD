@@ -75,6 +75,20 @@ public class HologramStorage {
         }
     }
 
+    public List<PeriodicType> getAvailableTypes(String name) {
+        for (WorldHologramStorage storage : holograms.values()) {
+            IndividualHologramHandler handler = storage.getHandler(name);
+            if (handler != null) {
+                List<PeriodicType> types = new ArrayList<>();
+                for (PeriodicHologramBase holo : handler.getHolograms()) {
+                    types.add(holo.getType());
+                }
+                return types;
+            }
+        }
+        return new ArrayList<>();
+    }
+
     public PeriodicHologramBase getHologram(String name, PeriodicType type) {
         for (WorldHologramStorage storage : holograms.values()) {
             PeriodicHologramBase holo = storage.getHologram(name, type);
