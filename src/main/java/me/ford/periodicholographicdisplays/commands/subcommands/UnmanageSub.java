@@ -56,7 +56,7 @@ public class UnmanageSub extends SubCommand {
             return true;
         }
         storage.removeHologram(holo);
-        sender.sendMessage("Succesfully removed hologram " + holo.getName() + " of type " + type.name() + " - TODO - messaging");
+        sender.sendMessage(messages.getUnmanagedHologramMessage(holo.getName(), type));
         return true;
     }
 

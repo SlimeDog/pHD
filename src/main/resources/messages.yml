@@ -27,6 +27,7 @@ need-a-player: "Only a player can use this command!"
 world-not-found: "World not found: {name}"
 hologram-info: "Hologram '{name}':\nWorld: {world}\nType:{type}\nShowTime:{time}s\nActivationDistance:{distance}\nPermission:{perms}\nTypeInfo:{typeinfo}"
 hologram-list: "Holograms: {holograms}"
+unmanaged-hologram: "Unmanaged hologram {name} of type {type}"
 typeinfo:
   MCTIME: "Shown at: {time}"
   IRLTIME: "Shown at: {time}"
