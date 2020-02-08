@@ -35,6 +35,7 @@ option-missing: "Need to set {option} for a {type} hologram"
 incorrect-time: "Unable to parse time {time}"
 need-player-after-playercount: "Need to specify a player after 'playercount'"
 player-not-found: "Player not found: {player}"
+unset-options: "Set the options to default: {options}"
 typeinfo:
   MCTIME: "Shown at: {time}"
   IRLTIME: "Shown at: {time}"

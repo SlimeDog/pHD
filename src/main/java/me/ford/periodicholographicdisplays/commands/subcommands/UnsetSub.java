@@ -113,7 +113,7 @@ public class UnsetSub extends SubCommand {
                 break;
             }
         }
-        sender.sendMessage("Unset the options " + String.join(", ", opts) + " - TODO - messaging");
+        sender.sendMessage(messages.getUnsetOptionsMessage(opts));
         return true;
     }
 
