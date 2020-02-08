@@ -34,6 +34,7 @@ set-new-values: "Set new values for hologram {name} of type {type}: {options}"
 option-missing: "Need to set {option} for a {type} hologram"
 incorrect-time: "Unable to parse time {time}"
 need-count-after-playercount: "Need to specify the new count after 'playercount'"
+player-not-found: "Player not found: {player}"
 typeinfo:
   MCTIME: "Shown at: {time}"
   IRLTIME: "Shown at: {time}"

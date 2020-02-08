@@ -103,7 +103,7 @@ public class UnsetSub extends SubCommand {
                 String playerName = opts[optAt + 1];
                 Player player = Bukkit.getPlayer(playerName); // TODO - what about offline players?
                 if (player == null) {
-                    sender.sendMessage("Player not found (or not online): " + playerName + " - TODO - messaging");
+                    sender.sendMessage(messages.getPlayerNotFoundMessage(playerName));
                     return true;
                 }
                 ((NTimesHologram) hologram).resetShownTo(player.getUniqueId());

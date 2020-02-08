@@ -91,6 +91,10 @@ public class Messages extends CustomConfigHandler {
         return getMessage("need-count-after-playercount", "Need to specify the new count after 'playercount'");
     }
 
+    public String getPlayerNotFoundMessage(String name) {
+        return getMessage("player-not-found", "Player not found: {player}").replace("{player}", name);
+    }
+
     public String getSetNewOptionsMessage(String name, PeriodicType type, Map<String, String> options) {
         List<String> opts = new ArrayList<>();
         for (Entry<String, String> entry : options.entrySet()) {
