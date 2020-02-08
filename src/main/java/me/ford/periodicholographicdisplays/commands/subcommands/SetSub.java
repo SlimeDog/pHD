@@ -181,7 +181,7 @@ public class SetSub extends SubCommand {
                     if (mcTime) time = TimeUtils.parseMCTime(result);
                     else time = TimeUtils.parseHoursAndMinutesToSeconds(result);
                 } catch (IllegalArgumentException e) {
-                    sender.sendMessage("Unable to parse TIME: " + result + " - TODO - messaging");
+                    sender.sendMessage(messages.getIncorrectTimeMessage(result));
                     return;
                 }
                 if (mcTime) ((MCTimeHologram) holo).setTime(time);
