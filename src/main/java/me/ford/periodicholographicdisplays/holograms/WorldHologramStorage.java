@@ -81,6 +81,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
             plugin.getLogger().log(Level.WARNING, "Problem loading hologram " + info.getHoloName() + ": HD hologram not found", e);
             return;
         }
+        if (holo.getWorld() != getWorld()) return; // don't load
         IndividualHologramHandler handler = null;
         for (HologramInfo hInfo : info.getInfos()) {
             PeriodicHologramBase hologram;
