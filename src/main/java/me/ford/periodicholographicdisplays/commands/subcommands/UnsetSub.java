@@ -68,6 +68,7 @@ public class UnsetSub extends SubCommand {
             return true;
         }
         String[] opts = Arrays.copyOfRange(args, 1, args.length);
+        List<String> usedOptions = Arrays.asList(opts);
         for (String opt : opts) {
             switch(opt) {
                 case "distance":
@@ -110,10 +111,11 @@ public class UnsetSub extends SubCommand {
                 break;
                 default:
                 sender.sendMessage(messages.getNoSuchOptionMessage(type, opt));
+                usedOptions.remove(opt);
                 break;
             }
         }
-        sender.sendMessage(messages.getUnsetOptionsMessage(opts));
+        sender.sendMessage(messages.getUnsetOptionsMessage(usedOptions));
         return true;
     }
 

@@ -95,7 +95,7 @@ public class Messages extends CustomConfigHandler {
         return getMessage("player-not-found", "Player not found: {player}").replace("{player}", name);
     }
 
-    public String getUnsetOptionsMessage(String[] opts) {
+    public String getUnsetOptionsMessage(List<String> opts) {
         return getMessage("unset-options", "Set the options to default: {options}").replace("{options}", String.join(", ", opts));
     }
 
