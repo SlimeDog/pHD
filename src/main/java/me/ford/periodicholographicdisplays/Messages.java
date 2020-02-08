@@ -83,6 +83,10 @@ public class Messages extends CustomConfigHandler {
                         .replace("{type}", type.name()).replace("{option}", option);
     }
 
+    public String getIncorrectTimeMessage(String msg) {
+        return getMessage("incorrect-time", "Unable to parse time {time}").replace("{time}", msg);
+    }
+
     public String getSetNewOptionsMessage(String name, PeriodicType type, Map<String, String> options) {
         List<String> opts = new ArrayList<>();
         for (Entry<String, String> entry : options.entrySet()) {

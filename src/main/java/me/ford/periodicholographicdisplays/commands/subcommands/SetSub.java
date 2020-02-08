@@ -118,7 +118,7 @@ public class SetSub extends SubCommand {
             try {
                 time = TimeUtils.parseHoursAndMinutesToSeconds(tResult);
             } catch (IllegalArgumentException e) {
-                sender.sendMessage("Unable to parse IRLTIME: " + tResult + " - TODO - messaging");
+                sender.sendMessage(messages.getIncorrectTimeMessage(tResult));
                 return null;
             }
             existing = new IRLTimeHologram(holo, holo.getName(), defaultDistance, showTime, time, true);
@@ -133,7 +133,7 @@ public class SetSub extends SubCommand {
             try {
                 timeAt = TimeUtils.parseMCTime(timeResult);
             } catch (IllegalArgumentException e) {
-                sender.sendMessage("Unable to parse MCTIME: " + timeResult + " - TODO - messaging");
+                sender.sendMessage(messages.getIncorrectTimeMessage(timeResult));
                 return null;
             }
             existing = new MCTimeHologram(holo, holo.getName(), defaultDistance, showTime, timeAt, true);
