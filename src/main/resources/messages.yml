@@ -33,6 +33,7 @@ incorrect-set-options: "Need a set of key-value pairs to set (got an odd number 
 set-new-values: "Set new values for hologram {name} of type {type}: {options}"
 option-missing: "Need to set {option} for a {type} hologram"
 incorrect-time: "Unable to parse time {time}"
+need-count-after-playercount: "Need to specify the new count after 'playercount'"
 typeinfo:
   MCTIME: "Shown at: {time}"
   IRLTIME: "Shown at: {time}"

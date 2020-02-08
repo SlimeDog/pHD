@@ -97,7 +97,7 @@ public class UnsetSub extends SubCommand {
                     optAt++;
                 }
                 if (opts.length < optAt + 2) {
-                    sender.sendMessage("Need to specify count after 'playercount' - TODO - messaging");
+                    sender.sendMessage(messages.getNeedCountAfterPlayercount());
                     return true;
                 }
                 String playerName = opts[optAt + 1];
