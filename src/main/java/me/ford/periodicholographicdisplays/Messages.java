@@ -99,6 +99,14 @@ public class Messages extends CustomConfigHandler {
         return getMessage("unset-options", "Set the options to default: {options}").replace("{options}", String.join(", ", opts));
     }
 
+    public String getConfigReloadedMessage() {
+        return getMessage("config-reloaded", "Succesfully reloaded the config");
+    }
+
+    public String getProblemsReloadingConfigMessage() {
+        return getMessage("problems-reloading-config", "Problems reloading config!");
+    }
+
     public String getSetNewOptionsMessage(String name, PeriodicType type, Map<String, String> options) {
         List<String> opts = new ArrayList<>();
         for (Entry<String, String> entry : options.entrySet()) {

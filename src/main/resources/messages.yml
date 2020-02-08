@@ -36,6 +36,8 @@ incorrect-time: "Unable to parse time {time}"
 need-player-after-playercount: "Need to specify a player after 'playercount'"
 player-not-found: "Player not found: {player}"
 unset-options: "Set the options to default: {options}"
+config-reloaded: "Succesfully reloaded the config"
+problems-reloading-config: "Problems reloading config!"
 typeinfo:
   MCTIME: "Shown at: {time}"
   IRLTIME: "Shown at: {time}"

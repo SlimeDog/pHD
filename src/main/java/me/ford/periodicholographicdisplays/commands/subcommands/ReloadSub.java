@@ -31,10 +31,9 @@ public class ReloadSub extends SubCommand {
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
         if (phd.reload()) {
-            messages.getClass(); // TODO - messaging
-            sender.sendMessage("Successfully reloaded the config - TODO messaging");
+            sender.sendMessage(messages.getConfigReloadedMessage());
         } else {
-            sender.sendMessage("Problem reloading config... - TODO - messaging");
+            sender.sendMessage(messages.getProblemsReloadingConfigMessage());
         }
         return true;
     }
