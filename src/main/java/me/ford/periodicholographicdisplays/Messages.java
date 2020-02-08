@@ -88,7 +88,7 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getNeedCountAfterPlayercount() {
-        return getMessage("need-count-after-playercount", "Need to specify the new count after 'playercount'");
+        return getMessage("need-player-after-playercount", "Need to specify a player after 'playercount'");
     }
 
     public String getPlayerNotFoundMessage(String name) {
