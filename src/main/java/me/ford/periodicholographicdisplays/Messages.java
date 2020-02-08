@@ -68,6 +68,15 @@ public class Messages extends CustomConfigHandler {
                         .replace("{name}", name).replace("{type}", type.name());
     }
 
+    public String getNoSuchOptionMessage(PeriodicType type, String option) {
+        return getMessage("no-such-option", "{type} holograms have no {option} option")
+                        .replace("{type}", type.name()).replace("{option}", option);
+    }
+
+    public String getNeedPairedOptionsMessage() {
+        return getMessage("incorrect-set-options", "Need a set of key-value pairs to set (got an odd number of arguments)");
+    }
+
     public String getHologramInfoMessage(PeriodicHologramBase hologram) {
         String typeinfo;
         switch(hologram.getType()) {

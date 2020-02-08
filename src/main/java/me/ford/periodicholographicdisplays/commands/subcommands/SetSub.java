@@ -84,7 +84,7 @@ public class SetSub extends SubCommand {
         try {
             optionPairs = getOptionPairs(Arrays.copyOfRange(args, 2, args.length));
         } catch (IllegalArgumentException e) {
-            sender.sendMessage("Need an even number of arguments (pairs)! - TODO - messaging");
+            sender.sendMessage(messages.getNeedPairedOptionsMessage());
             return true;
         }
         WorldHologramStorage worldStorage = storage.getHolograms(holo.getWorld());
@@ -211,7 +211,7 @@ public class SetSub extends SubCommand {
                 holo.setPermissions(result);
                 break;
                 default:
-                sender.sendMessage("Unable to set option " + entry.getKey() + " TODO - messaging");
+                sender.sendMessage(messages.getNoSuchOptionMessage(holo.getType(), entry.getKey()));
                 break; 
             }
         }
