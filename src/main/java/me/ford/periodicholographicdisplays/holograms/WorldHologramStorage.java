@@ -16,6 +16,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.Settings;
+import me.ford.periodicholographicdisplays.holograms.storage.HologramLoadException;
 
 /**
  * Storage
@@ -223,19 +224,6 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         Validate.isTrue(hologram.getLocation().getWorld() == getWorld(), "Cannot remove holograms in a different world!");
         IndividualHologramHandler handler = getHandler(hologram.getName());
         handler.removeHologram(hologram);
-    }
-
-    public class HologramLoadException extends IllegalArgumentException {
-
-        /**
-         *
-         */
-        private static final long serialVersionUID = -2998543533635166107L;
-        
-        public HologramLoadException(String msg) {
-            super(msg);
-        }
-
     }
     
 }
