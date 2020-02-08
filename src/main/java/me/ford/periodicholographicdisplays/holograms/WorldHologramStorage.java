@@ -111,7 +111,12 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
                 default:
                 throw new IllegalArgumentException("Unexpected pHD type " + hInfo.getType());
             }
-            if (handler == null) handler = new IndividualHologramHandler(hInfo.getType(), hologram);
+            if (handler == null) {
+                handler = new IndividualHologramHandler(hInfo.getType(), hologram);
+            } else {
+                handler.addHologram(hInfo.getType(), hologram);
+            }
+            
         }
         if (handler != null) {
             addHandler(handler.getName(), handler);
