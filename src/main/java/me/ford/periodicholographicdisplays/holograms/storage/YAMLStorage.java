@@ -84,7 +84,6 @@ public class YAMLStorage implements Storage {
 
     private void loadHologram(String name, Consumer<HDHologramInfo> consumer) {
         ConfigurationSection section = getConfig().getConfigurationSection(name);
-        // IndividualHologramHandler handler = null;
         HDHologramInfo info = new HDHologramInfo(name);
         for (String typeStr : section.getKeys(false)) {
             HologramInfo holo;
