@@ -76,7 +76,7 @@ public class SQLStorage implements Storage {
                 i++;
             }
             if (existingTypes.length - 1 < PeriodicType.values().length) {
-                String filler = String.format("%0" + existingTypes.length + "d", 0).replace("0", "?, ");
+                String filler = String.format("%0" + (existingTypes.length - 1) + "d", 0).replace("0", "?, ");
                 filler = filler.substring(0, filler.length() - 2);
                 String curDelete = String.format(deleteQuery, filler);
                 executeUpdate(curDelete, existingTypes);
