@@ -132,6 +132,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
                 infos.add(getInfo(handler));
             }
         }
+        if (infos.isEmpty()) return false;
         storage.saveHolograms(infos);
         return !infos.isEmpty();
     }
