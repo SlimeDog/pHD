@@ -100,13 +100,15 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
                                                 false, hInfo.getPermissions());
                 break;
                 case NTIMES:
-                case ALWAYS:
                 NTimesTypeInfo ntimesInfo = (NTimesTypeInfo) typeInfo;
                 NTimesHologram ntimes = new NTimesHologram(holo, info.getHoloName(), hInfo.getActivationDistance(),
                                                 hInfo.getShowTime(), ntimesInfo.getShowTimes(), 
                                                 false, hInfo.getPermissions());
                 ntimes.addAllShownTo(ntimesInfo.getShownToTimes());
                 hologram = ntimes;
+                break;
+                case ALWAYS:
+                hologram = new AlwaysHologram(holo, info.getHoloName(), hInfo.getActivationDistance(), hInfo.getShowTime(), false, hInfo.getPermissions());
                 break;
                 default:
                 throw new IllegalArgumentException("Unexpected pHD type " + hInfo.getType());

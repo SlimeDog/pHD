@@ -135,7 +135,9 @@ public abstract class PeriodicHologramBase {
         if (beingShownTo.contains(id)) return;
         hologram.getVisibilityManager().showTo(player);
         beingShownTo.add(id);
-        plugin.getServer().getScheduler().runTaskLater(plugin, () -> hideFrom(player), showTimeTicks);
+        if (getType() != PeriodicType.ALWAYS) { // in that case, something else handles it
+            plugin.getServer().getScheduler().runTaskLater(plugin, () -> hideFrom(player), showTimeTicks);
+        }
     }
     
 }

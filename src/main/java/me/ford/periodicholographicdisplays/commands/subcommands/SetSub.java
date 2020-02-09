@@ -19,6 +19,7 @@ import org.bukkit.util.StringUtil;
 import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.Settings;
 import me.ford.periodicholographicdisplays.commands.SubCommand;
+import me.ford.periodicholographicdisplays.holograms.AlwaysHologram;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.IRLTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.MCTimeHologram;
@@ -140,6 +141,8 @@ public class SetSub extends SubCommand {
             existing = new MCTimeHologram(holo, holo.getName(), defaultDistance, showTime, timeAt, true, perms);
             break;
             case ALWAYS:
+            existing = new AlwaysHologram(holo, holo.getName(), defaultDistance, showTime, true, perms);
+            break;
             case NTIMES:
             default:
             int timesToShow = 1;
@@ -152,7 +155,6 @@ public class SetSub extends SubCommand {
                     return null;
                 }
             }
-            if (type == PeriodicType.ALWAYS) timesToShow = -1;
             existing = new NTimesHologram(holo, holo.getName(), defaultDistance, showTime, timesToShow, true, perms);
             break;
         }
