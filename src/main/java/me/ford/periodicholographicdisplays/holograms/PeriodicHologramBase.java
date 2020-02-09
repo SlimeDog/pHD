@@ -123,6 +123,11 @@ public abstract class PeriodicHologramBase {
     public boolean canSee(Player player) {
         return (!hasPermissions() || player.hasPermission(getPermissions()));
     }
+    
+    public void hideFrom(Player player) {
+        hologram.getVisibilityManager().hideTo(player);
+        beingShownTo.remove(player.getUniqueId());
+    }
 
     public void show(Player player) {
         if (player == null) return;
@@ -130,10 +135,7 @@ public abstract class PeriodicHologramBase {
         if (beingShownTo.contains(id)) return;
         hologram.getVisibilityManager().showTo(player);
         beingShownTo.add(id);
-        plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
-            hologram.getVisibilityManager().hideTo(player);
-            beingShownTo.remove(id);
-        }, showTimeTicks);
+        plugin.getServer().getScheduler().runTaskLater(plugin, () -> hideFrom(player), showTimeTicks);
     }
     
 }
