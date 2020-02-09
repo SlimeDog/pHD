@@ -22,4 +22,7 @@ public class Settings {
         return phd.getConfig().getLong("save-delay", 60L);
     }
     
+    public boolean useDatabase() {
+        return phd.getConfig().getBoolean("use-database", false);
+    }
 }

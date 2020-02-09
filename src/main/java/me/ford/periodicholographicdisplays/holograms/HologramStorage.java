@@ -10,6 +10,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
+import me.ford.periodicholographicdisplays.holograms.storage.SQLStorage;
 import me.ford.periodicholographicdisplays.holograms.storage.Storage;
 import me.ford.periodicholographicdisplays.holograms.storage.YAMLStorage;
 
@@ -22,7 +23,11 @@ public class HologramStorage {
     private final Map<World, WorldHologramStorage> holograms = new HashMap<>();
 
     public HologramStorage(PeriodicHolographicDisplays plugin) {
-        this.storage = new YAMLStorage(); // TODO - check config and use database if needed
+        if (plugin.getSettings().useDatabase()) {
+            this.storage = new SQLStorage(plugin);
+        } else {
+            this.storage = new YAMLStorage(); // TODO - check config and use database if needed
+        }
         this.plugin = plugin;
         initWorldStorage();
     }
@@ -58,7 +63,7 @@ public class HologramStorage {
     public void addHologram(PeriodicHologramBase hologram) {
         WorldHologramStorage storage = getHolograms(hologram.getLocation().getWorld());
         storage.addHologram(hologram);
-        storage.saveHolograms();
+        storage.saveHolograms(false);
     }
 
     public void removeHologram(PeriodicHologramBase hologram) {
@@ -70,8 +75,12 @@ public class HologramStorage {
     // saving
 
     public void save() {
+        save(false);
+    }
+
+    public void save(boolean inSync) {
         for (WorldHologramStorage storage : holograms.values()) {
-            storage.saveHolograms();
+            storage.saveHolograms(inSync);
         }
     }
 

@@ -10,7 +10,7 @@ import java.util.function.Consumer;
  */
 public interface Storage {
 
-    public void saveHolograms(Set<HDHologramInfo> holograms);
+    public void saveHolograms(Set<HDHologramInfo> holograms, boolean inSync);
 
     public void loadHolograms(Consumer<HDHologramInfo> consumer);
 

@@ -14,3 +14,4 @@ defaults:
   activation-distance: 20
   show-time: 10
 save-delay: 60 # in seconds
+use-database: false

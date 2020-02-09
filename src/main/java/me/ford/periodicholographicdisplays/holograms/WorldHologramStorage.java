@@ -45,7 +45,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
 
     private void scheduleSave() {
         long delay = plugin.getSettings().getSaveDelay() * 20L;
-        plugin.getServer().getScheduler().runTaskTimer(plugin, () -> saveHolograms(), delay, delay);
+        plugin.getServer().getScheduler().runTaskTimer(plugin, () -> saveHolograms(false), delay, delay);
     }
 
     public PeriodicHologramBase getHologram(String name, PeriodicType type) {
@@ -124,7 +124,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
     }
 
     @Override
-    protected boolean saveHolograms() {
+    protected boolean saveHolograms(boolean inSync) {
         Set<HDHologramInfo> infos = new HashSet<>();
         for (IndividualHologramHandler handler : getHandlers(false)) {
             if (handler.needsSaved()){
@@ -133,7 +133,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
             }
         }
         if (infos.isEmpty()) return false;
-        storage.saveHolograms(infos);
+        storage.saveHolograms(infos, inSync);
         return !infos.isEmpty();
     }
 

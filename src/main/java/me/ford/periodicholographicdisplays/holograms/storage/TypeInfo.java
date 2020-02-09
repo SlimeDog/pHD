@@ -21,6 +21,14 @@ public interface TypeInfo {
             this.shownToTimes = shownToTimes;
         }
 
+        public void addAllShownTo(Map<UUID, Integer> shownTo) {
+            shownToTimes.putAll(shownTo);
+        }
+
+        public void addShownTo(UUID id, int times) {
+            shownToTimes.put(id, times);
+        }
+
         public int getShowTimes() {
             return showTimes;
         }

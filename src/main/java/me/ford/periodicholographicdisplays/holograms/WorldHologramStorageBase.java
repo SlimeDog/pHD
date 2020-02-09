@@ -78,6 +78,6 @@ public abstract class WorldHologramStorageBase {
         return new HashSet<>(holograms.entrySet());
     }
 
-    protected abstract boolean saveHolograms();
+    protected abstract boolean saveHolograms(boolean inSync);
     
 }

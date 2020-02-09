@@ -39,7 +39,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        holograms.save();
+        holograms.save(true);
     }
 
     public HologramStorage getHolograms() {
