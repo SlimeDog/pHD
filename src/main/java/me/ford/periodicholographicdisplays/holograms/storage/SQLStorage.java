@@ -63,18 +63,19 @@ public class SQLStorage implements Storage {
     private void saveHologramsAsync(Set<HDHologramInfo> holograms) {
         createHologramTableIfNotExists();
         createPlayerTableIfNotExists();
-        String deleteQuery = "DELETE FROM " + hologramTableName + " WHERE hologram NOT IN (%s)";
+        String deleteQuery = "DELETE FROM " + hologramTableName + " WHERE hologram=? AND type NOT IN (%s)";
         String query = "INSERT INTO " + hologramTableName + " VALUES (?, ?, ?, ?, ?, ?, ?)" 
         + " ON CONFLICT(hologram, type) DO UPDATE SET activation_distance=? , display_seconds=? , periodic_time=?, activation_times=?, permission=?;";
         for (HDHologramInfo hologram : holograms) {
             // first remove all others
-            String[] existingTypes = new String[hologram.getInfos().size()];
-            int i = 0;
+            String[] existingTypes = new String[hologram.getInfos().size() + 1];
+            existingTypes[0] = hologram.getHoloName();
+            int i = 1;
             for (HologramInfo info : hologram.getInfos()) {
                 existingTypes[i] = info.getType().name();
                 i++;
             }
-            if (existingTypes.length < PeriodicType.values().length) {
+            if (existingTypes.length - 1 < PeriodicType.values().length) {
                 String filler = String.format("%0" + existingTypes.length + "d", 0).replace("0", "?, ");
                 filler = filler.substring(0, filler.length() - 2);
                 String curDelete = String.format(deleteQuery, filler);
