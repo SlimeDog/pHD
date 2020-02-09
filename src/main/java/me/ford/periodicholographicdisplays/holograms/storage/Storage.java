@@ -34,6 +34,13 @@ public interface Storage {
             return infos; // I don't think I need to return a copy
         }
 
+        @Override
+        public String toString() {
+            List<String> types = new ArrayList<>();
+            for (HologramInfo info: infos) types.add(info.getType().name());
+            return String.format("[HDHoloInfo:%s(%s)]", holoName, String.join(", ", types));
+        }
+
     }
     
 }
