@@ -107,6 +107,7 @@ public class SetSub extends SubCommand {
         PeriodicHologramBase existing;
         double defaultDistance = settings.getDefaultActivationDistance();
         int showTime = settings.getDefaultShowTime();
+        String perms = optionPairs.get("permission");
         switch (type) {
             case IRLTIME:
             String tResult = optionPairs.get("time");
@@ -121,7 +122,7 @@ public class SetSub extends SubCommand {
                 sender.sendMessage(messages.getIncorrectTimeMessage(tResult));
                 return null;
             }
-            existing = new IRLTimeHologram(holo, holo.getName(), defaultDistance, showTime, time, true);
+            existing = new IRLTimeHologram(holo, holo.getName(), defaultDistance, showTime, time, true, perms);
             break;
             case MCTIME:
             String timeResult = optionPairs.get("time");
@@ -136,7 +137,7 @@ public class SetSub extends SubCommand {
                 sender.sendMessage(messages.getIncorrectTimeMessage(timeResult));
                 return null;
             }
-            existing = new MCTimeHologram(holo, holo.getName(), defaultDistance, showTime, timeAt, true);
+            existing = new MCTimeHologram(holo, holo.getName(), defaultDistance, showTime, timeAt, true, perms);
             break;
             case ALWAYS:
             case NTIMES:
@@ -152,7 +153,7 @@ public class SetSub extends SubCommand {
                 }
             }
             if (type == PeriodicType.ALWAYS) timesToShow = -1;
-            existing = new NTimesHologram(holo, holo.getName(), defaultDistance, showTime, timesToShow, true);
+            existing = new NTimesHologram(holo, holo.getName(), defaultDistance, showTime, timesToShow, true, perms);
             break;
         }
         return existing;
