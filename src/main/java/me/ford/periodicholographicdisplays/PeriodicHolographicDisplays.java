@@ -1,5 +1,6 @@
 package me.ford.periodicholographicdisplays;
 
+import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.ford.periodicholographicdisplays.commands.PHDCommand;
@@ -30,6 +31,11 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new WorldListener(holograms), this);
         this.getServer().getPluginManager().registerEvents(new WorldTimeListener(holograms), this);
         this.getServer().getPluginManager().registerEvents(new AlwaysHologramListener(holograms), this);
+
+        // metrics
+		if (settings.enableMetrics()) {
+			new Metrics(this);
+		}
     }
 
     public boolean reload() {

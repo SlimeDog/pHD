@@ -15,3 +15,4 @@ defaults:
   show-time: 10
 save-delay: 60 # in seconds
 use-database: false
+enable-metrics: true

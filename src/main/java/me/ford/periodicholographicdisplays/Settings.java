@@ -25,4 +25,9 @@ public class Settings {
     public boolean useDatabase() {
         return phd.getConfig().getBoolean("use-database", false);
     }
+
+    public boolean enableMetrics() {
+        return phd.getConfig().getBoolean("enable-metrics", true);
+    }
+
 }
