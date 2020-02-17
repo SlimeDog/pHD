@@ -30,4 +30,8 @@ public class Settings {
         return phd.getConfig().getBoolean("enable-metrics", true);
     }
 
+    public boolean checkForUpdates() {
+        return phd.geteConfig().getBoolean("check-for-updates", true);
+    }
+
 }

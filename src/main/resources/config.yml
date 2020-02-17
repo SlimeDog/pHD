@@ -16,3 +16,4 @@ defaults:
 save-delay: 60 # in seconds
 use-database: false
 enable-metrics: true
+check-for-updates: true

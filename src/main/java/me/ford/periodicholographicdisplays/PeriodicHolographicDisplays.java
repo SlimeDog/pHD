@@ -35,7 +35,11 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         // metrics
 		if (settings.enableMetrics()) {
 			new Metrics(this);
-		}
+        }
+        
+        if (settings.checkForUpdates()) {
+            // TODO - check for updates
+        }
     }
 
     public boolean reload() {
