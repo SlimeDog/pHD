@@ -31,7 +31,7 @@ public class Settings {
     }
 
     public boolean checkForUpdates() {
-        return phd.geteConfig().getBoolean("check-for-updates", true);
+        return phd.getConfig().getBoolean("check-for-updates", true);
     }
 
 }
