@@ -7,8 +7,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
+import me.ford.periodicholographicdisplays.holograms.AlwaysHologram;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
+import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.holograms.WorldHologramStorage;
 
 /**
@@ -26,6 +28,10 @@ public class HologramListener implements Listener {
         for (PeriodicHologramBase base : wh.getHolograms(true)) {
             double dist2 = base.getLocation().distanceSquared(location);
             if (dist2 < base.getSquareDistance()) {
+                if (base.getType() == PeriodicType.ALWAYS &&
+                      !((AlwaysHologram) base).hasActivationDistance()) {
+                    continue; // ignore
+                }
                 base.attemptToShow(player);
             }
         }
