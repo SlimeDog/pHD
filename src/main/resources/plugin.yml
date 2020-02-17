@@ -1,4 +1,4 @@
-# PluginVersions
+# pHD
 #
 # See http://wiki.bukkit.org/Plugin_YAML for a complete list of requirements and options.
 
@@ -45,4 +45,3 @@ permissions:
   phd.reload:
     description: Allows reloading the config
     default: op
-    
