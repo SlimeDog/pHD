@@ -1,5 +1,6 @@
 package me.ford.periodicholographicdisplays.listeners;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
@@ -18,7 +19,9 @@ public class WorldListener implements Listener {
 
     @EventHandler
     public void onWorldLeave(PlayerChangedWorldEvent event) {
-        storage.leftWorld(event.getPlayer(), event.getFrom());
+        Player player = event.getPlayer();
+        storage.leftWorld(player, event.getFrom());
+        storage.joinedWorld(player, player.getWorld());
     }
     
 }

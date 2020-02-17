@@ -122,12 +122,32 @@ public class HologramStorage {
         // nothing really...
     }
 
+    public void joinedWorld(Player player, World world) {
+        WorldHologramStorage worldStorage = getHolograms(world);
+        for (PeriodicHologramBase holo : worldStorage.getHolograms()) {
+            if (holo.getType() == PeriodicType.ALWAYS) {
+                AlwaysHologram always = (AlwaysHologram) holo;
+                if (!always.hasActivationDistance()) {
+                    always.attemptToShow(player);
+                }
+            }
+        }
+    }
+
     public void left(Player player) { // left server
-        // in case I need something
+        leftWorld(player, player.getWorld());
     }
 
     public void leftWorld(Player player, World world) {
-        // in case I need something
+        WorldHologramStorage worldStorage = getHolograms(world);
+        for (PeriodicHologramBase holo : worldStorage.getHolograms()) {
+            if (holo.getType() == PeriodicType.ALWAYS) {
+                AlwaysHologram always = (AlwaysHologram) holo;
+                if (!always.hasActivationDistance()) {
+                    always.hideFrom(player);
+                }
+            }
+        }
     }
 
 	public List<String> getNames() {
