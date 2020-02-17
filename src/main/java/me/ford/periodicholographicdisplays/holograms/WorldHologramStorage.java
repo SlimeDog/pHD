@@ -135,6 +135,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
             }
         }
         if (infos.isEmpty()) return false;
+        plugin.getLogger().info("in world " + getWorld().getName() + " saving:" + infos); // TODO - remove debug message
         storage.saveHolograms(infos, inSync);
         return !infos.isEmpty();
     }
