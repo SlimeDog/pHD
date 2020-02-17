@@ -78,6 +78,10 @@ public abstract class WorldHologramStorageBase {
         return new HashSet<>(holograms.entrySet());
     }
 
-    protected abstract boolean saveHolograms(boolean inSync);
+    protected abstract boolean saveHolograms(boolean inSync, HologramSaveReason reason);
+    
+    public static enum HologramSaveReason {
+        ADD, PERIODIC, MANUAL
+    }
     
 }
