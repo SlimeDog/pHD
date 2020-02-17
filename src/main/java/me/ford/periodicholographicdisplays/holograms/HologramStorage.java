@@ -119,7 +119,7 @@ public class HologramStorage {
     // onJoin holgorams
 
     public void joined(Player player) {
-        // nothing really...
+        joinedWorld(player, player.getWorld());
     }
 
     public void joinedWorld(Player player, World world) {
