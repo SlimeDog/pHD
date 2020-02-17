@@ -25,7 +25,7 @@ public class AlwaysHologram extends NTimesHologram {
     }
 
     public boolean hasActivationDistance() {
-        return getActivationDistance() == settings.getDefaultActivationDistance();
+        return getActivationDistance() != settings.getDefaultActivationDistance();
     }
     
 }
