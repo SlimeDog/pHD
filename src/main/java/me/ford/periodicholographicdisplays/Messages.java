@@ -65,7 +65,7 @@ public class Messages extends CustomConfigHandler {
         for (Entry<String, String> entry : holograms.entrySet()) {
             lines.add(entry.getKey() + " " + entry.getValue());
         }
-        return getMessage("hologram-list", "Holograms: {holograms}").replace("{holograms}", String.join("\n", lines));
+        return getMessage("hologram-list", "Holograms: \n{holograms}").replace("{holograms}", String.join("\n", lines));
     }
 
     public String getUnmanagedHologramMessage(String name, PeriodicType type) {
