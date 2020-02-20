@@ -2,12 +2,15 @@ package me.ford.periodicholographicdisplays.commands.subcommands;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.bukkit.command.CommandSender;
 
 import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.commands.SubCommand;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
+import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 
 /**
  * ListSub
@@ -31,7 +34,17 @@ public class ListSub extends SubCommand {
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
         List<String> names = storage.getNames();
-        sender.sendMessage(messages.getHologramListMessage(names));
+        names.sort(String.CASE_INSENSITIVE_ORDER);
+        Map<String, String> hologramTypes = new TreeMap<>();
+        for (String name : names) {
+            List<PeriodicType> types = storage.getAvailableTypes(name);
+            List<String> typesStr = new ArrayList<>();
+            for (PeriodicType type : types) {
+                typesStr.add(type.name());
+            }
+            hologramTypes.put(name, String.join(", ", typesStr));
+        }
+        sender.sendMessage(messages.getHologramListMessage(hologramTypes));
         return true;
     }
 

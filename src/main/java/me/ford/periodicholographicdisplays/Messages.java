@@ -60,8 +60,12 @@ public class Messages extends CustomConfigHandler {
         return getMessage("world-not-found", "World not found: {name}").replace("{name}", name);
     }
 
-    public String getHologramListMessage(List<String> names) {
-        return getMessage("hologram-list", "Holograms: {holograms}").replace("{holograms}", String.join(", ", names));
+    public String getHologramListMessage(Map<String, String> holograms) {
+        List<String> lines = new ArrayList<>();
+        for (Entry<String, String> entry : holograms.entrySet()) {
+            lines.add(entry.getKey() + " " + entry.getValue());
+        }
+        return getMessage("hologram-list", "Holograms: {holograms}").replace("{holograms}", String.join("\n", lines));
     }
 
     public String getUnmanagedHologramMessage(String name, PeriodicType type) {
