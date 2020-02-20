@@ -28,19 +28,24 @@ public class IndividualHologramHandler {
     }
 
     void addHologram(PeriodicType type, PeriodicHologramBase holo) {
+        addHologram(type, holo, false);
+    }
+
+    void addHologram(PeriodicType type, PeriodicHologramBase holo, boolean wasLoaded) {
         Validate.notNull(type, "PeriodicType cannot be null");
         Validate.notNull(holo, "Periodic hologram cannot be null");
         Validate.isTrue(holo.getType() == type, "Wrong type of hologram. Expected " + type.name() + " got " + holo.getType().name());
         Validate.isTrue(holo.getName().equals(name), "Can only handle pHD holograms of the same HD hologram");
         holograms.put(type, holo);
+        if (!wasLoaded) needsSaved = true;
     }
 
-    void removeHologram(PeriodicHologramBase hologram) {
+    void removeHologram(PeriodicHologramBase hologram, boolean markForRemoval) {
         Validate.notNull(hologram, "Cannot remove null hologram");
         Validate.isTrue(this.hologram == hologram.getHologram(), "Can only add pHD holograms that affect the same HD hologram");
         holograms.remove(hologram.getType());
         hologram.markRemoved();
-        needsSaved = true;
+        if (markForRemoval) needsSaved = true;
     }
 
     Hologram getHologram() {

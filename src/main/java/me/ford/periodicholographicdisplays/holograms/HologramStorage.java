@@ -52,7 +52,7 @@ public class HologramStorage {
     public void reload() {
         for (WorldHologramStorage storage : holograms.values()) {
             for (PeriodicHologramBase hologram : storage.getHolograms()) {
-                storage.removeHologram(hologram);
+                storage.removeHologram(hologram, false);
             }
         }
         holograms.clear();
