@@ -96,9 +96,11 @@ public class SetSub extends SubCommand {
         if (!existed) { // keep track of new one
             existing = adoptHologram(sender, holo, type, optionPairs);
             if (existing == null) return true;
-            storage.addHologram(existing);
         }
         setAll(sender, existing, optionPairs, existed);
+        if (!existed) {
+            storage.addHologram(existing);
+        }
         sender.sendMessage(messages.getSetNewOptionsMessage(holo.getName(), type, optionPairs));
         return true;
     }
