@@ -27,6 +27,7 @@ import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.holograms.WorldHologramStorage;
+import me.ford.periodicholographicdisplays.holograms.WorldHologramStorageBase.HologramSaveReason;
 import me.ford.periodicholographicdisplays.util.TimeUtils;
 
 /**
@@ -100,6 +101,8 @@ public class SetSub extends SubCommand {
         setAll(sender, existing, optionPairs, existed);
         if (!existed) {
             storage.addHologram(existing);
+        } else {
+            storage.save(HologramSaveReason.CHANGE, false);
         }
         sender.sendMessage(messages.getSetNewOptionsMessage(holo.getName(), type, optionPairs));
         return true;

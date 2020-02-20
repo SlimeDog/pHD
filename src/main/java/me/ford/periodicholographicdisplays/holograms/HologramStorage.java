@@ -80,8 +80,12 @@ public class HologramStorage {
     }
 
     public void save(boolean inSync) {
+        save(HologramSaveReason.MANUAL, inSync);
+    }
+
+    public void save(HologramSaveReason reason, boolean inSync) {
         for (WorldHologramStorage storage : holograms.values()) {
-            storage.saveHolograms(inSync, HologramSaveReason.MANUAL);
+            storage.saveHolograms(inSync, reason);
         }
     }
 
