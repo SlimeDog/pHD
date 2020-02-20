@@ -166,6 +166,10 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
     }
 
     void addHologram(PeriodicHologramBase hologram) {
+        addHologram(hologram, false);
+    }
+
+    void addHologram(PeriodicHologramBase hologram, boolean wasLoaded) {
         Validate.notNull(hologram, "Cannot add null hologram!");
         Validate.isTrue(hologram.getLocation().getWorld() == getWorld(), "Cannot add holograms in a different world!");
         IndividualHologramHandler handler = getHandler(hologram.getName());
@@ -173,7 +177,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
             handler = new IndividualHologramHandler((NamedHologram) hologram.getHologram());
             addHandler(hologram.getName(), handler);
         }
-        handler.addHologram(hologram.getType(), hologram);
+        handler.addHologram(hologram.getType(), hologram, wasLoaded);
     }
 
     void removeHologram(PeriodicHologramBase hologram) {
