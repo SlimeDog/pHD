@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import me.ford.periodicholographicdisplays.commands.PHDCommand;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
+import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
 import me.ford.periodicholographicdisplays.listeners.AlwaysHologramListener;
 import me.ford.periodicholographicdisplays.listeners.HologramListener;
 import me.ford.periodicholographicdisplays.listeners.JoinLeaveListener;
@@ -18,6 +19,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
     private HologramStorage holograms;
     private Settings settings;    
     private Messages messages;
+    private LuckPermsHook lpHook;
 
     @Override
     public void onEnable() {
@@ -36,10 +38,21 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
 		if (settings.enableMetrics()) {
 			new Metrics(this);
         }
+
+        // LuckPerms hook if possible
+        try {
+            lpHook = new LuckPermsHook(this);
+        } catch (IllegalStateException e) {
+            getLogger().warning("LuckPerms not found - unable to readjust permissions on the fly");
+        }
         
         if (settings.checkForUpdates()) {
             // TODO - check for updates
         }
+    }
+
+    public LuckPermsHook getLuckPermsHook() {
+        return lpHook;
     }
 
     public boolean reload() {

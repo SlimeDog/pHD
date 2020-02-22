@@ -12,6 +12,7 @@ import com.gmail.filoghost.holographicdisplays.object.NamedHologram;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.holograms.storage.HologramInfo;
@@ -121,6 +122,21 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         }
         if (handler != null) {
             addHandler(handler.getName(), handler);
+        }
+    }
+
+    public void resetAlwaysHologramPermissions(Player player) {
+        for (PeriodicHologramBase holo : getHolograms()) {
+            if (holo instanceof AlwaysHologram) {
+                AlwaysHologram always = (AlwaysHologram) holo;
+                if (!always.hasActivationDistance()) {
+                    if (always.canSee(player)) {
+                        always.attemptToShow(player);
+                    } else {
+                        always.hideFrom(player);
+                    }
+                }
+            }
         }
     }
 
