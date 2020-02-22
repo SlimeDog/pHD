@@ -18,6 +18,7 @@ public class AlwaysHologram extends NTimesHologram {
             boolean isNew, String perms) {
         super(hologram, name, activationDistance, showTime, -1, isNew, perms);
         settings = JavaPlugin.getPlugin(PeriodicHolographicDisplays.class).getSettings();
+        checkWorldPlayers();
     }
 
     public void leftArea(Player player) {
@@ -28,12 +29,16 @@ public class AlwaysHologram extends NTimesHologram {
     public void setPermissions(String perms) {
         super.setPermissions(perms);
         if (!hasActivationDistance()) {
-            for (Player player : getHologram().getWorld().getEntitiesByClass(Player.class)) {
-                if (!canSee(player)) {
-                    hideFrom(player);
-                } else {
-                    attemptToShow(player);
-                }
+            checkWorldPlayers();
+        }
+    }
+
+    private void checkWorldPlayers() {
+        for (Player player : getHologram().getWorld().getEntitiesByClass(Player.class)) {
+            if (!canSee(player)) {
+                hideFrom(player);
+            } else {
+                attemptToShow(player);
             }
         }
     }
