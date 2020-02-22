@@ -24,6 +24,20 @@ public class AlwaysHologram extends NTimesHologram {
         hideFrom(player);
     }
 
+    @Override
+    public void setPermissions(String perms) {
+        super.setPermissions(perms);
+        if (!hasActivationDistance()) {
+            for (Player player : getHologram().getWorld().getEntitiesByClass(Player.class)) {
+                if (!canSee(player)) {
+                    hideFrom(player);
+                } else {
+                    attemptToShow(player);
+                }
+            }
+        }
+    }
+
     public boolean hasActivationDistance() {
         return getActivationDistance() != settings.getDefaultActivationDistance();
     }
