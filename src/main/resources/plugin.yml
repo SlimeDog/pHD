@@ -8,6 +8,7 @@ api-version: 1.13
 main: ${project.groupId}.${project.artifactId}.PeriodicHolographicDisplays
 description: ${project.description}
 authors: [SlimeDog, drives_a_ford]
+softdepend: [LuckPerms]
 depend: [HolographicDisplays]
 
 commands:
