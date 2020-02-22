@@ -2,12 +2,8 @@ package me.ford.periodicholographicdisplays.commands.subcommands;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
 
 import com.gmail.filoghost.holographicdisplays.commands.CommandValidator;
 import com.gmail.filoghost.holographicdisplays.exception.CommandException;
@@ -18,7 +14,6 @@ import org.bukkit.util.StringUtil;
 
 import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.Settings;
-import me.ford.periodicholographicdisplays.commands.SubCommand;
 import me.ford.periodicholographicdisplays.holograms.AlwaysHologram;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.IRLTimeHologram;
@@ -33,7 +28,7 @@ import me.ford.periodicholographicdisplays.util.TimeUtils;
 /**
  * SetSub
  */
-public class SetSub extends SubCommand {
+public class SetSub extends OptionPairSetSub {
     private static final String PERMS = "phd.set";
     private static final String USAGE = "/phd set {hologram} {type} [times {integer}] [time {hh:mm}] [seconds {integer}] [distance {integer|decimal}] [permission {string}]";
     private final HologramStorage storage;
@@ -98,7 +93,24 @@ public class SetSub extends SubCommand {
             existing = adoptHologram(sender, holo, type, optionPairs);
             if (existing == null) return true;
         }
-        setAll(sender, existing, optionPairs, existed);
+        try {
+            setAll(sender, existing, optionPairs, existed);
+        } catch (OptionPairException e) {
+            switch(e.getType()) {
+                case NEED_A_NUMBER:
+                sender.sendMessage(messages.getNeedANumberMessage(e.getExtra()));
+                break;
+                case INCORRECT_TIME:
+                sender.sendMessage(messages.getIncorrectTimeMessage(e.getExtra()));
+                break;
+                case NO_SUCH_OPTION:
+                sender.sendMessage(messages.getNoSuchOptionMessage(type, e.getExtra()));
+                break;
+                default:
+                sender.sendMessage("Unusual problem: " + e);
+            }
+            return true;
+        }
         if (!existed) {
             storage.addHologram(existing);
         } else {
@@ -164,89 +176,6 @@ public class SetSub extends SubCommand {
             break;
         }
         return existing;
-    }
-
-    private void setAll(CommandSender sender, PeriodicHologramBase holo, Map<String, String> options, boolean doSpecial) {
-        Set<String> invalidOptions = new HashSet<>();
-        for (Entry<String, String> entry : options.entrySet()) {
-            String result = entry.getValue();
-            if (holo.getType() == PeriodicType.NTIMES && entry.getKey().equalsIgnoreCase("times")) {
-                int times;
-                try {
-                    times = Integer.parseInt(result);
-                } catch (NumberFormatException e) {
-                    sender.sendMessage(messages.getNeedANumberMessage(result));
-                    return;
-                }
-                ((NTimesHologram) holo).setTimesToShow(times);
-                continue;
-            }
-            if ((holo.getType() == PeriodicType.MCTIME || holo.getType() == PeriodicType.IRLTIME) 
-                                && entry.getKey().equalsIgnoreCase("time")) {
-                boolean mcTime = holo.getType() == PeriodicType.MCTIME;
-                long time;
-                try {
-                    if (mcTime) time = TimeUtils.parseMCTime(result);
-                    else time = TimeUtils.parseHoursAndMinutesToSeconds(result);
-                } catch (IllegalArgumentException e) {
-                    sender.sendMessage(messages.getIncorrectTimeMessage(result));
-                    return;
-                }
-                if (mcTime) ((MCTimeHologram) holo).setTime(time);
-                else ((IRLTimeHologram) holo).setTime(time);
-                continue;
-            }
-            switch (entry.getKey()) {
-                case "distance":
-                double distance;
-                try {
-                    distance = Double.parseDouble(result);
-                } catch (NumberFormatException e) {
-                    sender.sendMessage(messages.getNeedANumberMessage(result));
-                    return;
-                }
-                holo.setActivationDistance(distance);
-                break;
-                case "seconds":
-                int time;
-                try {
-                    time = Integer.parseInt(result);
-                } catch (NumberFormatException e) {
-                    sender.sendMessage(messages.getNeedANumberMessage(result));
-                    return;
-                }
-                holo.setShowTime(time);
-                break;
-                case "permission":
-                holo.setPermissions(result);
-                break;
-                default:
-                sender.sendMessage(messages.getNoSuchOptionMessage(holo.getType(), entry.getKey()));
-                invalidOptions.add(entry.getKey());
-                break; 
-            }
-        }
-        for (String opt : invalidOptions) options.remove(opt);
-    }
-
-    private Map<String, String> getOptionPairs(String[] args) {
-        if (args.length%2 != 0) throw new IllegalArgumentException("Expected an even number of arguments!");
-        Map<String, String> map = new HashMap<>();
-        boolean isKey = true;
-        String curKey = "";
-        String curValue = "";
-        for (String arg : args) {
-            if (isKey) {
-                curKey = arg.toLowerCase();
-            } else {
-                curValue = arg;
-            }
-            if (!isKey) {
-                map.put(curKey, curValue);
-            }
-            isKey = !isKey;
-        }
-        return map;
     }
 
     @Override
