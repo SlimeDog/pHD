@@ -61,7 +61,7 @@ public class ManageSub extends OptionPairSetSub {
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
-        if (args.length < 4) {
+        if (args.length < 1) {
             return false;
         }
         NamedHologram holo;
@@ -71,12 +71,18 @@ public class ManageSub extends OptionPairSetSub {
             sender.sendMessage(messages.getHDHologramNotFoundMessage(args[0]));
             return true;
         }
+        if (args.length < 2) {
+            return false;
+        }
         PeriodicType type;
         try {
             type = PeriodicType.valueOf(args[1]);
         } catch (IllegalArgumentException e) {
             sender.sendMessage(messages.getTypeNotRecognizedMessage(args[1]));
             return true;
+        }
+        if (args.length < 4) {
+            return false;
         }
         Map<String, String> optionPairs;
         try {
