@@ -38,6 +38,7 @@ player-not-found: "Player not found: {player}"
 unset-options: "Set the options to default: {options}"
 config-reloaded: "Succesfully reloaded the config"
 problems-reloading-config: "Problems reloading config!"
+hologram-not-managed: "Hologram {name} of type {type} is not managed by pHD"
 typeinfo:
   MCTIME: "Shown at: {time}"
   IRLTIME: "Shown at: {time}"

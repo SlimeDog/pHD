@@ -14,16 +14,11 @@ import org.bukkit.util.StringUtil;
 
 import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.Settings;
-import me.ford.periodicholographicdisplays.holograms.AlwaysHologram;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
-import me.ford.periodicholographicdisplays.holograms.IRLTimeHologram;
-import me.ford.periodicholographicdisplays.holograms.MCTimeHologram;
-import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.holograms.WorldHologramStorage;
 import me.ford.periodicholographicdisplays.holograms.WorldHologramStorageBase.HologramSaveReason;
-import me.ford.periodicholographicdisplays.util.TimeUtils;
 
 /**
  * SetSub
@@ -32,13 +27,11 @@ public class SetSub extends OptionPairSetSub {
     private static final String PERMS = "phd.set";
     private static final String USAGE = "/phd set {hologram} {type} [times {integer}] [time {hh:mm}] [seconds {integer}] [distance {integer|decimal}] [permission {string}]";
     private final HologramStorage storage;
-    private final Settings settings;
     private final Messages messages;
     private final List<String> settables = Arrays.asList("times", "time", "seconds", "distance", "permission");
 
     public SetSub(HologramStorage storage, Settings settings, Messages messages) {
         this.storage = storage;
-        this.settings = settings;
         this.messages = messages;
     }
 
@@ -88,13 +81,12 @@ public class SetSub extends OptionPairSetSub {
         }
         WorldHologramStorage worldStorage = storage.getHolograms(holo.getWorld());
         PeriodicHologramBase existing = worldStorage.getHologram(holo.getName(), type);
-        boolean existed = existing != null;
-        if (!existed) { // keep track of new one
-            existing = adoptHologram(sender, holo, type, optionPairs);
-            if (existing == null) return true;
+        if (existing == null) {
+            sender.sendMessage(messages.getHologramNotTrackedMessage(holo.getName(), type));
+            return true;
         }
         try {
-            setAll(sender, existing, optionPairs, existed);
+            setAll(sender, existing, optionPairs, true);
         } catch (OptionPairException e) {
             switch(e.getType()) {
                 case NEED_A_NUMBER:
@@ -111,71 +103,9 @@ public class SetSub extends OptionPairSetSub {
             }
             return true;
         }
-        if (!existed) {
-            storage.addHologram(existing);
-        } else {
-            storage.save(HologramSaveReason.CHANGE, false);
-        }
+        storage.save(HologramSaveReason.CHANGE, false);
         sender.sendMessage(messages.getSetNewOptionsMessage(holo.getName(), type, optionPairs));
         return true;
-    }
-
-    // TODO - SRP - this should throw exceptions that are caught and the appropriate message sent in onCommand
-    private PeriodicHologramBase adoptHologram(CommandSender sender, NamedHologram holo, PeriodicType type, Map<String, String> optionPairs) {
-        PeriodicHologramBase existing;
-        double defaultDistance = settings.getDefaultActivationDistance();
-        int showTime = settings.getDefaultShowTime();
-        String perms = optionPairs.get("permission");
-        switch (type) {
-            case IRLTIME:
-            String tResult = optionPairs.get("time");
-            if (tResult == null) {
-                sender.sendMessage(messages.getOptionMissingMessage(type, "time"));
-                return null;
-            }
-            long time;
-            try {
-                time = TimeUtils.parseHoursAndMinutesToSeconds(tResult);
-            } catch (IllegalArgumentException e) {
-                sender.sendMessage(messages.getIncorrectTimeMessage(tResult));
-                return null;
-            }
-            existing = new IRLTimeHologram(holo, holo.getName(), defaultDistance, showTime, time, true, perms);
-            break;
-            case MCTIME:
-            String timeResult = optionPairs.get("time");
-            if (timeResult == null) {
-                sender.sendMessage(messages.getOptionMissingMessage(type, "time"));
-                return null;
-            }
-            long timeAt;
-            try {
-                timeAt = TimeUtils.parseMCTime(timeResult);
-            } catch (IllegalArgumentException e) {
-                sender.sendMessage(messages.getIncorrectTimeMessage(timeResult));
-                return null;
-            }
-            existing = new MCTimeHologram(holo, holo.getName(), defaultDistance, showTime, timeAt, true, perms);
-            break;
-            case ALWAYS:
-            existing = new AlwaysHologram(holo, holo.getName(), defaultDistance, showTime, true, perms);
-            break;
-            case NTIMES:
-            default:
-            int timesToShow = 1;
-            String timesResult = optionPairs.get("times");
-            if (timesResult != null) { // otherwise stay at 1
-                try {
-                    timesToShow = Integer.parseInt(timesResult);
-                } catch (NumberFormatException e) {
-                    messages.getNeedANumberMessage(timesResult);
-                    return null;
-                }
-            }
-            existing = new NTimesHologram(holo, holo.getName(), defaultDistance, showTime, timesToShow, true, perms);
-            break;
-        }
-        return existing;
     }
 
     @Override

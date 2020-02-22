@@ -29,6 +29,11 @@ public class Messages extends CustomConfigHandler {
         this.phd = phd;
     }
 
+    public String getHologramNotTrackedMessage(String name, PeriodicType type) {
+        return getMessage("hologram-not-managed", "Hologram {name} of type {type} is not managed by pHD")
+                        .replace("{name}", name).replace("{type}", type.name());
+    }
+
     public String getHDHologramNotFoundMessage(String name) {
         return getMessage("hd-hologram-not-found", "HolographicDisplays hologram by the name of {name} was not found")
                         .replace("{name}", name);
