@@ -28,8 +28,8 @@ import me.ford.periodicholographicdisplays.util.TimeUtils;
  * ManageSub
  */
 public class ManageSub extends OptionPairSetSub {
-    private static final String PERMS = "phd.set";
-    private static final String USAGE = "/phd set {hologram} {type} [times {integer}] [time {hh:mm}] [seconds {integer}] [distance {integer|decimal}] [permission {string}]";
+    private static final String PERMS = "phd.manage";
+    private static final String USAGE = "/phd manage {hologram} {type} [times {integer}] [time {hh:mm}] [seconds {integer}] [distance {integer|decimal}] [permission {string}]";
     private final HologramStorage storage;
     private final Settings settings;
     private final Messages messages;

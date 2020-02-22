@@ -3,6 +3,7 @@ package me.ford.periodicholographicdisplays.commands;
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.commands.subcommands.InfoSub;
 import me.ford.periodicholographicdisplays.commands.subcommands.ListSub;
+import me.ford.periodicholographicdisplays.commands.subcommands.ManageSub;
 import me.ford.periodicholographicdisplays.commands.subcommands.ReloadSub;
 import me.ford.periodicholographicdisplays.commands.subcommands.SetSub;
 import me.ford.periodicholographicdisplays.commands.subcommands.UnmanageSub;
@@ -20,6 +21,7 @@ public class PHDCommand extends ParentCommand {
         addSubCommand("list", new ListSub(plugin.getHolograms(), this.plugin.getMessages()));
         addSubCommand("info", new InfoSub(plugin.getHolograms(), this.plugin.getMessages()));
         addSubCommand("set", new SetSub(plugin.getHolograms(), plugin.getSettings(), this.plugin.getMessages()));
+        addSubCommand("manage", new ManageSub(plugin.getHolograms(), plugin.getSettings(), this.plugin.getMessages()));
         addSubCommand("unset", new UnsetSub(plugin.getHolograms(), plugin.getSettings(), this.plugin.getMessages()));
         addSubCommand("unmanage", new UnmanageSub(plugin.getHolograms(), this.plugin.getMessages()));
         addSubCommand("reload", new ReloadSub(plugin));

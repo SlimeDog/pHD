@@ -34,6 +34,9 @@ permissions:
   phd.info:
     description: Allows listing of attributes of specified hologram
     default: op
+  phd.manage:
+    description: Allows managing a HolographicDisplays hologram
+    default: op
   phd.set:
     description: Allows setting a parameter of a hologram
     default: op

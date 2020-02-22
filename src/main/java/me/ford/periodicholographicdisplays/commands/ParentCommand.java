@@ -30,6 +30,7 @@ public abstract class ParentCommand implements TabExecutor {
 					list.add(entry.getKey());
 				}
 			}
+			list.sort(String.CASE_INSENSITIVE_ORDER);
 			return StringUtil.copyPartialMatches(args[0], list, new ArrayList<>());
 		} else {
 			SubCommand sub = subCommands.get(args[0]);
