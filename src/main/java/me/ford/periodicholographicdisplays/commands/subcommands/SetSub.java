@@ -5,9 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import com.gmail.filoghost.holographicdisplays.commands.CommandValidator;
-import com.gmail.filoghost.holographicdisplays.exception.CommandException;
-import com.gmail.filoghost.holographicdisplays.object.NamedHologram;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
@@ -17,7 +14,6 @@ import me.ford.periodicholographicdisplays.Settings;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
-import me.ford.periodicholographicdisplays.holograms.WorldHologramStorage;
 import me.ford.periodicholographicdisplays.holograms.WorldHologramStorageBase.HologramSaveReason;
 
 /**
@@ -57,15 +53,16 @@ public class SetSub extends OptionPairSetSub {
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
-        if (args.length < 4) {
+        if (args.length < 1) {
             return false;
         }
-        NamedHologram holo;
-        try {
-            holo = CommandValidator.getNamedHologram(args[0]);
-        } catch (CommandException e) {
-            sender.sendMessage(messages.getHDHologramNotFoundMessage(args[0]));
+        String holoName = args[0];
+        if (storage.getAvailableTypes(holoName).size() == 0) {
+            sender.sendMessage(messages.getHologramNotManagedMessage(holoName));
             return true;
+        }
+        if (args.length < 2) {
+            return false;
         }
         PeriodicType type;
         try {
@@ -74,6 +71,9 @@ public class SetSub extends OptionPairSetSub {
             sender.sendMessage(messages.getTypeNotRecognizedMessage(args[1]));
             return true;
         }
+        if (args.length < 4) {
+            return false;
+        }
         Map<String, String> optionPairs;
         try {
             optionPairs = getOptionPairs(Arrays.copyOfRange(args, 2, args.length));
@@ -81,10 +81,9 @@ public class SetSub extends OptionPairSetSub {
             sender.sendMessage(messages.getNeedPairedOptionsMessage());
             return true;
         }
-        WorldHologramStorage worldStorage = storage.getHolograms(holo.getWorld());
-        PeriodicHologramBase existing = worldStorage.getHologram(holo.getName(), type);
+        PeriodicHologramBase existing = storage.getHologram(holoName, type);
         if (existing == null) {
-            sender.sendMessage(messages.getHologramNotTrackedMessage(holo.getName(), type));
+            sender.sendMessage(messages.getHologramNotTrackedMessage(holoName, type));
             return true;
         }
         try {
@@ -106,7 +105,7 @@ public class SetSub extends OptionPairSetSub {
             return true;
         }
         storage.save(HologramSaveReason.CHANGE, false);
-        sender.sendMessage(messages.getSetNewOptionsMessage(holo.getName(), type, optionPairs));
+        sender.sendMessage(messages.getSetNewOptionsMessage(holoName, type, optionPairs));
         return true;
     }
 

@@ -53,6 +53,11 @@ public class Messages extends CustomConfigHandler {
                         .replace("{name}", name);
     }
 
+    public String getHologramNotManagedMessage(String name) {
+        return getMessage("hologram-not-managed", "Holgoram not managed: {name}")
+                        .replace("{name}", name);
+    }
+
     public String getHologramNotFoundMessage(String name, PeriodicType type) {
         return getMessage("hologram-not-found", "Hologram not found: {name} of type {type}")
                         .replace("{name}", name).replace("{type}", type.name());
