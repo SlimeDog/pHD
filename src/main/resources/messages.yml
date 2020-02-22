@@ -39,6 +39,8 @@ unset-options: "Set the options to default: {options}"
 config-reloaded: "Succesfully reloaded the config"
 problems-reloading-config: "Problems reloading config!"
 hologram-not-managed: "Hologram {name} of type {type} is not managed by pHD"
+hologram-already-managed: "Hologram {name} of type {type} is already managed by pHD"
+started-managing-hologram: "Started managing hologram {name} of type {type}: {options}"
 typeinfo:
   MCTIME: "Shown at: {time}"
   IRLTIME: "Shown at: {time}"

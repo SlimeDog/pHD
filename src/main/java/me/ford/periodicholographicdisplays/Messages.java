@@ -34,6 +34,20 @@ public class Messages extends CustomConfigHandler {
                         .replace("{name}", name).replace("{type}", type.name());
     }
 
+    public String getHologramAlreadyManagedMessage(String name, PeriodicType type) {
+        return getMessage("hologram-already-managed", "Hologram {name} of type {type} is already managed by pHD")
+                        .replace("{name}", name).replace("{type}", type.name());
+    }
+
+    public String getStartedManagingMessage(String name, PeriodicType type, Map<String, String> options) {
+        List<String> opts = new ArrayList<>();
+        for (Entry<String, String> entry : options.entrySet()) {
+            opts.add(String.format("%s=%s", entry.getKey(), entry.getValue()));
+        }
+        return getMessage("started-managing-hologram", "Started managing hologram {name} of type {type}: {options}")
+                        .replace("{name}", name).replace("{type}", type.name()).replace("{options}", String.join(", ", opts));
+    }
+
     public String getHDHologramNotFoundMessage(String name) {
         return getMessage("hd-hologram-not-found", "HolographicDisplays hologram by the name of {name} was not found")
                         .replace("{name}", name);
