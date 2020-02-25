@@ -15,6 +15,7 @@ import java.util.logging.Level;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
+import me.ford.periodicholographicdisplays.holograms.events.HologramsLoadedEvent;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.IRLTimeTypeInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.MCTimeTypeInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.NTimesTypeInfo;
@@ -228,6 +229,7 @@ public class SQLStorage implements Storage {
             for (HDHologramInfo info : infos.values()) {
                 consumer.accept(info);
             }
+            phd.getServer().getPluginManager().callEvent(new HologramsLoadedEvent());
         });
     }
 

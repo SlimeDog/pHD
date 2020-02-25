@@ -17,6 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.Settings;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
+import me.ford.periodicholographicdisplays.holograms.events.HologramsLoadedEvent;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.IRLTimeTypeInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.MCTimeTypeInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.NTimesTypeInfo;
@@ -80,6 +81,7 @@ public class YAMLStorage implements Storage {
         for (String name : getConfig().getKeys(false)) {
             loadHologram(name, consumer);
         }
+        phd.getServer().getPluginManager().callEvent(new HologramsLoadedEvent());
     }
 
     private void loadHologram(String name, Consumer<HDHologramInfo> consumer) {
