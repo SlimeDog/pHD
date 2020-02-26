@@ -40,6 +40,10 @@ public class HologramStorage {
         }
     }
 
+    public void newWorld(World world) {
+        holograms.put(world, new WorldHologramStorage(plugin, world, storage));
+    }
+
     public WorldHologramStorage getHolograms(World world) {
         Validate.notNull(world, "Cannot get holograms of a null world!");
         WorldHologramStorage storage = holograms.get(world);
