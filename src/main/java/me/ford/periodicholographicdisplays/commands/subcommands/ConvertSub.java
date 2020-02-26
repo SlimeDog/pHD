@@ -79,10 +79,10 @@ public class ConvertSub extends SubCommand {
         });
         phd.getServer().getPluginManager().registerEvents(listener, phd);
         if (useDatabase) {
-            new HologramImporter<YAMLStorage>(new YAMLStorage(), (info) -> loaded(info));
+            new HologramImporter<YAMLStorage>(new YAMLStorage(), (info) -> loaded(info)).startImport();
         } else {
             SQLStorage sqlite = new SQLStorage(phd);
-            new HologramImporter<SQLStorage>(sqlite, (info) -> loaded(info));
+            new HologramImporter<SQLStorage>(sqlite, (info) -> loaded(info)).startImport();
             sqlStorage.put(start, sqlite);
         }
         sender.sendMessage(messages.getStartedImportingMessage(from));
