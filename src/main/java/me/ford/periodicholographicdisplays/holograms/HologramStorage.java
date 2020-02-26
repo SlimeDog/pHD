@@ -94,6 +94,9 @@ public class HologramStorage {
         for (WorldHologramStorage storage : holograms.values()) {
             storage.saveHolograms(inSync, reason);
         }
+        if (inSync && storage instanceof SQLStorage) {
+            ((SQLStorage) storage).close();
+        }
     }
 
     public List<PeriodicType> getAvailableTypes(String name) {
