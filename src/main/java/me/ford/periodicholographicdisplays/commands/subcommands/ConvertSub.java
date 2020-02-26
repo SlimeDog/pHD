@@ -1,7 +1,9 @@
 package me.ford.periodicholographicdisplays.commands.subcommands;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
@@ -23,6 +25,7 @@ public class ConvertSub extends SubCommand {
     private static final String USAGE = "/phd convert <oldStorageType> <newStorageType>";
     private final PeriodicHolographicDisplays phd;
     private final Messages messages;
+    private final Map<Long, SQLStorage> sqlStorage = new HashMap<>(); // to close the SQLite connection
 
     public ConvertSub(PeriodicHolographicDisplays phd) {
         this.phd = phd;
@@ -69,14 +72,18 @@ public class ConvertSub extends SubCommand {
             sender.sendMessage(messages.getCannotImportToMessage(to));
             return true;
         }
+        long start = System.currentTimeMillis();
         HologramsLoadedListener listener = new HologramsLoadedListener(() -> {
             sender.sendMessage(messages.getDoneImportingMessage(from));
+            closeSqlite(start);
         });
         phd.getServer().getPluginManager().registerEvents(listener, phd);
         if (useDatabase) {
             new HologramImporter<YAMLStorage>(new YAMLStorage(), (info) -> loaded(info));
         } else {
-            new HologramImporter<SQLStorage>(new SQLStorage(phd), (info) -> loaded(info));
+            SQLStorage sqlite = new SQLStorage(phd);
+            new HologramImporter<SQLStorage>(sqlite, (info) -> loaded(info));
+            sqlStorage.put(start, sqlite);
         }
         sender.sendMessage(messages.getStartedImportingMessage(from));
         return true;
@@ -84,6 +91,14 @@ public class ConvertSub extends SubCommand {
 
     private void loaded(HDHologramInfo info) {
         phd.getHolograms().imported(info);
+    }
+
+    private void closeSqlite(long start) {
+        SQLStorage storage = sqlStorage.get(start);
+        if (storage == null) {
+            phd.getLogger().warning("Problem while importing data from SQLite database - trying to close a non-existant database");
+        }
+        storage.close();
     }
 
     @Override
