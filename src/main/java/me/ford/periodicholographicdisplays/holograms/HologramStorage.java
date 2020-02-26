@@ -14,6 +14,7 @@ import me.ford.periodicholographicdisplays.holograms.WorldHologramStorageBase.Ho
 import me.ford.periodicholographicdisplays.holograms.storage.SQLStorage;
 import me.ford.periodicholographicdisplays.holograms.storage.Storage;
 import me.ford.periodicholographicdisplays.holograms.storage.YAMLStorage;
+import me.ford.periodicholographicdisplays.holograms.storage.Storage.HDHologramInfo;
 
 /**
  * HologramStorage
@@ -57,6 +58,12 @@ public class HologramStorage {
         }
         holograms.clear();
         initWorldStorage();
+    }
+
+    public void imported(HDHologramInfo info) {
+        for (WorldHologramStorage storage : holograms.values()) {
+            storage.imported(info); // try for all -> the method will figure out if it's the correct world
+        }
     }
 
     // adding

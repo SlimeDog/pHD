@@ -49,3 +49,6 @@ permissions:
   phd.reload:
     description: Allows reloading the config
     default: op
+  phd.convert :
+    description: Allows converting from different types of storage
+    default: op

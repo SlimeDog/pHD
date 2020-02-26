@@ -76,6 +76,10 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         return names;
     }
 
+    public void imported(HDHologramInfo info) {
+        loaded(info);
+    }
+
     private void loaded(HDHologramInfo info) {
         NamedHologram holo;
         try {

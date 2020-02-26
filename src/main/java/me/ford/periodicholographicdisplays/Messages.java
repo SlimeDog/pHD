@@ -29,6 +29,31 @@ public class Messages extends CustomConfigHandler {
         this.phd = phd;
     }
 
+    public String getStartedImportingMessage(String storageType) {
+        return getMessage("started-importing-holograms", "Started importing holograms from {type}")
+                        .replace("{type}", storageType);
+    }
+
+    public String getDoneImportingMessage(String storageType) {
+        return getMessage("done-importing-holograms", "Started importing holograms from {type}")
+                        .replace("{type}", storageType);
+    }
+
+    public String getCannotImportSameMessage(String storageType) {
+        return getMessage("cannot-import-from-same", "Cannot import from the same storage type ({type})")
+                        .replace("{type}", storageType);
+    }
+
+    public String getCannotImportFromMessage(String storageType) {
+        return getMessage("cannot-import-from", "Cannot import from {type} - that is the new storage type")
+                        .replace("{type}", storageType);
+    }
+
+    public String getCannotImportToMessage(String storageType) {
+        return getMessage("cannot-import-to", "Cannot import to {type} - not using that storage type")
+                        .replace("{type}", storageType);
+    }
+
     public String getHologramNotTrackedMessage(String name, PeriodicType type) {
         return getMessage("hologram-not-managed", "Hologram {name} of type {type} is not managed by pHD")
                         .replace("{name}", name).replace("{type}", type.name());
