@@ -62,23 +62,23 @@ public class ConvertSub extends SubCommand {
             return true;
         }
         boolean useDatabase = phd.getSettings().useDatabase();
-        if (useDatabase && !from.equalsIgnoreCase("sqlite")) {
+        if (useDatabase && (!from.equalsIgnoreCase("yaml") || !to.equalsIgnoreCase("sqlite"))) {
             sender.sendMessage(messages.getCannotImportFromMessage(from));
             return true;
-        } else if (!useDatabase && !to.equalsIgnoreCase("yaml")) {
+        } else if (!useDatabase && (!from.equalsIgnoreCase("sqlite") || !to.equalsIgnoreCase("yaml"))) {
             sender.sendMessage(messages.getCannotImportToMessage(to));
             return true;
         }
         HologramsLoadedListener listener = new HologramsLoadedListener(() -> {
             sender.sendMessage(messages.getDoneImportingMessage(from));
         });
+        phd.getServer().getPluginManager().registerEvents(listener, phd);
         if (useDatabase) {
-            new HologramImporter<SQLStorage>(new SQLStorage(phd), (info) -> loaded(info));
-        } else {
             new HologramImporter<YAMLStorage>(new YAMLStorage(), (info) -> loaded(info));
+        } else {
+            new HologramImporter<SQLStorage>(new SQLStorage(phd), (info) -> loaded(info));
         }
         sender.sendMessage(messages.getStartedImportingMessage(from));
-        phd.getServer().getPluginManager().registerEvents(listener, phd);
         return true;
     }
 
