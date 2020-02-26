@@ -40,7 +40,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
 
     private void scheduleLoad() { // TODO - maybe there's an event?
         plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
-            storage.loadHolograms((info) -> loaded(info));
+            storage.loadHolograms((info) -> loaded(info, false));
         }, 40L); // need to do this later so the holograms are loaded
     }
 
@@ -77,10 +77,10 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
     }
 
     public void imported(HDHologramInfo info) {
-        loaded(info);
+        loaded(info, true);
     }
 
-    private void loaded(HDHologramInfo info) {
+    private void loaded(HDHologramInfo info, boolean imported) {
         NamedHologram holo;
         try {
             holo = CommandValidator.getNamedHologram(info.getHoloName());
@@ -121,7 +121,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
             if (handler == null) {
                 handler = new IndividualHologramHandler(holo);
             }
-            handler.addHologram(hInfo.getType(), hologram, true);
+            handler.addHologram(hInfo.getType(), hologram, !imported);
             
         }
         if (handler != null) {
