@@ -74,7 +74,7 @@ public class ConvertSub extends SubCommand {
         }
         long start = System.currentTimeMillis();
         HologramsLoadedListener listener = new HologramsLoadedListener(() -> {
-            sender.sendMessage(messages.getDoneImportingMessage(from));
+            phd.getServer().getScheduler().runTask(phd, () -> sender.sendMessage(messages.getDoneImportingMessage(from))); // so it gets sent after the start message (for YAML mostly)
             if (!useDatabase) closeSqlite(start);
         });
         phd.getServer().getPluginManager().registerEvents(listener, phd);
