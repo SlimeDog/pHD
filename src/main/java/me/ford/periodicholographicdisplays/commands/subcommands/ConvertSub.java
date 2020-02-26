@@ -37,16 +37,16 @@ public class ConvertSub extends SubCommand {
         List<String> list = new ArrayList<>();
         if (args.length == 1) {
             if (!phd.getSettings().useDatabase()) {
-                list.add("yaml");
-            } else {
                 list.add("sqlite");
+            } else {
+                list.add("yaml");
             }
             return StringUtil.copyPartialMatches(args[0], list, new ArrayList<>());
         } else if (args.length == 2) {
             if (phd.getSettings().useDatabase()) {
-                list.add("yaml");
-            } else {
                 list.add("sqlite");
+            } else {
+                list.add("yaml");
             }
             return StringUtil.copyPartialMatches(args[1], list, new ArrayList<>());
         }
