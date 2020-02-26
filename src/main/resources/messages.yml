@@ -20,7 +20,7 @@ PHD_PREFIX: "[pHD] "
 # Messages produced by ...
 #
 hd-hologram-not-found: "HolographicDisplays hologram by the name of {name} was not found"
-hologram-not-managed: "Holgoram not managed: {name}"
+hologram-not-managed: "Hologram not managed: {name}"
 hologram-not-found: "Hologram not found: {name} of type {type}"
 type-not-recognized: "This type for a periodic hologram was not recognized: {type}"
 need-a-number: "Expected a number, got {msg}"

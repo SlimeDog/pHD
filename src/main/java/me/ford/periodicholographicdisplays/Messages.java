@@ -79,7 +79,7 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getHologramNotManagedMessage(String name) {
-        return getMessage("hologram-not-managed", "Holgoram not managed: {name}")
+        return getMessage("hologram-not-managed", "Hologram not managed: {name}")
                         .replace("{name}", name);
     }
 
