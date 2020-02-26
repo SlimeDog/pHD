@@ -62,6 +62,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         try {
             settings.useDatabase();
         } catch (IllegalStateException e) {
+            e.printStackTrace();
             return false;
         }
         return true;
