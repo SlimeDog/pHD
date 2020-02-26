@@ -93,27 +93,35 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         for (HologramInfo hInfo : info.getInfos()) {
             PeriodicHologramBase hologram;
             TypeInfo typeInfo = hInfo.getTypeInfo();
+            double distance = hInfo.getActivationDistance();
+            if (distance == -1) {
+                distance = plugin.getSettings().getDefaultActivationDistance();
+            }
+            long seconds = hInfo.getShowTime();
+            if (seconds == -1) {
+                seconds = plugin.getSettings().getDefaultShowTime();
+            }
             switch (hInfo.getType()) {
                 case MCTIME:
-                hologram = new MCTimeHologram(holo, info.getHoloName(), hInfo.getActivationDistance(), 
-                                                hInfo.getShowTime(), ((MCTimeTypeInfo) typeInfo).getAtTime(), 
+                hologram = new MCTimeHologram(holo, info.getHoloName(), distance, 
+                                                seconds, ((MCTimeTypeInfo) typeInfo).getAtTime(), 
                                                 false, hInfo.getPermissions());
                 break;
                 case IRLTIME:
-                hologram = new IRLTimeHologram(holo, info.getHoloName(), hInfo.getActivationDistance(),
-                                                hInfo.getShowTime(), ((IRLTimeTypeInfo) typeInfo).getAtTime(), 
+                hologram = new IRLTimeHologram(holo, info.getHoloName(), distance,
+                                                seconds, ((IRLTimeTypeInfo) typeInfo).getAtTime(), 
                                                 false, hInfo.getPermissions());
                 break;
                 case NTIMES:
                 NTimesTypeInfo ntimesInfo = (NTimesTypeInfo) typeInfo;
-                NTimesHologram ntimes = new NTimesHologram(holo, info.getHoloName(), hInfo.getActivationDistance(),
-                                                hInfo.getShowTime(), ntimesInfo.getShowTimes(), 
+                NTimesHologram ntimes = new NTimesHologram(holo, info.getHoloName(), distance,
+                                                seconds, ntimesInfo.getShowTimes(), 
                                                 false, hInfo.getPermissions());
                 ntimes.addAllShownTo(ntimesInfo.getShownToTimes());
                 hologram = ntimes;
                 break;
                 case ALWAYS:
-                hologram = new AlwaysHologram(holo, info.getHoloName(), hInfo.getActivationDistance(), hInfo.getShowTime(), false, hInfo.getPermissions());
+                hologram = new AlwaysHologram(holo, info.getHoloName(), distance, seconds, false, hInfo.getPermissions());
                 break;
                 default:
                 throw new IllegalArgumentException("Unexpected pHD type " + hInfo.getType());
@@ -163,8 +171,16 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         HDHologramInfo info = new HDHologramInfo(handler.getName());
         for (PeriodicHologramBase holo : handler.getHolograms()) {
             TypeInfo typeInfo = getTypeInfo(holo);
-            HologramInfo hInfo = new HologramInfo(holo.getName(), holo.getType(), holo.getActivationDistance(), 
-                                holo.getShowTimeTicks()/20L, holo.getPermissions(), typeInfo);
+            double distance = holo.getActivationDistance();
+            if (distance == plugin.getSettings().getDefaultActivationDistance()) {
+                distance = -1;
+            }
+            long seconds = holo.getShowTimeTicks()/20L;
+            if (seconds == plugin.getSettings().getDefaultShowTime()) {
+                seconds = -1;
+            }
+            HologramInfo hInfo = new HologramInfo(holo.getName(), holo.getType(), distance, 
+                                seconds, holo.getPermissions(), typeInfo);
             info.addInfo(hInfo);
         }
         return info;
