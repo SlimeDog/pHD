@@ -59,7 +59,12 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         reloadConfig();
         messages.reloadCustomConfig();
         holograms.reload();
-        return true; // TODO -> record failures
+        try {
+            settings.useDatabase();
+        } catch (IllegalStateException e) {
+            return false;
+        }
+        return true;
     }
 
     @Override

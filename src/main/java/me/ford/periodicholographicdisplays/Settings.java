@@ -23,7 +23,15 @@ public class Settings {
     }
     
     public boolean useDatabase() {
-        return phd.getConfig().getBoolean("use-database", false);
+        String type = phd.getConfig().getString("storage-type", "YAML");
+        switch(type) {
+            case "YAML":
+            return false;
+            case "SQLITE":
+            return true;
+            default:
+            throw new IllegalStateException("Only 'YAML' or 'SQLITE' allowed as database type!");
+        }
     }
 
     public boolean enableMetrics() {
