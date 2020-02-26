@@ -42,4 +42,8 @@ public class Settings {
         return phd.getConfig().getBoolean("check-for-updates", true);
     }
 
+    public boolean onDebug() {
+        return phd.getConfig().getBoolean("debug", false);
+    }
+
 }
