@@ -77,9 +77,14 @@ public class SQLStorage implements Storage {
                 i++;
             }
             if (existingTypes.length - 1 < PeriodicType.values().length) {
-                String filler = String.format("%0" + (existingTypes.length - 1) + "d", 0).replace("0", "?, ");
-                filler = filler.substring(0, filler.length() - 2);
-                String curDelete = String.format(deleteQuery, filler);
+                String curDelete;
+                if (existingTypes.length != 1) {
+                    String filler = String.format("%0" + (existingTypes.length - 1) + "d", 0).replace("0", "?, ");
+                    filler = filler.substring(0, filler.length() - 2);
+                    curDelete = String.format(deleteQuery, filler);
+                } else {
+                    curDelete = deleteQuery.substring(0, deleteQuery.indexOf(" AND type NOT IN (%s)"));
+                }
                 executeUpdate(curDelete, existingTypes);
             }
             for (HologramInfo info : hologram.getInfos()) {

@@ -35,7 +35,7 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getDoneImportingMessage(String storageType) {
-        return getMessage("done-importing-holograms", "Started importing holograms from {type}")
+        return getMessage("done-importing-holograms", "Done importing holograms from {type}")
                         .replace("{type}", storageType);
     }
 
