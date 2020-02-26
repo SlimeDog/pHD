@@ -75,7 +75,7 @@ public class ConvertSub extends SubCommand {
         long start = System.currentTimeMillis();
         HologramsLoadedListener listener = new HologramsLoadedListener(() -> {
             sender.sendMessage(messages.getDoneImportingMessage(from));
-            closeSqlite(start);
+            if (!useDatabase) closeSqlite(start);
         });
         phd.getServer().getPluginManager().registerEvents(listener, phd);
         if (useDatabase) {
