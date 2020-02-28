@@ -13,7 +13,7 @@
 defaults:
   activation-distance: 20
   show-time: 10
-save-delay: 60 # in seconds
+save-frequency: 60 # in seconds
 storage-type: SQLITE # or YAML
 enable-metrics: true
 check-for-updates: false

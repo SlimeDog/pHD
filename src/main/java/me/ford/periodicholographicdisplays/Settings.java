@@ -19,7 +19,7 @@ public class Settings {
     }
 
     public long getSaveDelay() {
-        return phd.getConfig().getLong("save-delay", 60L);
+        return phd.getConfig().getLong("save-frequency", 60L);
     }
     
     public boolean useDatabase() {
