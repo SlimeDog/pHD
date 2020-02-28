@@ -1,4 +1,4 @@
-# periodicHolographicDisplays
+# pHD
 # This file must contain valid YAML code. A YAML checker may be found at http://www.yamllint.com
 #
 # pHD is an add-on for HolographicDisplays
@@ -16,4 +16,4 @@ defaults:
 save-delay: 60 # in seconds
 storage-type: SQLITE # or YAML
 enable-metrics: true
-check-for-updates: true
+check-for-updates: false
