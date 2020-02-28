@@ -35,7 +35,12 @@ public class InfoSub extends SubCommand {
             names.sort(String.CASE_INSENSITIVE_ORDER);
             return StringUtil.copyPartialMatches(args[0], names, list);
         case 2:
-            return StringUtil.copyPartialMatches(args[1], PeriodicType.names(), list);
+            List<PeriodicType> types = storage.getAvailableTypes(args[0]);
+            List<String> availableTypes = new ArrayList<>();
+            for (PeriodicType type : types) {
+                availableTypes.add(type.name());
+            }
+            return StringUtil.copyPartialMatches(args[1], availableTypes, list);
         } 
         return list;
     }
