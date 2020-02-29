@@ -16,18 +16,44 @@ commands:
     description: Main command
     usage: /<command> <subcommand> args
     permission: phd.command.phd
+  phd info <name> <type>:
+    description: See info about a pHD hologram
+    usage: /<command> <subcommand> args
+  phd list:
+    description: List pHD holograms
+    usage: /<command>
+  phd manage <name> <type> <params...>:
+    description: Manage a hologram as a pHD hologram
+    usage: /<command>
+  phd set <name> <type> <params...>:
+    description: Set a parameter of a pHD hologram
+    usage: /<command>
+  phd unset <name> <type> <params...>:
+    description: Unset a parameter of a pHD hologram
+    usage: /<command>
+  phd unmanage <name> <type>:
+    description: Unmanage
+    usage: /<command> <subcommand> args
+  phd reload:
+    description: Reload the config and the holograms
+    usage: /<command>
+  phd convert <oldStorage> <newStorage>:
+    description: Convert storage from old storage to new storage
+    usage: /<command>
 
 permissions:
   phd.*:
     description: All phd permissions
     default: op
     children:
-      phd.list: true
       phd.info: true
+      phd.list: true
+      phd.manage: true
       phd.set: true
       phd.unset: true
       phd.unmanage: true
       phd.reload: true
+      phd.convert: true
   phd.list:
     description: Allows listing of pHD holograms
     default: op
@@ -49,6 +75,6 @@ permissions:
   phd.reload:
     description: Allows reloading the config
     default: op
-  phd.convert :
+  phd.convert:
     description: Allows converting from different types of storage
     default: op
