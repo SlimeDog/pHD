@@ -41,7 +41,11 @@ public class UnsetSub extends SubCommand {
         case 1:
             return StringUtil.copyPartialMatches(args[0], storage.getNames(), list);
         case 2:
-            return StringUtil.copyPartialMatches(args[1], PeriodicType.names(), list);
+            List<String> typeNames = new ArrayList<>();
+            for (PeriodicType type : storage.getAvailableTypes(args[0])) {
+                typeNames.add(type.name());
+            }
+            return StringUtil.copyPartialMatches(args[1], typeNames, list);
         case 3:
         case 4:
         case 5:
