@@ -48,7 +48,11 @@ public class ManageSub extends OptionPairSetSub {
         case 1:
             return StringUtil.copyPartialMatches(args[0], getNamedHolograms(), list);
         case 2:
-            return StringUtil.copyPartialMatches(args[1], PeriodicType.names(), list);
+            List<String> typeNames = PeriodicType.names();
+            for (PeriodicType type : storage.getAvailableTypes(args[0])) {
+                typeNames.remove(type.name());
+            }
+            return StringUtil.copyPartialMatches(args[1], typeNames, list);
         case 3:
         case 5:
         case 7:
