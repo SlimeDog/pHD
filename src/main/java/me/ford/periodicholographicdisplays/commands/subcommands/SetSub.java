@@ -40,7 +40,11 @@ public class SetSub extends OptionPairSetSub {
             names.sort(String.CASE_INSENSITIVE_ORDER);
             return StringUtil.copyPartialMatches(args[0], names, list);
         case 2:
-            return StringUtil.copyPartialMatches(args[1], PeriodicType.names(), list);
+            List<String> typeNames = new ArrayList<>();
+            for (PeriodicType type : storage.getAvailableTypes(args[0])) {
+                typeNames.add(type.name());
+            }
+            return StringUtil.copyPartialMatches(args[1], typeNames, list);
         case 3:
         case 5:
         case 7:
