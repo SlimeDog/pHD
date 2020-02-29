@@ -19,10 +19,10 @@ public class PHDCommand extends ParentCommand {
 
     public PHDCommand(PeriodicHolographicDisplays plugin) {
         this.plugin = plugin;
-        addSubCommand("list", new ListSub(plugin.getHolograms(), this.plugin.getMessages()));
         addSubCommand("info", new InfoSub(plugin.getHolograms(), this.plugin.getMessages()));
-        addSubCommand("set", new SetSub(plugin.getHolograms(), plugin.getSettings(), this.plugin.getMessages()));
+        addSubCommand("list", new ListSub(plugin.getHolograms(), this.plugin.getMessages()));
         addSubCommand("manage", new ManageSub(plugin.getHolograms(), plugin.getSettings(), this.plugin.getMessages()));
+        addSubCommand("set", new SetSub(plugin.getHolograms(), plugin.getSettings(), this.plugin.getMessages()));
         addSubCommand("unset", new UnsetSub(plugin.getHolograms(), plugin.getSettings(), this.plugin.getMessages()));
         addSubCommand("unmanage", new UnmanageSub(plugin.getHolograms(), this.plugin.getMessages()));
         addSubCommand("reload", new ReloadSub(plugin));
