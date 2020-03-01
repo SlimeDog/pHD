@@ -10,10 +10,29 @@
 #
 # Spigot version support: 1.13.2, 1.14.4, 1.15.x
 #
+
+# ========== DEFAULT PARAMETER VALUES ==============================================================
+# If parameter values are not specified, the default values will be used.
+# Activation-distance: The distance at which a hologram may be seen.
+# Show-time: The time a hologram will be displayed, in seconds.
 defaults:
   activation-distance: 20
   show-time: 10
-save-frequency: 60 # in seconds
-storage-type: SQLITE # or YAML
+
+# ========== SAVE FREQUENCY ========================================================================
+# For NTIMES holograms, how frequently player view data are saved to the database, in seconds.
+# The data should not be saved too frequently, for performance reasons.
+save-frequency: 60
+
+# ========== DATA STORAGE TYPE =====================================================================
+# Data storage may be either SQLITE or YAML. SQLITE performs better, so is the default.
+storage-type: SQLITE
+
+# ========== CHECK FOR UPDATES =====================================================================
+# If you do not want available updates announced in the console log, you may disable it here.
+check-for-updates: true
+
+# ========== BSTATS METRICS ========================================================================
+# By default, the plugins collects and transmits anonymous statistics to bstats.org.
+# Data collection may be disabled here, or generally in the bStats/config.yml.
 enable-metrics: true
-check-for-updates: false
