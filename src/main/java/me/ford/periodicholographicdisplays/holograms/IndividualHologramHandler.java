@@ -44,7 +44,7 @@ public class IndividualHologramHandler {
         Validate.notNull(hologram, "Cannot remove null hologram");
         Validate.isTrue(this.hologram == hologram.getHologram(), "Can only add pHD holograms that affect the same HD hologram");
         holograms.remove(hologram.getType());
-        hologram.markRemoved();
+        if (holograms.isEmpty()) hologram.markRemoved();
         if (markForRemoval) needsSaved = true;
     }
 
