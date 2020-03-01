@@ -29,6 +29,11 @@ public class Messages extends CustomConfigHandler {
         this.phd = phd;
     }
 
+    public String getAlreadyHasDataMessage(String type) {
+        return getMessage("new-storage-has-data", "The new storage type {type} already has data. Use '--force' if you wish to override that data")
+                        .replace("{type}", type);
+    }
+
     public String getStartedConvertingMessage(String from, String to) {
         return getMessage("started-converting", "Started converting from {from} to {to}")
                         .replace("{from}", from).replace("{to}", to);

@@ -14,6 +14,10 @@ public interface Storage {
 
     public void loadHolograms(Consumer<HDHologramInfo> consumer);
 
+    public boolean hasData();
+
+    public void clear();
+
     public static class HDHologramInfo {
         private final String holoName;
         private final List<HologramInfo> infos = new ArrayList<>();

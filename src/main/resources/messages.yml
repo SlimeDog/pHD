@@ -46,6 +46,7 @@ unrecognized-conversion: "Cannot convert from {from} to {to} - unrecognized stor
 started-managing-hologram: "Started managing hologram {name} of type {type}: {options}"
 started-converting: "Started converting from {from} to {to}"
 done-converting: "Done converting from {from} to {to}"
+new-storage-has-data: "The new storage type {type} already has data. Use --force if you wish to override that data"
 typeinfo:
   MCTIME: "Shown at: {time}"
   IRLTIME: "Shown at: {time}"

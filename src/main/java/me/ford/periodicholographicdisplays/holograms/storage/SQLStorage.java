@@ -378,10 +378,40 @@ public class SQLStorage implements Storage {
                     "PRIMARY KEY (playerUUID, hologram_id, type)" +
                     ");";
 		if (!executeUpdate(query)) {
-			phd.getLogger().severe("Unable to create table: " + hologramTableName);
+			phd.getLogger().severe("Unable to create table: " + playerTableName);
 		}
     }
-    
+
+    @Override
+    public boolean hasData() { // TODO - this is run IN SYNC
+        String holgorams = "SELECT name FROM sqlite_master WHERE type='table' AND name='" + hologramTableName + "';";
+        String players = "SELECT name FROM sqlite_master WHERE type='table' AND name='" + playerTableName + "';";
+        ResultSet rs = executeQuery(holgorams);
+        if (rs == null) return false;
+        try {
+            if (!rs.next()) return false;
+        } catch (SQLException e) {
+            phd.getLogger().log(Level.WARNING, "Problem checking for existance of table (hologram table)", e);
+        }
+        rs = executeQuery(players);
+        if (rs == null) return false;
+        try {
+            if (!rs.next()) return false;
+        } catch (SQLException e) {
+            phd.getLogger().log(Level.WARNING, "Problem checking for existance of table (player table)", e);
+        }
+        return true;
+    }
+
+    @Override
+    public void clear() {
+        phd.getServer().getScheduler().runTaskAsynchronously(phd, () -> {
+            String delHologramTable = "DROP TABLE IF EXISTS " + hologramTableName + ";";
+            executeUpdate(delHologramTable);
+            String delPlayerTable = "DROP TABLE IF EXISTS " + playerTableName + ";";;
+            executeUpdate(delPlayerTable);
+        });
+    }    
 
 	public void close() {
 		try {

@@ -13,6 +13,7 @@ import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.commands.SubCommand;
 import me.ford.periodicholographicdisplays.holograms.storage.SQLStorage;
+import me.ford.periodicholographicdisplays.holograms.storage.Storage;
 import me.ford.periodicholographicdisplays.holograms.storage.YAMLStorage;
 import me.ford.periodicholographicdisplays.holograms.storage.storageimport.StorageConverter;
 
@@ -21,7 +22,7 @@ import me.ford.periodicholographicdisplays.holograms.storage.storageimport.Stora
  */
 public class ConvertSub extends SubCommand {
     private static final String PERMS = "phd.convert";
-    private static final String USAGE = "/phd convert <sourceStorageType> <targetStorageType>";
+    private static final String USAGE = "/phd convert <sourceStorageType> <targetStorageType> [--force]";
     private final PeriodicHolographicDisplays phd;
     private final Messages messages;
     private final Map<Long, SQLStorage> sqlStorage = new HashMap<>(); // to close the SQLite connection
@@ -50,6 +51,7 @@ public class ConvertSub extends SubCommand {
         if (args.length < 2) {
             return false;
         }
+        boolean force = args.length > 2 && args[2].equalsIgnoreCase("--force");
         String from = args[0];
         String to = args[1];
         if (from.equalsIgnoreCase(to)) {
@@ -65,6 +67,8 @@ public class ConvertSub extends SubCommand {
             sender.sendMessage(messages.getUnrecognizedStorageTypeMessage(from, to));
             return true;
         }
+
+
         long start = System.currentTimeMillis();
         SQLStorage sqlStorage;
         YAMLStorage yamlStorage;
@@ -76,19 +80,36 @@ public class ConvertSub extends SubCommand {
             this.sqlStorage.put(start, sqlStorage);
             yamlStorage = (YAMLStorage) phd.getHolograms().getStorage();
         }
-        WhenDone whenDone = new WhenDone(sender, start, from, to);
-        StorageConverter<?, ?> converter;
+
+        // set target and source
+        Storage sourceStorage;
+        Storage targetStorage;
         switch (type) {
             case YAML_TO_SQLITE:
-            converter = new StorageConverter<YAMLStorage, SQLStorage>(yamlStorage, sqlStorage, whenDone);
+            sourceStorage = yamlStorage;
+            targetStorage = sqlStorage;
             break;
             case SQLITE_TO_YAML:
-            converter = new StorageConverter<SQLStorage, YAMLStorage>(sqlStorage, yamlStorage, whenDone);
+            sourceStorage = sqlStorage;
+            targetStorage = yamlStorage;
             break;
             default:
             sender.sendMessage(messages.getUnrecognizedStorageTypeMessage(from, to));
             return true;
         }
+
+        // find out if there is a previous instance of target storage type
+        boolean hasData = targetStorage.hasData();
+        if (hasData && !force) {
+            sender.sendMessage(messages.getAlreadyHasDataMessage(to));
+            return true;
+        } else if (hasData) {
+            targetStorage.clear();
+        }
+
+        WhenDone whenDone = new WhenDone(sender, start, from, to);
+        StorageConverter<Storage, Storage> converter;
+        converter = new StorageConverter<Storage, Storage>(sourceStorage, targetStorage, whenDone);
         converter.startConvert();
         sender.sendMessage(messages.getStartedConvertingMessage(from, to));
         return true;

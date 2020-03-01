@@ -37,7 +37,7 @@ commands:
   phd reload:
     description: Reload the config and the holograms
     usage: /<command>
-  phd convert <sourceStorageType> <targetStorageType>:
+  phd convert <sourceStorageType> <targetStorageType> [--force]:
     description: Convert storage from source storage to target storage
     usage: /<command>
 

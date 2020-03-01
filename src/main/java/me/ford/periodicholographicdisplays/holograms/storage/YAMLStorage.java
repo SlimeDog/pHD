@@ -161,6 +161,19 @@ public class YAMLStorage implements Storage {
         storage = YamlConfiguration.loadConfiguration(storageFile);
     }
 
+    @Override
+    public boolean hasData() {
+        return !storage.getKeys(true).isEmpty();
+    }
+
+    @Override
+    public void clear() {
+        for (String key : storage.getKeys(false)) {
+            storage.set(key, null);
+        }
+        save();
+    }
+
     protected FileConfiguration getConfig() {
         if (storage == null) {
             reload();
