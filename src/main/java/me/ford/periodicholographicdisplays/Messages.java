@@ -29,28 +29,23 @@ public class Messages extends CustomConfigHandler {
         this.phd = phd;
     }
 
-    public String getStartedImportingMessage(String storageType) {
-        return getMessage("started-importing-holograms", "Started importing holograms from {type}")
-                        .replace("{type}", storageType);
+    public String getStartedConvertingMessage(String from, String to) {
+        return getMessage("started-converting", "Started converting from {from} to {to}")
+                        .replace("{from}", from).replace("{to}", to);
     }
 
-    public String getDoneImportingMessage(String storageType) {
-        return getMessage("done-importing-holograms", "Done importing holograms from {type}")
-                        .replace("{type}", storageType);
+    public String getDoneConvertingMessage(String from, String to) {
+        return getMessage("done-converting", "Done converting from {from} to {to}")
+                        .replace("{from}", from).replace("{to}", to);
     }
 
-    public String getCannotImportSameMessage(String storageType) {
-        return getMessage("cannot-import-from-same", "Cannot import from the same storage type ({type})")
-                        .replace("{type}", storageType);
+    public String getUnrecognizedStorageTypeMessage(String from, String to) {
+        return getMessage("unrecognized-conversion", "Cannot convert from {from} to {to} - unrecognized storage types")
+                        .replace("{from}", from).replace("{to}", to);
     }
 
-    public String getCannotImportFromMessage(String storageType) {
-        return getMessage("cannot-import-from", "Cannot import from {type} - that is the new storage type")
-                        .replace("{type}", storageType);
-    }
-
-    public String getCannotImportToMessage(String storageType) {
-        return getMessage("cannot-import-to", "Cannot import to {type} - not using that storage type")
+    public String getCannotConvertSameMessage(String storageType) {
+        return getMessage("cannot-convert-from-same", "Cannot convert from the same storage type ({type})")
                         .replace("{type}", storageType);
     }
 

@@ -1,6 +1,7 @@
 package me.ford.periodicholographicdisplays.commands.subcommands;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,9 +14,7 @@ import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.commands.SubCommand;
 import me.ford.periodicholographicdisplays.holograms.storage.SQLStorage;
 import me.ford.periodicholographicdisplays.holograms.storage.YAMLStorage;
-import me.ford.periodicholographicdisplays.holograms.storage.Storage.HDHologramInfo;
-import me.ford.periodicholographicdisplays.holograms.storage.storageimport.HologramImporter;
-import me.ford.periodicholographicdisplays.listeners.HologramsLoadedListener;
+import me.ford.periodicholographicdisplays.holograms.storage.storageimport.StorageConverter;
 
 /**
  * ImportSub
@@ -26,6 +25,7 @@ public class ConvertSub extends SubCommand {
     private final PeriodicHolographicDisplays phd;
     private final Messages messages;
     private final Map<Long, SQLStorage> sqlStorage = new HashMap<>(); // to close the SQLite connection
+    private final List<String> storageTypes = Arrays.asList("sqlite", "yaml");
 
     public ConvertSub(PeriodicHolographicDisplays phd) {
         this.phd = phd;
@@ -36,19 +36,11 @@ public class ConvertSub extends SubCommand {
     public List<String> onTabComplete(CommandSender sender, String[] args) {
         List<String> list = new ArrayList<>();
         if (args.length == 1) {
-            if (!phd.getSettings().useDatabase()) {
-                list.add("sqlite");
-            } else {
-                list.add("yaml");
-            }
-            return StringUtil.copyPartialMatches(args[0], list, new ArrayList<>());
+            return StringUtil.copyPartialMatches(args[0], storageTypes, list);
         } else if (args.length == 2) {
-            if (phd.getSettings().useDatabase()) {
-                list.add("sqlite");
-            } else {
-                list.add("yaml");
-            }
-            return StringUtil.copyPartialMatches(args[1], list, new ArrayList<>());
+            List<String> types = new ArrayList<>(storageTypes);
+            types.remove(args[0]);
+            return StringUtil.copyPartialMatches(args[1], types, list);
         }
         return list;
     }
@@ -61,42 +53,56 @@ public class ConvertSub extends SubCommand {
         String from = args[0];
         String to = args[1];
         if (from.equalsIgnoreCase(to)) {
-            sender.sendMessage(messages.getCannotImportSameMessage(from));
+            sender.sendMessage(messages.getCannotConvertSameMessage(from));
             return true;
         }
-        boolean useDatabase = phd.getSettings().useDatabase();
-        if (useDatabase && (!from.equalsIgnoreCase("yaml") || !to.equalsIgnoreCase("sqlite"))) {
-            sender.sendMessage(messages.getCannotImportFromMessage(from));
-            return true;
-        } else if (!useDatabase && (!from.equalsIgnoreCase("sqlite") || !to.equalsIgnoreCase("yaml"))) {
-            sender.sendMessage(messages.getCannotImportToMessage(to));
+        ConvertTypes type;
+        if (from.equalsIgnoreCase("sqlite") && to.equalsIgnoreCase("yaml")) {
+            type = ConvertTypes.SQLITE_TO_YAML;
+        } else if (from.equalsIgnoreCase("yaml") && to.equalsIgnoreCase("sqlite")) {
+            type = ConvertTypes.YAML_TO_SQLITE;
+        } else {
+            sender.sendMessage(messages.getUnrecognizedStorageTypeMessage(from, to));
             return true;
         }
         long start = System.currentTimeMillis();
-        HologramsLoadedListener listener = new HologramsLoadedListener(() -> {
-            phd.getServer().getScheduler().runTask(phd, () -> sender.sendMessage(messages.getDoneImportingMessage(from))); // so it gets sent after the start message (for YAML mostly)
-            if (!useDatabase) closeSqlite(start);
-        });
-        phd.getServer().getPluginManager().registerEvents(listener, phd);
-        if (useDatabase) {
-            new HologramImporter<YAMLStorage>(new YAMLStorage(), (info) -> loaded(info)).startImport();
+        SQLStorage sqlStorage;
+        YAMLStorage yamlStorage;
+        if (phd.getSettings().useDatabase()) {
+            sqlStorage = (SQLStorage) phd.getHolograms().getStorage();
+            yamlStorage = new YAMLStorage();
         } else {
-            SQLStorage sqlite = new SQLStorage(phd);
-            new HologramImporter<SQLStorage>(sqlite, (info) -> loaded(info)).startImport();
-            sqlStorage.put(start, sqlite);
+            sqlStorage = new SQLStorage(phd);
+            this.sqlStorage.put(start, sqlStorage);
+            yamlStorage = (YAMLStorage) phd.getHolograms().getStorage();
         }
-        sender.sendMessage(messages.getStartedImportingMessage(from));
+        WhenDone whenDone = new WhenDone(sender, start, from, to);
+        StorageConverter<?, ?> converter;
+        switch (type) {
+            case YAML_TO_SQLITE:
+            converter = new StorageConverter<YAMLStorage, SQLStorage>(yamlStorage, sqlStorage, whenDone);
+            break;
+            case SQLITE_TO_YAML:
+            converter = new StorageConverter<SQLStorage, YAMLStorage>(sqlStorage, yamlStorage, whenDone);
+            break;
+            default:
+            sender.sendMessage(messages.getUnrecognizedStorageTypeMessage(from, to));
+            return true;
+        }
+        converter.startConvert();
+        sender.sendMessage(messages.getStartedConvertingMessage(from, to));
         return true;
     }
 
-    private void loaded(HDHologramInfo info) {
-        phd.getHolograms().imported(info);
-    }
-
-    private void closeSqlite(long start) {
+    private void closeSqlite(long start, String from, String to) {
+        if (to.equals("sqlite")) {
+            // TODO - perhaps an event?
+            phd.getServer().getScheduler().runTaskLater(phd, () -> closeSqlite(start, from, "..."), 40L);
+            return; // not saved yet
+        }
         SQLStorage storage = sqlStorage.get(start);
         if (storage == null) {
-            phd.getLogger().warning("Problem while importing data from SQLite database - trying to close a non-existant database");
+            return;
         }
         storage.close();
     }
@@ -111,5 +117,29 @@ public class ConvertSub extends SubCommand {
         return USAGE;
     }
 
+    private final class WhenDone implements Runnable {
+        private final CommandSender sender;
+        private final long start;
+        private final String from, to;
+
+        private WhenDone(CommandSender sender, long start, String from, String to) {
+            this.sender = sender;
+            this.start = start;
+            this.from = from;
+            this.to = to;
+        }
+
+        @Override
+        public void run() {
+            phd.getServer().getScheduler().runTask(phd, () -> sender.sendMessage(messages.getDoneConvertingMessage(from, to))); // so it gets sent after the start message (for YAML mostly)
+            closeSqlite(start, from, to);
+        }
+
+    }
+
+    private enum ConvertTypes {
+        SQLITE_TO_YAML,
+        YAML_TO_SQLITE
+    }
     
 }

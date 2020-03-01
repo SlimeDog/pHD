@@ -34,6 +34,10 @@ public class HologramStorage {
         initWorldStorage();
     }
 
+    public Storage getStorage() {
+        return storage;
+    }
+
     private void initWorldStorage() {
         for (World world : plugin.getServer().getWorlds()) {
             holograms.put(world, new WorldHologramStorage(plugin, world, storage));
