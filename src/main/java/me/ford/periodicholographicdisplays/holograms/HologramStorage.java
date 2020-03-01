@@ -69,9 +69,10 @@ public class HologramStorage {
             boolean db = plugin.getSettings().useDatabase();
             plugin.getLogger().info("Starting new type of storage after a reload: " + (db ? "SQLITE" : "YAML"));
             if (db) {
-                this.storage = new SQLStorage(plugin);
-            } else {
-                this.storage = new YAMLStorage();
+                storage = new SQLStorage(plugin);
+            } else { // old was SQLITE
+                ((SQLStorage) storage).close(); // close connection
+                storage = new YAMLStorage();
             }
         }
         initWorldStorage();
