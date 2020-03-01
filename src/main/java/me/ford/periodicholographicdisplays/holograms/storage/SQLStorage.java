@@ -25,16 +25,16 @@ import me.ford.periodicholographicdisplays.util.TimeUtils;
  * SQLStorage
  */
 public class SQLStorage implements Storage {
+    private static Connection conn; // shared connection
     private final PeriodicHolographicDisplays phd;
     // private final Settings settings;
     private final String hologramTableName = "phd_hologram";
     private final String playerTableName = "phd_player";
-    private Connection conn;
 
     public SQLStorage(PeriodicHolographicDisplays phd) {
         this.phd = phd;
         // this.settings = phd.getSettings();
-        this.conn = connect();
+        conn = connect();
     } 
 
     private Connection connect() {
@@ -406,9 +406,9 @@ public class SQLStorage implements Storage {
     @Override
     public void clear() {
         phd.getServer().getScheduler().runTaskAsynchronously(phd, () -> {
-            String delHologramTable = "DROP TABLE IF EXISTS " + hologramTableName + ";";
+            String delHologramTable = "DELETE FROM " + hologramTableName + ";";
             executeUpdate(delHologramTable);
-            String delPlayerTable = "DROP TABLE IF EXISTS " + playerTableName + ";";;
+            String delPlayerTable = "DELETE FROM " + playerTableName + ";";;
             executeUpdate(delPlayerTable);
         });
     }    

@@ -2,9 +2,7 @@ package me.ford.periodicholographicdisplays.commands.subcommands;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
@@ -25,7 +23,7 @@ public class ConvertSub extends SubCommand {
     private static final String USAGE = "/phd convert <sourceStorageType> <targetStorageType> [--force]";
     private final PeriodicHolographicDisplays phd;
     private final Messages messages;
-    private final Map<Long, SQLStorage> sqlStorage = new HashMap<>(); // to close the SQLite connection
+    private SQLStorage sqlStorage = null; // to close the SQLite connection
     private final List<String> storageTypes = Arrays.asList("sqlite", "yaml");
 
     public ConvertSub(PeriodicHolographicDisplays phd) {
@@ -68,16 +66,12 @@ public class ConvertSub extends SubCommand {
             return true;
         }
 
-
-        long start = System.currentTimeMillis();
-        SQLStorage sqlStorage;
         YAMLStorage yamlStorage;
         if (phd.getSettings().useDatabase()) {
-            sqlStorage = (SQLStorage) phd.getHolograms().getStorage();
+            if (sqlStorage == null) sqlStorage = (SQLStorage) phd.getHolograms().getStorage();
             yamlStorage = new YAMLStorage();
         } else {
-            sqlStorage = new SQLStorage(phd);
-            this.sqlStorage.put(start, sqlStorage);
+            if (sqlStorage == null) sqlStorage = new SQLStorage(phd);
             yamlStorage = (YAMLStorage) phd.getHolograms().getStorage();
         }
 
@@ -107,7 +101,7 @@ public class ConvertSub extends SubCommand {
             targetStorage.clear();
         }
 
-        WhenDone whenDone = new WhenDone(sender, start, from, to);
+        WhenDone whenDone = new WhenDone(sender, from, to);
         StorageConverter<Storage, Storage> converter;
         converter = new StorageConverter<Storage, Storage>(sourceStorage, targetStorage, whenDone);
         converter.startConvert();
@@ -115,17 +109,18 @@ public class ConvertSub extends SubCommand {
         return true;
     }
 
-    private void closeSqlite(long start, String from, String to) {
+    private void closeSqlite(String from, String to) {
+        if (phd.getSettings().useDatabase()) return;
         if (to.equals("sqlite")) {
             // TODO - perhaps an event?
-            phd.getServer().getScheduler().runTaskLater(phd, () -> closeSqlite(start, from, "..."), 40L);
+            phd.getServer().getScheduler().runTaskLater(phd, () -> closeSqlite(from, "..."), 40L);
             return; // not saved yet
         }
-        SQLStorage storage = sqlStorage.get(start);
-        if (storage == null) {
+        if (sqlStorage == null) {
             return;
         }
-        storage.close();
+        phd.getLogger().info("Closing: " + sqlStorage);
+        sqlStorage.close();
     }
 
     @Override
@@ -140,12 +135,10 @@ public class ConvertSub extends SubCommand {
 
     private final class WhenDone implements Runnable {
         private final CommandSender sender;
-        private final long start;
         private final String from, to;
 
-        private WhenDone(CommandSender sender, long start, String from, String to) {
+        private WhenDone(CommandSender sender, String from, String to) {
             this.sender = sender;
-            this.start = start;
             this.from = from;
             this.to = to;
         }
@@ -153,7 +146,7 @@ public class ConvertSub extends SubCommand {
         @Override
         public void run() {
             phd.getServer().getScheduler().runTask(phd, () -> sender.sendMessage(messages.getDoneConvertingMessage(from, to))); // so it gets sent after the start message (for YAML mostly)
-            closeSqlite(start, from, to);
+            closeSqlite(from, to);
         }
 
     }
