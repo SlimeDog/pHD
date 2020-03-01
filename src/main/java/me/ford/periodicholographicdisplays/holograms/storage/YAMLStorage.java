@@ -163,7 +163,7 @@ public class YAMLStorage implements Storage {
 
     @Override
     public boolean hasData() {
-        return !storage.getKeys(true).isEmpty();
+        return !getConfig().getKeys(true).isEmpty();
     }
 
     @Override
