@@ -20,7 +20,7 @@ import me.ford.periodicholographicdisplays.holograms.storage.Storage.HDHologramI
  * HologramStorage
  */
 public class HologramStorage {
-    private final Storage storage;
+    private Storage storage;
     private final PeriodicHolographicDisplays plugin;
     private final Map<World, WorldHologramStorage> holograms = new HashMap<>();
 
@@ -28,7 +28,7 @@ public class HologramStorage {
         if (plugin.getSettings().useDatabase()) {
             this.storage = new SQLStorage(plugin);
         } else {
-            this.storage = new YAMLStorage(); // TODO - check config and use database if needed
+            this.storage = new YAMLStorage();
         }
         this.plugin = plugin;
         initWorldStorage();
@@ -58,13 +58,22 @@ public class HologramStorage {
         return storage;
     }
 
-    public void reload() {
+    public void reload(boolean newStorage) {
         for (WorldHologramStorage storage : holograms.values()) {
             for (PeriodicHologramBase hologram : storage.getHolograms()) {
                 storage.removeHologram(hologram, false);
             }
         }
         holograms.clear();
+        if (newStorage) {
+            boolean db = plugin.getSettings().useDatabase();
+            plugin.getLogger().info("Starting new type of storage after a reload: " + (db ? "SQLITE" : "YAML"));
+            if (db) {
+                this.storage = new SQLStorage(plugin);
+            } else {
+                this.storage = new YAMLStorage();
+            }
+        }
         initWorldStorage();
     }
 

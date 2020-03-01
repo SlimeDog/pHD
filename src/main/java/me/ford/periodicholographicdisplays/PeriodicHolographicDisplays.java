@@ -56,15 +56,17 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
     }
 
     public boolean reload() {
+        boolean useDbBefore = settings.useDatabase();
         reloadConfig();
         messages.reloadCustomConfig();
-        holograms.reload();
+        boolean useDbAfter;
         try {
-            settings.useDatabase();
+            useDbAfter = settings.useDatabase();
         } catch (IllegalStateException e) {
             e.printStackTrace();
             return false;
         }
+        holograms.reload(useDbBefore != useDbAfter);
         return true;
     }
 
