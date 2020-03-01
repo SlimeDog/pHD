@@ -37,8 +37,8 @@ commands:
   phd reload:
     description: Reload the config and the holograms
     usage: /<command>
-  phd convert <oldStorage> <newStorage>:
-    description: Convert storage from old storage to new storage
+  phd convert <sourceStorageType> <targetStorageType>:
+    description: Convert storage from source storage to target storage
     usage: /<command>
 
 permissions:

@@ -21,7 +21,7 @@ import me.ford.periodicholographicdisplays.holograms.storage.storageimport.Stora
  */
 public class ConvertSub extends SubCommand {
     private static final String PERMS = "phd.convert";
-    private static final String USAGE = "/phd convert <oldStorageType> <newStorageType>";
+    private static final String USAGE = "/phd convert <sourceStorageType> <targetStorageType>";
     private final PeriodicHolographicDisplays phd;
     private final Messages messages;
     private final Map<Long, SQLStorage> sqlStorage = new HashMap<>(); // to close the SQLite connection
