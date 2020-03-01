@@ -1,7 +1,7 @@
 package me.ford.periodicholographicdisplays.commands;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -15,7 +15,7 @@ import org.bukkit.util.StringUtil;
  * ParentCommand
  */
 public abstract class ParentCommand implements TabExecutor {
-    private final Map<String, SubCommand> subCommands = new HashMap<>();
+    private final Map<String, SubCommand> subCommands = new LinkedHashMap<>();
     
     protected void addSubCommand(String name, SubCommand subCommand) {
         subCommands.put(name.toLowerCase(), subCommand);
@@ -30,7 +30,6 @@ public abstract class ParentCommand implements TabExecutor {
 					list.add(entry.getKey());
 				}
 			}
-			list.sort(String.CASE_INSENSITIVE_ORDER);
 			return StringUtil.copyPartialMatches(args[0], list, new ArrayList<>());
 		} else {
 			SubCommand sub = subCommands.get(args[0]);
