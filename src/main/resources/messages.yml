@@ -19,36 +19,60 @@ PHD_PREFIX: "[pHD] "
 
 # Messages produced by ...
 #
-hd-hologram-not-found: "HolographicDisplays hologram by the name of {name} was not found"
-hologram-not-managed: "Hologram not managed: {name}"
-hologram-not-found: "Hologram not found: {name} of type {type}"
-type-not-recognized: "This type for a periodic hologram was not recognized: {type}"
-need-a-number: "Expected a number, got {msg}"
-need-a-player: "Only a player can use this command!"
-world-not-found: "World not found: {name}"
+
+# Messages produced by /phd info
+#
 hologram-info: "Hologram '{name}':\nWorld: {world}\nType:{type}\nShowTime:{time}s\nActivationDistance:{distance}\nPermission:{perms}\nTypeInfo: {typeinfo}"
-hologram-list: "Holograms: \n{holograms}"
-unmanaged-hologram: "Unmanaged hologram {name} of type {type}"
-no-such-option: "{type} holograms have no {option} option"
-incorrect-set-options: "Need a set of key-value pairs to set (got an odd number of arguments)"
-set-new-values: "Set new values for hologram {name} of type {type}: {options}"
-option-missing: "Need to set {option} for a {type} hologram"
-incorrect-time: "Unable to parse time {time}"
-need-player-after-playercount: "Need to specify a player after 'playercount'"
-player-not-found: "Player not found: {player}"
-unset-options: "Set the options to default: {options}"
-config-reloaded: "Succesfully reloaded the config"
-problems-reloading-config: "Problems reloading config!"
-hologram-not-managed: "Hologram {name} of type {type} is not managed by pHD"
-hologram-already-managed: "Hologram {name} of type {type} is already managed by pHD"
-cannot-convert-from-same: "Cannot convert from the same storage type ({type})"
-unrecognized-conversion: "Cannot convert from {from} to {to} - unrecognized storage types"
-started-managing-hologram: "Started managing hologram {name} of type {type}: {options}"
-started-converting: "Started converting from {from} to {to}"
-done-converting: "Done converting from {from} to {to}"
-new-storage-has-data: "The new storage type {type} already has data. Use --force if you wish to override that data"
 typeinfo:
   MCTIME: "Shown at: {time}"
   IRLTIME: "Shown at: {time}"
   ALWAYS: "Always shown"
   NTIMES: "Shown to: {players:times}"
+
+# Messages produced by /phd list
+#
+hologram-list: "Holograms: \n{holograms}"
+
+# Messages produced by /phd manage
+#
+hologram-already-managed: "Hologram {name} of type {type} is already managed by pHD"
+hologram-not-managed: "Hologram {name} of type {type} is not managed by pHD"
+hd-hologram-not-found: "HolographicDisplays hologram {name} was not found"
+started-managing-hologram: "Started managing hologram {name} of type {type}: {options}"
+option-missing: "Need to set {option} for a {type} hologram"
+
+# Messages produced by /phd set
+#
+set-new-values: "Set new values for hologram {name} of type {type}: {options}"
+incorrect-set-options: "Need a set of key-value pairs to set (got an odd number of arguments)"
+incorrect-time: "Unable to parse time {time}"
+need-a-number: "Expected a number, got {msg}"
+no-such-option: "{type} holograms have no {option} option"
+
+# Messages produced by /phd unset
+#
+unset-options: "Set the options to default: {options}"
+need-player-after-playercount: "Need to specify a player after 'playercount'"
+player-not-found: "Player not found: {player}"
+
+# Messages produced by /phd unmanage
+#
+unmanaged-hologram: "Unmanaged hologram {name} of type {type}"
+
+# Messages produced by /phd convert
+#
+cannot-convert-from-same: "Cannot convert from the same storage type ({type})"
+unrecognized-conversion: "Cannot convert from {from} to {to} - unrecognized storage types"
+started-converting: "Started converting from {from} to {to}"
+done-converting: "Done converting from {from} to {to}"
+new-storage-has-data: "The new storage type {type} already has data. Use --force if you wish to override that data"
+
+# Messages produced by /phd reload
+#
+config-reloaded: "Succesfully reloaded the config"
+problems-reloading-config: "Problems reloading config!"
+
+# Information messages
+#
+type-not-recognized: "Hologram type {type} is not recognized"
+hologram-not-found: "Hologram not found: {name} of type {type}"

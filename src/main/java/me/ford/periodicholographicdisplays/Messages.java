@@ -74,7 +74,7 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getHDHologramNotFoundMessage(String name) {
-        return getMessage("hd-hologram-not-found", "HolographicDisplays hologram by the name of {name} was not found")
+        return getMessage("hd-hologram-not-found", "HolographicDisplays hologram {name} was not found")
                         .replace("{name}", name);
     }
 
@@ -89,7 +89,7 @@ public class Messages extends CustomConfigHandler {
     }
 
 	public String getTypeNotRecognizedMessage(String type) {
-		return getMessage("type-not-recognized", "This type for a periodic hologram was not recognized: {type}").replace("{type}", type);
+		return getMessage("type-not-recognized", "Hologram type {type} is not recognized").replace("{type}", type);
 	}
 
     public String getNeedANumberMessage(String msg) {
@@ -99,14 +99,6 @@ public class Messages extends CustomConfigHandler {
     public String getIllegalTimeMessage(String msg) {
         return getMessage("illega-time", "Time must be specified as e.g '1d' or '10h30m'. Available units: y, mo, d, h, m, s. Got {msg} instead")
                         .replace("{msg}", msg);
-    }
-
-    public String getNeedAPlayerMessage() {
-        return getMessage("need-a-player", "Only a player can use this command!");
-    }
-
-    public String getWorldNotFoundMessage(String name) {
-        return getMessage("world-not-found", "World not found: {name}").replace("{name}", name);
     }
 
     public String getHologramListMessage(Map<String, String> holograms) {
@@ -190,7 +182,7 @@ public class Messages extends CustomConfigHandler {
             phd.getLogger().warning("Unable to get info for hologram of type " + hologram.getType() + " - " + hologram);
         }
         String typeName = (hologram.getType() == PeriodicType.NTIMES && ((NTimesHologram) hologram).getTimesToShow() < 0) ? PeriodicType.ALWAYS.name() : hologram.getType().name();
-        return getMessage("hologram-info", "Hologram '{name}':\nWorld: {world}\nType:{type}\nShowTime:{time}s\nActivationDistance:{distance}\nPermission:{perms}\nTypeInfo:{typeinfo}")
+        return getMessage("hologram-info", "Hologram '{name}':\nWorld: {world}\nType:{type}\nShowTime:{time}s\nActivationDistance:{distance}\nPermission:{perms}\nTypeInfo: {typeinfo}")
                         .replace("{name}", hologram.getName()).replace("{world}", hologram.getLocation().getWorld().getName())
                         .replace("{type}", typeName).replace("{time}", String.valueOf(hologram.getShowTimeTicks()/20))
                         .replace("{typeinfo}", typeinfo).replace("{distance}", String.format("%3.2f", hologram.getActivationDistance()))
