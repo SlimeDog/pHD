@@ -190,11 +190,11 @@ public class Messages extends CustomConfigHandler {
     }
 
     private String getIRLTimeTypeInfo(IRLTimeHologram hologram) {
-        return getMessage("IRLTIME", "Shown at: {time}").replace("{time}", TimeUtils.toIRLTime(hologram.getTime()));
+        return getMessage("typeinfo.IRLTIME", "Shown at: {time}").replace("{time}", TimeUtils.toIRLTime(hologram.getTime()));
     }
 
     private String getMCTimeTypeInfo(MCTimeHologram hologram) {
-        return getMessage("MCTIME", "Shown at: {time}").replace("{time}", TimeUtils.toMCTime(hologram.getTime()));
+        return getMessage("typeinfo.MCTIME", "Shown at: {time}").replace("{time}", TimeUtils.toMCTime(hologram.getTime()));
     }
 
     public String getNTimesTypeInfo(NTimesHologram hologram) {
