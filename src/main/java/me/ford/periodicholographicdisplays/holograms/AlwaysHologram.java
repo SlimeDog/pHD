@@ -22,7 +22,7 @@ public class AlwaysHologram extends NTimesHologram {
     }
 
     public void leftArea(Player player) {
-        hideFrom(player);
+        if (this.isBeingShownTo(player)) hideFrom(player);
     }
 
     @Override
