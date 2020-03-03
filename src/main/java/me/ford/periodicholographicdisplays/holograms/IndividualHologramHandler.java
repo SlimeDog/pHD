@@ -11,6 +11,9 @@ import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.object.NamedHologram;
 
 import org.apache.commons.lang.Validate;
+import org.bukkit.Bukkit;
+
+import me.ford.periodicholographicdisplays.holograms.events.StartedManagingHologramEvent;
 
 /**
  * IndividualHologramHandler
@@ -36,6 +39,7 @@ public class IndividualHologramHandler {
         Validate.notNull(holo, "Periodic hologram cannot be null");
         Validate.isTrue(holo.getType() == type, "Wrong type of hologram. Expected " + type.name() + " got " + holo.getType().name());
         Validate.isTrue(holo.getName().equals(name), "Can only handle pHD holograms of the same HD hologram");
+        Bukkit.getPluginManager().callEvent(new StartedManagingHologramEvent(holo));
         holograms.put(type, holo);
         if (!wasLoaded) needsSaved = true;
     }
