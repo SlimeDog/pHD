@@ -72,6 +72,9 @@ public class UnsetSub extends SubCommand {
             if (type != PeriodicType.NTIMES) {
                 options.remove("playercount");
             }
+            for (String prevArg : Arrays.copyOfRange(args, 2, args.length - 1)) {
+                options.remove(prevArg);
+            }
             return StringUtil.copyPartialMatches(args[args.length - 1], options, list);
         }
         return list;
