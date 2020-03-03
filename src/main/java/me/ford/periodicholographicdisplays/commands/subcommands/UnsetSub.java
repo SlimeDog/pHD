@@ -22,11 +22,11 @@ import me.ford.periodicholographicdisplays.holograms.PeriodicType;
  */
 public class UnsetSub extends SubCommand {
     private static final String PERMS = "phd.set";
-    private static final String USAGE = "/phd unset {hologram} {type} [times] [seconds] [distance] [permission] [playercount {player}]";
+    private static final String USAGE = "/phd unset {hologram} {type} [seconds] [distance] [permission] [playercount {player}]";
     private final HologramStorage storage;
     private final Settings settings;
     private final Messages messages;
-    private final List<String> optionList = Arrays.asList("times", "seconds", "distance", "permission", "playercount");
+    private final List<String> optionList = Arrays.asList("seconds", "distance", "permission", "playercount");
 
     public UnsetSub(HologramStorage storage, Settings settings, Messages messages) {
         this.storage = storage;
@@ -83,13 +83,6 @@ public class UnsetSub extends SubCommand {
                 break;
                 case "permission":
                 hologram.setPermissions(null);
-                break;
-                case "times":
-                if (hologram.getType() == PeriodicType.NTIMES) {
-                    sender.sendMessage(messages.getNoSuchOptionMessage(type, opt));
-                    return true;
-                }
-                ((NTimesHologram) hologram).setTimesToShow(-1); // ALWAYS
                 break;
                 case "playercount":
                 if (hologram.getType() != PeriodicType.NTIMES) {
