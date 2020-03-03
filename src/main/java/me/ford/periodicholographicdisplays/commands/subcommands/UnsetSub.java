@@ -146,6 +146,10 @@ public class UnsetSub extends SubCommand {
                 break;
             }
         }
+        if (usedOptions.isEmpty()) {
+            sender.sendMessage(messages.getNothingToUnsetMessage());
+            return true;
+        }
         sender.sendMessage(messages.getUnsetOptionsMessage(usedOptions));
         return true;
     }
