@@ -51,7 +51,28 @@ public class UnsetSub extends SubCommand {
         case 5:
         case 6:
         case 7:
-            return StringUtil.copyPartialMatches(args[args.length - 1], optionList, list);
+            List<String> options = new ArrayList<>(optionList);
+            PeriodicType type;
+            try {
+                type = PeriodicType.valueOf(args[1]);
+            } catch (IllegalArgumentException e) {
+                return list;
+            }
+            PeriodicHologramBase hologram = storage.getHologram(args[0], type);
+            if (hologram == null) return list;
+            if (!hologram.hasPermissions()) {
+                options.remove("permission");
+            }
+            if (hologram.getActivationDistance() == settings.getDefaultActivationDistance()) {
+                options.remove("distance");
+            }
+            if (hologram.getShowTimeTicks() == settings.getDefaultShowTime() * 20L) {
+                options.remove("seconds");
+            }
+            if (type != PeriodicType.NTIMES) {
+                options.remove("playercount");
+            }
+            return StringUtil.copyPartialMatches(args[args.length - 1], options, list);
         }
         return list;
     }
