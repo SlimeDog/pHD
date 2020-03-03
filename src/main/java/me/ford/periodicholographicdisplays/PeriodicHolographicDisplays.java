@@ -9,8 +9,10 @@ import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
 import me.ford.periodicholographicdisplays.listeners.AlwaysHologramListener;
 import me.ford.periodicholographicdisplays.listeners.HologramListener;
 import me.ford.periodicholographicdisplays.listeners.JoinLeaveListener;
+import me.ford.periodicholographicdisplays.listeners.SimpleWorldTimeListener;
 import me.ford.periodicholographicdisplays.listeners.WorldListener;
 import me.ford.periodicholographicdisplays.listeners.WorldTimeListener;
+import me.ford.periodicholographicdisplays.listeners.legacy.LegacyWorldTimeListener;
 
 /**
  * PeriodicHolographicDisplays
@@ -31,7 +33,14 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new HologramListener(holograms), this);
         this.getServer().getPluginManager().registerEvents(new JoinLeaveListener(holograms), this);
         this.getServer().getPluginManager().registerEvents(new WorldListener(holograms), this);
-        this.getServer().getPluginManager().registerEvents(new WorldTimeListener(holograms), this);
+        WorldTimeListener worldTimeListener;
+        if (getServer().getBukkitVersion().contains("1.15")) {
+            worldTimeListener = new SimpleWorldTimeListener(holograms);
+        } else {
+            getLogger().warning("MCTIME holograms can behave unpredicably because of the use of a legacy version of MC");
+            worldTimeListener = new LegacyWorldTimeListener(holograms);
+        }
+        this.getServer().getPluginManager().registerEvents(worldTimeListener, this);
         this.getServer().getPluginManager().registerEvents(new AlwaysHologramListener(holograms), this);
 
         // metrics
