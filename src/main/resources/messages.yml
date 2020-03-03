@@ -52,6 +52,7 @@ no-such-option: "{type} holograms have no {option} option"
 # Messages produced by /phd unset
 #
 unset-options: "Set the options to default: {options}"
+cannot-unset-dominant: "Cannot unset dominant option {option} for type {type}. Use /phd unmanage instead"
 need-player-after-playercount: "Need to specify a player after 'playercount'"
 player-not-found: "Player not found: {player}"
 

@@ -106,6 +106,16 @@ public class UnsetSub extends SubCommand {
                 }
                 ((NTimesHologram) hologram).resetShownTo(player.getUniqueId());
                 break;
+                case "time":
+                if (type == PeriodicType.MCTIME || type == PeriodicType.IRLTIME) {
+                    sender.sendMessage(messages.getCannotUnSetDominantMessage(opt, type));
+                    break;
+                }
+                case "times":
+                if (type == PeriodicType.NTIMES) {
+                    sender.sendMessage(messages.getCannotUnSetDominantMessage(opt, type));
+                    break;
+                }
                 default:
                 sender.sendMessage(messages.getNoSuchOptionMessage(type, opt));
                 usedOptions.remove(opt);

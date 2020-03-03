@@ -29,6 +29,11 @@ public class Messages extends CustomConfigHandler {
         this.phd = phd;
     }
 
+    public String getCannotUnSetDominantMessage(String option, PeriodicType type) {
+        return getMessage("cannot-unset-dominant", "Cannot unset dominant option {option} for type {type}. Use /phd unmanage instead")
+                        .replace("{option}", option).replace("{type}", type.name());
+    }
+
     public String getAlreadyHasDataMessage(String type) {
         return getMessage("new-storage-has-data", "The new storage type {type} already has data. Use '--force' if you wish to override that data")
                         .replace("{type}", type);
