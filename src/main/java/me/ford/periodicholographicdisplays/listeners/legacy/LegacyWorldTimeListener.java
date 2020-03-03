@@ -11,6 +11,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
+import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
+import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.holograms.WorldHologramStorage;
 import me.ford.periodicholographicdisplays.holograms.events.StartedManagingHologramEvent;
 import me.ford.periodicholographicdisplays.holograms.events.StoppedManagingHologramEvent;
@@ -31,12 +33,14 @@ public class LegacyWorldTimeListener extends WorldTimeListener {
 
     @EventHandler
     public void onStartManage(StartedManagingHologramEvent event) {
+        if (event.getHologram().getType() != PeriodicType.MCTIME) return; // don't care for anything other than MCTIME
         World world = event.getHologram().getLocation().getWorld();
         if (!worldTimes.containsKey(world)) addWorld(world);
     }
 
     @EventHandler
     public void onStopManage(StoppedManagingHologramEvent event) {
+        if (event.getHologram().getType() != PeriodicType.MCTIME) return; // don't care for anything other than MCTIME
         phd.getServer().getScheduler().runTask(phd, new WorldChecker(event.getHologram().getLocation().getWorld()));
     }
 
@@ -93,6 +97,17 @@ public class LegacyWorldTimeListener extends WorldTimeListener {
             WorldHologramStorage holos = getStorage().getHolograms(world);
             if (holos == null || holos.getHolograms().isEmpty()) {
                 removeWorld(world);
+            } else if (holos != null) {
+                boolean hasMctime = false;
+                for (PeriodicHologramBase hologram : holos.getHolograms()) {
+                    if (hologram.getType() == PeriodicType.MCTIME) {
+                        hasMctime = true;
+                        break;
+                    }
+                }
+                if (!hasMctime) {
+                    removeWorld(world);
+                }
             }
         }
 
