@@ -95,8 +95,8 @@ public class UnsetSub extends SubCommand {
             sender.sendMessage(messages.getHologramNotFoundMessage(args[0], type));
             return true;
         }
-        String[] opts = Arrays.copyOfRange(args, 1, args.length);
-        List<String> usedOptions = Arrays.asList(opts);
+        String[] opts = Arrays.copyOfRange(args, 2, args.length);
+        List<String> usedOptions = new ArrayList<>(Arrays.asList(opts));
         for (String opt : opts) {
             switch(opt) {
                 case "distance":
