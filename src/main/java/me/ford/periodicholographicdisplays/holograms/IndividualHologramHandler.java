@@ -14,6 +14,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 
 import me.ford.periodicholographicdisplays.holograms.events.StartedManagingHologramEvent;
+import me.ford.periodicholographicdisplays.holograms.events.StoppedManagingHologramEvent;
 
 /**
  * IndividualHologramHandler
@@ -47,6 +48,7 @@ public class IndividualHologramHandler {
     void removeHologram(PeriodicHologramBase hologram, boolean markForRemoval) {
         Validate.notNull(hologram, "Cannot remove null hologram");
         Validate.isTrue(this.hologram == hologram.getHologram(), "Can only add pHD holograms that affect the same HD hologram");
+        Bukkit.getPluginManager().callEvent(new StoppedManagingHologramEvent(hologram));
         holograms.remove(hologram.getType());
         if (holograms.isEmpty()) hologram.markRemoved();
         if (markForRemoval) needsSaved = true;
