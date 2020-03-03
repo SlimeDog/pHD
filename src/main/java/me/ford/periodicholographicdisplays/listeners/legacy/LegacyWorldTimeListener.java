@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -55,7 +56,7 @@ public class LegacyWorldTimeListener extends WorldTimeListener {
 
     private void timeChanged(World world, long addTime) {
         if (phd.getSettings().onDebug()) {
-            phd.getLogger().info("Time changed in " + world.getName() + " by + addTime"); 
+            phd.getLogger().info("Time changed in " + world.getName() + " by " + addTime); 
         }
         getStorage().mcTimeChanged(world, addTime);
     }
@@ -70,7 +71,9 @@ public class LegacyWorldTimeListener extends WorldTimeListener {
                 long newTime = world.getFullTime();
                 if (newTime != prevTime + 1) {
                     // time changed
-                    timeChanged(world, newTime - (prevTime + 1));
+                    if (world.getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE)) { // ignore if time doesn't change anyway ?
+                        timeChanged(world, newTime - (prevTime + 1));
+                    }
                 }
                 worldTimes.put(world, newTime);
             }
