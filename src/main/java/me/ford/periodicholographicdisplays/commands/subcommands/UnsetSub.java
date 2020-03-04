@@ -132,12 +132,12 @@ public class UnsetSub extends SubCommand {
                 break;
                 case "time":
                 if (type == PeriodicType.MCTIME || type == PeriodicType.IRLTIME) {
-                    sender.sendMessage(messages.getCannotUnSetDominantMessage(opt, type));
+                    sender.sendMessage(messages.getCannotUnSetRequiredMessage(opt, type));
                     break;
                 }
                 case "times":
                 if (type == PeriodicType.NTIMES) {
-                    sender.sendMessage(messages.getCannotUnSetDominantMessage(opt, type));
+                    sender.sendMessage(messages.getCannotUnSetRequiredMessage(opt, type));
                     break;
                 }
                 default:

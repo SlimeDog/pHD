@@ -33,8 +33,8 @@ public class Messages extends CustomConfigHandler {
         return getMessage("nothing-to-unset", "Did not find a suitable option, nothing was unset");
     }
 
-    public String getCannotUnSetDominantMessage(String option, PeriodicType type) {
-        return getMessage("cannot-unset-dominant", "Cannot unset dominant option {option} for type {type}. Use /phd unmanage instead")
+    public String getCannotUnSetRequiredMessage(String option, PeriodicType type) {
+        return getMessage("cannot-unset-required-option", "Cannot unset required option {option} for type {type}. Use /phd unmanage instead")
                         .replace("{option}", option).replace("{type}", type.name());
     }
 
