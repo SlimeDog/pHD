@@ -59,6 +59,18 @@ public class ManageSub extends OptionPairSetSub {
         case 9:
         case 11:
             List<String> options = new ArrayList<>(settables);
+            PeriodicType type;
+            try {
+                type = PeriodicType.valueOf(args[1]);
+            } catch (IllegalArgumentException e) {
+                return list;
+            }
+            if (type != PeriodicType.MCTIME && type != PeriodicType.IRLTIME) {
+                options.remove("time");
+            }
+            if (type != PeriodicType.NTIMES) {
+                options.remove("times");
+            }
             for (int i = 2; i<args.length - 2; i+=2) {
                 options.remove(args[i]);
             }
