@@ -50,7 +50,11 @@ public class SetSub extends OptionPairSetSub {
         case 7:
         case 9:
         case 11:
-            return StringUtil.copyPartialMatches(args[args.length - 1], settables, list);
+            List<String> options = new ArrayList<>(settables);
+            for (int i = 2; i<args.length - 2; i+=2) {
+                options.remove(args[i]);
+            }
+            return StringUtil.copyPartialMatches(args[args.length - 1], options, list);
         }
         return list;
     }
