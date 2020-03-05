@@ -29,6 +29,11 @@ public class Messages extends CustomConfigHandler {
         this.phd = phd;
     }
 
+    public String getNegativeDistanceMessage(String given) {
+        return getMessage("distance-cannot-be-negative", "Distance cannot be negative: {distance}")
+                        .replace("{distance", given);
+    }
+
     public String getNothingToUnsetMessage() {
         return getMessage("nothing-to-unset", "Did not find a suitable option, nothing was unset");
     }

@@ -77,6 +77,9 @@ public abstract class OptionPairSetSub extends SubCommand {
                 } catch (NumberFormatException e) {
                     throw new OptionPairException(OptionPairExceptionType.NEED_A_NUMBER, result);
                 }
+                if (distance < 0) {
+                    throw new OptionPairException(OptionPairExceptionType.DISTANCE_NEGATIVE, result);
+                }
                 holo.setActivationDistance(distance);
                 break;
                 case "seconds":
@@ -126,7 +129,8 @@ public abstract class OptionPairSetSub extends SubCommand {
     public enum OptionPairExceptionType {
         NEED_A_NUMBER,
         INCORRECT_TIME,
-        NO_SUCH_OPTION
+        NO_SUCH_OPTION,
+        DISTANCE_NEGATIVE
     }
     
 }

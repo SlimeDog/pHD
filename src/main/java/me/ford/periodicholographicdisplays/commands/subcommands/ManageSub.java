@@ -131,6 +131,9 @@ public class ManageSub extends OptionPairSetSub {
                 case NO_SUCH_OPTION:
                 sender.sendMessage(messages.getNoSuchOptionMessage(type, e.getExtra()));
                 break;
+                case DISTANCE_NEGATIVE:
+                sender.sendMessage(messages.getNegativeDistanceMessage(e.getExtra()));
+                break;
                 default:
                 sender.sendMessage("Unusual problem: " + e);
             }
