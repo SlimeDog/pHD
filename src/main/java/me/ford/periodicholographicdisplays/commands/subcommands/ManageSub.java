@@ -2,6 +2,7 @@ package me.ford.periodicholographicdisplays.commands.subcommands;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -101,15 +102,20 @@ public class ManageSub extends OptionPairSetSub {
             sender.sendMessage(messages.getTypeNotRecognizedMessage(args[1]));
             return true;
         }
-        if (args.length < 4) {
+        boolean defaultedAlways = args.length == 2 && type == PeriodicType.ALWAYS;
+        if (args.length < 4 && !defaultedAlways) { // in case of ALWAYS, allow all defaults
             return false;
         }
         Map<String, String> optionPairs;
-        try {
-            optionPairs = getOptionPairs(Arrays.copyOfRange(args, 2, args.length));
-        } catch (IllegalArgumentException e) {
-            sender.sendMessage(messages.getNeedPairedOptionsMessage());
-            return true;
+        if (defaultedAlways) {
+            optionPairs = new HashMap<>();
+        } else {
+            try {
+                optionPairs = getOptionPairs(Arrays.copyOfRange(args, 2, args.length));
+            } catch (IllegalArgumentException e) {
+                sender.sendMessage(messages.getNeedPairedOptionsMessage());
+                return true;
+            }
         }
         WorldHologramStorage worldStorage = storage.getHolograms(holo.getWorld());
         PeriodicHologramBase existing = worldStorage.getHologram(holo.getName(), type);
@@ -118,29 +124,31 @@ public class ManageSub extends OptionPairSetSub {
             return true;
         }
         existing = adoptHologram(sender, holo, type, optionPairs);
-        try {
-            setAll(sender, existing, optionPairs, false);
-        } catch (OptionPairException e) {
-            switch(e.getType()) {
-                case NEED_A_NUMBER:
-                sender.sendMessage(messages.getNeedANumberMessage(e.getExtra()));
-                break;
-                case INCORRECT_TIME:
-                sender.sendMessage(messages.getIncorrectTimeMessage(e.getExtra()));
-                break;
-                case NO_SUCH_OPTION:
-                sender.sendMessage(messages.getNoSuchOptionMessage(type, e.getExtra()));
-                break;
-                case DISTANCE_NEGATIVE:
-                sender.sendMessage(messages.getNegativeDistanceMessage(e.getExtra()));
-                break;
-                case SECONDS_NEGATIVE:
-                sender.sendMessage(messages.getNegativeSecondsMessage(e.getExtra()));
-                break;
-                default:
-                sender.sendMessage("Unusual problem: " + e);
+        if (!defaultedAlways) {
+            try {
+                setAll(sender, existing, optionPairs, false);
+            } catch (OptionPairException e) {
+                switch(e.getType()) {
+                    case NEED_A_NUMBER:
+                    sender.sendMessage(messages.getNeedANumberMessage(e.getExtra()));
+                    break;
+                    case INCORRECT_TIME:
+                    sender.sendMessage(messages.getIncorrectTimeMessage(e.getExtra()));
+                    break;
+                    case NO_SUCH_OPTION:
+                    sender.sendMessage(messages.getNoSuchOptionMessage(type, e.getExtra()));
+                    break;
+                    case DISTANCE_NEGATIVE:
+                    sender.sendMessage(messages.getNegativeDistanceMessage(e.getExtra()));
+                    break;
+                    case SECONDS_NEGATIVE:
+                    sender.sendMessage(messages.getNegativeSecondsMessage(e.getExtra()));
+                    break;
+                    default:
+                    sender.sendMessage("Unusual problem: " + e);
+                }
+                return true;
             }
-            return true;
         }
         storage.addHologram(existing);
         sender.sendMessage(messages.getStartedManagingMessage(holo.getName(), type, optionPairs));
