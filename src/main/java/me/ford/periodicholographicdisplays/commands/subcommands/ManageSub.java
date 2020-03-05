@@ -150,6 +150,7 @@ public class ManageSub extends OptionPairSetSub {
                     default:
                     sender.sendMessage("Unusual problem: " + e);
                 }
+                if (worldStorage.getHologram(holo.getName(), type) == null) existing.markRemoved(); // nothing managed before -> not adding
                 return true;
             }
         }
