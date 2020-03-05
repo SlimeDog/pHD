@@ -177,7 +177,7 @@ public class HologramStorage {
         for (PeriodicHologramBase holo : worldStorage.getHolograms()) {
             if (holo.getType() == PeriodicType.ALWAYS) {
                 AlwaysHologram always = (AlwaysHologram) holo;
-                if (!always.hasActivationDistance()) {
+                if (always.getAlwaysType() == AlwaysType.PERMS_ONLY) {
                     always.hideFrom(player);
                 }
             }
