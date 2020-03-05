@@ -10,6 +10,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
+import me.ford.periodicholographicdisplays.holograms.AlwaysHologram.AlwaysType;
 import me.ford.periodicholographicdisplays.holograms.WorldHologramStorageBase.HologramSaveReason;
 import me.ford.periodicholographicdisplays.holograms.storage.SQLStorage;
 import me.ford.periodicholographicdisplays.holograms.storage.Storage;
@@ -160,7 +161,7 @@ public class HologramStorage {
         for (PeriodicHologramBase holo : worldStorage.getHolograms()) {
             if (holo.getType() == PeriodicType.ALWAYS) {
                 AlwaysHologram always = (AlwaysHologram) holo;
-                if (!always.hasActivationDistance()) {
+                if (always.getAlwaysType() == AlwaysType.PERMS_ONLY) {
                     always.attemptToShow(player);
                 }
             }
