@@ -81,7 +81,7 @@ public abstract class WorldHologramStorageBase {
     protected abstract boolean saveHolograms(boolean inSync, HologramSaveReason reason);
     
     public static enum HologramSaveReason {
-        ADD, PERIODIC, MANUAL, CHANGE
+        ADD, PERIODIC, MANUAL, CHANGE, REMOVE
     }
     
 }

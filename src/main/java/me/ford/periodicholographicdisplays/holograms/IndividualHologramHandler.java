@@ -62,6 +62,10 @@ public class IndividualHologramHandler {
         return name;
     }
 
+    public boolean isEmpty() {
+        return holograms.size() == 0;
+    }
+
     public PeriodicHologramBase getHologram(PeriodicType type) {
         return holograms.get(type);
     }
