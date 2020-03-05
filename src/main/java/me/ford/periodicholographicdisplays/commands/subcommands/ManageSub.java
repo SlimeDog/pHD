@@ -193,7 +193,7 @@ public class ManageSub extends OptionPairSetSub {
             existing = new MCTimeHologram(holo, holo.getName(), defaultDistance, showTime, timeAt, true, perms);
             break;
             case ALWAYS:
-            existing = new AlwaysHologram(holo, holo.getName(), defaultDistance, showTime, true, perms);
+            existing = new AlwaysHologram(holo, holo.getName(), defaultDistance, true, perms);
             break;
             case NTIMES:
             default:
