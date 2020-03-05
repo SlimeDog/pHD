@@ -83,6 +83,9 @@ public abstract class OptionPairSetSub extends SubCommand {
                 holo.setActivationDistance(distance);
                 break;
                 case "seconds":
+                if (holo.getType() == PeriodicType.ALWAYS) {
+                    throw new OptionPairException(OptionPairExceptionType.NO_SUCH_OPTION, entry.getKey());
+                }
                 int time;
                 try {
                     time = Integer.parseInt(result);

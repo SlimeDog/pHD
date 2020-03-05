@@ -63,6 +63,9 @@ public class SetSub extends OptionPairSetSub {
             if (type != PeriodicType.NTIMES) {
                 options.remove("times");
             }
+            if (type == PeriodicType.ALWAYS) {
+                options.remove("seconds");
+            }
             for (int i = 2; i<args.length - 2; i+=2) {
                 options.remove(args[i]);
             }

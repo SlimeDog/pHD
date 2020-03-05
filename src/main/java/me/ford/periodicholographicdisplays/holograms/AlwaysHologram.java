@@ -21,6 +21,15 @@ public class AlwaysHologram extends NTimesHologram {
         checkWorldPlayers();
     }
 
+     @Override
+     public void setShowTime(int time) {
+         if (time == settings.getDefaultShowTime()) {
+             if (getShowTimeTicks() == settings.getDefaultShowTime() * 20L) return;
+             super.setShowTime(time);
+         }
+         throw new IllegalStateException("Cannot set showtime of ALWAYS hologram - it's meaningless");
+     }
+
     public AlwaysType getAlwaysType() {
         if (isPermsOnly()) {
             return AlwaysType.PERMS_ONLY;
