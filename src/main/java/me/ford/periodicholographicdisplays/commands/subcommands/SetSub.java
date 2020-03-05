@@ -122,6 +122,9 @@ public class SetSub extends OptionPairSetSub {
                 case DISTANCE_NEGATIVE:
                 sender.sendMessage(messages.getNegativeDistanceMessage(e.getExtra()));
                 break;
+                case SECONDS_NEGATIVE:
+                sender.sendMessage(messages.getNegativeSecondsMessage(e.getExtra()));
+                break;
                 default:
                 sender.sendMessage("Unusual problem: " + e);
             }

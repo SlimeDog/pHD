@@ -49,6 +49,7 @@ incorrect-time: "Unable to parse time {time}"
 need-a-number: "Expected a number, got {msg}"
 no-such-option: "{type} holograms have no {option} option"
 distance-cannot-be-negative: "Distance cannot be negative: {distance}"
+seconds-cannot-be-negative: "Seconds cannot be negative: {seconds}"
 
 # Messages produced by /phd unset
 #

@@ -29,6 +29,11 @@ public class Messages extends CustomConfigHandler {
         this.phd = phd;
     }
 
+    public String getNegativeSecondsMessage(String given) {
+        return getMessage("seconds-cannot-be-negative", "Seconds cannot be negative: {seconds}")
+                        .replace("{seconds}", given);
+    }
+
     public String getNegativeDistanceMessage(String given) {
         return getMessage("distance-cannot-be-negative", "Distance cannot be negative: {distance}")
                         .replace("{distance", given);

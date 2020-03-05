@@ -89,6 +89,9 @@ public abstract class OptionPairSetSub extends SubCommand {
                 } catch (NumberFormatException e) {
                     throw new OptionPairException(OptionPairExceptionType.NEED_A_NUMBER, result);
                 }
+                if (time < 0) {
+                    throw new OptionPairException(OptionPairExceptionType.SECONDS_NEGATIVE, result);
+                }
                 holo.setShowTime(time);
                 break;
                 case "permission":
@@ -130,7 +133,8 @@ public abstract class OptionPairSetSub extends SubCommand {
         NEED_A_NUMBER,
         INCORRECT_TIME,
         NO_SUCH_OPTION,
-        DISTANCE_NEGATIVE
+        DISTANCE_NEGATIVE,
+        SECONDS_NEGATIVE
     }
     
 }
