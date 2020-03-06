@@ -29,7 +29,7 @@ public class HologramListener implements Listener {
             double dist2 = base.getLocation().distanceSquared(location);
             if (dist2 < base.getSquareDistance()) {
                 if (base.getType() == PeriodicType.ALWAYS &&
-                      !((AlwaysHologram) base).isShownOnWorldJoin()) {
+                      ((AlwaysHologram) base).isShownOnWorldJoin()) {
                     continue; // ignore
                 }
                 base.attemptToShow(player);
