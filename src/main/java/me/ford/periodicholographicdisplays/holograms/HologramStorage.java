@@ -160,7 +160,7 @@ public class HologramStorage {
         for (PeriodicHologramBase holo : worldStorage.getHolograms()) {
             if (holo.getType() == PeriodicType.ALWAYS) {
                 AlwaysHologram always = (AlwaysHologram) holo;
-                if (always.isForever()) {
+                if (always.isShownOnWorldJoin()) {
                     always.attemptToShow(player);
                 }
             }
@@ -176,7 +176,7 @@ public class HologramStorage {
         for (PeriodicHologramBase holo : worldStorage.getHolograms()) {
             if (holo.getType() == PeriodicType.ALWAYS) {
                 AlwaysHologram always = (AlwaysHologram) holo;
-                if (always.isForever()) {
+                if (always.isShownOnWorldJoin()) {
                     always.hideFrom(player);
                 }
             }

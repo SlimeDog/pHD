@@ -29,7 +29,7 @@ public class HologramListener implements Listener {
             double dist2 = base.getLocation().distanceSquared(location);
             if (dist2 < base.getSquareDistance()) {
                 if (base.getType() == PeriodicType.ALWAYS &&
-                      !((AlwaysHologram) base).hasActivationDistance()) {
+                      !((AlwaysHologram) base).isShownOnWorldJoin()) {
                     continue; // ignore
                 }
                 base.attemptToShow(player);
@@ -37,7 +37,7 @@ public class HologramListener implements Listener {
             // handle leaving ALWAYS holograms with activation distance and FOREVER settings
             if (base.getType() == PeriodicType.ALWAYS) {
                 AlwaysHologram always = (AlwaysHologram) base;
-                if (!always.hasActivationDistance() || !always.isForever()) continue;
+                if (!always.isShownWhileInArea()) continue;
                 if (base.getLocation().distanceSquared(location) > base.getSquareDistance()) {
                     always.leftArea(player);
                 }

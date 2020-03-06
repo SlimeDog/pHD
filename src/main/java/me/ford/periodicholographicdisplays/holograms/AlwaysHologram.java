@@ -28,7 +28,15 @@ public class AlwaysHologram extends NTimesHologram {
              super.setShowTime(time);
          }
          throw new IllegalStateException("Cannot set showtime of ALWAYS hologram - it's meaningless");
-     }
+    }
+
+    public boolean isShownWhileInArea() {
+        return isForever() && hasActivationDistance();
+    }
+
+    public boolean isShownOnWorldJoin() {
+        return !hasActivationDistance() && isForever();
+    }
 
     public boolean isForever() {
         return settings.getDefaultShowTime()*20L == getShowTimeTicks();
