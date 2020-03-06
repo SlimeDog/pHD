@@ -11,7 +11,6 @@ import me.ford.periodicholographicdisplays.Settings.StorageTypeException;
 import me.ford.periodicholographicdisplays.commands.PHDCommand;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
-import me.ford.periodicholographicdisplays.listeners.AlwaysHologramListener;
 import me.ford.periodicholographicdisplays.listeners.HologramListener;
 import me.ford.periodicholographicdisplays.listeners.JoinLeaveListener;
 import me.ford.periodicholographicdisplays.listeners.SimpleWorldTimeListener;
@@ -52,7 +51,6 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
             worldTimeListener = new LegacyWorldTimeListener(holograms);
         }
         this.getServer().getPluginManager().registerEvents(worldTimeListener, this);
-        this.getServer().getPluginManager().registerEvents(new AlwaysHologramListener(holograms), this);
 
         // metrics
 		if (settings.enableMetrics()) {

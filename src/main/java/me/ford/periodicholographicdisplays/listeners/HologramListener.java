@@ -34,6 +34,14 @@ public class HologramListener implements Listener {
                 }
                 base.attemptToShow(player);
             }
+            // handle leaving ALWAYS holograms with activation distance and FOREVER settings
+            if (base.getType() == PeriodicType.ALWAYS) {
+                AlwaysHologram always = (AlwaysHologram) base;
+                if (!always.hasActivationDistance() || !always.isForever()) continue;
+                if (base.getLocation().distanceSquared(location) > base.getSquareDistance()) {
+                    always.leftArea(player);
+                }
+            }
         }
     }
 
