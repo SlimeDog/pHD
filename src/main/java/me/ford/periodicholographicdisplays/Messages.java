@@ -37,7 +37,7 @@ public class Messages extends CustomConfigHandler {
 
     public String getNegativeDistanceMessage(String given) {
         return getMessage("distance-cannot-be-negative", "Distance cannot be negative: {distance}")
-                        .replace("{distance", given);
+                        .replace("{distance}", given);
     }
 
     public String getNothingToUnsetMessage() {
