@@ -1,8 +1,13 @@
 package me.ford.periodicholographicdisplays;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import me.ford.periodicholographicdisplays.Settings.StorageTypeException;
 import me.ford.periodicholographicdisplays.commands.PHDCommand;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
@@ -64,19 +69,29 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         return lpHook;
     }
 
-    public boolean reload() {
+    public List<ReloadIssue> reload() {
+        List<ReloadIssue> issues = new ArrayList<>();
+        File df = getDataFolder();
+        if (!df.exists() || !df.canRead()) {
+            getLogger().warning("Plugin folder does not exist or is unreadable at reload. Attempting to recreated.");
+            df.mkdir();
+            issues.add(DefaultReloadIssue.NO_FOLDER);
+        }
         boolean useDbBefore = settings.useDatabase();
         reloadConfig();
         messages.reloadCustomConfig();
         boolean useDbAfter;
         try {
             useDbAfter = settings.useDatabase();
-        } catch (IllegalStateException e) {
+        } catch (StorageTypeException e) {
             e.printStackTrace();
-            return false;
+            DefaultReloadIssue issue = DefaultReloadIssue.ILLEGA_STORAGE_TYPE;
+            issue.setExtra(e.getType());
+            issues.add(issue);
+            useDbAfter = useDbBefore; // not used
         }
-        holograms.reload(useDbBefore != useDbAfter);
-        return true;
+        if (issues.isEmpty()) holograms.reload(useDbBefore != useDbAfter);
+        return issues;
     }
 
     @Override
@@ -94,6 +109,42 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
 
     public Messages getMessages() {
         return messages;
+    }
+
+    public static enum DefaultReloadIssue implements ReloadIssue {
+        NONE(null),
+        NO_FOLDER("folder had to be recreated!"),
+        ILLEGA_STORAGE_TYPE("storage type not understood");
+        ;
+        private final String issue;
+        private String extra = null;
+
+        private DefaultReloadIssue(String issue) {
+            this.issue = issue;
+        }
+
+        @Override
+        public String getIssue() {
+            return issue;
+        }
+
+        @Override
+        public String getExtra() {
+            return extra;
+        }
+
+        public void setExtra(String extra) {
+            this.extra = extra;
+        }
+        
+    }
+
+    public static interface ReloadIssue {
+
+        public String getIssue();
+
+        public String getExtra();
+
     }
     
 }

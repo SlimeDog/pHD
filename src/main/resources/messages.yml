@@ -74,7 +74,7 @@ new-storage-has-data: "The new storage type {type} already has data. Use --force
 # Messages produced by /phd reload
 #
 config-reloaded: "Succesfully reloaded the config"
-problems-reloading-config: "Problems reloading config!"
+problems-reloading-config: "Problems reloading config: {problems}"
 
 # Information messages
 #

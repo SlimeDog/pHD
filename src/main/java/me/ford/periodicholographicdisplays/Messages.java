@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 
+import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.ReloadIssue;
 import me.ford.periodicholographicdisplays.holograms.IRLTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.MCTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
@@ -167,8 +168,14 @@ public class Messages extends CustomConfigHandler {
         return getMessage("config-reloaded", "Succesfully reloaded the config");
     }
 
-    public String getProblemsReloadingConfigMessage() {
-        return getMessage("problems-reloading-config", "Problems reloading config!");
+    public String getProblemsReloadingConfigMessage(List<ReloadIssue> issues) {
+        StringBuilder problems = new StringBuilder();
+        for (ReloadIssue issue : issues) {
+            String strIssue = issue.getExtra() == null ? issue.getIssue() : String.format("%s: %s", issue.getIssue(), issue.getExtra());
+            problems.append(strIssue);
+        }
+        return getMessage("problems-reloading-config", "Problems reloading config: {problems}")
+                        .replace("{problems}", problems.toString());
     }
 
     public String getSetNewOptionsMessage(String name, PeriodicType type, Map<String, String> options) {

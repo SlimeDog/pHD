@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 
 import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
+import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.ReloadIssue;
 import me.ford.periodicholographicdisplays.commands.SubCommand;
 
 /**
@@ -30,10 +31,11 @@ public class ReloadSub extends SubCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
-        if (phd.reload()) {
+        List<ReloadIssue> issues = phd.reload();
+        if (issues.isEmpty()) {
             sender.sendMessage(messages.getConfigReloadedMessage());
         } else {
-            sender.sendMessage(messages.getProblemsReloadingConfigMessage());
+            sender.sendMessage(messages.getProblemsReloadingConfigMessage(issues));
         }
         return true;
     }

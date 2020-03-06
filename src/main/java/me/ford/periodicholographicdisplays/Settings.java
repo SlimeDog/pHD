@@ -46,4 +46,20 @@ public class Settings {
         return phd.getConfig().getBoolean("debug", false);
     }
 
+    public static class StorageTypeException extends IllegalStateException {
+        private static final long serialVersionUID = -1888165138957133828L;
+
+        private final String type;
+
+        public StorageTypeException(String type) {
+            super("Only 'YAML' or 'SQLITE' allowed as database type,  got " + type);
+            this.type = type;
+        }
+
+        public String getType() {
+            return type;
+        }
+        
+    }
+
 }
