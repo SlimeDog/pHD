@@ -17,7 +17,7 @@
 # Show-time: The time a hologram will be displayed, in seconds.
 defaults:
   activation-distance: 20
-  show-time: 10
+  show-time: 15
 
 # ========== SAVE FREQUENCY ========================================================================
 # For NTIMES holograms, how frequently player view data are saved to the database, in seconds.
