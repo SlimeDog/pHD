@@ -143,7 +143,15 @@ public abstract class PeriodicHologramBase {
         }
         hologram.getVisibilityManager().showTo(player);
         beingShownTo.add(id);
-        if (getType() != PeriodicType.ALWAYS) { // in that case, something else handles it
+        boolean scheduleHide = true;
+        if (getType() == PeriodicType.ALWAYS) {
+            AlwaysHologram always = (AlwaysHologram) this;
+            if (always.isShownOnWorldJoin() || always.isShownWhileInArea()) {
+                // in these cases taken care of elsewhere
+                scheduleHide = false;
+            }
+        }
+        if (scheduleHide) {
             plugin.getServer().getScheduler().runTaskLater(plugin, () -> hideFrom(player), showTimeTicks);
         }
     }
