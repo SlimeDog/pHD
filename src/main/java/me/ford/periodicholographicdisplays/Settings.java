@@ -30,7 +30,7 @@ public class Settings {
             case "SQLITE":
             return true;
             default:
-            throw new IllegalStateException("Only 'YAML' or 'SQLITE' allowed as database type!");
+            throw new StorageTypeException(type);
         }
     }
 
