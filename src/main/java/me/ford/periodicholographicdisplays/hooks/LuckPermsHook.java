@@ -11,7 +11,6 @@ import net.luckperms.api.event.node.NodeAddEvent;
 import net.luckperms.api.event.node.NodeRemoveEvent;
 import net.luckperms.api.event.user.track.UserDemoteEvent;
 import net.luckperms.api.event.user.track.UserPromoteEvent;
-import net.luckperms.api.model.group.Group;
 
 /**
  * LuckPermsHook
@@ -59,11 +58,6 @@ public class LuckPermsHook {
     }
 
     private void handleGroup(String name) {
-        Group group = api.getGroupManager().getGroup(name);
-        if (group == null) {
-            phd.getLogger().warning("LuckPerms updateded group '" + name + "', but could not find the group");
-            return;
-        }
         for (Player player : phd.getServer().getOnlinePlayers()) {
             if (player.hasPermission("group." + name)) {
                 resetHolograms(player);
@@ -72,7 +66,14 @@ public class LuckPermsHook {
     }
 
     private void nodeRemoved(NodeRemoveEvent event) {
-        UUID id = UUID.fromString(event.getTarget().getIdentifier().getName());
+        String name = event.getTarget().getIdentifier().getName();
+        UUID id;
+        try {
+            id = UUID.fromString(name);
+        } catch (IllegalArgumentException e) { // GROUP
+            handleGroup(name);
+            return;
+        }
         Player player = phd.getServer().getPlayer(id);
         if (player == null) return; // don't worry about it - they're offline    
         phd.getHolograms().getHolograms(player.getWorld()).resetAlwaysHologramPermissions(player);
