@@ -30,25 +30,7 @@ public class AlwaysHologram extends NTimesHologram {
          throw new IllegalStateException("Cannot set showtime of ALWAYS hologram - it's meaningless");
      }
 
-    public AlwaysType getAlwaysType() {
-        if (isPermsOnly()) {
-            return AlwaysType.PERMS_ONLY;
-        }
-        if (isDefaulted()) {
-            return AlwaysType.DEFAULTED;
-        }
-        return AlwaysType.CUSTOM;
-    }
-
-    public boolean isDefaulted() {
-        if (this.hasPermissions()) return false;
-        if (settings.getDefaultActivationDistance() != getActivationDistance()) return false;
-        return settings.getDefaultShowTime()*20L == getShowTimeTicks();
-    }
-
-    public boolean isPermsOnly() {
-        if (!this.hasPermissions()) return false;
-        if (settings.getDefaultActivationDistance() != getActivationDistance()) return false;
+    public boolean isForever() {
         return settings.getDefaultShowTime()*20L == getShowTimeTicks();
     }
 
@@ -76,10 +58,6 @@ public class AlwaysHologram extends NTimesHologram {
 
     public boolean hasActivationDistance() {
         return getActivationDistance() != settings.getDefaultActivationDistance();
-    }
-
-    public static enum AlwaysType {
-        DEFAULTED, PERMS_ONLY, CUSTOM
     }
     
 }
