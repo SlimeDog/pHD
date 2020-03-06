@@ -23,7 +23,7 @@ public class Settings {
     }
     
     public boolean useDatabase() {
-        String type = phd.getConfig().getString("storage-type", "YAML");
+        String type = phd.getConfig().getString("storage-type", "SQLITE");
         switch(type) {
             case "YAML":
             return false;
