@@ -116,6 +116,9 @@ public class SetSub extends OptionPairSetSub {
                 case NEED_A_NUMBER:
                 sender.sendMessage(messages.getNeedANumberMessage(e.getExtra()));
                 break;
+                case NEED_AN_INTEGER:
+                sender.sendMessage(messages.getNeedAnIntegerMessage(e.getExtra()));
+                break;
                 case INCORRECT_TIME:
                 sender.sendMessage(messages.getIncorrectTimeMessage(e.getExtra()));
                 break;

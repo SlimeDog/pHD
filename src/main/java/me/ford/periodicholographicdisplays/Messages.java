@@ -112,6 +112,10 @@ public class Messages extends CustomConfigHandler {
 		return getMessage("type-not-recognized", "Hologram type {type} is not recognized").replace("{type}", type);
 	}
 
+    public String getNeedAnIntegerMessage(String msg) {
+        return getMessage("need-an-integer", "Value must be an integer, got {msg}").replace("{msg}", msg);
+    }
+
     public String getNeedANumberMessage(String msg) {
         return getMessage("need-a-number", "Expected a number, got {msg}").replace("{msg}", msg);
     }

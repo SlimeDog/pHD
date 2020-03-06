@@ -50,7 +50,7 @@ public abstract class OptionPairSetSub extends SubCommand {
                 try {
                     times = Integer.parseInt(result);
                 } catch (NumberFormatException e) {
-                    throw new OptionPairException(OptionPairExceptionType.NEED_A_NUMBER, result);
+                    throw new OptionPairException(OptionPairExceptionType.NEED_AN_INTEGER, result);
                 }
                 ((NTimesHologram) holo).setTimesToShow(times);
                 continue;
@@ -90,7 +90,7 @@ public abstract class OptionPairSetSub extends SubCommand {
                 try {
                     time = Integer.parseInt(result);
                 } catch (NumberFormatException e) {
-                    throw new OptionPairException(OptionPairExceptionType.NEED_A_NUMBER, result);
+                    throw new OptionPairException(OptionPairExceptionType.NEED_AN_INTEGER, result);
                 }
                 if (time < 0) {
                     throw new OptionPairException(OptionPairExceptionType.SECONDS_NEGATIVE, result);
@@ -134,6 +134,7 @@ public abstract class OptionPairSetSub extends SubCommand {
 
     public enum OptionPairExceptionType {
         NEED_A_NUMBER,
+        NEED_AN_INTEGER,
         INCORRECT_TIME,
         NO_SUCH_OPTION,
         DISTANCE_NEGATIVE,
