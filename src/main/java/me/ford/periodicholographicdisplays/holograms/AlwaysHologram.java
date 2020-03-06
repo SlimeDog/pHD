@@ -14,9 +14,9 @@ import me.ford.periodicholographicdisplays.Settings;
 public class AlwaysHologram extends NTimesHologram {
     private final Settings settings;
 
-    public AlwaysHologram(Hologram hologram, String name, double activationDistance,
+    public AlwaysHologram(Hologram hologram, String name, double activationDistance, long showTime,
             boolean isNew, String perms) {
-        super(hologram, name, activationDistance, -1, -1, isNew, perms);
+        super(hologram, name, activationDistance, showTime, -1, isNew, perms);
         settings = JavaPlugin.getPlugin(PeriodicHolographicDisplays.class).getSettings();
         checkWorldPlayers();
     }
