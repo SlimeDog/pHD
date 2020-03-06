@@ -97,7 +97,7 @@ public class UnsetSub extends SubCommand {
         }
         String[] opts = Arrays.copyOfRange(args, 2, args.length);
         List<String> usedOptions = new ArrayList<>(Arrays.asList(opts));
-        for (String opt : opts) {
+        for (String opt : opts) { // TODO -> move away from DEFAULTs to UNSET
             switch(opt) {
                 case "distance":
                 hologram.setActivationDistance(settings.getDefaultActivationDistance());
