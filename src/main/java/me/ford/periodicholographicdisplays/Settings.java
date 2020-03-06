@@ -34,6 +34,10 @@ public class Settings {
         }
     }
 
+    public void setDefaultDatabaseInternal() {
+        phd.getConfig().set("storage-type", "SQLITE"); // isn't saved anywhere
+    }
+
     public boolean enableMetrics() {
         return phd.getConfig().getBoolean("enable-metrics", true);
     }

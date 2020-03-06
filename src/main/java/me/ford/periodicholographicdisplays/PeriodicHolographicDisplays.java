@@ -33,6 +33,12 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         saveDefaultConfig();
         messages = new Messages(this);
         settings = new Settings(this);
+        try {
+            settings.useDatabase();
+        } catch (StorageTypeException e) {
+            getLogger().warning("Illegal storage type " + e.getType() + " - reverting to default (SQLITE)");
+            settings.setDefaultDatabaseInternal();
+        }
         holograms = new HologramStorage(this);
         getCommand("phd").setExecutor(new PHDCommand(this));
         this.getServer().getPluginManager().registerEvents(new HologramListener(holograms), this);
@@ -89,6 +95,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
             issue.setExtra(e.getType());
             issues.add(issue);
             useDbAfter = useDbBefore; // not used
+            settings.setDefaultDatabaseInternal();
         }
         if (issues.isEmpty()) holograms.reload(useDbBefore != useDbAfter);
         return issues;
