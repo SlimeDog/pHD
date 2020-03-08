@@ -52,9 +52,7 @@ public class InfoSub extends SubCommand {
         }
         if (args.length == 1) {
             List<PeriodicType> availableTypes = storage.getAvailableTypes(args[0]);
-            List<String> types = new ArrayList<>();
-            for (PeriodicType type : availableTypes) types.add(type.name());
-            sender.sendMessage("Types available for " + args[0] + ": " + String.join(", ", types));
+            sender.sendMessage(messages.getAvailableTypesMessage(args[0], availableTypes));
             return true;
         }
         PeriodicType type;

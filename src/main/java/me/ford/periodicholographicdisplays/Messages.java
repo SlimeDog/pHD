@@ -1,6 +1,7 @@
 package me.ford.periodicholographicdisplays;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -29,6 +30,14 @@ public class Messages extends CustomConfigHandler {
         super(phd, FILE_NAME);
         saveDefaultConfig();
         this.phd = phd;
+    }
+
+    public String getAvailableTypesMessage(String name, Collection<PeriodicType> availableTypes) {
+        String msg = getMessage("available-types", "Types available for {hologram}: {types}");
+        msg = msg.replace("{hologram}", name);
+        List<String> types = new ArrayList<>();
+        for (PeriodicType type : availableTypes) types.add(type.name());
+        return msg.replace("{types}", String.join(", ", types));
     }
 
     public String getNoPluginFolderMessage() {

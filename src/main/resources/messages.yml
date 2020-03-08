@@ -21,7 +21,8 @@ PHD_PREFIX: "[pHD] "
 #
 
 # Messages produced by /phd info
-#
+#"
+available-types: "Types available for {hologram}: {types}"
 hologram-info: "Hologram '{name}':\nWorld: {world}\nType:{type}\nShowTime:{time}s\nActivationDistance:{distance}\nPermission:{perms}\nTypeInfo: {typeinfo}"
 typeinfo:
   MCTIME: "Shown at: {time}"
