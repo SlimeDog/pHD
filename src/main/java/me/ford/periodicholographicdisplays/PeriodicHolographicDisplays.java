@@ -35,7 +35,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         try {
             settings.useDatabase();
         } catch (StorageTypeException e) {
-            getLogger().warning("Illegal storage type " + e.getType() + " - reverting to default (SQLITE)");
+            getLogger().warning(messages.getIllegalStorageMessage(e.getType()));
             settings.setDefaultDatabaseInternal();
         }
         holograms = new HologramStorage(this);

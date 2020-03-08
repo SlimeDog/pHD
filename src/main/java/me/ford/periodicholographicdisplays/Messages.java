@@ -30,6 +30,11 @@ public class Messages extends CustomConfigHandler {
         this.phd = phd;
     }
 
+    public String getIllegalStorageMessage(String type) {
+        return getMessage("illegal-storage-type", "Illegal storage type {type} - only YAML and SQLITE are supported - reverting to default (SQLITE)")
+                        .replace("{type}", type);
+    }
+
     public String getNegativeSecondsMessage(String given) {
         return getMessage("seconds-cannot-be-negative", "Seconds cannot be negative: {seconds}")
                         .replace("{seconds}", given);
