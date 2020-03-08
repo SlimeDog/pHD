@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 
+import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.DefaultReloadIssue;
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.ReloadIssue;
 import me.ford.periodicholographicdisplays.holograms.IRLTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.MCTimeHologram;
@@ -192,8 +193,23 @@ public class Messages extends CustomConfigHandler {
     public String getProblemsReloadingConfigMessage(List<ReloadIssue> issues) {
         StringBuilder problems = new StringBuilder();
         for (ReloadIssue issue : issues) {
-            String strIssue = issue.getExtra() == null ? issue.getIssue() : String.format("%s: %s", issue.getIssue(), issue.getExtra());
-            problems.append(strIssue);
+            String desc = null;
+            if (issue instanceof DefaultReloadIssue) {
+                DefaultReloadIssue dri = (DefaultReloadIssue) issue;
+                switch (dri) {
+                    case NO_FOLDER:
+                    desc = getNoPluginFolderMessage();
+                    break;
+                    case ILLEGA_STORAGE_TYPE:
+                    desc = getIllegalStorageMessage(dri.getExtra());
+                    break;
+                    default:
+                }
+            }
+            if (desc == null) {
+                desc = issue.getExtra() == null ? issue.getIssue() : String.format("%s: %s", issue.getIssue(), issue.getExtra());;
+            }
+            problems.append(desc);
         }
         return getMessage("problems-reloading-config", "Problems reloading config: {problems}")
                         .replace("{problems}", problems.toString());
