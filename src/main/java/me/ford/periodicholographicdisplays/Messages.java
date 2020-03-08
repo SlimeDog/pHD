@@ -30,6 +30,10 @@ public class Messages extends CustomConfigHandler {
         this.phd = phd;
     }
 
+    public String getNoLPMessage() {
+        return getMessage("no-luckperms", "LuckPerms not found - unable to readjust permissions on the fly or tab-complete permissions");
+    }
+
     public String getLegacyMessage() {
         return getMessage("legacy-version-mctime", "MCTIME holograms can behave unpredicably because of the use of a legacy version of MC");
     }

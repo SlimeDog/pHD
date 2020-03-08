@@ -60,7 +60,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         try {
             lpHook = new LuckPermsHook(this);
         } catch (IllegalStateException e) {
-            getLogger().warning("LuckPerms not found - unable to readjust permissions on the fly");
+            getLogger().warning(messages.getNoLPMessage());
         }
 
         // commands
