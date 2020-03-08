@@ -119,7 +119,7 @@ public class ConvertSub extends SubCommand {
         if (sqlStorage == null) {
             return;
         }
-        phd.getLogger().info("Closing: " + sqlStorage);
+        phd.debug("Closing SQLite after convert");
         sqlStorage.close();
     }
 
