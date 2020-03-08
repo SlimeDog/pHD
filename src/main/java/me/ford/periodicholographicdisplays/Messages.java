@@ -30,6 +30,10 @@ public class Messages extends CustomConfigHandler {
         this.phd = phd;
     }
 
+    public String getNoPluginFolderMessage() {
+        return getMessage("plugin-folder-removed", "Plugin folder does not exist or is unreadable at reload; attempting to recreate.");
+    }
+
     public String getNoLPMessage() {
         return getMessage("no-luckperms", "LuckPerms not found - unable to readjust permissions on the fly or tab-complete permissions");
     }
