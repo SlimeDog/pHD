@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
 
-import com.gmail.filoghost.holographicdisplays.commands.CommandValidator;
-import com.gmail.filoghost.holographicdisplays.exception.CommandException;
 import com.gmail.filoghost.holographicdisplays.object.NamedHologram;
 
 import org.apache.commons.lang.Validate;
@@ -34,15 +31,14 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         super(plugin, world);
         this.plugin = plugin;
         this.storage = storage;
-        scheduleLoad();
         scheduleSave();
     }
 
-    private void scheduleLoad() { // TODO - maybe there's an event?
-        plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
-            storage.loadHolograms((info) -> loaded(info, false));
-        }, 40L); // need to do this later so the holograms are loaded
-    }
+    // private void scheduleLoad() { // TODO - maybe there's an event?
+    //     plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+    //         storage.loadHolograms((info) -> loaded(info, false));
+    //     }, 40L); // need to do this later so the holograms are loaded
+    // }
 
     private void scheduleSave() {
         long delay = plugin.getSettings().getSaveDelay() * 20L;
@@ -76,18 +72,11 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         return names;
     }
 
-    public void imported(HDHologramInfo info) {
-        loaded(info, true);
-    }
+    // public void imported(HDHologramInfo info) {
+    //     loaded(info, true);
+    // }
 
-    private void loaded(HDHologramInfo info, boolean imported) {
-        NamedHologram holo;
-        try {
-            holo = CommandValidator.getNamedHologram(info.getHoloName());
-        } catch (CommandException e) {
-            plugin.getLogger().log(Level.WARNING, "Problem loading hologram " + info.getHoloName() + ": HD hologram not found", e);
-            return;
-        }
+    public void loaded(NamedHologram holo, HDHologramInfo info, boolean imported) {
         if (holo.getWorld() != getWorld()) return; // don't load
         IndividualHologramHandler handler = null;
         for (HologramInfo hInfo : info.getInfos()) {

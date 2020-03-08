@@ -2,8 +2,15 @@ package me.ford.periodicholographicdisplays.holograms;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.logging.Level;
+
+import com.gmail.filoghost.holographicdisplays.commands.CommandValidator;
+import com.gmail.filoghost.holographicdisplays.exception.CommandException;
+import com.gmail.filoghost.holographicdisplays.object.NamedHologram;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.World;
@@ -23,6 +30,7 @@ public class HologramStorage {
     private Storage storage;
     private final PeriodicHolographicDisplays plugin;
     private final Map<World, WorldHologramStorage> holograms = new HashMap<>();
+    private final Set<HDHologramInfo> danglingInfos = new HashSet<>();
 
     public HologramStorage(PeriodicHolographicDisplays plugin) {
         if (plugin.getSettings().useDatabase()) {
@@ -32,6 +40,40 @@ public class HologramStorage {
         }
         this.plugin = plugin;
         initWorldStorage();
+        scheduleLoad();
+        scheduleDanglingCheck();
+    }
+
+    private void scheduleLoad() { // TODO - maybe there's an event?
+        plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+            storage.loadHolograms((info) -> loaded(info, false));
+        }, 40L); // need to do this later so the holograms are loaded
+    }
+
+    private void scheduleDanglingCheck() {
+        plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+            if (!danglingInfos.isEmpty()) {
+                plugin.getLogger().warning("Some pHD holograms were loaded such that they have not found their corresponding hologram:");
+            }
+        }, 200L);
+    }
+
+    private void loaded(HDHologramInfo info, boolean imported) {
+        danglingInfos.add(info); // removed if not left danlging
+        NamedHologram holo;
+        try {
+            holo = CommandValidator.getNamedHologram(info.getHoloName());
+        } catch (CommandException e) {
+            plugin.getLogger().log(Level.WARNING, "Problem loading hologram " + info.getHoloName() + ": HD hologram not found (perhaps the world isn't loaded?)", e);
+            return;
+        }
+        WorldHologramStorage whs = holograms.get(holo.getWorld());
+        if (whs == null) {
+            plugin.getLogger().info("Loaded hologram before world was initialized: " + holo.getName() + " - it should be sorted out once the world loads");
+        } else {
+            danglingInfos.remove(info);
+        }
+        whs.loaded(holo, info, imported);
     }
 
     public Storage getStorage() {
@@ -40,12 +82,15 @@ public class HologramStorage {
 
     private void initWorldStorage() {
         for (World world : plugin.getServer().getWorlds()) {
-            holograms.put(world, new WorldHologramStorage(plugin, world, storage));
+            newWorld(world);
         }
     }
 
     public void newWorld(World world) {
         holograms.put(world, new WorldHologramStorage(plugin, world, storage));
+        for (HDHologramInfo info : danglingInfos) {
+            loaded(info, false); // it'll be removed if it fits
+        }
     }
 
     public WorldHologramStorage getHolograms(World world) {
@@ -79,9 +124,7 @@ public class HologramStorage {
     }
 
     public void imported(HDHologramInfo info) {
-        for (WorldHologramStorage storage : holograms.values()) {
-            storage.imported(info); // try for all -> the method will figure out if it's the correct world
-        }
+        loaded(info, true);
     }
 
     // adding
