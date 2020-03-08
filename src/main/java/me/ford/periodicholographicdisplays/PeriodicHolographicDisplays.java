@@ -79,7 +79,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         List<ReloadIssue> issues = new ArrayList<>();
         File df = getDataFolder();
         if (!df.exists() || !df.canRead()) {
-            getLogger().warning("Plugin folder does not exist or is unreadable at reload. Attempting to recreated.");
+            getLogger().warning("Plugin folder does not exist or is unreadable at reload; attempting to recreate.");
             df.mkdir();
             saveDefaultConfig();
             messages.saveDefaultConfig();
