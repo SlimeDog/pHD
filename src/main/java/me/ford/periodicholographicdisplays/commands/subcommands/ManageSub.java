@@ -23,6 +23,7 @@ import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.holograms.WorldHologramStorage;
+import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
 import me.ford.periodicholographicdisplays.util.TimeUtils;
 
 /**
@@ -32,12 +33,14 @@ public class ManageSub extends OptionPairSetSub {
     private static final String PERMS = "phd.manage";
     private static final String USAGE = "/phd manage {hologram} {type} [times {integer}] [time {hh:mm}] [seconds {integer}] [distance {integer|decimal}] [permission {string}]";
     private final HologramStorage storage;
+    private final LuckPermsHook hook;
     private final Settings settings;
     private final Messages messages;
     private final List<String> settables = Arrays.asList("times", "time", "seconds", "distance", "permission");
 
-    public ManageSub(HologramStorage storage, Settings settings, Messages messages) {
+    public ManageSub(HologramStorage storage, LuckPermsHook hook, Settings settings, Messages messages) {
         this.storage = storage;
+        this.hook = hook;
         this.settings = settings;
         this.messages = messages;
     }
@@ -76,6 +79,15 @@ public class ManageSub extends OptionPairSetSub {
                 options.remove(args[i]);
             }
             return StringUtil.copyPartialMatches(args[args.length - 1], options, list);
+        case 4:
+        case 6:
+        case 8:
+        case 10:
+        case 12:
+            if (args[args.length - 2].equalsIgnoreCase("permission")) {
+                if (hook == null) return list;
+                return hook.tabCompletePermissions(sender, args[args.length - 1]);
+            }
         }
         return list;
     }

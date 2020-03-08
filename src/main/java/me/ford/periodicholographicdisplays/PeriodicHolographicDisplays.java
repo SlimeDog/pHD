@@ -39,7 +39,6 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
             settings.setDefaultDatabaseInternal();
         }
         holograms = new HologramStorage(this);
-        getCommand("phd").setExecutor(new PHDCommand(this));
         this.getServer().getPluginManager().registerEvents(new HologramListener(holograms), this);
         this.getServer().getPluginManager().registerEvents(new JoinLeaveListener(holograms), this);
         this.getServer().getPluginManager().registerEvents(new WorldListener(holograms), this);
@@ -63,6 +62,9 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         } catch (IllegalStateException e) {
             getLogger().warning("LuckPerms not found - unable to readjust permissions on the fly");
         }
+
+        // commands
+        getCommand("phd").setExecutor(new PHDCommand(this));
         
         if (settings.checkForUpdates()) {
             // TODO - check for updates

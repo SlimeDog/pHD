@@ -1,9 +1,13 @@
 package me.ford.periodicholographicdisplays.hooks;
 
+import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 import net.luckperms.api.LuckPerms;
@@ -17,11 +21,13 @@ import net.luckperms.api.event.user.track.UserPromoteEvent;
  */
 public class LuckPermsHook {
     private final PeriodicHolographicDisplays phd;
+    private final JavaPlugin lp;
     private final LuckPerms api;
 
     public LuckPermsHook(PeriodicHolographicDisplays phd) {
         this.phd = phd;
-        if (this.phd.getServer().getPluginManager().getPlugin("LuckPerms") == null) {
+        lp = (JavaPlugin) this.phd.getServer().getPluginManager().getPlugin("LuckPerms");
+        if (lp == null) {
             throw new IllegalStateException("Need LuckPerms to be enabled for the LuckPermsHook to work");
         }
         RegisteredServiceProvider<LuckPerms> provider = phd.getServer().getServicesManager()
@@ -89,6 +95,16 @@ public class LuckPermsHook {
         Player player = phd.getServer().getPlayer(event.getUser().getUniqueId());
         if (player == null) return; // don't worry about it - they're offline
         phd.getHolograms().getHolograms(player.getWorld()).resetAlwaysHologramPermissions(player);        
+    }
+
+    private final String lpCommand = "luckperms";
+    private final String[] lpArgs = {"user", "N/A", "permission", "set", null};
+    
+    public List<String> tabCompletePermissions(CommandSender sender, String cur) {
+        PluginCommand command = lp.getCommand(lpCommand);
+        String[] args = lpArgs.clone();
+        args[args.length-1] = cur;
+        return command.getTabCompleter().onTabComplete(sender, command, lpCommand, args);
     }
     
 }

@@ -15,6 +15,7 @@ import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.holograms.WorldHologramStorageBase.HologramSaveReason;
+import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
 
 /**
  * SetSub
@@ -23,11 +24,13 @@ public class SetSub extends OptionPairSetSub {
     private static final String PERMS = "phd.set";
     private static final String USAGE = "/phd set {hologram} {type} [times {integer}] [time {hh:mm}] [seconds {integer}] [distance {integer|decimal}] [permission {string}]";
     private final HologramStorage storage;
+    private final LuckPermsHook hook;
     private final Messages messages;
     private final List<String> settables = Arrays.asList("times", "time", "seconds", "distance", "permission");
 
-    public SetSub(HologramStorage storage, Settings settings, Messages messages) {
+    public SetSub(HologramStorage storage, LuckPermsHook hook, Settings settings, Messages messages) {
         this.storage = storage;
+        this.hook = hook;
         this.messages = messages;
     }
 
@@ -67,6 +70,15 @@ public class SetSub extends OptionPairSetSub {
                 options.remove(args[i]);
             }
             return StringUtil.copyPartialMatches(args[args.length - 1], options, list);
+        case 4:
+        case 6:
+        case 8:
+        case 10:
+        case 12:
+            if (args[args.length - 2].equalsIgnoreCase("permission")) {
+                if (hook == null) return list;
+                return hook.tabCompletePermissions(sender, args[args.length - 1]);
+            }
         }
         return list;
     }
