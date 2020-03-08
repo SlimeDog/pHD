@@ -12,11 +12,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
+import me.ford.periodicholographicdisplays.Settings;
 
 /**
  * PeriodicHologram
  */
 public abstract class PeriodicHologramBase {
+    public static final int NO_SECONDS = -1;
+    public static final double NO_DISTANCE = -1.0D;
     private final PeriodicHolographicDisplays plugin = JavaPlugin.getPlugin(PeriodicHolographicDisplays.class);
     private final Set<UUID> beingShownTo = new HashSet<>();
     private final String name;
@@ -154,6 +157,22 @@ public abstract class PeriodicHologramBase {
         if (scheduleHide) {
             plugin.getServer().getScheduler().runTaskLater(plugin, () -> hideFrom(player), showTimeTicks);
         }
+    }
+
+    public void defaultDistance(Settings settings) {
+        double dist = settings.getDefaultActivationDistance();
+        if (getType() == PeriodicType.ALWAYS) {
+            dist = PeriodicHologramBase.NO_DISTANCE;
+        }
+        setActivationDistance(dist);
+    }
+
+    public void defaultShowtime(Settings settings) {
+        int time = settings.getDefaultShowTime();
+        if (getType() == PeriodicType.ALWAYS) {
+            time = PeriodicHologramBase.NO_SECONDS;
+        }
+        setShowTime(time);
     }
     
 }

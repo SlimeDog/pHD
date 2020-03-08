@@ -97,13 +97,13 @@ public class UnsetSub extends SubCommand {
         }
         String[] opts = Arrays.copyOfRange(args, 2, args.length);
         List<String> usedOptions = new ArrayList<>(Arrays.asList(opts));
-        for (String opt : opts) { // TODO -> move away from DEFAULTs to UNSET
+        for (String opt : opts) {
             switch(opt) {
                 case "distance":
-                hologram.setActivationDistance(settings.getDefaultActivationDistance());
+                hologram.defaultDistance(settings);
                 break;
                 case "seconds":
-                hologram.setShowTime(settings.getDefaultShowTime());
+                hologram.defaultShowtime(settings);
                 break;
                 case "permission":
                 hologram.setPermissions(null);

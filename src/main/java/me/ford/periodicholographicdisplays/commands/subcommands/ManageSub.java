@@ -162,8 +162,14 @@ public class ManageSub extends OptionPairSetSub {
     // TODO - SRP - this should throw exceptions that are caught and the appropriate message sent in onCommand
     private PeriodicHologramBase adoptHologram(CommandSender sender, NamedHologram holo, PeriodicType type, Map<String, String> optionPairs) {
         PeriodicHologramBase existing;
-        double defaultDistance = settings.getDefaultActivationDistance(); // TODO -> move away from DEFAULTs to UNSET
+        double defaultDistance = settings.getDefaultActivationDistance();
+        if (type == PeriodicType.ALWAYS) {
+            defaultDistance = PeriodicHologramBase.NO_DISTANCE;
+        }
         int showTime = settings.getDefaultShowTime();
+        if (type == PeriodicType.ALWAYS) {
+            showTime = PeriodicHologramBase.NO_SECONDS;
+        }
         String perms = null; // default to nothing
         switch (type) {
             case IRLTIME:
