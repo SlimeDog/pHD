@@ -212,7 +212,7 @@ public class SQLStorage implements Storage {
                 try {
                     typeInfo = getTypeInfo(type, time, activationTimes);
                 } catch (IllegalArgumentException e) {
-                    phd.getLogger().log(Level.WARNING, "Unable to get typeinfo of " + holoName + " of type " + type.name(), e);
+                    phd.getLogger().log(Level.WARNING, "Unable to get typeinfo of " + holoName + " of type " + type.name());
                     continue;
                 }
                 HologramInfo holo = new HologramInfo(holoName, type, distance, seconds, perms, typeInfo);
