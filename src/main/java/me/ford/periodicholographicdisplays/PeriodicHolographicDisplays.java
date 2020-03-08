@@ -46,7 +46,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         if (getServer().getBukkitVersion().contains("1.15")) {
             worldTimeListener = new SimpleWorldTimeListener(holograms);
         } else {
-            getLogger().warning("MCTIME holograms can behave unpredicably because of the use of a legacy version of MC");
+            getLogger().warning(messages.getLegacyMessage());
             worldTimeListener = new LegacyWorldTimeListener(holograms);
         }
         this.getServer().getPluginManager().registerEvents(worldTimeListener, this);

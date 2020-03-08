@@ -83,3 +83,4 @@ type-not-recognized: "Hologram type {type} is not recognized"
 hologram-not-found: "Hologram not found: {name} of type {type}"
 
 illegal-storage-type: "Illegal storage type {type} - only YAML and SQLITE are supported - reverting to default (SQLITE)"
+legacy-version-mctime: "MCTIME holograms can behave unpredicably because of the use of a legacy version of MC"

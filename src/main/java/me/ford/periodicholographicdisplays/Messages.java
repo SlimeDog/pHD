@@ -30,6 +30,10 @@ public class Messages extends CustomConfigHandler {
         this.phd = phd;
     }
 
+    public String getLegacyMessage() {
+        return getMessage("legacy-version-mctime", "MCTIME holograms can behave unpredicably because of the use of a legacy version of MC");
+    }
+
     public String getIllegalStorageMessage(String type) {
         return getMessage("illegal-storage-type", "Illegal storage type {type} - only YAML and SQLITE are supported - reverting to default (SQLITE)")
                         .replace("{type}", type);
