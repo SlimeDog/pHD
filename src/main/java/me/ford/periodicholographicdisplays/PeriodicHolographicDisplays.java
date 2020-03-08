@@ -81,6 +81,8 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         if (!df.exists() || !df.canRead()) {
             getLogger().warning("Plugin folder does not exist or is unreadable at reload. Attempting to recreated.");
             df.mkdir();
+            saveDefaultConfig();
+            messages.saveDefaultConfig();
             issues.add(DefaultReloadIssue.NO_FOLDER);
         }
         boolean useDbBefore = settings.useDatabase();
