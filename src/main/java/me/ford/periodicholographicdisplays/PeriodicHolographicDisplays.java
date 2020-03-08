@@ -120,6 +120,12 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         return messages;
     }
 
+    public void debug(String message) {
+        if (settings.onDebug()) {
+            getLogger().info(message);
+        }
+    }
+
     public static enum DefaultReloadIssue implements ReloadIssue {
         NONE(null),
         NO_FOLDER("folder had to be recreated!"),

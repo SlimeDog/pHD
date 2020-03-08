@@ -121,9 +121,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
             handler.addHologram(hInfo.getType(), hologram, !imported);
             
         }
-        if (plugin.getSettings().onDebug()) {
-            plugin.getLogger().info("Loaded pHD " + handler.getName() + " with types " + handler.getTypes() + " in " + getWorld().getName());
-        }
+        plugin.debug("Loaded pHD " + handler.getName() + " with types " + handler.getTypes() + " in " + getWorld().getName());
         if (handler != null) {
             addHandler(handler.getName(), handler);
         }
@@ -154,9 +152,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
             }
         }
         if (infos.isEmpty()) return false;
-        if (plugin.getSettings().onDebug()) {
-            plugin.getLogger().info("in world " + getWorld().getName() + " for reason " + reason.name() + " saving:" + infos); // TODO - remove debug message
-        }
+        plugin.debug("in world " + getWorld().getName() + " for reason " + reason.name() + " saving:" + infos); // TODO - remove debug message
         storage.saveHolograms(infos, inSync);
         return !infos.isEmpty();
     }

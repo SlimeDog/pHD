@@ -128,10 +128,8 @@ public abstract class PeriodicHologramBase {
     }
     
     public void hideFrom(Player player) {
-        if (plugin.getSettings().onDebug()) {
-            String info = plugin.getMessages().getHologramInfoMessage(this).replace("\n", ";");
-            plugin.getLogger().info(String.format("Hiding from %s: %s", player.getName(), info));
-        }
+        String info = plugin.getMessages().getHologramInfoMessage(this).replace("\n", ";");
+        plugin.debug(String.format("Hiding from %s: %s", player.getName(), info));
         hologram.getVisibilityManager().hideTo(player);
         beingShownTo.remove(player.getUniqueId());
     }
@@ -140,10 +138,8 @@ public abstract class PeriodicHologramBase {
         if (player == null) return;
         UUID id = player.getUniqueId();
         if (beingShownTo.contains(id)) return;
-        if (plugin.getSettings().onDebug()) {
-            String info = plugin.getMessages().getHologramInfoMessage(this).replace("\n", ";");
-            plugin.getLogger().info(String.format("Showing to %s: %s", player.getName(), info));
-        }
+        String info = plugin.getMessages().getHologramInfoMessage(this).replace("\n", ";");
+        plugin.debug(String.format("Showing to %s: %s", player.getName(), info));
         hologram.getVisibilityManager().showTo(player);
         beingShownTo.add(id);
         boolean scheduleHide = true;

@@ -45,23 +45,17 @@ public class LegacyWorldTimeListener extends WorldTimeListener {
     }
 
     private void addWorld(World world) { // TODO - how do I know if I will or will not still have the TickRunnable run this tick ?
-        if (phd.getSettings().onDebug()) {
-            phd.getLogger().info("Adding world to LegacyWorldTimeListener: " + world.getName()); 
-        }
+        phd.debug("Adding world to LegacyWorldTimeListener: " + world.getName()); 
         worldTimes.put(world, world.getFullTime()); // or does it even matter?
     }
 
     private void removeWorld(World world) {
-        if (phd.getSettings().onDebug()) {
-            phd.getLogger().info("Removing world from LegacyWorldTimeListener: " + world.getName()); 
-        }
+        phd.debug("Removing world from LegacyWorldTimeListener: " + world.getName()); 
         worldTimes.remove(world);
     }
 
     private void timeChanged(World world, long addTime) {
-        if (phd.getSettings().onDebug()) {
-            phd.getLogger().info("Time changed in " + world.getName() + " by " + addTime); 
-        }
+        phd.debug("Time changed in " + world.getName() + " by " + addTime); 
         getStorage().mcTimeChanged(world, addTime);
     }
 
