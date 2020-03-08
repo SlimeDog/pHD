@@ -160,11 +160,7 @@ public abstract class PeriodicHologramBase {
     }
 
     public void defaultDistance(Settings settings) {
-        double dist = settings.getDefaultActivationDistance();
-        if (getType() == PeriodicType.ALWAYS) {
-            dist = PeriodicHologramBase.NO_DISTANCE;
-        }
-        setActivationDistance(dist);
+        setActivationDistance(settings.getDefaultActivationDistance());
     }
 
     public void defaultShowtime(Settings settings) {

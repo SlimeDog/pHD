@@ -163,9 +163,6 @@ public class ManageSub extends OptionPairSetSub {
     private PeriodicHologramBase adoptHologram(CommandSender sender, NamedHologram holo, PeriodicType type, Map<String, String> optionPairs) {
         PeriodicHologramBase existing;
         double defaultDistance = settings.getDefaultActivationDistance();
-        if (type == PeriodicType.ALWAYS) {
-            defaultDistance = PeriodicHologramBase.NO_DISTANCE;
-        }
         int showTime = settings.getDefaultShowTime();
         if (type == PeriodicType.ALWAYS) {
             showTime = PeriodicHologramBase.NO_SECONDS;
