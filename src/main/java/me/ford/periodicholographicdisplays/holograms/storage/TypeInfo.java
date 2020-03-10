@@ -44,7 +44,7 @@ public interface TypeInfo {
 
         @Override
         public String toString() {
-            return String.format("<%s(%d):%s>", getType().name(), shownToTimes.toString());
+            return String.format("<%s(%d):%s>", getType().name(), showTimes, shownToTimes.toString());
         }
         
     }

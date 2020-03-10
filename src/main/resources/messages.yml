@@ -28,7 +28,7 @@ typeinfo:
   MCTIME: "Shown at: {time}"
   IRLTIME: "Shown at: {time}"
   ALWAYS: "Always shown"
-  NTIMES: "Shown to: {players:times}"
+  NTIMES: "Show times: {times}; Shown to: {players:times}"
 
 # Messages produced by /phd list
 #
