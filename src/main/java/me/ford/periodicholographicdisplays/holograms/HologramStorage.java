@@ -119,6 +119,13 @@ public class HologramStorage {
                 ((SQLStorage) storage).close(); // close connection
                 storage = new YAMLStorage();
             }
+        } else {
+            if (storage instanceof SQLStorage) {
+                ((SQLStorage) storage).close();
+                storage = new SQLStorage(plugin);
+            } else {
+                storage = new YAMLStorage();
+            }
         }
         initWorldStorage();
     }
