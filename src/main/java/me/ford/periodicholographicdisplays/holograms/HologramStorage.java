@@ -128,6 +128,7 @@ public class HologramStorage {
             }
         }
         initWorldStorage();
+        scheduleLoad();
     }
 
     public void imported(HDHologramInfo info) {
