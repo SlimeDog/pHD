@@ -279,7 +279,8 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getNTimesTypeInfo(NTimesHologram hologram, boolean always) {
-        String msg = getMessage(always?"typeinfo.ALWAYS":"typeinfo.NTIMES", "Show times: {times}; Shown to: {players:times}");
+        String msg = getMessage(always?"typeinfo.ALWAYS":"typeinfo.NTIMES", 
+                                        always ? "Always shown" : "Show times: {times}; Shown to: {players:times}");
         msg = msg.replace("{times}", String.valueOf(hologram.getTimesToShow()));
         if (msg.contains("{players:times}")) {
             List<String> playersAndTimes = new ArrayList<>();
