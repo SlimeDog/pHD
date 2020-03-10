@@ -81,10 +81,10 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         if (!df.exists() || !df.canRead()) {
             getLogger().warning(messages.getNoPluginFolderMessage());
             df.mkdir();
-            saveDefaultConfig();
-            messages.saveDefaultConfig();
             issues.add(DefaultReloadIssue.NO_FOLDER);
         }
+        saveDefaultConfig();
+        messages.saveDefaultConfig();
         boolean useDbBefore = settings.useDatabase();
         reloadConfig();
         messages.reloadCustomConfig();
