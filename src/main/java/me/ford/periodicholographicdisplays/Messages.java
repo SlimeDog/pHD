@@ -284,7 +284,7 @@ public class Messages extends CustomConfigHandler {
             List<String> playersAndTimes = new ArrayList<>();
             for (Entry<UUID, Integer> entry : hologram.getShownTo().entrySet()) {
                 OfflinePlayer player = phd.getServer().getOfflinePlayer(entry.getKey());
-                String playerName = (player == null || !player.hasPlayedBefore()) ? "UNKOWNPLAYER" : player.getName();
+                String playerName = (player == null || !player.hasPlayedBefore()) ? "UNKNOWNPLAYER" : player.getName();
                 playersAndTimes.add(playerName + ": " + entry.getValue());
             }
             msg = msg.replace("{players:times}", String.join(", ", playersAndTimes));
