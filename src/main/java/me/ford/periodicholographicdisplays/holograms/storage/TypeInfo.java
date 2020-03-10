@@ -41,6 +41,11 @@ public interface TypeInfo {
         public PeriodicType getType() {
             return showTimes == -1 ? PeriodicType.ALWAYS : PeriodicType.NTIMES;
         }
+
+        @Override
+        public String toString() {
+            return String.format("<%s(%d):%s>", getType().name(), shownToTimes.toString());
+        }
         
     }
 

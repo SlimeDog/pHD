@@ -45,5 +45,10 @@ public class HologramInfo {
     public TypeInfo getTypeInfo() {
         return typeInfo;
     }
+
+    @Override
+    public String toString() {
+        return String.format("{%f;%d;%s;%s}", activationDistance, showTime, perms, getTypeInfo().toString());
+    }
     
 }
