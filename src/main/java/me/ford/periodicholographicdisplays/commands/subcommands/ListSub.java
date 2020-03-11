@@ -60,7 +60,7 @@ public class ListSub extends SubCommand {
             hologramTypes.put(name, String.join(", ", typesStr));
             i++;
         }
-        sender.sendMessage(messages.getHologramListMessage(hologramTypes));
+        sender.sendMessage(messages.getHologramListMessage(hologramTypes, page));
         return true;
     }
 

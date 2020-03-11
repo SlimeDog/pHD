@@ -168,12 +168,14 @@ public class Messages extends CustomConfigHandler {
                         .replace("{msg}", msg);
     }
 
-    public String getHologramListMessage(Map<String, String> holograms) {
+    public String getHologramListMessage(Map<String, String> holograms, int page) {
         List<String> lines = new ArrayList<>();
         for (Entry<String, String> entry : holograms.entrySet()) {
             lines.add(entry.getKey() + " " + entry.getValue());
         }
-        return getMessage("hologram-list", "Holograms: \n{holograms}").replace("{holograms}", String.join("\n", lines));
+        return getMessage("hologram-list", "Holograms (page {page}): \n{holograms}")
+                        .replace("{page}", String.valueOf(page))
+                        .replace("{holograms}", String.join("\n", lines));
     }
 
     public String getUnmanagedHologramMessage(String name, PeriodicType type) {

@@ -32,7 +32,7 @@ typeinfo:
 
 # Messages produced by /phd list
 #
-hologram-list: "Holograms: \n{holograms}"
+hologram-list: "Holograms (page {page}): \n{holograms}"
 
 # Messages produced by /phd manage
 #
