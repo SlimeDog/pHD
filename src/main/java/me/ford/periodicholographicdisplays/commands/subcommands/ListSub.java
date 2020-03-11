@@ -17,7 +17,8 @@ import me.ford.periodicholographicdisplays.holograms.PeriodicType;
  */
 public class ListSub extends SubCommand {
     private static final String PERMS = "phd.commands.phd.list";
-    private static final String USAGE = "/phd list";
+    private static final String USAGE = "/phd list [page]";
+    private final int perPage = 10;
     private final HologramStorage storage;
     private final Messages messages;
 
@@ -33,16 +34,31 @@ public class ListSub extends SubCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
+        int page = 1;
+        if (args.length > 0) {
+            try {
+                page = Integer.parseInt(args[0]);
+            } catch (NumberFormatException e) {
+                sender.sendMessage(messages.getNeedAnIntegerMessage(args[0]));
+                return true;
+            }
+        } 
         List<String> names = storage.getNames();
         names.sort(String.CASE_INSENSITIVE_ORDER);
         Map<String, String> hologramTypes = new TreeMap<>();
+        int i = 0;
         for (String name : names) {
+            if (i < (page - 1) * perPage || i >= page * perPage) {
+                i++;
+                continue;
+            }
             List<PeriodicType> types = storage.getAvailableTypes(name);
             List<String> typesStr = new ArrayList<>();
             for (PeriodicType type : types) {
                 typesStr.add(type.name());
             }
             hologramTypes.put(name, String.join(", ", typesStr));
+            i++;
         }
         sender.sendMessage(messages.getHologramListMessage(hologramTypes));
         return true;
