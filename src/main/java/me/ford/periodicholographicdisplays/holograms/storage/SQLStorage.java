@@ -218,6 +218,7 @@ public class SQLStorage implements Storage {
                 HologramInfo holo = new HologramInfo(holoName, type, distance, seconds, perms, typeInfo);
                 info.addInfo(holo);
             }
+            rs.close();
         } catch (SQLException e) {
 			phd.getLogger().log(Level.WARNING, "Issue while loading holohrams from database!", e);
         }
@@ -257,6 +258,7 @@ public class SQLStorage implements Storage {
                 int ntimes = rs.getInt("ntimes");
                 info.addShownTo(uuid, ntimes);
             }
+            rs.close();
         } catch (SQLException e) {
 			phd.getLogger().log(Level.WARNING, "Issue while loading user shown times from database!", e);
         }
@@ -317,7 +319,9 @@ public class SQLStorage implements Storage {
 			return false;
 		}
 		try {
-			return rs.next();
+            boolean can = rs.next();
+            rs.close();
+            return can;
 		} catch (SQLException e) {
 			phd.getLogger().log(Level.WARNING, "Unable to check if table exists(next): " + table, e);
 			return false;
@@ -393,12 +397,22 @@ public class SQLStorage implements Storage {
         } catch (SQLException e) {
             phd.getLogger().log(Level.WARNING, "Problem checking for existance of table (hologram table)", e);
         }
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            phd.getLogger().log(Level.WARNING, "Problem releasing resultset (hologram table)", e);
+        }
         rs = executeQuery(players);
         if (rs == null) return false;
         try {
             if (!rs.next()) return false;
         } catch (SQLException e) {
             phd.getLogger().log(Level.WARNING, "Problem checking for existance of table (player table)", e);
+        }
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            phd.getLogger().log(Level.WARNING, "Problem releasing resultset (player table)", e);
         }
         return true;
     }
