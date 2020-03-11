@@ -80,11 +80,22 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         File df = getDataFolder();
         if (!df.exists() || !df.canRead()) {
             getLogger().warning(messages.getNoPluginFolderMessage());
-            df.mkdir();
-            issues.add(DefaultReloadIssue.NO_FOLDER);
+            boolean wasCreated = df.mkdir();
+            DefaultReloadIssue dri = DefaultReloadIssue.NO_FOLDER;
+            dri.setExtra(String.valueOf(wasCreated));
+            issues.add(dri);
         }
-        saveDefaultConfig();
-        messages.saveDefaultConfig();
+        File configFile = new File(getDataFolder(), "config.yml");
+        if (!configFile.exists()) {
+            issues.add(DefaultReloadIssue.NO_CONFIG);
+            saveDefaultConfig();
+        }
+        messages.getConfigReloadedMessage(); // to make sure the configFile is not null
+        File messagesFile = messages.getFile();
+        if (!messagesFile.exists()) {
+            messages.saveDefaultConfig();
+            issues.add(DefaultReloadIssue.NO_MESSAGES);
+        }
         boolean useDbBefore = settings.useDatabase();
         reloadConfig();
         messages.reloadCustomConfig();
@@ -132,6 +143,8 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
     public static enum DefaultReloadIssue implements ReloadIssue {
         NONE(null),
         NO_FOLDER("folder had to be recreated!"),
+        NO_CONFIG("the config had to be recreated"),
+        NO_MESSAGES("the messages file had to be recreated"),
         ILLEGA_STORAGE_TYPE("storage type not understood");
         ;
         private final String issue;

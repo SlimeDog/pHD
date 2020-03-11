@@ -40,6 +40,22 @@ public class Messages extends CustomConfigHandler {
         return msg.replace("{types}", String.join(", ", types));
     }
 
+    public String getConfigRecreatedMessage() {
+        return getMessage("config-recreated", "The config.yml file did not exist and was recreated");
+    }
+
+    public String getMessagesRecreatedMessage() {
+        return getMessage("messages-recreated", "The messages.yml file did not exist and was recreated");
+    }
+
+    public String getPluginFolderRecreatedMessage() {
+        return getMessage("plugin-folder-recreated", "Plugin folder was recreated");
+    }
+
+    public String getProblemRecreatingPluginFolder() {
+        return getMessage("problem-recreated-plugin-folder", "Problem recreating plugin folder");
+    }
+
     public String getNoPluginFolderMessage() {
         return getMessage("plugin-folder-removed", "Plugin folder does not exist or is unreadable at reload; attempting to recreate.");
     }
@@ -208,9 +224,17 @@ public class Messages extends CustomConfigHandler {
                 switch (dri) {
                     case NO_FOLDER:
                     desc = getNoPluginFolderMessage();
+                    problems.append(desc);
+                    desc = Boolean.valueOf(dri.getExtra()) ? getPluginFolderRecreatedMessage() : getProblemRecreatingPluginFolder();
                     break;
                     case ILLEGA_STORAGE_TYPE:
                     desc = getIllegalStorageMessage(dri.getExtra());
+                    break;
+                    case NO_CONFIG:
+                    desc = getConfigRecreatedMessage();
+                    break;
+                    case NO_MESSAGES:
+                    desc = getMessagesRecreatedMessage();
                     break;
                     default:
                 }

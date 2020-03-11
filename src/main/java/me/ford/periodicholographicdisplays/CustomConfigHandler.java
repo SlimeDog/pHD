@@ -63,6 +63,10 @@ public class CustomConfigHandler {
 		}
 	}
 
+	public File getFile() {
+		return customConfigFile;
+	}
+
 	public void saveDefaultConfig() {
 		if (customConfigFile == null) {
 			customConfigFile = new File(plugin.getDataFolder(), fileName);

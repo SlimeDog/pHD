@@ -87,3 +87,7 @@ illegal-storage-type: "Illegal storage type {type} - only YAML and SQLITE are su
 legacy-version-mctime: "MCTIME holograms can behave unpredicably because of the use of a legacy version of MC"
 no-luckperms: "LuckPerms not found - unable to readjust permissions on the fly or tab-complete permissions"
 plugin-folder-removed: "Plugin folder does not exist or is unreadable at reload; attempting to recreate."
+plugin-folder-recreated: "Plugin folder was recreated"
+problem-recreated-plugin-folder: "Problem recreating plugin folder"
+config-recreated: "The config.yml file did not exist and was recreated"
+messages-recreated: "The messages.yml file did not exist and was recreated"
