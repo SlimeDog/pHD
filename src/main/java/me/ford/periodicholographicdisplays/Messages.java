@@ -313,10 +313,14 @@ public class Messages extends CustomConfigHandler {
             List<String> playersAndTimes = new ArrayList<>();
             int i = 0;
             for (Entry<UUID, Integer> entry : hologram.getShownTo().entrySet()) {
-                if (i < (page - 1) * playersPerPage || i >= page * playersPerPage) continue;
+                if (i < (page - 1) * playersPerPage || i >= page * playersPerPage) {
+                    i++;
+                    continue;
+                }
                 OfflinePlayer player = phd.getServer().getOfflinePlayer(entry.getKey());
                 String playerName = (player == null || !player.hasPlayedBefore()) ? "UNKNOWNPLAYER" : player.getName();
                 playersAndTimes.add(playerName + ": " + entry.getValue());
+                i++;
             }
             msg = msg.replace("{players:times}", String.join("\n", playersAndTimes));
         }
