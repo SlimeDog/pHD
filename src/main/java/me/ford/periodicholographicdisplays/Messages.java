@@ -32,6 +32,10 @@ public class Messages extends CustomConfigHandler {
         this.phd = phd;
     }
 
+    public String getInvalidPageMessage() {
+        return getMessage("invalid-page", "Page needs to be greater than 0");
+    }
+
     public String getAvailableTypesMessage(String name, Collection<PeriodicType> availableTypes) {
         String msg = getMessage("available-types", "Types available for {hologram}: {types}");
         msg = msg.replace("{hologram}", name);

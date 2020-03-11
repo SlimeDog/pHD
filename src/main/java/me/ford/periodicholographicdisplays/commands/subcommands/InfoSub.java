@@ -71,6 +71,10 @@ public class InfoSub extends SubCommand {
                 return true;
             }
         }
+        if (page <= 0) {
+            sender.sendMessage(messages.getInvalidPageMessage());
+            return true;
+        }
         PeriodicHologramBase hologram = storage.getHologram(args[0], type);
         if (hologram == null) {
             sender.sendMessage(messages.getHologramNotFoundMessage(args[0], type));

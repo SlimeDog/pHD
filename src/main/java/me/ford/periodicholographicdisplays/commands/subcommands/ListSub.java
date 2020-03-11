@@ -43,6 +43,10 @@ public class ListSub extends SubCommand {
                 return true;
             }
         } 
+        if (page <= 0) {
+            sender.sendMessage(messages.getInvalidPageMessage());
+            return true;
+        }
         List<String> names = storage.getNames();
         names.sort(String.CASE_INSENSITIVE_ORDER);
         Map<String, String> hologramTypes = new TreeMap<>();
