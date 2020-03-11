@@ -19,12 +19,14 @@ import me.ford.periodicholographicdisplays.holograms.storage.storageimport.Stora
  * ImportSub
  */
 public class ConvertSub extends SubCommand {
+    private static final String SQLITE = "SQLITE";
+    private static final String YAML = "YAML";
     private static final String PERMS = "phd.convert";
     private static final String USAGE = "/phd convert <sourceStorageType> <targetStorageType> [--force]";
     private final PeriodicHolographicDisplays phd;
     private final Messages messages;
     private SQLStorage sqlStorage = null; // to close the SQLite connection
-    private final List<String> storageTypes = Arrays.asList("sqlite", "yaml");
+    private final List<String> storageTypes = Arrays.asList(SQLITE, YAML);
 
     public ConvertSub(PeriodicHolographicDisplays phd) {
         this.phd = phd;
@@ -57,9 +59,9 @@ public class ConvertSub extends SubCommand {
             return true;
         }
         ConvertTypes type;
-        if (from.equalsIgnoreCase("sqlite") && to.equalsIgnoreCase("yaml")) {
+        if (from.equalsIgnoreCase(SQLITE) && to.equalsIgnoreCase(YAML)) {
             type = ConvertTypes.SQLITE_TO_YAML;
-        } else if (from.equalsIgnoreCase("yaml") && to.equalsIgnoreCase("sqlite")) {
+        } else if (from.equalsIgnoreCase(YAML) && to.equalsIgnoreCase(SQLITE)) {
             type = ConvertTypes.YAML_TO_SQLITE;
         } else {
             sender.sendMessage(messages.getUnrecognizedStorageTypeMessage(from, to));
@@ -111,7 +113,7 @@ public class ConvertSub extends SubCommand {
 
     private void closeSqlite(String from, String to) {
         if (phd.getSettings().useDatabase()) return;
-        if (to.equals("sqlite")) {
+        if (to.equals(SQLITE)) {
             // TODO - perhaps an event?
             phd.getServer().getScheduler().runTaskLater(phd, () -> closeSqlite(from, "..."), 40L);
             return; // not saved yet
