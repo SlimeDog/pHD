@@ -257,8 +257,8 @@ public class Messages extends CustomConfigHandler {
                         .replace("{name}", name).replace("{type}", type.name()).replace("{options}", String.join(", ", opts));
     }
 
-    public String getHologramInfoMessage(PeriodicHologramBase hologram) {
-        String typeinfo = getTypeInfo(hologram);
+    public String getHologramInfoMessage(PeriodicHologramBase hologram, int page) {
+        String typeinfo = getTypeInfo(hologram, page);
         String typeName = (hologram.getType() == PeriodicType.NTIMES && ((NTimesHologram) hologram).getTimesToShow() < 0) ? PeriodicType.ALWAYS.name() : hologram.getType().name();
         return getMessage("hologram-info", "Hologram '{name}':\nWorld: {world}\nType:{type}\nShowTime:{time}s\nActivationDistance:{distance}\nPermission:{perms}\nTypeInfo: {typeinfo}")
                         .replace("{name}", hologram.getName()).replace("{world}", hologram.getLocation().getWorld().getName())
@@ -267,7 +267,7 @@ public class Messages extends CustomConfigHandler {
                         .replace("{perms}", hologram.hasPermissions() ? hologram.getPermissions() : "");
     }
 
-    public String getTypeInfo(PeriodicHologramBase hologram) {
+    public String getTypeInfo(PeriodicHologramBase hologram, int page) {
         String typeinfo;
         switch(hologram.getType()) {
             case MCTIME:
@@ -278,10 +278,10 @@ public class Messages extends CustomConfigHandler {
             break;
             case NTIMES:
             NTimesHologram nth = (NTimesHologram) hologram;
-            typeinfo = getNTimesTypeInfo(nth, nth.getTimesToShow() < 0);
+            typeinfo = getNTimesTypeInfo(nth, nth.getTimesToShow() < 0, page);
             break;
             case ALWAYS:
-            typeinfo = getNTimesTypeInfo((NTimesHologram) hologram, true);
+            typeinfo = getNTimesTypeInfo((NTimesHologram) hologram, true, page);
             break;
             default:
             typeinfo = "N/A"; // this shouldn't happen!
@@ -298,22 +298,26 @@ public class Messages extends CustomConfigHandler {
         return getMessage("typeinfo.MCTIME", "Shown at: {time}").replace("{time}", TimeUtils.toMCTime(hologram.getTime()));
     }
 
-    public String getNTimesTypeInfo(NTimesHologram hologram) {
-        return getNTimesTypeInfo(hologram, false);
+    public String getNTimesTypeInfo(NTimesHologram hologram, int page) {
+        return getNTimesTypeInfo(hologram, false, page);
     }
 
-    public String getNTimesTypeInfo(NTimesHologram hologram, boolean always) {
+    private final int playersPerPage = 10;
+
+    public String getNTimesTypeInfo(NTimesHologram hologram, boolean always, int page) {
         String msg = getMessage(always?"typeinfo.ALWAYS":"typeinfo.NTIMES", 
                                         always ? "Always shown" : "Show times: {times}; Shown to: {players:times}");
         msg = msg.replace("{times}", String.valueOf(hologram.getTimesToShow()));
         if (msg.contains("{players:times}")) {
             List<String> playersAndTimes = new ArrayList<>();
+            int i = 0;
             for (Entry<UUID, Integer> entry : hologram.getShownTo().entrySet()) {
+                if (i < (page - 1) * playersPerPage || i >= page * playersPerPage) continue;
                 OfflinePlayer player = phd.getServer().getOfflinePlayer(entry.getKey());
                 String playerName = (player == null || !player.hasPlayedBefore()) ? "UNKNOWNPLAYER" : player.getName();
                 playersAndTimes.add(playerName + ": " + entry.getValue());
             }
-            msg = msg.replace("{players:times}", String.join(", ", playersAndTimes));
+            msg = msg.replace("{players:times}", String.join("\n", playersAndTimes));
         }
         return msg;
     }

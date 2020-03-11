@@ -17,7 +17,7 @@ import me.ford.periodicholographicdisplays.holograms.PeriodicType;
  */
 public class InfoSub extends SubCommand {
     private static final String PERMS = "phd.commands.phd.info";
-    private static final String USAGE = "/phd info <name> <type>";
+    private static final String USAGE = "/phd info <name> <type> [page]";
     private final HologramStorage storage;
     private final Messages messages;
 
@@ -62,12 +62,21 @@ public class InfoSub extends SubCommand {
             sender.sendMessage(messages.getTypeNotRecognizedMessage(args[1]));
             return true;
         }
+        int page = 1;
+        if (args.length > 2) {
+            try {
+                page = Integer.parseInt(args[2]);
+            } catch (NumberFormatException e) {
+                sender.sendMessage(messages.getNeedAnIntegerMessage(args[2]));
+                return true;
+            }
+        }
         PeriodicHologramBase hologram = storage.getHologram(args[0], type);
         if (hologram == null) {
             sender.sendMessage(messages.getHologramNotFoundMessage(args[0], type));
             return true;
         }
-        sender.sendMessage(messages.getHologramInfoMessage(hologram));
+        sender.sendMessage(messages.getHologramInfoMessage(hologram, page));
         return true;
     }
 
