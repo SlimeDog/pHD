@@ -17,6 +17,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
+import me.ford.periodicholographicdisplays.commands.PHDCommand;
 import me.ford.periodicholographicdisplays.holograms.WorldHologramStorageBase.HologramSaveReason;
 import me.ford.periodicholographicdisplays.holograms.storage.SQLStorage;
 import me.ford.periodicholographicdisplays.holograms.storage.Storage;
@@ -114,7 +115,9 @@ public class HologramStorage {
             boolean db = plugin.getSettings().useDatabase();
             plugin.getLogger().info("Starting new type of storage after a reload: " + (db ? "SQLITE" : "YAML"));
             if (db) {
-                storage = new SQLStorage(plugin);
+                PHDCommand command = (PHDCommand) plugin.getCommand("phd").getExecutor();
+                storage = command.getConvertSub().getSqlStorage();
+                if (storage == null) storage = new SQLStorage(plugin);
             } else { // old was SQLITE
                 ((SQLStorage) storage).close(); // close connection
                 storage = new YAMLStorage();

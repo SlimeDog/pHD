@@ -123,6 +123,10 @@ public class ConvertSub extends SubCommand {
         sqlStorage.close();
     }
 
+    public SQLStorage getSqlStorage() {
+        return sqlStorage;
+    }
+
     @Override
     public boolean hasPermission(CommandSender sender) {
         return sender.hasPermission(PERMS);

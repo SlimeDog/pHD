@@ -16,6 +16,7 @@ import me.ford.periodicholographicdisplays.commands.subcommands.UnsetSub;
 public class PHDCommand extends ParentCommand {
     private static final String USAGE = "/phd <subcommand> args";
     private final PeriodicHolographicDisplays plugin;
+    private final ConvertSub convertSub;
 
     public PHDCommand(PeriodicHolographicDisplays plugin) {
         this.plugin = plugin;
@@ -26,7 +27,12 @@ public class PHDCommand extends ParentCommand {
         addSubCommand("unset", new UnsetSub(plugin.getHolograms(), plugin.getSettings(), this.plugin.getMessages()));
         addSubCommand("unmanage", new UnmanageSub(plugin.getHolograms(), this.plugin.getMessages()));
         addSubCommand("reload", new ReloadSub(plugin));
-        addSubCommand("convert", new ConvertSub(plugin));
+        convertSub = new ConvertSub(plugin);
+        addSubCommand("convert", convertSub);
+    }
+
+    public ConvertSub getConvertSub() {
+        return convertSub;
     }
 
     @Override
