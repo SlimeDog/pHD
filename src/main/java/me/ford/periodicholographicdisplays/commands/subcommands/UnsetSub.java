@@ -58,6 +58,9 @@ public class UnsetSub extends SubCommand {
             } catch (IllegalArgumentException e) {
                 return list;
             }
+            if (type == PeriodicType.NTIMES && args[args.length -2].equalsIgnoreCase("playercount")) {
+                return null; // player names
+            }
             PeriodicHologramBase hologram = storage.getHologram(args[0], type);
             if (hologram == null) return list;
             if (!hologram.hasPermissions()) {
