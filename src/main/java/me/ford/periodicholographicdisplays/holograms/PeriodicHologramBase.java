@@ -128,8 +128,10 @@ public abstract class PeriodicHologramBase {
     }
     
     public void hideFrom(Player player) {
-        String info = plugin.getMessages().getHologramInfoMessage(this, 1).replace("\n", ";");
-        plugin.debug(String.format("Hiding from %s: %s", player.getName(), info));
+        if (plugin.getSettings().onDebug()) {
+            String info = plugin.getMessages().getHologramInfoMessage(this, 1).replace("\n", ";");
+            plugin.debug(String.format("Hiding from %s: %s", player.getName(), info));
+        }
         hologram.getVisibilityManager().hideTo(player);
         beingShownTo.remove(player.getUniqueId());
     }
