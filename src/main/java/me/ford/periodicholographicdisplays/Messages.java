@@ -317,7 +317,7 @@ public class Messages extends CustomConfigHandler {
 
     public String getNTimesTypeInfo(NTimesHologram hologram, boolean always, int page) {
         String msg = getMessage(always?"typeinfo.ALWAYS":"typeinfo.NTIMES", 
-                                        always ? "Always shown" : "Show times: {times}; Shown to (page {page}):\n{players:times}");
+                                        always ? "Always shown" : "Show times: {times}; Shown to (page {page}): {players:times}");
         msg = msg.replace("{times}", String.valueOf(hologram.getTimesToShow()));
         msg = msg.replace("{page}", String.valueOf(page));
         if (msg.contains("{players:times}")) {
@@ -333,7 +333,11 @@ public class Messages extends CustomConfigHandler {
                 playersAndTimes.add(playerName + ": " + entry.getValue());
                 i++;
             }
-            msg = msg.replace("{players:times}", String.join("\n", playersAndTimes));
+            if (playersAndTimes.isEmpty()) {
+                msg = msg.replace("{players:times}", "none");
+            } else {
+                msg = msg.replace("{players:times}", "\n" + String.join("\n", playersAndTimes));
+            }
         }
         return msg;
     }
