@@ -109,7 +109,7 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getAlreadyHasDataMessage(String type) {
-        return getMessage("new-storage-has-data", "The new storage type {type} already has data. Use '--force' if you wish to override that data")
+        return getMessage("target-storage-has-data", "The target storage type {type} already has data; use --force if you wish to override that data")
                         .replace("{type}", type);
     }
 

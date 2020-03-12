@@ -72,7 +72,7 @@ cannot-convert-from-same: "Cannot convert from the same storage type ({type})"
 unrecognized-conversion: "Cannot convert from {from} to {to} - unrecognized storage types"
 started-converting: "Started converting from {from} to {to}"
 done-converting: "Done converting from {from} to {to}"
-new-storage-has-data: "The new storage type {type} already has data. Use --force if you wish to override that data"
+target-storage-has-data: "The target storage type {type} already has data; use --force if you wish to override that data"
 
 # Messages produced by /phd reload
 #
