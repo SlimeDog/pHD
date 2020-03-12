@@ -133,6 +133,8 @@ public class UnsetSub extends SubCommand {
                     return true;
                 }
                 ((NTimesHologram) hologram).resetShownTo(player.getUniqueId());
+                usedOptions.remove(opt);
+                usedOptions.add(String.format("%s:%s", opt, playerName));
                 break;
                 case "time":
                 if (type == PeriodicType.MCTIME || type == PeriodicType.IRLTIME) {
