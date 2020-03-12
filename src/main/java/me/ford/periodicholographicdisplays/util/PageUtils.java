@@ -32,6 +32,7 @@ public final class PageUtils {
 
     public static PageInfo getPageInfo(int nrOfEntries, int perPage, int page) {
         int nrOfPages = getNumberOfPages(nrOfEntries, perPage);
+        if (nrOfPages == 0) nrOfPages++;
         if (page <= 0 || page > nrOfPages) throw new IllegalArgumentException(String.format("Expected page number between 1 and %d. Got %d.", nrOfPages, page));
         int startNr = getStartNumber(nrOfEntries, perPage, page);
         int endNr = getEndNumber(nrOfEntries, perPage, page);
