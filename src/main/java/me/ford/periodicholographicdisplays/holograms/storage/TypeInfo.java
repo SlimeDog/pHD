@@ -12,6 +12,20 @@ public interface TypeInfo {
 
     public PeriodicType getType();
 
+    public class NullTypeInfo implements TypeInfo {
+        private final PeriodicType type;
+
+        public NullTypeInfo(PeriodicType type) {
+            this.type = type;
+        }
+
+        @Override
+        public PeriodicType getType() {
+            return type;
+        }
+
+    }
+
     public class NTimesTypeInfo implements TypeInfo {
         private final int showTimes;
         private final Map<UUID, Integer> shownToTimes;

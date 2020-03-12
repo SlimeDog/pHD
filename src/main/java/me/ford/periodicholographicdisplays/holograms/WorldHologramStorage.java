@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import com.gmail.filoghost.holographicdisplays.object.NamedHologram;
 
@@ -15,6 +16,7 @@ import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.holograms.storage.HologramInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.Storage;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo;
+import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.NullTypeInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.MCTimeTypeInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.IRLTimeTypeInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.NTimesTypeInfo;
@@ -153,8 +155,10 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
 
     private HDHologramInfo getInfo(IndividualHologramHandler handler) {
         HDHologramInfo info = new HDHologramInfo(handler.getName());
-        for (PeriodicHologramBase holo : handler.getHolograms()) {
-            TypeInfo typeInfo = getTypeInfo(holo);
+        for (Entry<PeriodicType, PeriodicHologramBase> entry : handler.getToSave().entrySet()) {
+            PeriodicType type = entry.getKey();
+            PeriodicHologramBase holo = entry.getValue();
+            TypeInfo typeInfo = getTypeInfo(type, holo);
             double distance = holo.getActivationDistance();
             if (distance == plugin.getSettings().getDefaultActivationDistance()) {
                 distance = -1;
@@ -170,8 +174,11 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         return info;
     }
 
-    private TypeInfo getTypeInfo(PeriodicHologramBase holo) {
-        switch (holo.getType()) {
+    private TypeInfo getTypeInfo(PeriodicType type, PeriodicHologramBase holo) {
+        if (holo == null) {
+            return new NullTypeInfo(type);
+        }
+        switch (type) {
             case MCTIME:
             return new MCTimeTypeInfo(((MCTimeHologram) holo).getTime());
             case IRLTIME:

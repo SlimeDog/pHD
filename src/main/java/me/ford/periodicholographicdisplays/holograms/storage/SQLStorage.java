@@ -19,6 +19,7 @@ import me.ford.periodicholographicdisplays.holograms.events.HologramsLoadedEvent
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.IRLTimeTypeInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.MCTimeTypeInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.NTimesTypeInfo;
+import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.NullTypeInfo;
 import me.ford.periodicholographicdisplays.util.TimeUtils;
 
 /**
@@ -64,31 +65,17 @@ public class SQLStorage implements Storage {
     private void saveHologramsAsync(Set<HDHologramInfo> holograms) {
         createHologramTableIfNotExists();
         createPlayerTableIfNotExists();
-        String deleteQuery = "DELETE FROM " + hologramTableName + " WHERE hologram=? AND type NOT IN (%s)";
+        String deleteQuery = "DELETE FROM " + hologramTableName + " WHERE hologram=? AND type=?";
         String query = "INSERT INTO " + hologramTableName + " VALUES (?, ?, ?, ?, ?, ?, ?)" 
         + " ON CONFLICT(hologram, type) DO UPDATE SET activation_distance=? , display_seconds=? , periodic_time=?, activation_times=?, permission=?;";
         for (HDHologramInfo hologram : holograms) {
-            // first remove all others
-            String[] existingTypes = new String[hologram.getInfos().size() + 1];
-            existingTypes[0] = hologram.getHoloName();
-            int i = 1;
-            for (HologramInfo info : hologram.getInfos()) {
-                existingTypes[i] = info.getType().name();
-                i++;
-            }
-            if (existingTypes.length - 1 < PeriodicType.values().length) {
-                String curDelete;
-                if (existingTypes.length != 1) {
-                    String filler = String.format("%0" + (existingTypes.length - 1) + "d", 0).replace("0", "?, ");
-                    filler = filler.substring(0, filler.length() - 2);
-                    curDelete = String.format(deleteQuery, filler);
-                } else {
-                    curDelete = deleteQuery.substring(0, deleteQuery.indexOf(" AND type NOT IN (%s)"));
-                }
-                executeUpdate(curDelete, existingTypes);
-            }
             for (HologramInfo info : hologram.getInfos()) {
                 TypeInfo typeInfo = info.getTypeInfo();
+                if (typeInfo instanceof NullTypeInfo) {
+                    executeUpdate(deleteQuery, info.getName(), typeInfo.getType().name());
+                    saveTypeInfoAsync(info.getName(), typeInfo);
+                    continue; // next
+                }
                 String time = "";
                 switch(info.getType()) {
                     case IRLTIME:
@@ -139,11 +126,19 @@ public class SQLStorage implements Storage {
 
     // playerUUID, hologram_id, type, ntimes
     private void saveTypeInfoAsync(String holoName, TypeInfo info) {
+        String insertQuery = "INSERT INTO " + playerTableName + " VALUES (?, ?, ?, ?)" 
+                            + " ON CONFLICT(playerUUID, hologram_id, type) DO UPDATE SET ntimes=?;";
+        String query;
+        if (info instanceof NullTypeInfo) {
+            String deleteQuery = "DELETE * FROM " + playerTableName + " WHERE hologram_id=? AND type=?;";
+            executeUpdate(deleteQuery, holoName, info.getType().name());
+            return;
+        } else {
+            query = insertQuery;
+        }
         switch(info.getType()) {
             case NTIMES:
             NTimesTypeInfo ninfo = (NTimesTypeInfo) info;
-            String query = "INSERT INTO " + playerTableName + " VALUES (?, ?, ?, ?)" 
-                            + " ON CONFLICT(playerUUID, hologram_id, type) DO UPDATE SET ntimes=?;";
             for (Entry<UUID, Integer> entry : ninfo.getShownToTimes().entrySet()) {
                 PreparedStatement statement;
                 try {

@@ -21,6 +21,7 @@ import me.ford.periodicholographicdisplays.holograms.events.HologramsLoadedEvent
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.IRLTimeTypeInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.MCTimeTypeInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.NTimesTypeInfo;
+import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.NullTypeInfo;
 
 /**
  * YAMLStorage
@@ -48,6 +49,10 @@ public class YAMLStorage implements Storage {
     }
 
     private void saveInfo(ConfigurationSection section, HologramInfo info) {
+        TypeInfo typeInfo = info.getTypeInfo();
+        if (typeInfo instanceof NullTypeInfo) { // just created the section - therefore I can just return
+            return;
+        }
         Settings settings = phd.getSettings();
         section.set("type", info.getType().name());
         if (info.getActivationDistance() != settings.getDefaultActivationDistance()) {
@@ -57,7 +62,6 @@ public class YAMLStorage implements Storage {
             section.set("show-time", info.getShowTime());
         }
         section.set("permission", info.getPermissions());
-        TypeInfo typeInfo = info.getTypeInfo();
         if (typeInfo instanceof NTimesTypeInfo) {
             NTimesTypeInfo ntimes = (NTimesTypeInfo) typeInfo;
             if (ntimes.getShowTimes() > -1) {

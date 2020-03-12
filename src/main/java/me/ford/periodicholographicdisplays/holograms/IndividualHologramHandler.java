@@ -23,6 +23,7 @@ public class IndividualHologramHandler {
     private final Hologram hologram;
     private final String name;
     private final Map<PeriodicType, PeriodicHologramBase> holograms = new HashMap<>();
+    private final Map<PeriodicType, PeriodicHologramBase> toSave = new HashMap<>();
     private boolean needsSaved = false; // in case something gets removed
 
     public IndividualHologramHandler(NamedHologram hologram) {
@@ -42,6 +43,7 @@ public class IndividualHologramHandler {
         Validate.isTrue(holo.getName().equals(name), "Can only handle pHD holograms of the same HD hologram");
         Bukkit.getPluginManager().callEvent(new StartedManagingHologramEvent(holo));
         holograms.put(type, holo);
+        toSave.put(type, holo);
         if (!wasLoaded) needsSaved = true;
     }
 
@@ -51,6 +53,7 @@ public class IndividualHologramHandler {
         Bukkit.getPluginManager().callEvent(new StoppedManagingHologramEvent(hologram));
         holograms.remove(hologram.getType());
         if (holograms.isEmpty()) hologram.markRemoved();
+        toSave.put(hologram.getType(), null); // i.e to remove
         if (markForRemoval) needsSaved = true;
     }
 
@@ -68,6 +71,10 @@ public class IndividualHologramHandler {
 
     public PeriodicHologramBase getHologram(PeriodicType type) {
         return holograms.get(type);
+    }
+
+    Map<PeriodicType, PeriodicHologramBase> getToSave() {
+        return new HashMap<>(toSave);
     }
 
     public Set<PeriodicHologramBase> getHolograms() {
@@ -94,6 +101,7 @@ public class IndividualHologramHandler {
         for (PeriodicHologramBase holo : holograms.values()) {
             holo.markSaved();
         }
+        toSave.clear();
         needsSaved = false;
     }
 
