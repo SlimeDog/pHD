@@ -271,7 +271,7 @@ public class Messages extends CustomConfigHandler {
             problems.append(desc);
         }
         return getMessage("problems-reloading-config", "Problems reloading config: {problems}")
-                        .replace("{problems}", problems.toString());
+                        .replace("{problems}", "\n" + String.join("\n", problems));
     }
 
     public String getSetNewOptionsMessage(String name, PeriodicType type, Map<String, String> options) {
