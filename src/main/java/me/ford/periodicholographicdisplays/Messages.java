@@ -324,10 +324,6 @@ public class Messages extends CustomConfigHandler {
         return getMessage("typeinfo.MCTIME", "Shown at: {time}").replace("{time}", TimeUtils.toMCTime(hologram.getTime()));
     }
 
-    public String getNTimesTypeInfo(NTimesHologram hologram, int page) {
-        return getNTimesTypeInfo(hologram, false, page);
-    }
-
     public String getNTimesTypeInfo(NTimesHologram hologram, boolean always, int page) {// need to be sure not to specify the wrong page!
         String msg = getMessage(always?"typeinfo.ALWAYS":"typeinfo.NTIMES", 
                                         always ? "Always shown" : "Show times: {times}; Shown to (players {startnr}-{endnr}, page {page}/{max-pages}): {players:times}");
