@@ -182,12 +182,20 @@ public class Messages extends CustomConfigHandler {
 
     public String getHologramListMessage(Map<String, String> holograms, int page) {
         List<String> lines = new ArrayList<>();
+        PageInfo pageInfo = PageUtils.getPageInfo(holograms.size(), PageUtils.HOLOGRAMS_PER_PAGE, page);
+        int i = 1;
         for (Entry<String, String> entry : holograms.entrySet()) {
+            if (i < pageInfo.getStartNumber() || i > pageInfo.getEndNumber()) {
+                i++;
+                continue;
+            }
             lines.add(entry.getKey() + " " + entry.getValue());
+            i++;
         }
-        return getMessage("hologram-list", "Holograms (page {page}): \n{holograms}")
-                        .replace("{page}", String.valueOf(page))
-                        .replace("{holograms}", String.join("\n", lines));
+        String msg = getMessage("hologram-list", "Holograms (holograms {startnr}-{endnr}, page {page}/{max-pages}): \n{holograms}");
+        msg = msg.replace("{startnr}", String.valueOf(pageInfo.getStartNumber())).replace("{endnr}", String.valueOf(pageInfo.getEndNumber()));
+        msg = msg.replace("{page}", String.valueOf(page)).replace("{max-pages}", String.valueOf(pageInfo.getNumberOfPages()));
+        return msg.replace("{holograms}", String.join("\n", lines));
     }
 
     public String getUnmanagedHologramMessage(String name, PeriodicType type) {
@@ -326,9 +334,9 @@ public class Messages extends CustomConfigHandler {
             msg = msg.replace("{startnr}", String.valueOf(pageInfo.getStartNumber())).replace("{endnr}", String.valueOf(pageInfo.getEndNumber()));
             msg = msg.replace("{page}", String.valueOf(page)).replace("{max-pages}", String.valueOf(pageInfo.getNumberOfPages()));
             List<String> playersAndTimes = new ArrayList<>();
-            int i = 0;
+            int i = 1;
             for (Entry<UUID, Integer> entry : hologram.getShownTo().entrySet()) {
-                if (i < (page - 1) * PageUtils.PLAYERS_PER_PAGE || i >= page * PageUtils.PLAYERS_PER_PAGE) {
+                if (i < pageInfo.getStartNumber() || i > pageInfo.getEndNumber()) {
                     i++;
                     continue;
                 }
