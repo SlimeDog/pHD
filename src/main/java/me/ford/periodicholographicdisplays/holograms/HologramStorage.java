@@ -42,6 +42,12 @@ public class HologramStorage {
         initWorldStorage();
         scheduleLoad();
         scheduleDanglingCheck();
+        scheduleSave();
+    }
+
+    private void scheduleSave() {
+        long delay = plugin.getSettings().getSaveDelay() * 20L;
+        plugin.getServer().getScheduler().runTaskTimer(plugin, () -> save(HologramSaveReason.PERIODIC, false), delay, delay);
     }
 
     private void scheduleLoad() { // TODO - maybe there's an event?

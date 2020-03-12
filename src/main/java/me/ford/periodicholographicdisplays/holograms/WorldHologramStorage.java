@@ -31,7 +31,6 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         super(plugin, world);
         this.plugin = plugin;
         this.storage = storage;
-        scheduleSave();
     }
 
     // private void scheduleLoad() { // TODO - maybe there's an event?
@@ -39,11 +38,6 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
     //         storage.loadHolograms((info) -> loaded(info, false));
     //     }, 40L); // need to do this later so the holograms are loaded
     // }
-
-    private void scheduleSave() {
-        long delay = plugin.getSettings().getSaveDelay() * 20L;
-        plugin.getServer().getScheduler().runTaskTimer(plugin, () -> saveHolograms(false, HologramSaveReason.PERIODIC), delay, delay);
-    }
 
     public PeriodicHologramBase getHologram(String name, PeriodicType type) {
         IndividualHologramHandler handler = getHandler(name);
