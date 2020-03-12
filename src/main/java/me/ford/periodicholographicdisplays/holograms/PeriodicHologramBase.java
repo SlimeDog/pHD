@@ -138,8 +138,10 @@ public abstract class PeriodicHologramBase {
         if (player == null) return;
         UUID id = player.getUniqueId();
         if (beingShownTo.contains(id)) return;
-        String info = plugin.getMessages().getHologramInfoMessage(this, 1).replace("\n", ";");
-        plugin.debug(String.format("Showing to %s: %s", player.getName(), info));
+        if (plugin.getSettings().onDebug()) {
+            String info = plugin.getMessages().getHologramInfoMessage(this, 1).replace("\n", ";");
+            plugin.debug(String.format("Showing to %s: %s", player.getName(), info));
+        }
         hologram.getVisibilityManager().showTo(player);
         beingShownTo.add(id);
         boolean scheduleHide = true;
