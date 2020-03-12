@@ -17,7 +17,9 @@ import me.ford.periodicholographicdisplays.holograms.MCTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
+import me.ford.periodicholographicdisplays.util.PageUtils;
 import me.ford.periodicholographicdisplays.util.TimeUtils;
+import me.ford.periodicholographicdisplays.util.PageUtils.PageInfo;
 
 /**
  * Messages
@@ -32,8 +34,9 @@ public class Messages extends CustomConfigHandler {
         this.phd = phd;
     }
 
-    public String getInvalidPageMessage() {
-        return getMessage("invalid-page", "Page needs to be greater than 0");
+    public String getInvalidPageMessage(int maxPage) {
+        return getMessage("invalid-page", "Page needs to be between 1 and {max-page}")
+                        .replace("{max-page}", String.valueOf(maxPage));
     }
 
     public String getAvailableTypesMessage(String name, Collection<PeriodicType> availableTypes) {
@@ -313,18 +316,19 @@ public class Messages extends CustomConfigHandler {
         return getNTimesTypeInfo(hologram, false, page);
     }
 
-    private final int playersPerPage = 10;
-
-    public String getNTimesTypeInfo(NTimesHologram hologram, boolean always, int page) {
+    public String getNTimesTypeInfo(NTimesHologram hologram, boolean always, int page) {// need to be sure not to specify the wrong page!
         String msg = getMessage(always?"typeinfo.ALWAYS":"typeinfo.NTIMES", 
-                                        always ? "Always shown" : "Show times: {times}; Shown to (page {page}): {players:times}");
-        msg = msg.replace("{times}", String.valueOf(hologram.getTimesToShow()));
-        msg = msg.replace("{page}", String.valueOf(page));
-        if (msg.contains("{players:times}")) {
+                                        always ? "Always shown" : "Show times: {times}; Shown to (players {startnr}-{endnr}, page {page}/{max-pages}): {players:times}");
+        if (!always) {
+            msg = msg.replace("{times}", String.valueOf(hologram.getTimesToShow()));
+            final int nrOfPlayers = hologram.getShownTo().size();
+            PageInfo pageInfo = PageUtils.getPageInfo(nrOfPlayers, PageUtils.PLAYERS_PER_PAGE, page);
+            msg = msg.replace("{startnr}", String.valueOf(pageInfo.getStartNumber())).replace("{endnr}", String.valueOf(pageInfo.getEndNumber()));
+            msg = msg.replace("{page}", String.valueOf(page)).replace("{max-pages}", String.valueOf(pageInfo.getNumberOfPages()));
             List<String> playersAndTimes = new ArrayList<>();
             int i = 0;
             for (Entry<UUID, Integer> entry : hologram.getShownTo().entrySet()) {
-                if (i < (page - 1) * playersPerPage || i >= page * playersPerPage) {
+                if (i < (page - 1) * PageUtils.PLAYERS_PER_PAGE || i >= page * PageUtils.PLAYERS_PER_PAGE) {
                     i++;
                     continue;
                 }

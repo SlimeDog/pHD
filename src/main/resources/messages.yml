@@ -28,7 +28,7 @@ typeinfo:
   MCTIME: "Shown at: {time}"
   IRLTIME: "Shown at: {time}"
   ALWAYS: "Always shown"
-  NTIMES: "Show times: {times}; Shown to (page {page}): {players:times}"
+  NTIMES: "Show times: {times}; Shown to (players {startnr}-{endnr}, page {page}/{max-pages}): {players:times}"
 
 # Messages produced by /phd list
 #
@@ -92,4 +92,4 @@ plugin-folder-recreated: "Plugin folder was recreated"
 problem-recreated-plugin-folder: "Problem recreating plugin folder"
 config-recreated: "The config.yml file did not exist and was recreated"
 messages-recreated: "The messages.yml file did not exist and was recreated"
-invalid-page: "Page needs to be greater than 0"
+invalid-page: "Page needs to be between 1 and {max-page}"

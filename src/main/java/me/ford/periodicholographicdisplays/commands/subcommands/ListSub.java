@@ -11,6 +11,7 @@ import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.commands.SubCommand;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
+import me.ford.periodicholographicdisplays.util.PageUtils;
 
 /**
  * ListSub
@@ -43,11 +44,12 @@ public class ListSub extends SubCommand {
                 return true;
             }
         } 
-        if (page <= 0) {
-            sender.sendMessage(messages.getInvalidPageMessage());
+        List<String> names = storage.getNames();
+        int maxPage = PageUtils.getNumberOfPages(names.size(), PageUtils.HOLOGRAMS_PER_PAGE);
+        if (page <= 0 || page > maxPage) {
+            sender.sendMessage(messages.getInvalidPageMessage(maxPage));
             return true;
         }
-        List<String> names = storage.getNames();
         names.sort(String.CASE_INSENSITIVE_ORDER);
         Map<String, String> hologramTypes = new TreeMap<>();
         int i = 0;
