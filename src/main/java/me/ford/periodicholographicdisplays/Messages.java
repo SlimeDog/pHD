@@ -34,6 +34,10 @@ public class Messages extends CustomConfigHandler {
         this.phd = phd;
     }
 
+    public String getNextPageHint(String command) {
+        return getMessage("next-page-hint", "TIP: See the next page with {command}").replace("{command}", command);
+    }
+
     public String getInvalidPageMessage(int maxPage) {
         return getMessage("invalid-page", "Page needs to be between 1 and {max-page}")
                         .replace("{max-page}", String.valueOf(maxPage));
