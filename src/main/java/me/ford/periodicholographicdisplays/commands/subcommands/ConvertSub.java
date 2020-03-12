@@ -94,6 +94,13 @@ public class ConvertSub extends SubCommand {
             return true;
         }
 
+        // find out if there is an instance of SOURCE storage type
+        boolean sourceHasData = sourceStorage.hasData();
+        if (!sourceHasData) {
+            sender.sendMessage(messages.getStorageTypeDoesNotExistMessage(from));
+            return true;
+        }
+
         // find out if there is a previous instance of target storage type
         boolean hasData = targetStorage.hasData();
         if (hasData && !force) {

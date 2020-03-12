@@ -96,6 +96,11 @@ public class Messages extends CustomConfigHandler {
                         .replace("{option}", option).replace("{type}", type.name());
     }
 
+    public String getStorageTypeDoesNotExistMessage(String type) {
+        return getMessage("source-storage-does-not-exist", "{type} source storage type does not exist; no data will be converted")
+                        .replace("{type}", type);
+    }
+
     public String getAlreadyHasDataMessage(String type) {
         return getMessage("new-storage-has-data", "The new storage type {type} already has data. Use '--force' if you wish to override that data")
                         .replace("{type}", type);

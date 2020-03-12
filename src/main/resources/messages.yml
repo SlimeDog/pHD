@@ -67,6 +67,7 @@ unmanaged-hologram: "Unmanaged hologram {name} of type {type}"
 
 # Messages produced by /phd convert
 #
+source-storage-does-not-exist: "{type} source storage type does not exist; no data will be converted"
 cannot-convert-from-same: "Cannot convert from the same storage type ({type})"
 unrecognized-conversion: "Cannot convert from {from} to {to} - unrecognized storage types"
 started-converting: "Started converting from {from} to {to}"
