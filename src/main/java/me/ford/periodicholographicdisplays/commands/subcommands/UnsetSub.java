@@ -100,6 +100,7 @@ public class UnsetSub extends SubCommand {
         }
         String[] opts = Arrays.copyOfRange(args, 2, args.length);
         List<String> usedOptions = new ArrayList<>(Arrays.asList(opts));
+        String prevOpt = "";
         for (String opt : opts) {
             switch(opt) {
                 case "distance":
@@ -146,10 +147,13 @@ public class UnsetSub extends SubCommand {
                     break;
                 }
                 default:
-                sender.sendMessage(messages.getNoSuchOptionMessage(type, opt));
+                if (!prevOpt.equalsIgnoreCase("playercount")) {
+                    sender.sendMessage(messages.getNoSuchOptionMessage(type, opt));
+                }
                 usedOptions.remove(opt);
                 break;
             }
+            prevOpt = opt;
         }
         if (usedOptions.isEmpty()) {
             sender.sendMessage(messages.getNothingToUnsetMessage());
