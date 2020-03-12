@@ -68,7 +68,7 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getNoPluginFolderMessage() {
-        return getMessage("plugin-folder-removed", "Plugin folder does not exist or is unreadable at reload; attempting to recreate.");
+        return getMessage("plugin-folder-removed", "Plugin folder does not exist or is unreadable at reload; attempting to recreate");
     }
 
     public String getNoLPMessage() {
@@ -99,7 +99,7 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getCannotUnSetRequiredMessage(String option, PeriodicType type) {
-        return getMessage("cannot-unset-required-option", "Cannot unset required option {option} for type {type}. Use /phd unmanage instead")
+        return getMessage("cannot-unset-required-option", "Cannot unset required option {option} for type {type}; use /phd unmanage instead")
                         .replace("{option}", option).replace("{type}", type.name());
     }
 
