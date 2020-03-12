@@ -104,6 +104,7 @@ public class HologramStorage {
     }
 
     public void reload(boolean newStorage) {
+        danglingInfos.clear();
         for (WorldHologramStorage storage : holograms.values()) {
             for (PeriodicHologramBase hologram : storage.getHolograms()) {
                 storage.removeHologram(hologram, false);
