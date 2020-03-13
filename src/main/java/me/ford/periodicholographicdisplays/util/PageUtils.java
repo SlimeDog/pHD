@@ -19,6 +19,7 @@ public final class PageUtils {
 
     public static int getStartNumber(int nrOfEntries, int perPage, int page) {
         int startNr = (page - 1) * perPage + 1;
+        if (startNr == 1 && nrOfEntries == 0) return startNr;
         if (startNr <= 0 || startNr > nrOfEntries) throw new IllegalArgumentException("Page number too high or too low");
         return startNr;
     }
