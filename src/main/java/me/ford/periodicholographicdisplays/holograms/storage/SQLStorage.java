@@ -130,7 +130,7 @@ public class SQLStorage implements Storage {
                             + " ON CONFLICT(playerUUID, hologram_id, type) DO UPDATE SET ntimes=?;";
         String query;
         if (info instanceof NullTypeInfo) {
-            String deleteQuery = "DELETE * FROM " + playerTableName + " WHERE hologram_id=? AND type=?;";
+            String deleteQuery = "DELETE FROM " + playerTableName + " WHERE hologram_id=? AND type=?;";
             executeUpdate(deleteQuery, holoName, info.getType().name());
             return;
         } else {
