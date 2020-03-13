@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
@@ -58,6 +59,11 @@ public class HologramListener implements Listener {
     @EventHandler
     public void onTeleport(PlayerTeleportEvent event) {
         movedTo(event.getPlayer(), event.getTo());
+    }
+
+    @EventHandler
+    public void onWorldChange(PlayerChangedWorldEvent event) {
+        movedTo(event.getPlayer(), event.getPlayer().getLocation());
     }
 
 }
