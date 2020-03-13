@@ -3,10 +3,11 @@ package me.ford.periodicholographicdisplays.commands.subcommands;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import me.ford.periodicholographicdisplays.Messages;
@@ -117,6 +118,7 @@ public class UnsetSub extends SubCommand {
                     sender.sendMessage(messages.getNoSuchOptionMessage(type, opt));
                     return true;
                 }
+                NTimesHologram ntimes = (NTimesHologram) hologram;
                 int optAt = 0;
                 for (String copt : opts) {
                     if (opt == copt) break;
@@ -127,12 +129,19 @@ public class UnsetSub extends SubCommand {
                     return true;
                 }
                 String playerName = opts[optAt + 1];
-                Player player = Bukkit.getPlayer(playerName); // TODO - what about offline players?
+                OfflinePlayer player = Bukkit.getPlayer(playerName); // TODO - what about offline players?
                 if (player == null) {
+                    for (UUID id : ntimes.getShownTo().keySet()) {
+                        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(id);
+                        if (offlinePlayer != null && offlinePlayer.hasPlayedBefore() && offlinePlayer.getName().equalsIgnoreCase(playerName)) {
+                            player = offlinePlayer;
+                            break;
+                        }
+                    }
                     sender.sendMessage(messages.getPlayerNotFoundMessage(playerName));
                     return true;
                 }
-                ((NTimesHologram) hologram).resetShownTo(player.getUniqueId());
+                ntimes.resetShownTo(player.getUniqueId());
                 usedOptions.remove(opt);
                 usedOptions.add(String.format("%s:%s", opt, playerName));
                 break;
