@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 public class NTimesHologram extends PeriodicHologramBase {
     private int timesToShow;
     private final Map<UUID, Integer> shownTo = new HashMap<>();
+    private final Map<UUID, Integer> toSave = new HashMap<>();
 
     public NTimesHologram(Hologram hologram, String name, double activationDistance, long showTime,
             int timesToShow, boolean isNew) {
@@ -60,6 +61,10 @@ public class NTimesHologram extends PeriodicHologramBase {
         return new HashMap<>(shownTo);
     }
 
+    public Map<UUID, Integer> getToSave() {
+        return new HashMap<>(toSave);
+    }
+
     void addAllShownTo(Map<UUID, Integer> shownTo) {
         for (Entry<UUID, Integer> entry : shownTo.entrySet()) {
             addShownTo(entry.getKey(), entry.getValue());
@@ -68,12 +73,19 @@ public class NTimesHologram extends PeriodicHologramBase {
 
     public void addShownTo(UUID id, int timesShown) {
         shownTo.put(id, timesShown);
+        toSave.put(id, timesShown);
         markChanged();
     }
 
     public void resetShownTo(UUID id) {
         shownTo.remove(id);
         markChanged();
+    }
+
+    @Override
+    public void markSaved() {
+        super.markSaved();
+        toSave.clear();
     }
     
 }

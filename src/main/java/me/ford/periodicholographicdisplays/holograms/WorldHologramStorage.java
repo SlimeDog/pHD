@@ -143,8 +143,8 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         Set<HDHologramInfo> infos = new HashSet<>();
         for (IndividualHologramHandler handler : getHandlers(false)) {
             if (handler.needsSaved()){
-                handler.markSaved();
                 infos.add(getInfo(handler));
+                handler.markSaved();
             }
         }
         if (infos.isEmpty()) return false;
@@ -156,19 +156,23 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
     private HDHologramInfo getInfo(IndividualHologramHandler handler) {
         HDHologramInfo info = new HDHologramInfo(handler.getName());
         for (Entry<PeriodicType, PeriodicHologramBase> entry : handler.getToSave().entrySet()) {
+            double distance = -1;
+            long seconds = -1;
+            String perms = null;
             PeriodicType type = entry.getKey();
             PeriodicHologramBase holo = entry.getValue();
             TypeInfo typeInfo = getTypeInfo(type, holo);
-            double distance = holo.getActivationDistance();
-            if (distance == plugin.getSettings().getDefaultActivationDistance()) {
-                distance = -1;
+            if (!(typeInfo instanceof NullTypeInfo)) {
+                if (distance == plugin.getSettings().getDefaultActivationDistance()) {
+                    distance = -1;
+                }
+                if (seconds == plugin.getSettings().getDefaultShowTime()) {
+                    seconds = -1;
+                }
+                perms = holo.getPermissions();
             }
-            long seconds = holo.getShowTimeTicks()/20L;
-            if (seconds == plugin.getSettings().getDefaultShowTime()) {
-                seconds = -1;
-            }
-            HologramInfo hInfo = new HologramInfo(holo.getName(), holo.getType(), distance, 
-                                seconds, holo.getPermissions(), typeInfo);
+            HologramInfo hInfo = new HologramInfo(handler.getName(), type, distance, 
+                                seconds, perms, typeInfo);
             info.addInfo(hInfo);
         }
         return info;

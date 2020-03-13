@@ -80,6 +80,7 @@ public class InfoSub extends SubCommand {
             return true;
         }
         int maxPage = getMaxPages(hologram);
+        if (maxPage == 0) maxPage++;
         if (page <= 0 || page > maxPage) {
             sender.sendMessage(messages.getInvalidPageMessage(maxPage));
             return true;
