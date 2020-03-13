@@ -27,7 +27,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
     private Settings settings;    
     private Messages messages;
     private LuckPermsHook lpHook;
-    private CitizensHook citizensHook;
+    private CitizensHook citizensHook = null;
 
     @Override
     public void onEnable() {
@@ -67,7 +67,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         // Citizens hoook if possible
         try {
             citizensHook = new CitizensHook(this);
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | NoClassDefFoundError e) {
             // TODO - anything?
         }
 
