@@ -170,5 +170,9 @@ public abstract class PeriodicHologramBase {
         }
         setShowTime(time);
     }
+
+    protected PeriodicHolographicDisplays getPlugin() {
+        return plugin;
+    }
     
 }

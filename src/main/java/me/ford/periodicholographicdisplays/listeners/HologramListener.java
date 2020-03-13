@@ -12,18 +12,22 @@ import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.holograms.WorldHologramStorage;
+import me.ford.periodicholographicdisplays.hooks.CitizensHook;
 
 /**
  * HologramListener
  */
 public class HologramListener implements Listener {
     private final HologramStorage holograms;
+    private final CitizensHook hook;
 
-    public HologramListener(HologramStorage holograms) {
+    public HologramListener(HologramStorage holograms, CitizensHook hook) {
         this.holograms = holograms;
+        this.hook = hook;
     }
 
     private void movedTo(Player player, Location location) {
+        if (hook != null && hook.isNPC(player)) return; // ignore
         WorldHologramStorage wh = holograms.getHolograms(location.getWorld());
         for (PeriodicHologramBase base : wh.getHolograms(true)) {
             double dist2 = base.getLocation().distanceSquared(location);

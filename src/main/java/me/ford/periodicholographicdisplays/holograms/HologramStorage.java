@@ -22,6 +22,7 @@ import me.ford.periodicholographicdisplays.holograms.storage.SQLStorage;
 import me.ford.periodicholographicdisplays.holograms.storage.Storage;
 import me.ford.periodicholographicdisplays.holograms.storage.YAMLStorage;
 import me.ford.periodicholographicdisplays.holograms.storage.Storage.HDHologramInfo;
+import me.ford.periodicholographicdisplays.hooks.CitizensHook;
 
 /**
  * HologramStorage
@@ -29,6 +30,7 @@ import me.ford.periodicholographicdisplays.holograms.storage.Storage.HDHologramI
 public class HologramStorage {
     private Storage storage;
     private final PeriodicHolographicDisplays plugin;
+    private final CitizensHook hook;
     private final Map<World, WorldHologramStorage> holograms = new HashMap<>();
     private final Set<HDHologramInfo> danglingInfos = new HashSet<>();
 
@@ -39,6 +41,7 @@ public class HologramStorage {
             this.storage = new YAMLStorage();
         }
         this.plugin = plugin;
+        hook = plugin.getCitizensHook();
         initWorldStorage();
         scheduleLoad();
         scheduleDanglingCheck();
@@ -214,6 +217,7 @@ public class HologramStorage {
     }
 
     public void joinedWorld(Player player, World world) {
+        if (hook != null && hook.isNPC(player)) return;
         WorldHologramStorage worldStorage = getHolograms(world);
         for (PeriodicHologramBase holo : worldStorage.getHolograms()) {
             if (holo.getType() == PeriodicType.ALWAYS) {

@@ -17,6 +17,7 @@ import me.ford.periodicholographicdisplays.holograms.storage.HologramInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.Storage;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.NullTypeInfo;
+import me.ford.periodicholographicdisplays.hooks.CitizensHook;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.MCTimeTypeInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.IRLTimeTypeInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.NTimesTypeInfo;
@@ -28,11 +29,13 @@ import me.ford.periodicholographicdisplays.holograms.storage.Storage.HDHologramI
 public class WorldHologramStorage extends WorldHologramStorageBase {
     private final PeriodicHolographicDisplays plugin;
     private final Storage storage;
+    private final CitizensHook hook;
 
     public WorldHologramStorage(PeriodicHolographicDisplays plugin, World world, Storage storage) {
         super(plugin, world);
         this.plugin = plugin;
         this.storage = storage;
+        this.hook = plugin.getCitizensHook();
     }
 
     // private void scheduleLoad() { // TODO - maybe there's an event?
@@ -124,6 +127,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
     }
 
     public void resetAlwaysHologramPermissions(Player player) {
+        if (hook != null && hook.isNPC(player)) return;
         for (PeriodicHologramBase holo : getHolograms()) {
             if (holo instanceof AlwaysHologram) {
                 AlwaysHologram always = (AlwaysHologram) holo;

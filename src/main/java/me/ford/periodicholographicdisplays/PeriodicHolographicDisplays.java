@@ -41,7 +41,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
             settings.setDefaultDatabaseInternal();
         }
         holograms = new HologramStorage(this);
-        this.getServer().getPluginManager().registerEvents(new HologramListener(holograms), this);
+        this.getServer().getPluginManager().registerEvents(new HologramListener(holograms, citizensHook), this);
         this.getServer().getPluginManager().registerEvents(new JoinLeaveListener(holograms), this);
         this.getServer().getPluginManager().registerEvents(new WorldListener(holograms), this);
         WorldTimeListener worldTimeListener;
