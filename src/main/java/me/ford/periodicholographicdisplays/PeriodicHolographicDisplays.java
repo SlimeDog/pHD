@@ -41,6 +41,21 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
             settings.setDefaultDatabaseInternal();
         }
         holograms = new HologramStorage(this);
+
+        // LuckPerms hook if possible
+        try {
+            lpHook = new LuckPermsHook(this);
+        } catch (IllegalStateException e) {
+            getLogger().warning(messages.getNoLPMessage());
+        }
+        // Citizens hoook if possible
+        try {
+            citizensHook = new CitizensHook(this);
+        } catch (ClassNotFoundException | NoClassDefFoundError e) {
+            // TODO - anything?
+        }
+
+        // listeners
         this.getServer().getPluginManager().registerEvents(new HologramListener(holograms, citizensHook), this);
         this.getServer().getPluginManager().registerEvents(new JoinLeaveListener(holograms), this);
         this.getServer().getPluginManager().registerEvents(new WorldListener(holograms), this);
@@ -56,19 +71,6 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         // metrics
 		if (settings.enableMetrics()) {
 			new Metrics(this);
-        }
-
-        // LuckPerms hook if possible
-        try {
-            lpHook = new LuckPermsHook(this);
-        } catch (IllegalStateException e) {
-            getLogger().warning(messages.getNoLPMessage());
-        }
-        // Citizens hoook if possible
-        try {
-            citizensHook = new CitizensHook(this);
-        } catch (ClassNotFoundException | NoClassDefFoundError e) {
-            // TODO - anything?
         }
 
         // commands
