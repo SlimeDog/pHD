@@ -40,7 +40,8 @@ public class YAMLStorage implements Storage {
     @Override
     public void saveHolograms(Set<HDHologramInfo> holograms, boolean inSync) {
         for (HDHologramInfo hdHoloInfo : holograms) {
-            ConfigurationSection nameSection = getConfig().createSection(hdHoloInfo.getHoloName());
+            ConfigurationSection nameSection = getConfig().getConfigurationSection(hdHoloInfo.getHoloName());
+            if (nameSection == null) nameSection = getConfig().createSection(hdHoloInfo.getHoloName());
             for (HologramInfo info : hdHoloInfo.getInfos()) {
                 saveInfo(nameSection.createSection(info.getType().name()), info);
             }
