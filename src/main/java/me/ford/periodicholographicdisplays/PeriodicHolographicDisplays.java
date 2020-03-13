@@ -10,6 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import me.ford.periodicholographicdisplays.Settings.StorageTypeException;
 import me.ford.periodicholographicdisplays.commands.PHDCommand;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
+import me.ford.periodicholographicdisplays.hooks.CitizensHook;
 import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
 import me.ford.periodicholographicdisplays.listeners.HologramListener;
 import me.ford.periodicholographicdisplays.listeners.JoinLeaveListener;
@@ -26,6 +27,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
     private Settings settings;    
     private Messages messages;
     private LuckPermsHook lpHook;
+    private CitizensHook citizensHook;
 
     @Override
     public void onEnable() {
@@ -62,6 +64,12 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         } catch (IllegalStateException e) {
             getLogger().warning(messages.getNoLPMessage());
         }
+        // Citizens hoook if possible
+        try {
+            citizensHook = new CitizensHook(this);
+        } catch (ClassNotFoundException e) {
+            // TODO - anything?
+        }
 
         // commands
         getCommand("phd").setExecutor(new PHDCommand(this));
@@ -69,6 +77,10 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         if (settings.checkForUpdates()) {
             // TODO - check for updates
         }
+    }
+
+    public CitizensHook getCitizensHook() {
+        return citizensHook;
     }
 
     public LuckPermsHook getLuckPermsHook() {
