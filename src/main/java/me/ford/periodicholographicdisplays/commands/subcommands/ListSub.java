@@ -46,6 +46,7 @@ public class ListSub extends SubCommand {
         } 
         List<String> names = storage.getNames();
         int maxPage = PageUtils.getNumberOfPages(names.size(), PageUtils.HOLOGRAMS_PER_PAGE);
+        if (maxPage == 0) maxPage++;
         if (page <= 0 || page > maxPage) {
             sender.sendMessage(messages.getInvalidPageMessage(maxPage));
             return true;
