@@ -234,7 +234,7 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getUnsetOptionsMessage(List<String> opts) {
-        return getMessage("unset-options", "Set the options to default: {options}").replace("{options}", String.join(", ", opts));
+        return getMessage("unset-options", "Unset {options}; now using default").replace("{options}", String.join(", ", opts));
     }
 
     public String getConfigReloadedMessage() {
