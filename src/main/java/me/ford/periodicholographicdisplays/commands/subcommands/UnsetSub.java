@@ -138,8 +138,10 @@ public class UnsetSub extends SubCommand {
                             break;
                         }
                     }
-                    sender.sendMessage(messages.getPlayerNotFoundMessage(playerName));
-                    return true;
+                    if (player == null) {
+                        sender.sendMessage(messages.getPlayerNotFoundMessage(playerName));
+                        return true;
+                    }
                 }
                 ntimes.resetShownTo(player.getUniqueId());
                 usedOptions.remove(opt);
