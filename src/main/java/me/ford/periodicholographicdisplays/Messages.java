@@ -196,8 +196,10 @@ public class Messages extends CustomConfigHandler {
             lines.add(entry.getKey() + " " + entry.getValue());
             i++;
         }
-        String msg = getMessage("hologram-list", "Holograms (holograms {startnr}-{endnr}, page {page}/{max-pages}): \n{holograms}");
-        msg = msg.replace("{startnr}", String.valueOf(pageInfo.getStartNumber())).replace("{endnr}", String.valueOf(pageInfo.getEndNumber()));
+        String msg = getMessage("hologram-list", "Holograms (holograms {numbers}, page {page}/{max-pages}): \n{holograms}");
+        int startNr = pageInfo.getStartNumber();
+        int endNr = pageInfo.getEndNumber();
+        msg = msg.replace("{numbers}", (endNr <= startNr && startNr == 1)?"1":String.format("%d-%d", startNr, endNr));
         msg = msg.replace("{page}", String.valueOf(page)).replace("{max-pages}", String.valueOf(pageInfo.getNumberOfPages()));
         return msg.replace("{holograms}", String.join("\n", lines));
     }
