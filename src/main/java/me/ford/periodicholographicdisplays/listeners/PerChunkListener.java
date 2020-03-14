@@ -35,7 +35,7 @@ public class PerChunkListener implements Listener {
     @EventHandler
     public void onChunkLoad(ChunkLoadEvent event) {
         if (event.getWorld() != world) return;
-        chunkLoad.accept(event.getChunk());   
+        chunkLoad.accept(event.getChunk());
     }
 
     @EventHandler
