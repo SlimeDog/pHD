@@ -11,7 +11,9 @@ import me.ford.periodicholographicdisplays.Settings.StorageTypeException;
 import me.ford.periodicholographicdisplays.commands.PHDCommand;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.hooks.CitizensHook;
+import me.ford.periodicholographicdisplays.hooks.DummyCitizensHook;
 import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
+import me.ford.periodicholographicdisplays.hooks.SimpleCitizensHook;
 import me.ford.periodicholographicdisplays.listeners.HologramListener;
 import me.ford.periodicholographicdisplays.listeners.JoinLeaveListener;
 import me.ford.periodicholographicdisplays.listeners.SimpleWorldTimeListener;
@@ -50,9 +52,9 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         }
         // Citizens hoook if possible
         try {
-            citizensHook = new CitizensHook(this);
+            citizensHook = new SimpleCitizensHook();
         } catch (ClassNotFoundException | NoClassDefFoundError e) {
-            // TODO - anything?
+            citizensHook = new DummyCitizensHook();
         }
 
         // listeners
