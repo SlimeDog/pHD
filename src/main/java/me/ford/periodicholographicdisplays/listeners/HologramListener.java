@@ -13,16 +13,16 @@ import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.holograms.WorldHologramStorage;
-import me.ford.periodicholographicdisplays.hooks.CitizensHook;
+import me.ford.periodicholographicdisplays.hooks.NPCHook;
 
 /**
  * HologramListener
  */
 public class HologramListener implements Listener {
     private final HologramStorage holograms;
-    private final CitizensHook hook;
+    private final NPCHook hook;
 
-    public HologramListener(HologramStorage holograms, CitizensHook hook) {
+    public HologramListener(HologramStorage holograms, NPCHook hook) {
         this.holograms = holograms;
         this.hook = hook;
     }

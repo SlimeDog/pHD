@@ -5,9 +5,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import net.citizensnpcs.Citizens;
 
 /**
- * SimplyCitizensHook
+ * SimpleCitizensHook
  */
-public class SimpleCitizensHook extends CitizensHook {
+public class SimpleCitizensHook extends NPCHook {
     private final Citizens citizens;
 
     public SimpleCitizensHook() throws ClassNotFoundException {

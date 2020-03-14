@@ -10,9 +10,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import me.ford.periodicholographicdisplays.Settings.StorageTypeException;
 import me.ford.periodicholographicdisplays.commands.PHDCommand;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
-import me.ford.periodicholographicdisplays.hooks.CitizensHook;
-import me.ford.periodicholographicdisplays.hooks.DummyCitizensHook;
+import me.ford.periodicholographicdisplays.hooks.DummyNPCHook;
 import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
+import me.ford.periodicholographicdisplays.hooks.NPCHook;
 import me.ford.periodicholographicdisplays.hooks.SimpleCitizensHook;
 import me.ford.periodicholographicdisplays.listeners.HologramListener;
 import me.ford.periodicholographicdisplays.listeners.JoinLeaveListener;
@@ -29,7 +29,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
     private Settings settings;    
     private Messages messages;
     private LuckPermsHook lpHook;
-    private CitizensHook citizensHook = null;
+    private NPCHook citizensHook = null;
 
     @Override
     public void onEnable() {
@@ -54,7 +54,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         try {
             citizensHook = new SimpleCitizensHook();
         } catch (ClassNotFoundException | NoClassDefFoundError e) {
-            citizensHook = new DummyCitizensHook();
+            citizensHook = new DummyNPCHook();
         }
 
         // listeners
@@ -83,7 +83,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         }
     }
 
-    public CitizensHook getCitizensHook() {
+    public NPCHook getNPCHook() {
         return citizensHook;
     }
 

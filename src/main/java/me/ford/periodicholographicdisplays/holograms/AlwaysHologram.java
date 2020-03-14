@@ -4,7 +4,7 @@ import com.gmail.filoghost.holographicdisplays.api.Hologram;
 
 import org.bukkit.entity.Player;
 
-import me.ford.periodicholographicdisplays.hooks.CitizensHook;
+import me.ford.periodicholographicdisplays.hooks.NPCHook;
 
 /**
  * AlwaysHologram
@@ -34,7 +34,7 @@ public class AlwaysHologram extends NTimesHologram {
     }
 
     private void checkWorldPlayers() {
-        CitizensHook hook = getPlugin().getCitizensHook();
+        NPCHook hook = getPlugin().getNPCHook();
         for (Player player : getHologram().getWorld().getEntitiesByClass(Player.class)) {
             if (hook != null && hook.isNPC(player)) continue;
             if (!canSee(player)) {

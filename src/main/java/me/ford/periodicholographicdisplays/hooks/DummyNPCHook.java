@@ -3,6 +3,6 @@ package me.ford.periodicholographicdisplays.hooks;
 /**
  * DummyCitizensHook
  */
-public class DummyCitizensHook extends CitizensHook {
+public class DummyNPCHook extends NPCHook {
     
 }
