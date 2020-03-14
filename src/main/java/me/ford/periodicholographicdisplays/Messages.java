@@ -331,12 +331,14 @@ public class Messages extends CustomConfigHandler {
 
     public String getNTimesTypeInfo(NTimesHologram hologram, boolean always, int page) {// need to be sure not to specify the wrong page!
         String msg = getMessage(always?"typeinfo.ALWAYS":"typeinfo.NTIMES", 
-                                        always ? "Always shown" : "Show times: {times}; Shown to (players {startnr}-{endnr}, page {page}/{max-pages}): {players:times}");
+                                        always ? "Always shown" : "Show times: {times}; Shown to (players {players}, page {page}/{max-pages}): {players:times}");
         if (!always) {
             msg = msg.replace("{times}", String.valueOf(hologram.getTimesToShow()));
             final int nrOfPlayers = hologram.getShownTo().size();
             PageInfo pageInfo = PageUtils.getPageInfo(nrOfPlayers, PageUtils.PLAYERS_PER_PAGE, page);
-            msg = msg.replace("{startnr}", String.valueOf(pageInfo.getStartNumber())).replace("{endnr}", String.valueOf(pageInfo.getEndNumber()));
+            int startNr = pageInfo.getStartNumber();
+            int endNr = pageInfo.getEndNumber();
+            msg = msg.replace("{players}", (endNr <= startNr && startNr == 1)?"1":String.format("%d-%d", startNr, endNr));
             msg = msg.replace("{page}", String.valueOf(page)).replace("{max-pages}", String.valueOf(pageInfo.getNumberOfPages()));
             List<String> playersAndTimes = new ArrayList<>();
             int i = 1;
