@@ -152,7 +152,12 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
             }
         }
         if (infos.isEmpty()) return false;
-        plugin.debug("in world " + getWorld().getName() + " for reason " + reason.name() + " saving:" + infos); // TODO - remove debug message
+        if (plugin.getSettings().onDebug()) {
+            plugin.debug("in world " + getWorld().getName() + " for reason " + reason.name() + " saving:"); // TODO - remove debug message
+            for (HDHologramInfo info : infos) {
+                plugin.debug("" + info);
+            }
+        }
         storage.saveHolograms(infos, inSync);
         return !infos.isEmpty();
     }
