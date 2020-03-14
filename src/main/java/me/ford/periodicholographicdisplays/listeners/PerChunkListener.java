@@ -36,6 +36,14 @@ public class PerChunkListener implements Listener {
     public void onChunkLoad(ChunkLoadEvent event) {
         if (event.getWorld() != world) return;
         chunkLoad.accept(event.getChunk());
+        // DEBUG
+        IllegalStateException e = new IllegalStateException();
+        int count = 0;
+        for(StackTraceElement p : e.getStackTrace()) {
+            if (p.toString().contains("me.ford.periodicholographicdisplays")) count++;
+        }
+        if (count >= 2) e.printStackTrace();
+        // DEBUG
     }
 
     @EventHandler
