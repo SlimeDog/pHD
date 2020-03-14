@@ -233,6 +233,11 @@ public class Messages extends CustomConfigHandler {
         return getMessage("player-not-found", "Player not found: {player}").replace("{player}", name);
     }
 
+    public String getUnsetPlayerCountMessage(OfflinePlayer player) {
+        return getMessage("unset-playercount", "Unset playrcount of {player}; now 0")
+                        .replace("{player}", player.getName());
+    }
+
     public String getUnsetOptionsMessage(List<String> opts) {
         return getMessage("unset-options", "Unset {options}; now using default").replace("{options}", String.join(", ", opts));
     }

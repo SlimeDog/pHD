@@ -145,7 +145,7 @@ public class UnsetSub extends SubCommand {
                 }
                 ntimes.resetShownTo(player.getUniqueId());
                 usedOptions.remove(opt);
-                usedOptions.add(String.format("%s:%s", opt, playerName));
+                sender.sendMessage(messages.getUnsetPlayerCountMessage(player));
                 break;
                 case "time":
                 if (type == PeriodicType.MCTIME || type == PeriodicType.IRLTIME) {
