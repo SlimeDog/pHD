@@ -67,14 +67,18 @@ public class NTimesHologram extends PeriodicHologramBase {
 
     void addAllShownTo(Map<UUID, Integer> shownTo) {
         for (Entry<UUID, Integer> entry : shownTo.entrySet()) {
-            addShownTo(entry.getKey(), entry.getValue());
+            addShownTo(entry.getKey(), entry.getValue(), false);
         }
     }
 
     public void addShownTo(UUID id, int timesShown) {
+        addShownTo(id, timesShown, true);
+    }
+
+    private void addShownTo(UUID id, int timesShown, boolean markChanged) {
         shownTo.put(id, timesShown);
         toSave.put(id, timesShown);
-        markChanged();
+        if (markChanged) markChanged();
     }
 
     public void resetShownTo(UUID id) {
