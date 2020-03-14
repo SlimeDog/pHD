@@ -150,7 +150,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
 
     public void debug(String message) {
         if (settings.onDebug()) {
-            getLogger().info(message);
+            getLogger().info("[DEBUG] " + message);
         }
     }
 
