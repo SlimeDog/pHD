@@ -32,7 +32,7 @@ typeinfo:
 
 # Messages produced by /phd list
 #
-hologram-list: "Holograms (holograms {startnr}-{endnr}, page {page}/{max-pages}): \n{holograms}"
+hologram-list: "Holograms (holograms {numbers}, page {page}/{max-pages}): \n{holograms}"
 
 # Messages produced by /phd manage
 #
