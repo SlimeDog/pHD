@@ -55,7 +55,11 @@ public class InfoSub extends SubCommand {
         }
         if (args.length == 1) {
             List<PeriodicType> availableTypes = storage.getAvailableTypes(args[0]);
-            sender.sendMessage(messages.getAvailableTypesMessage(args[0], availableTypes));
+            if (availableTypes.isEmpty()) {
+                sender.sendMessage(messages.getHDHologramNotFoundMessage(args[0]));
+            } else {
+                sender.sendMessage(messages.getAvailableTypesMessage(args[0], availableTypes));
+            }
             return true;
         }
         PeriodicType type;
