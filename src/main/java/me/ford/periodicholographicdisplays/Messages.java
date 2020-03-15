@@ -236,7 +236,7 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getUnsetPlayerCountMessage(OfflinePlayer player) {
-        return getMessage("unset-playercount", "Unset playrcount of {player}; now 0")
+        return getMessage("unset-playercount", "Unset playercount of {player}; now 0")
                         .replace("{player}", player.getName());
     }
 
