@@ -102,6 +102,7 @@ public class UnsetSub extends SubCommand {
         String[] opts = Arrays.copyOfRange(args, 2, args.length);
         List<String> usedOptions = new ArrayList<>(Arrays.asList(opts));
         String prevOpt = "";
+        boolean unsetPlayerCount = false;
         for (String opt : opts) {
             switch(opt) {
                 case "distance":
@@ -129,7 +130,7 @@ public class UnsetSub extends SubCommand {
                     return true;
                 }
                 String playerName = opts[optAt + 1];
-                OfflinePlayer player = Bukkit.getPlayer(playerName); // TODO - what about offline players?
+                OfflinePlayer player = Bukkit.getPlayer(playerName); 
                 if (player == null) {
                     for (UUID id : ntimes.getShownTo().keySet()) {
                         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(id);
@@ -144,6 +145,7 @@ public class UnsetSub extends SubCommand {
                     }
                 }
                 ntimes.resetShownTo(player.getUniqueId());
+                unsetPlayerCount = true;
                 usedOptions.remove(opt);
                 sender.sendMessage(messages.getUnsetPlayerCountMessage(player));
                 break;
@@ -169,7 +171,7 @@ public class UnsetSub extends SubCommand {
             prevOpt = opt;
         }
         if (usedOptions.isEmpty()) {
-            sender.sendMessage(messages.getNothingToUnsetMessage());
+            if (!unsetPlayerCount) sender.sendMessage(messages.getNothingToUnsetMessage());
             return true;
         }
         sender.sendMessage(messages.getUnsetOptionsMessage(usedOptions));
