@@ -199,7 +199,13 @@ public class Messages extends CustomConfigHandler {
         String msg = getMessage("hologram-list", "Holograms (holograms {numbers}, page {page}/{max-pages}): \n{holograms}");
         int startNr = pageInfo.getStartNumber();
         int endNr = pageInfo.getEndNumber();
-        msg = msg.replace("{numbers}", (endNr <= startNr && startNr == 1)?"1":String.format("%d-%d", startNr, endNr));
+        String numbers;
+        if (endNr <= startNr && startNr == 1) {
+            numbers = String.valueOf(endNr);
+        } else {
+            numbers = String.format("%d-%d", startNr, endNr);
+        }
+        msg = msg.replace("{numbers}", numbers);
         msg = msg.replace("{page}", String.valueOf(page)).replace("{max-pages}", String.valueOf(pageInfo.getNumberOfPages()));
         return msg.replace("{holograms}", String.join("\n", lines));
     }
@@ -340,7 +346,13 @@ public class Messages extends CustomConfigHandler {
             PageInfo pageInfo = PageUtils.getPageInfo(nrOfPlayers, PageUtils.PLAYERS_PER_PAGE, page);
             int startNr = pageInfo.getStartNumber();
             int endNr = pageInfo.getEndNumber();
-            msg = msg.replace("{players}", (endNr <= startNr && startNr == 1)?"1":String.format("%d-%d", startNr, endNr));
+            String numbers;
+            if (endNr <= startNr && startNr == 1) {
+                numbers = String.valueOf(endNr);
+            } else {
+                numbers = String.format("%d-%d", startNr, endNr);
+            }
+            msg = msg.replace("{players}", numbers);
             msg = msg.replace("{page}", String.valueOf(page)).replace("{max-pages}", String.valueOf(pageInfo.getNumberOfPages()));
             List<String> playersAndTimes = new ArrayList<>();
             int i = 1;
