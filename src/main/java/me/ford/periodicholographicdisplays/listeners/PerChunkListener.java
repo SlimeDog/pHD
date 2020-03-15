@@ -12,7 +12,6 @@ import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
-import me.ford.periodicholographicdisplays.Settings;
 
 /**
  * ChunkListener
@@ -21,7 +20,6 @@ public class PerChunkListener implements Listener {
     private final World world;
     private final Consumer<Chunk> chunkLoad;
     private final Consumer<Chunk> chunkUnload;
-    private final Settings settings;
 
     public PerChunkListener(World world, Consumer<Chunk> chunkLoad, Consumer<Chunk> chunkUnload) {
         Validate.notNull(world, "Cannot listen for null world");
@@ -32,18 +30,12 @@ public class PerChunkListener implements Listener {
         this.chunkUnload = chunkUnload;
         PeriodicHolographicDisplays phd = JavaPlugin.getPlugin(PeriodicHolographicDisplays.class);
         phd.getServer().getPluginManager().registerEvents(this, phd);
-        settings = phd.getSettings();
     }
 
     @EventHandler
     public void onChunkLoad(ChunkLoadEvent event) {
         if (event.getWorld() != world) return;
         chunkLoad.accept(event.getChunk());
-        if (settings.onDebug()) {
-            // DEBUG
-            new IllegalStateException().printStackTrace();
-            // DEBUG
-        }
     }
 
     @EventHandler
