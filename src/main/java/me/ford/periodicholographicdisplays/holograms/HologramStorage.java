@@ -217,8 +217,6 @@ public class HologramStorage {
     }
 
     public void joinedWorld(Player player, World world) {
-        plugin.getLogger().info("Hooked? " + (hook != null) + " NPC? " + (hook != null && hook.isNPC(player))
-         + " manual: " + player.hasMetadata("NPC"));
         if (hook != null && hook.isNPC(player)) return;
         WorldHologramStorage worldStorage = getHolograms(world);
         for (PeriodicHologramBase holo : worldStorage.getHolograms()) {
