@@ -74,24 +74,25 @@ unrecognized-conversion: "Cannot convert from {from} to {to} - unrecognized stor
 started-converting: "Started converting from {from} to {to}"
 done-converting: "Done converting from {from} to {to}"
 target-storage-has-data: "The target storage type {type} already has data; use --force if you wish to override that data"
+illegal-storage-type: "Illegal storage type {type} - only YAML and SQLITE are supported - reverting to default (SQLITE)"
 
 # Messages produced by /phd reload
 #
-config-reloaded: "Successfully reloaded the config"
+config-reloaded: "Successfully reloaded configuration, messages, and data"
 problems-reloading-config: "Problems reloading config: {problems}"
+plugin-folder-removed: "Plugin folder does not exist or is unreadable at reload; attempting to recreate"
+plugin-folder-recreated: "Plugin folder was recreated"
+problem-recreated-plugin-folder: "Problem recreating plugin folder"
+config-recreated: "The config.yml file did not exist and was recreated"
+messages-recreated: "The messages.yml file did not exist and was recreated"
+sqlite-connection-established: "Connection to SQLite has been established"
 
 # Information messages
 #
 type-not-recognized: "Hologram type {type} is not recognized"
 hologram-not-found: "Hologram not found: {name} of type {type}"
 
-illegal-storage-type: "Illegal storage type {type} - only YAML and SQLITE are supported - reverting to default (SQLITE)"
 legacy-version-mctime: "MCTIME holograms can behave unpredicably because of the use of a legacy version of MC"
 no-luckperms: "LuckPerms not found - unable to readjust permissions on the fly or tab-complete permissions"
-plugin-folder-removed: "Plugin folder does not exist or is unreadable at reload; attempting to recreate"
-plugin-folder-recreated: "Plugin folder was recreated"
-problem-recreated-plugin-folder: "Problem recreating plugin folder"
-config-recreated: "The config.yml file did not exist and was recreated"
-messages-recreated: "The messages.yml file did not exist and was recreated"
 invalid-page: "Page needs to be between 1 and {max-page}"
-next-page-hint: "TIP: See the next page with {command}"
+next-page-hint: "TIP: See the next page with &n{command}&r"
