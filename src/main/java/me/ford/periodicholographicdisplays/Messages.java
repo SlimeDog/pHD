@@ -269,8 +269,8 @@ public class Messages extends CustomConfigHandler {
         StringBuilder problems = new StringBuilder();
         for (ReloadIssue issue : issues) {
             String desc = null;
+            problems.append("\n");
             if (issue instanceof DefaultReloadIssue) {
-                problems.append("\n");
                 DefaultReloadIssue dri = (DefaultReloadIssue) issue;
                 switch (dri) {
                     case NO_FOLDER:

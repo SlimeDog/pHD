@@ -117,8 +117,9 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         }
         boolean useDbBefore = settings.useDatabase();
         boolean useDbAfter;
+        Map<SettingIssue, String> settingIssues = null;
         try {
-            reloadConfig();
+            settingIssues = reloadMyConfig();
         } catch (StorageTypeException e) {
             DefaultReloadIssue issue = DefaultReloadIssue.ILLEGA_STORAGE_TYPE;
             issue.setExtra(e.getType());
@@ -132,18 +133,20 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         } else {
             holograms.reload(false); // assume we have the same database type
         }
+        if (settingIssues != null && !settingIssues.isEmpty()) {
+            for (Entry<SettingIssue, String> entry : settingIssues.entrySet()) {
+                issues.add(new SimpleReloadIssue(messages.getProblemWithConfigMessage(entry.getKey(), entry.getValue()), null));
+            }
+        }
         return issues;
     }
 
-    @Override
-    public void reloadConfig() {
+    public Map<SettingIssue, String> reloadMyConfig() {
         super.reloadConfig();
         if (settings != null) {
-            Map<SettingIssue, String> issues = settings.reload();
-            for (Entry<SettingIssue, String> entry : issues.entrySet()) {
-                getLogger().info(messages.getProblemWithConfigMessage(entry.getKey(), entry.getValue()));
-            }
+            return settings.reload();
         }
+        return null;
     }
 
     @Override
@@ -195,6 +198,27 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
 
         public void setExtra(String extra) {
             this.extra = extra;
+        }
+        
+    }
+
+    public static class SimpleReloadIssue implements ReloadIssue {
+        private final String issue;
+        private final String extra;
+
+        public SimpleReloadIssue(String issue, String extra) {
+            this.issue = issue;
+            this.extra = extra;
+        }
+
+        @Override
+        public String getIssue() {
+            return issue;
+        }
+
+        @Override
+        public String getExtra() {
+            return extra;
         }
         
     }
