@@ -113,24 +113,29 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
             issues.add(DefaultReloadIssue.NO_MESSAGES);
         }
         boolean useDbBefore = settings.useDatabase();
-        reloadConfig();
-        messages.reloadCustomConfig();
         boolean useDbAfter;
         try {
-            useDbAfter = settings.useDatabase();
+            reloadConfig();
         } catch (StorageTypeException e) {
             DefaultReloadIssue issue = DefaultReloadIssue.ILLEGA_STORAGE_TYPE;
             issue.setExtra(e.getType());
             issues.add(issue);
-            useDbAfter = useDbBefore; // not used
             settings.setDefaultDatabaseInternal();
         }
+        useDbAfter = settings.useDatabase();
+        messages.reloadCustomConfig();
         if (issues.isEmpty()) {
             holograms.reload(useDbBefore != useDbAfter);
         } else {
             holograms.reload(false); // assume we have the same database type
         }
         return issues;
+    }
+
+    @Override
+    public void reloadConfig() {
+        super.reloadConfig();
+        settings.reload();
     }
 
     @Override
