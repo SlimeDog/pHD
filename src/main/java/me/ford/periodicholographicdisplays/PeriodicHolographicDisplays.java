@@ -135,7 +135,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
     @Override
     public void reloadConfig() {
         super.reloadConfig();
-        settings.reload();
+        if (settings != null) settings.reload();
     }
 
     @Override
