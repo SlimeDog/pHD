@@ -147,6 +147,9 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         Set<HDHologramInfo> infos = new HashSet<>();
         for (IndividualHologramHandler handler : getHandlers(false)) {
             if (handler.needsSaved()){
+                for (PeriodicType type : handler.getTypes()) {
+                    plugin.debug(plugin.getMessages().getHologramInfoMessage(handler.getHologram(type), 1));
+                }
                 infos.add(getInfo(handler));
                 handler.markSaved();
             }
@@ -172,12 +175,8 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
             PeriodicHologramBase holo = entry.getValue();
             TypeInfo typeInfo = getTypeInfo(type, holo);
             if (!(typeInfo instanceof NullTypeInfo)) {
-                if (distance == plugin.getSettings().getDefaultActivationDistance()) {
-                    distance = -1;
-                }
-                if (seconds == plugin.getSettings().getDefaultShowTime()) {
-                    seconds = -1;
-                }
+                distance = holo.getActivationDistance();
+                seconds = holo.getShowTimeTicks() / 20L;
                 perms = holo.getPermissions();
             }
             HologramInfo hInfo = new HologramInfo(handler.getName(), type, distance, 
