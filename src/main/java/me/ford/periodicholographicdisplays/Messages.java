@@ -263,11 +263,13 @@ public class Messages extends CustomConfigHandler {
         for (ReloadIssue issue : issues) {
             String desc = null;
             if (issue instanceof DefaultReloadIssue) {
+                problems.append("\n");
                 DefaultReloadIssue dri = (DefaultReloadIssue) issue;
                 switch (dri) {
                     case NO_FOLDER:
                     desc = getNoPluginFolderMessage();
                     problems.append(desc);
+                    problems.append("\n");
                     desc = Boolean.valueOf(dri.getExtra()) ? getPluginFolderRecreatedMessage() : getProblemRecreatingPluginFolder();
                     break;
                     case ILLEGA_STORAGE_TYPE:
@@ -288,7 +290,7 @@ public class Messages extends CustomConfigHandler {
             problems.append(desc);
         }
         return getMessage("problems-reloading-config", "Problems reloading config: {problems}")
-                        .replace("{problems}", "\n" + String.join("\n", problems));
+                        .replace("{problems}", problems.toString());
     }
 
     public String getSetNewOptionsMessage(String name, PeriodicType type, Map<String, String> options) {
