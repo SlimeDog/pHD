@@ -47,7 +47,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         // LuckPerms hook if possible
         try {
             lpHook = new LuckPermsHook(this);
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException | NoClassDefFoundError e) {
             getLogger().warning(messages.getNoLPMessage());
         }
         // Citizens hoook if possible
