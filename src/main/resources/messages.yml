@@ -77,7 +77,7 @@ target-storage-has-data: "The target storage type {type} already has data; use -
 
 # Messages produced by /phd reload
 #
-config-reloaded: "Succesfully reloaded the config"
+config-reloaded: "Successfully reloaded the config"
 problems-reloading-config: "Problems reloading config: {problems}"
 
 # Information messages

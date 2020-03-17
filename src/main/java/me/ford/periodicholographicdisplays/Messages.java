@@ -251,7 +251,7 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getConfigReloadedMessage() {
-        return getMessage("config-reloaded", "Succesfully reloaded the config");
+        return getMessage("config-reloaded", "Successfully reloaded the config");
     }
 
     public String getProblemsReloadingConfigMessage(List<ReloadIssue> issues) {
