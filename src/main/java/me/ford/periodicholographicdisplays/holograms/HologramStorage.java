@@ -73,7 +73,7 @@ public class HologramStorage {
         try {
             holo = CommandValidator.getNamedHologram(info.getHoloName());
         } catch (CommandException e) {
-            plugin.getLogger().log(Level.WARNING, "Problem loading hologram " + info.getHoloName() + ": HD hologram not found (perhaps the world isn't loaded?)", e);
+            plugin.getLogger().log(Level.WARNING, "Problem loading hologram " + info.getHoloName() + ": HD hologram not found (perhaps the world isn't loaded?)");
             return;
         }
         WorldHologramStorage whs = holograms.get(holo.getWorld());
