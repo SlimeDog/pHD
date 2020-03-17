@@ -1,5 +1,8 @@
 package me.ford.periodicholographicdisplays;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Settings
  */
@@ -18,7 +21,14 @@ public class Settings {
         reload();
     }
 
-    public void reload() {
+    public Map<SettingIssue, String> reload() {
+        Map<SettingIssue, String> issues = new HashMap<>();
+        for (SettingIssue issue : SettingIssue.values()) {
+            String val = phd.getConfig().getString(issue.getPath());
+            if (!issue.fits(val)) {
+                issues.put(issue, val);
+            }
+        }
         defaultActivationDistance = getDefaultActivationDistance_();
         defaultShowTime = getDefaultShowTime_();
         saveDelay = getSaveDelay_();
@@ -26,6 +36,7 @@ public class Settings {
         enableMetrics = enableMetrics_();
         checkForUpdates = checkForUpdates_();
         onDebug = onDebug_();
+        return issues;
     }
 
     public double getDefaultActivationDistance() {
@@ -110,6 +121,71 @@ public class Settings {
             return type;
         }
         
+    }
+
+    public static enum SettingIssue {
+        ACTIVATION_DISTANCE("defaults.activation-distance", SettingType.DOUBLE),
+        SHOW_TIME("defaults.show-time", SettingType.INTEGER),
+        SAVE_DELAY("save-frequency", SettingType.LONG),
+        ENABLE_METRICS("enable-metrics", SettingType.BOOLEAN),
+        CHECK_FOR_UPDATES("check-for-updates", SettingType.BOOLEAN);
+
+        private final String path;
+        private final SettingType type;
+        
+        SettingIssue(String path, SettingType type) {
+            this.path = path;
+            this.type = type;
+        }
+
+        public String getPath() {
+            return path;
+        }
+
+        public SettingType getType() {
+            return type;
+        }
+
+        public boolean fits(String val) {
+            if (val == null) return false; // fallback to default is elsewhere
+            switch(type) {
+                case DOUBLE:
+                try {
+                    Double.parseDouble(val);
+                    return true;
+                } catch (NumberFormatException e) {
+                    return false;
+                }
+                case INTEGER:
+                try {
+                    Integer.parseInt(val);
+                    return true;
+                } catch (NumberFormatException e) {
+                    return false;
+                }
+                case LONG:
+                try {
+                    Long.parseLong(val);
+                    return true;
+                } catch (NumberFormatException e) {
+                    return false;
+                }
+                case BOOLEAN:
+                try {
+                    Boolean.parseBoolean(val);
+                    return true;
+                } catch (NumberFormatException e) {
+                    return false;
+                }
+                default:
+                throw new IllegalArgumentException("Unrecognized type!" + type);
+            }
+        }
+
+    }
+
+    public static enum SettingType {
+        DOUBLE, INTEGER, LONG, BOOLEAN
     }
 
 }

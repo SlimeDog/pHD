@@ -86,6 +86,7 @@ problem-recreated-plugin-folder: "Problem recreating plugin folder"
 config-recreated: "The config.yml file did not exist and was recreated"
 messages-recreated: "The messages.yml file did not exist and was recreated"
 sqlite-connection-established: "Connection to SQLite has been established"
+problem-in-config: "Problem in config for {key}; expected {type} got {value}"
 
 # Information messages
 #

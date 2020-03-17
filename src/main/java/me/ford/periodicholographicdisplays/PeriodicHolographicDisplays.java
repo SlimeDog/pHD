@@ -3,10 +3,13 @@ package me.ford.periodicholographicdisplays;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import me.ford.periodicholographicdisplays.Settings.SettingIssue;
 import me.ford.periodicholographicdisplays.Settings.StorageTypeException;
 import me.ford.periodicholographicdisplays.commands.PHDCommand;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
@@ -135,7 +138,12 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
     @Override
     public void reloadConfig() {
         super.reloadConfig();
-        if (settings != null) settings.reload();
+        if (settings != null) {
+            Map<SettingIssue, String> issues = settings.reload();
+            for (Entry<SettingIssue, String> entry : issues.entrySet()) {
+                getLogger().info(messages.getProblemWithConfigMessage(entry.getKey(), entry.getValue()));
+            }
+        }
     }
 
     @Override

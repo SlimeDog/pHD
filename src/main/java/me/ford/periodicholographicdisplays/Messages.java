@@ -12,6 +12,7 @@ import org.bukkit.OfflinePlayer;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.DefaultReloadIssue;
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.ReloadIssue;
+import me.ford.periodicholographicdisplays.Settings.SettingIssue;
 import me.ford.periodicholographicdisplays.holograms.IRLTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.MCTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
@@ -248,6 +249,12 @@ public class Messages extends CustomConfigHandler {
 
     public String getUnsetOptionsMessage(List<String> opts) {
         return getMessage("unset-options", "Unset {options}; now using default").replace("{options}", String.join(", ", opts));
+    }
+
+    public String getProblemWithConfigMessage(SettingIssue issue, String value) {
+        return getMessage("problem-in-config", "Problem in config for {key}; expected {type} got {value}")
+                        .replace("{key}", issue.getPath()).replace("{type}", issue.getType().name())
+                        .replace("{value}", value);
     }
 
     public String getConfigReloadedMessage() {
