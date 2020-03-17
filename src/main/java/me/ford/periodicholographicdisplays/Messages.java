@@ -254,6 +254,10 @@ public class Messages extends CustomConfigHandler {
         return getMessage("config-reloaded", "Successfully reloaded configuration, messages, and data");
     }
 
+    public String getSqlConnectionMessage() {
+        return getMessage("sqlite-connection-established", "Connection to SQLite has been established");
+    }
+
     public String getProblemsReloadingConfigMessage(List<ReloadIssue> issues) {
         StringBuilder problems = new StringBuilder();
         for (ReloadIssue issue : issues) {

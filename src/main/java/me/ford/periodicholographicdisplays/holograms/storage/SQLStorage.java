@@ -45,7 +45,7 @@ public class SQLStorage implements Storage {
             String url = "jdbc:sqlite:" + phd.getDataFolder().getAbsolutePath() + "/database.db";
             // create a connection to the database
             conn = DriverManager.getConnection(url);
-            phd.getLogger().info("Connection to SQLite has been established.");
+            phd.getLogger().info(phd.getMessages().getSqlConnectionMessage());
         } catch (SQLException e) {
             phd.getLogger().log(Level.SEVERE, "Problem connecting to database", e);
         }
