@@ -124,9 +124,9 @@ public class Settings {
     }
 
     public static enum SettingIssue {
-        ACTIVATION_DISTANCE("defaults.activation-distance", SettingType.DOUBLE),
-        SHOW_TIME("defaults.show-time", SettingType.INTEGER),
-        SAVE_DELAY("save-frequency", SettingType.LONG),
+        ACTIVATION_DISTANCE("defaults.activation-distance", SettingType.DOUBLE_PLUS),
+        SHOW_TIME("defaults.show-time", SettingType.INTEGER_PLUS),
+        SAVE_DELAY("save-frequency", SettingType.LONG_PLUS),
         ENABLE_METRICS("enable-metrics", SettingType.BOOLEAN),
         CHECK_FOR_UPDATES("check-for-updates", SettingType.BOOLEAN);
 
@@ -150,23 +150,26 @@ public class Settings {
             if (val == null) return false; // fallback to default is elsewhere
             switch(type) {
                 case DOUBLE:
+                case DOUBLE_PLUS:
                 try {
-                    Double.parseDouble(val);
-                    return true;
+                    double d = Double.parseDouble(val);
+                    return type == SettingType.DOUBLE_PLUS ?  d >=0 : true;
                 } catch (NumberFormatException e) {
                     return false;
                 }
                 case INTEGER:
+                case INTEGER_PLUS:
                 try {
-                    Integer.parseInt(val);
-                    return true;
+                    int i = Integer.parseInt(val);
+                    return type == SettingType.INTEGER_PLUS ? i >= 0 : true;
                 } catch (NumberFormatException e) {
                     return false;
                 }
                 case LONG:
+                case LONG_PLUS:
                 try {
-                    Long.parseLong(val);
-                    return true;
+                    long l = Long.parseLong(val);
+                    return type == SettingType.LONG_PLUS ? l >= 0 : true;
                 } catch (NumberFormatException e) {
                     return false;
                 }
@@ -185,7 +188,19 @@ public class Settings {
     }
 
     public static enum SettingType {
-        DOUBLE, INTEGER, LONG, BOOLEAN
+        DOUBLE("DOUBLE"), DOUBLE_PLUS("DOUBLE > 0.0"),
+        INTEGER("INT"), INTEGER_PLUS("INT > 0"),
+        LONG("LONG"), LONG_PLUS("LONG > 0"),
+        BOOLEAN("BOOL");
+
+        private final String name;
+        SettingType(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 
 }

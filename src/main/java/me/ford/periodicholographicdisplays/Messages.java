@@ -253,7 +253,7 @@ public class Messages extends CustomConfigHandler {
 
     public String getProblemWithConfigMessage(SettingIssue issue, String value) {
         return getMessage("problem-in-config", "Problem in config for {key}; expected {type} got {value}")
-                        .replace("{key}", issue.getPath()).replace("{type}", issue.getType().name())
+                        .replace("{key}", issue.getPath()).replace("{type}", issue.getType().getName())
                         .replace("{value}", value);
     }
 
