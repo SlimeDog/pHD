@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
@@ -63,6 +64,11 @@ public class HologramListener implements Listener {
 
     @EventHandler
     public void onWorldChange(PlayerChangedWorldEvent event) {
+        movedTo(event.getPlayer(), event.getPlayer().getLocation());
+    }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
         movedTo(event.getPlayer(), event.getPlayer().getLocation());
     }
 
