@@ -38,12 +38,6 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         this.hook = plugin.getNPCHook();
     }
 
-    // private void scheduleLoad() { // TODO - maybe there's an event?
-    //     plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
-    //         storage.loadHolograms((info) -> loaded(info, false));
-    //     }, 40L); // need to do this later so the holograms are loaded
-    // }
-
     public PeriodicHologramBase getHologram(String name, PeriodicType type) {
         IndividualHologramHandler handler = getHandler(name);
         if (handler == null)
@@ -51,7 +45,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         return handler.getHologram(type);
     }
 
-    public List<PeriodicHologramBase> getHolograms() { // TODO - potentially only show those in loaded chunks
+    public List<PeriodicHologramBase> getHolograms() {
         return getHolograms(false);
     }
 
@@ -63,17 +57,13 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         return holos;
     }
 
-    public List<String> getHologramNames() { // TODO - potentially only show those in loaded chunks
+    public List<String> getHologramNames() {
         List<String> names = new ArrayList<>();
         for (IndividualHologramHandler handler : getHandlers(false)) {
             names.add(handler.getName());
         }
         return names;
     }
-
-    // public void imported(HDHologramInfo info) {
-    //     loaded(info, true);
-    // }
 
     public void loaded(NamedHologram holo, HDHologramInfo info, boolean imported) {
         if (holo.getWorld() != getWorld()) return; // don't load
@@ -156,7 +146,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         }
         if (infos.isEmpty()) return false;
         if (plugin.getSettings().onDebug()) {
-            plugin.debug("in world " + getWorld().getName() + " for reason " + reason.name() + " saving:"); // TODO - remove debug message
+            plugin.debug("in world " + getWorld().getName() + " for reason " + reason.name() + " saving:");
             for (HDHologramInfo info : infos) {
                 plugin.debug("" + info);
             }
