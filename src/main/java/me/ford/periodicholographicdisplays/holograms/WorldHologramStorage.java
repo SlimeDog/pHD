@@ -72,13 +72,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
             PeriodicHologramBase hologram;
             TypeInfo typeInfo = hInfo.getTypeInfo();
             double distance = hInfo.getActivationDistance();
-            if (distance == -1) {
-                distance = plugin.getSettings().getDefaultActivationDistance();
-            }
             long seconds = hInfo.getShowTime();
-            if (seconds == -1) {
-                seconds = plugin.getSettings().getDefaultShowTime();
-            }
             switch (hInfo.getType()) {
                 case MCTIME:
                 hologram = new MCTimeHologram(holo, info.getHoloName(), distance, 
