@@ -44,9 +44,9 @@ public class LegacyWorldTimeListener extends WorldTimeListener {
         phd.getServer().getScheduler().runTask(phd, new WorldChecker(event.getHologram().getLocation().getWorld()));
     }
 
-    private void addWorld(World world) { // TODO - how do I know if I will or will not still have the TickRunnable run this tick ?
+    private void addWorld(World world) {
         phd.debug("Adding world to LegacyWorldTimeListener: " + world.getName()); 
-        worldTimes.put(world, world.getFullTime()); // or does it even matter?
+        worldTimes.put(world, world.getFullTime());
     }
 
     private void removeWorld(World world) {
