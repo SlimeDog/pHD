@@ -137,9 +137,6 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         Set<HDHologramInfo> infos = new HashSet<>();
         for (IndividualHologramHandler handler : getHandlers(false)) {
             if (handler.needsSaved()){
-                for (PeriodicType type : handler.getTypes()) {
-                    plugin.debug(plugin.getMessages().getHologramInfoMessage(handler.getHologram(type), 1));
-                }
                 infos.add(getInfo(handler));
                 handler.markSaved();
             }
