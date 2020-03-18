@@ -176,7 +176,7 @@ public class UnsetSub extends SubCommand {
             return true;
         }
         sender.sendMessage(messages.getUnsetOptionsMessage(usedOptions));
-        storage.save(HologramSaveReason.REMOVE, false);
+        storage.save(HologramSaveReason.CHANGE, false);
         return true;
     }
 
