@@ -53,7 +53,7 @@ public class HologramStorage {
         plugin.getServer().getScheduler().runTaskTimer(plugin, () -> save(HologramSaveReason.PERIODIC, false), delay, delay);
     }
 
-    private void scheduleLoad() { // TODO - maybe there's an event?
+    private void scheduleLoad() {
         plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
             storage.loadHolograms((info) -> loaded(info, false));
         }, 40L); // need to do this later so the holograms are loaded
