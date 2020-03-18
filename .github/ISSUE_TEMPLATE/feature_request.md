@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Suggest an idea for this project
+about: Suggest an new feature
 title: ''
 labels: 'type: feature request'
 assignees: ''
@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 **Is your feature request related to a problem? Please describe.**
-A clear and concise description of  the problem
+A clear and concise description of the problem
 
 **Describe the solution you'd like**
 A clear and concise description of what you want to happen
