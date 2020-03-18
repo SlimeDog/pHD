@@ -17,6 +17,7 @@ import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
+import me.ford.periodicholographicdisplays.holograms.WorldHologramStorageBase.HologramSaveReason;
 
 /**
  * UnsetSub
@@ -175,6 +176,7 @@ public class UnsetSub extends SubCommand {
             return true;
         }
         sender.sendMessage(messages.getUnsetOptionsMessage(usedOptions));
+        storage.save(HologramSaveReason.REMOVE, false);
         return true;
     }
 
