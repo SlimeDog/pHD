@@ -13,6 +13,7 @@ import org.bukkit.OfflinePlayer;
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.DefaultReloadIssue;
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.ReloadIssue;
 import me.ford.periodicholographicdisplays.Settings.SettingIssue;
+import me.ford.periodicholographicdisplays.holograms.AlwaysHologram;
 import me.ford.periodicholographicdisplays.holograms.IRLTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.MCTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
@@ -312,25 +313,53 @@ public class Messages extends CustomConfigHandler {
     public String getHologramInfoMessage(PeriodicHologramBase hologram, int page) {
         String typeinfo = getTypeInfo(hologram, page);
         String typeName = (hologram.getType() == PeriodicType.NTIMES && ((NTimesHologram) hologram).getTimesToShow() < 0) ? PeriodicType.ALWAYS.name() : hologram.getType().name();
-        long showTime = hologram.getShowTime();
-        String time;
-        if (showTime == PeriodicHologramBase.NO_SECONDS) {
-            time = String.valueOf(phd.getSettings().getDefaultShowTime());
-        } else {
-            time = String.valueOf(showTime);
-        }
-        double dist = hologram.getActivationDistance();
-        String distance;
-        if (dist == PeriodicHologramBase.NO_DISTANCE) {
-            distance = String.format("%3.2f", phd.getSettings().getDefaultActivationDistance());
-        } else {
-            distance = String.format("%3.2f", dist);
-        }
+        String time = getShowTimeString(hologram);
+        String distance = getDistanceString(hologram);
         return getMessage("hologram-info", "Hologram '{name}':\nWorld: {world}\nType:{type}\nShowTime:{time}s\nActivationDistance:{distance}\nPermission:{perms}\nTypeInfo: {typeinfo}")
                         .replace("{name}", hologram.getName()).replace("{world}", hologram.getLocation().getWorld().getName())
                         .replace("{type}", typeName).replace("{time}", time)
                         .replace("{typeinfo}", typeinfo).replace("{distance}", distance)
                         .replace("{perms}", hologram.hasPermissions() ? hologram.getPermissions() : "");
+    }
+
+    private String getShowTimeString(PeriodicHologramBase hologram) {
+        long showTime = hologram.getShowTime();
+        boolean isSpecialAlways = hologram.getType() == PeriodicType.ALWAYS;
+        if (isSpecialAlways) {
+            AlwaysHologram always = (AlwaysHologram) hologram;
+            isSpecialAlways = always.isShownOnWorldJoin() || always.isShownWhileInArea();
+        }
+        String time;
+        if (isSpecialAlways) { // whichever special case -> always
+            time = "Always";
+        } else {
+            if (showTime == PeriodicHologramBase.NO_SECONDS) {
+                time = String.valueOf(phd.getSettings().getDefaultShowTime());
+            } else {
+                time = String.valueOf(showTime);
+            }
+        }
+        return time;
+    }
+
+    private String getDistanceString(PeriodicHologramBase hologram) {
+        double dist = hologram.getActivationDistance();
+        boolean isSpecialAlways = hologram.getType() == PeriodicType.ALWAYS;
+        if (isSpecialAlways) {
+            AlwaysHologram always = (AlwaysHologram) hologram;
+            isSpecialAlways = always.isShownOnWorldJoin(); // when shown in area, show default
+        }
+        String distance;
+        if (isSpecialAlways) {
+            distance = "InWorld";
+        } else {
+            if (dist == PeriodicHologramBase.NO_DISTANCE) {
+                distance = String.format("%3.2f", phd.getSettings().getDefaultActivationDistance());
+            } else {
+                distance = String.format("%3.2f", dist);
+            }
+        }
+        return distance;
     }
 
     public String getTypeInfo(PeriodicHologramBase hologram, int page) {
