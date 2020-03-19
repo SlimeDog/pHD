@@ -15,7 +15,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
-import me.ford.periodicholographicdisplays.Settings;
+import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.holograms.events.HologramsLoadedEvent;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.IRLTimeTypeInfo;
@@ -54,12 +54,11 @@ public class YAMLStorage implements Storage {
         if (typeInfo instanceof NullTypeInfo) { // just created the section - therefore I can just return
             return;
         }
-        Settings settings = phd.getSettings();
         section.set("type", info.getType().name());
-        if (info.getActivationDistance() != settings.getDefaultActivationDistance()) {
+        if (info.getActivationDistance() != PeriodicHologramBase.NO_DISTANCE) {
             section.set("activation-distance", info.getActivationDistance());
         }
-        if (info.getShowTime() != settings.getDefaultShowTime()) {
+        if (info.getShowTime() != PeriodicHologramBase.NO_SECONDS) {
             section.set("show-time", info.getShowTime());
         }
         section.set("permission", info.getPermissions());
@@ -115,9 +114,8 @@ public class YAMLStorage implements Storage {
         } catch (IllegalArgumentException e) {
             throw new HologramLoadException("Unable to parse type of hologram: " + section.getName());
         }
-        Settings settings = phd.getSettings();
-        double distance = section.getDouble("activation-distance", settings.getDefaultActivationDistance());
-        long showTime = section.getLong("show-time", settings.getDefaultShowTime());
+        double distance = section.getDouble("activation-distance", PeriodicHologramBase.NO_DISTANCE);
+        long showTime = section.getLong("show-time", PeriodicHologramBase.NO_SECONDS);
         String perms = section.getString("permission"); // defaults to null
         final TypeInfo typeInfo;
         switch (type) {

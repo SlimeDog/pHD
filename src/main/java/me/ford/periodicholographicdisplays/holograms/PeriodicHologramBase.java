@@ -23,8 +23,9 @@ public abstract class PeriodicHologramBase {
     private final PeriodicHolographicDisplays plugin = JavaPlugin.getPlugin(PeriodicHolographicDisplays.class);
     private final Set<UUID> beingShownTo = new HashSet<>();
     private final String name;
-    private double activationDistance;
+    private double activationDistance; // internal
     private double squareDistance;
+    private long showTime; // internal
     private long showTimeTicks;
     private boolean hasChanged = false;
     private final PeriodicType type; // in order to change this, I'll create a new instance
@@ -41,6 +42,7 @@ public abstract class PeriodicHologramBase {
         this.name = name;
         this.activationDistance = activationDistance;
         this.squareDistance = activationDistance * activationDistance;
+        this.showTime = showTime;
         this.showTimeTicks = showTime * 20L;// seconds -> ticks
         this.type = type;
         this.hasChanged = isNew;
@@ -57,8 +59,12 @@ public abstract class PeriodicHologramBase {
     }
     
     public void setActivationDistance(double distance) {
+        setActivationDistance(distance, distance * distance);
+    }
+
+    private void setActivationDistance(double distance, double distanceSquared) {
         this.activationDistance = distance;
-        this.squareDistance = distance * distance;
+        this.squareDistance = distanceSquared;
         markChanged();
     }
 
@@ -71,8 +77,17 @@ public abstract class PeriodicHologramBase {
     }
 
     public void setShowTime(int time) {
-        showTimeTicks = time * 20L; // second -> ticks
+        setShowTime(time, time * 20L);
+    }
+
+    private void setShowTime(int time, long ticks) {
+        showTime = time;
+        showTimeTicks = ticks;
         markChanged();
+    }
+
+    public long getShowTime() {
+        return showTime;
     }
 
     public long getShowTimeTicks() {
@@ -160,15 +175,13 @@ public abstract class PeriodicHologramBase {
     }
 
     public void defaultDistance(Settings settings) {
-        setActivationDistance(settings.getDefaultActivationDistance());
+        double defDist = settings.getDefaultActivationDistance();
+        setActivationDistance(NO_DISTANCE, defDist * defDist);
     }
 
     public void defaultShowtime(Settings settings) {
         int time = settings.getDefaultShowTime();
-        if (getType() == PeriodicType.ALWAYS) {
-            time = PeriodicHologramBase.NO_SECONDS;
-        }
-        setShowTime(time);
+        setShowTime(NO_SECONDS, time * 20L);
     }
 
     protected PeriodicHolographicDisplays getPlugin() {

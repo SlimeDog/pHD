@@ -14,7 +14,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
 
 import me.ford.periodicholographicdisplays.Messages;
-import me.ford.periodicholographicdisplays.Settings;
 import me.ford.periodicholographicdisplays.holograms.AlwaysHologram;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.IRLTimeHologram;
@@ -34,14 +33,12 @@ public class ManageSub extends OptionPairSetSub {
     private static final String USAGE = "/phd manage {hologram} {type} [times {integer}] [time {hh:mm}] [seconds {integer}] [distance {integer|decimal}] [permission {string}]";
     private final HologramStorage storage;
     private final LuckPermsHook hook;
-    private final Settings settings;
     private final Messages messages;
     private final List<String> settables = Arrays.asList("times", "time", "seconds", "distance", "permission");
 
-    public ManageSub(HologramStorage storage, LuckPermsHook hook, Settings settings, Messages messages) {
+    public ManageSub(HologramStorage storage, LuckPermsHook hook, Messages messages) {
         this.storage = storage;
         this.hook = hook;
-        this.settings = settings;
         this.messages = messages;
     }
 
@@ -174,11 +171,8 @@ public class ManageSub extends OptionPairSetSub {
     // TODO - SRP - this should throw exceptions that are caught and the appropriate message sent in onCommand
     private PeriodicHologramBase adoptHologram(CommandSender sender, NamedHologram holo, PeriodicType type, Map<String, String> optionPairs) {
         PeriodicHologramBase existing;
-        double defaultDistance = settings.getDefaultActivationDistance();
-        int showTime = settings.getDefaultShowTime();
-        if (type == PeriodicType.ALWAYS) {
-            showTime = PeriodicHologramBase.NO_SECONDS;
-        }
+        double defaultDistance = PeriodicHologramBase.NO_DISTANCE;
+        int showTime = PeriodicHologramBase.NO_SECONDS;
         String perms = null; // default to nothing
         switch (type) {
             case IRLTIME:

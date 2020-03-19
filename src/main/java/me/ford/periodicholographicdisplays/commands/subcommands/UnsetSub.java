@@ -68,10 +68,10 @@ public class UnsetSub extends SubCommand {
             if (!hologram.hasPermissions()) {
                 options.remove("permission");
             }
-            if (hologram.getActivationDistance() == settings.getDefaultActivationDistance()) {
+            if (hologram.getActivationDistance() == PeriodicHologramBase.NO_DISTANCE) {
                 options.remove("distance");
             }
-            if (hologram.getShowTimeTicks() == settings.getDefaultShowTime() * 20L) {
+            if (hologram.getShowTime() == PeriodicHologramBase.NO_SECONDS) {
                 options.remove("seconds");
             }
             if (type != PeriodicType.NTIMES) {

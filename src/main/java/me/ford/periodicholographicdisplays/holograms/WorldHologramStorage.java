@@ -157,7 +157,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
             TypeInfo typeInfo = getTypeInfo(type, holo);
             if (!(typeInfo instanceof NullTypeInfo)) {
                 distance = holo.getActivationDistance();
-                seconds = holo.getShowTimeTicks() / 20L;
+                seconds = holo.getShowTime();
                 perms = holo.getPermissions();
             }
             HologramInfo hInfo = new HologramInfo(handler.getName(), type, distance, 

@@ -312,10 +312,24 @@ public class Messages extends CustomConfigHandler {
     public String getHologramInfoMessage(PeriodicHologramBase hologram, int page) {
         String typeinfo = getTypeInfo(hologram, page);
         String typeName = (hologram.getType() == PeriodicType.NTIMES && ((NTimesHologram) hologram).getTimesToShow() < 0) ? PeriodicType.ALWAYS.name() : hologram.getType().name();
+        long showTime = hologram.getShowTime();
+        String time;
+        if (showTime == PeriodicHologramBase.NO_SECONDS) {
+            time = String.valueOf(phd.getSettings().getDefaultShowTime());
+        } else {
+            time = String.valueOf(showTime);
+        }
+        double dist = hologram.getActivationDistance();
+        String distance;
+        if (dist == PeriodicHologramBase.NO_DISTANCE) {
+            distance = String.format("%3.2f", phd.getSettings().getDefaultActivationDistance());
+        } else {
+            distance = String.format("%3.2f", dist);
+        }
         return getMessage("hologram-info", "Hologram '{name}':\nWorld: {world}\nType:{type}\nShowTime:{time}s\nActivationDistance:{distance}\nPermission:{perms}\nTypeInfo: {typeinfo}")
                         .replace("{name}", hologram.getName()).replace("{world}", hologram.getLocation().getWorld().getName())
-                        .replace("{type}", typeName).replace("{time}", String.valueOf(hologram.getShowTimeTicks()/20))
-                        .replace("{typeinfo}", typeinfo).replace("{distance}", String.format("%3.2f", hologram.getActivationDistance()))
+                        .replace("{type}", typeName).replace("{time}", time)
+                        .replace("{typeinfo}", typeinfo).replace("{distance}", distance)
                         .replace("{perms}", hologram.hasPermissions() ? hologram.getPermissions() : "");
     }
 
