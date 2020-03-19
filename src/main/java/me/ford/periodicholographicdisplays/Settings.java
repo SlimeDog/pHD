@@ -153,7 +153,7 @@ public class Settings {
                 case DOUBLE_PLUS:
                 try {
                     double d = Double.parseDouble(val);
-                    return type == SettingType.DOUBLE_PLUS ?  d >=0 : true;
+                    return type == SettingType.DOUBLE_PLUS ?  d > 0 : true;
                 } catch (NumberFormatException e) {
                     return false;
                 }
@@ -161,7 +161,7 @@ public class Settings {
                 case INTEGER_PLUS:
                 try {
                     int i = Integer.parseInt(val);
-                    return type == SettingType.INTEGER_PLUS ? i >= 0 : true;
+                    return type == SettingType.INTEGER_PLUS ? i > 0 : true;
                 } catch (NumberFormatException e) {
                     return false;
                 }
@@ -169,7 +169,7 @@ public class Settings {
                 case LONG_PLUS:
                 try {
                     long l = Long.parseLong(val);
-                    return type == SettingType.LONG_PLUS ? l >= 0 : true;
+                    return type == SettingType.LONG_PLUS ? l > 0 : true;
                 } catch (NumberFormatException e) {
                     return false;
                 }
