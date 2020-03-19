@@ -26,7 +26,7 @@ public class AlwaysHologram extends NTimesHologram {
     }
 
     public boolean isForever() {
-        return NO_SECONDS*20L == getShowTimeTicks();
+        return NO_SECONDS == getShowTime();
     }
 
     public void leftArea(Player player) {
