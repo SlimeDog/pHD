@@ -51,7 +51,7 @@ public class IndividualHologramHandler {
         Bukkit.getPluginManager().callEvent(new StoppedManagingHologramEvent(hologram));
         holograms.remove(hologram.getType());
         if (holograms.isEmpty()) hologram.markRemoved();
-        toSave.put(hologram.getType(), null); // i.e to remove
+        if (markForRemoval) toSave.put(hologram.getType(), null); // i.e to remove
     }
 
     Hologram getHologram() {
