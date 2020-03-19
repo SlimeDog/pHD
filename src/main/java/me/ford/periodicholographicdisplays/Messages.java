@@ -331,7 +331,7 @@ public class Messages extends CustomConfigHandler {
         }
         String time;
         if (isSpecialAlways) { // whichever special case -> always
-            time = "Always";
+            time = "Alway"; // add s as in seconds
         } else {
             if (showTime == PeriodicHologramBase.NO_SECONDS) {
                 time = String.valueOf(phd.getSettings().getDefaultShowTime());
