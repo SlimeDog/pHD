@@ -40,10 +40,16 @@ public abstract class PeriodicHologramBase {
         Validate.notNull(hologram, "Hologram cannot be null!");
         this.hologram = hologram;
         this.name = name;
-        this.activationDistance = activationDistance;
-        this.squareDistance = activationDistance * activationDistance;
-        this.showTime = showTime;
-        this.showTimeTicks = showTime * 20L;// seconds -> ticks
+        if (activationDistance == NO_DISTANCE) {
+            defaultDistance(plugin.getSettings());
+        } else {
+            setActivationDistance(activationDistance);
+        }
+        if (showTime == NO_SECONDS) {
+            defaultShowtime(plugin.getSettings());
+        } else {
+            setShowTime((int) showTime);
+        }
         this.type = type;
         this.hasChanged = isNew;
         this.perms = perms;
