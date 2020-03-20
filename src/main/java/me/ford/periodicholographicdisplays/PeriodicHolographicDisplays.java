@@ -111,6 +111,20 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         }
         boolean useDbBefore = settings.useDatabase();
         boolean useDbAfter;
+        
+        useDbAfter = settings.useDatabase();
+        messages.reloadCustomConfig();
+        issues.addAll(getSettingIssues());
+        if (issues.isEmpty()) {
+            holograms.reload(useDbBefore != useDbAfter);
+        } else {
+            holograms.reload(false); // assume we have the same database type
+        }
+        return issues;
+    }
+
+    private List<ReloadIssue> getSettingIssues() {
+        List<ReloadIssue> issues = new ArrayList<>();
         Map<SettingIssue, String> settingIssues = null;
         try {
             settingIssues = reloadMyConfig();
@@ -119,13 +133,6 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
             issue.setExtra(e.getType());
             issues.add(issue);
             settings.setDefaultDatabaseInternal();
-        }
-        useDbAfter = settings.useDatabase();
-        messages.reloadCustomConfig();
-        if (issues.isEmpty()) {
-            holograms.reload(useDbBefore != useDbAfter);
-        } else {
-            holograms.reload(false); // assume we have the same database type
         }
         if (settingIssues != null && !settingIssues.isEmpty()) {
             for (Entry<SettingIssue, String> entry : settingIssues.entrySet()) {
