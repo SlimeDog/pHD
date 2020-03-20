@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
@@ -33,6 +34,9 @@ public class ReloadSub extends SubCommand {
     public boolean onCommand(CommandSender sender, String[] args) {
         List<ReloadIssue> issues = phd.reload();
         if (issues.isEmpty()) {
+            if (phd.getSettings().useDatabase() && (sender instanceof Player)) {
+                sender.sendMessage(messages.getSqlConnectionMessage());
+            }
             sender.sendMessage(messages.getConfigReloadedMessage());
         } else {
             sender.sendMessage(messages.getProblemsReloadingConfigMessage(issues));
