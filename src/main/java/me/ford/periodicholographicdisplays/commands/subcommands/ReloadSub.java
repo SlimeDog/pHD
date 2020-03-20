@@ -39,7 +39,11 @@ public class ReloadSub extends SubCommand {
             }
             sender.sendMessage(messages.getConfigReloadedMessage());
         } else {
-            sender.sendMessage(messages.getProblemsReloadingConfigMessage(issues));
+            String msg = messages.getProblemsReloadingConfigMessage(issues);
+            phd.getLogger().severe(msg);
+            if (sender instanceof Player) {
+                sender.sendMessage(msg);
+            }
         }
         return true;
     }
