@@ -135,7 +135,13 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         }
         if (settingIssues != null && !settingIssues.isEmpty()) {
             for (Entry<SettingIssue, String> entry : settingIssues.entrySet()) {
-                issues.add(new SimpleReloadIssue(messages.getProblemWithConfigMessage(entry.getKey(), entry.getValue()), null));
+                if (entry.getKey() == SettingIssue.STORAGE) {
+                    DefaultReloadIssue issue = DefaultReloadIssue.ILLEGA_STORAGE_TYPE;
+                    issue.setExtra(entry.getValue());
+                    issues.add(issue);
+                } else {
+                    issues.add(new SimpleReloadIssue(messages.getProblemWithConfigMessage(entry.getKey(), entry.getValue()), null));
+                }
             }
         }
         return issues;

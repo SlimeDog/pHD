@@ -85,9 +85,8 @@ public class Settings {
             case "YAML":
             return false;
             case "SQLITE":
-            return true;
             default:
-            throw new StorageTypeException(type);
+            return true;
         }
     }
 
@@ -128,7 +127,8 @@ public class Settings {
         SHOW_TIME("defaults.show-time", SettingType.INTEGER_PLUS),
         SAVE_DELAY("save-frequency", SettingType.LONG_PLUS),
         ENABLE_METRICS("enable-metrics", SettingType.BOOLEAN),
-        CHECK_FOR_UPDATES("check-for-updates", SettingType.BOOLEAN);
+        CHECK_FOR_UPDATES("check-for-updates", SettingType.BOOLEAN),
+        STORAGE("storage-type", SettingType.STORAGE);
 
         private final String path;
         private final SettingType type;
@@ -180,6 +180,8 @@ public class Settings {
                 } catch (NumberFormatException e) {
                     return false;
                 }
+                case STORAGE:
+                    return val.equalsIgnoreCase("YAML") || val.equalsIgnoreCase("SQLITE");
                 default:
                 throw new IllegalArgumentException("Unrecognized type!" + type);
             }
@@ -191,7 +193,8 @@ public class Settings {
         DOUBLE("DOUBLE"), DOUBLE_PLUS("DOUBLE > 0.0"),
         INTEGER("INT"), INTEGER_PLUS("INT > 0"),
         LONG("LONG"), LONG_PLUS("LONG > 0"),
-        BOOLEAN("BOOL");
+        BOOLEAN("BOOL"),
+        STORAGE("STORAGE");
 
         private final String name;
         SettingType(String name) {
