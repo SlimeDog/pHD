@@ -50,6 +50,7 @@ public class IndividualHologramHandler {
         Validate.isTrue(this.hologram == hologram.getHologram(), "Can only add pHD holograms that affect the same HD hologram");
         Bukkit.getPluginManager().callEvent(new StoppedManagingHologramEvent(hologram));
         holograms.remove(hologram.getType());
+        hologram.resetVisibility();
         if (holograms.isEmpty()) hologram.markRemoved();
         if (markForRemoval) toSave.put(hologram.getType(), null); // i.e to remove
     }
