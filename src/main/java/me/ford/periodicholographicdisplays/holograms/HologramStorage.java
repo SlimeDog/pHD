@@ -49,7 +49,11 @@ public class HologramStorage {
     }
 
     private void scheduleSave() {
-        long delay = plugin.getSettings().getSaveDelay() * 20L;
+        long seconds = plugin.getSettings().getSaveDelay();
+        if (seconds < 20) {
+            plugin.getLogger().warning(plugin.getMessages().getLowSaveDelayMessage(seconds));
+        }
+        long delay = seconds * 20L;
         plugin.getServer().getScheduler().runTaskTimer(plugin, () -> save(HologramSaveReason.PERIODIC, false), delay, delay);
     }
 

@@ -431,6 +431,11 @@ public class Messages extends CustomConfigHandler {
         return msg;
     }
 
+    public String getLowSaveDelayMessage(long seconds) {
+        return getMessage("save-frequency-low", "Configuration save-frequency set to {value} seconds may result in decreased performance")
+                        .replace("{value}", String.valueOf(seconds));
+    }
+
     public String getMessage(String path, String def) {
         return ChatColor.translateAlternateColorCodes('&', (getCustomConfig().getString(path, def)));
     }
