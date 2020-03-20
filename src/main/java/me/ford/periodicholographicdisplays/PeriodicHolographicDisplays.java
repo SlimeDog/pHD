@@ -39,12 +39,6 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         saveDefaultConfig();
         messages = new Messages(this);
         settings = new Settings(this);
-        try {
-            settings.useDatabase();
-        } catch (StorageTypeException e) {
-            getLogger().warning(messages.getIllegalStorageMessage(e.getType()));
-            settings.setDefaultDatabaseInternal();
-        }
         holograms = new HologramStorage(this);
 
         // LuckPerms hook if possible
