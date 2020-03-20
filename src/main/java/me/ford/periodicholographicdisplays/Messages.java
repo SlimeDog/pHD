@@ -315,7 +315,7 @@ public class Messages extends CustomConfigHandler {
         String typeName = (hologram.getType() == PeriodicType.NTIMES && ((NTimesHologram) hologram).getTimesToShow() < 0) ? PeriodicType.ALWAYS.name() : hologram.getType().name();
         String time = getShowTimeString(hologram);
         String distance = getDistanceString(hologram);
-        return getMessage("hologram-info", "Hologram '{name}':\nWorld: {world}\nType:{type}\nShowTime:{time}s\nActivationDistance:{distance}\nPermission:{perms}\nTypeInfo: {typeinfo}")
+        return getMessage("hologram-info", "Hologram '{name}':\nWorld: {world}\nType: {type}\nShowTime: {time} seconds\nActivationDistance: {distance}\nPermission: {perms}\nTypeInfo: {typeinfo}")
                         .replace("{name}", hologram.getName()).replace("{world}", hologram.getLocation().getWorld().getName())
                         .replace("{type}", typeName).replace("{time}", time)
                         .replace("{typeinfo}", typeinfo).replace("{distance}", distance)
