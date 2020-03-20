@@ -62,6 +62,7 @@ public class IRLTimeHologram extends PeriodicHologramBase {
     private void showInRange() {
         World world = getLocation().getWorld();
         double dist = getActivationDistance();
+        if (dist == NO_DISTANCE) dist = plugin.getSettings().getDefaultActivationDistance();
         for (Entity entity : world.getNearbyEntities(getLocation(), dist, dist, dist, (e) -> e.getType() == EntityType.PLAYER)) {
             Player player = (Player) entity;
             show(player);

@@ -30,8 +30,7 @@ public class MCTimeHologram extends PeriodicHologramBase {
         this.atTime = atTime;
         plugin = JavaPlugin.getPlugin(PeriodicHolographicDisplays.class);
         displayer = new MCTimeHologramDisplayer();
-        long curDelay = (atTime - hologram.getWorld().getTime())%24000;
-        task = plugin.getServer().getScheduler().runTaskTimer(plugin, displayer, curDelay, DELAY);
+        schedule();
     }
 
     public long getTime() {
@@ -40,7 +39,15 @@ public class MCTimeHologram extends PeriodicHologramBase {
 
     public void timeChanged(long amount) {
         if (amount == 0) return;
-        task.cancel();
+        schedule(amount);
+    }
+
+    private void schedule() {
+        schedule(0);
+    }
+
+    private void schedule(long amount) {
+        if (task != null) task.cancel();
         long newTime = (getLocation().getWorld().getTime() + amount)%24000;
         long curDelay = (atTime - newTime)%24000;// in MC time = ticks
         task = plugin.getServer().getScheduler().runTaskTimer(plugin, displayer, curDelay, DELAY);
@@ -48,6 +55,7 @@ public class MCTimeHologram extends PeriodicHologramBase {
 
     public void setTime(long time) {
         this.atTime = time;
+        schedule();
     }
 
     @Override
@@ -58,6 +66,7 @@ public class MCTimeHologram extends PeriodicHologramBase {
     private void showInRange() {
         World world = getLocation().getWorld();
         double dist = getActivationDistance();
+        if (dist == NO_DISTANCE) dist = plugin.getSettings().getDefaultActivationDistance();
         for (Entity entity : world.getNearbyEntities(getLocation(), dist, dist, dist, (e) -> e.getType() == EntityType.PLAYER)) {
             Player player = (Player) entity;
             show(player);
