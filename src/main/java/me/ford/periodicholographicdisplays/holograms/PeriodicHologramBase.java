@@ -193,5 +193,13 @@ public abstract class PeriodicHologramBase {
     protected PeriodicHolographicDisplays getPlugin() {
         return plugin;
     }
+
+    public void resetVisibility() {
+        for (UUID id : beingShownTo) {
+            Player player = plugin.getServer().getPlayer(id);
+            if (player != null) hideFrom(player);
+        }
+        beingShownTo.clear();
+    }
     
 }

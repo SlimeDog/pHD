@@ -145,6 +145,7 @@ public class SetSub extends OptionPairSetSub {
             }
             return true;
         }
+        existing.resetVisibility();
         storage.save(HologramSaveReason.CHANGE, false);
         sender.sendMessage(messages.getSetNewOptionsMessage(holoName, type, optionPairs));
         return true;
