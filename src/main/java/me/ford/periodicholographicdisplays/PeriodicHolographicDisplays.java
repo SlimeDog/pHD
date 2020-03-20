@@ -74,6 +74,14 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
 
         // commands
         getCommand("phd").setExecutor(new PHDCommand(this));
+
+        // settings check
+        List<ReloadIssue> issues = getSettingIssues();
+        if (!issues.isEmpty()) {
+            getLogger().severe(messages.getProblemsReloadingConfigMessage(issues));
+            getLogger().severe("Disabling plugin!");
+            getServer().getPluginManager().disablePlugin(this);
+        }
         
         if (settings.checkForUpdates()) {
             // TODO - check for updates
@@ -114,7 +122,14 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         
         useDbAfter = settings.useDatabase();
         messages.reloadCustomConfig();
-        issues.addAll(getSettingIssues());
+        List<ReloadIssue> settingIssues = getSettingIssues();
+        if (!settingIssues.isEmpty()) {
+            getServer().getScheduler().runTask(this, () -> {
+                getLogger().severe("Disabling plugin!");
+                getServer().getPluginManager().disablePlugin(this);
+            });
+        }
+        issues.addAll(settingIssues);
         if (issues.isEmpty()) {
             holograms.reload(useDbBefore != useDbAfter);
         } else {
