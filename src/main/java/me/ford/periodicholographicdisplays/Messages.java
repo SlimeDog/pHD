@@ -331,10 +331,10 @@ public class Messages extends CustomConfigHandler {
         }
         String time;
         if (isSpecialAlways) { // whichever special case -> always
-            time = "Alway"; // add s as in seconds
+            time = "Always"; // add s as in seconds
         } else {
             if (showTime == PeriodicHologramBase.NO_SECONDS) {
-                time = String.valueOf(phd.getSettings().getDefaultShowTime());
+                time = String.valueOf(phd.getSettings().getDefaultShowTime()) + " (default)";
             } else {
                 time = String.valueOf(showTime);
             }
@@ -354,7 +354,7 @@ public class Messages extends CustomConfigHandler {
             distance = "InWorld";
         } else {
             if (dist == PeriodicHologramBase.NO_DISTANCE) {
-                distance = String.format("%3.2f", phd.getSettings().getDefaultActivationDistance());
+                distance = String.format("%3.2f (default)", phd.getSettings().getDefaultActivationDistance());
             } else {
                 distance = String.format("%3.2f", dist);
             }
