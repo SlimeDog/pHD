@@ -45,7 +45,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         try {
             messages.getCustomConfig();
         } catch (IllegalStateException e) {
-            getLogger().severe("Disabling plugin!");
+            getLogger().severe(messages.getDisablingMessage());
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
@@ -88,7 +88,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         List<ReloadIssue> issues = getSettingIssues();
         if (!issues.isEmpty()) {
             getLogger().severe(messages.getProblemsReloadingConfigMessage(issues));
-            getLogger().severe("Disabling plugin!");
+            getLogger().severe(messages.getDisablingMessage());
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
@@ -133,14 +133,14 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         useDbAfter = settings.useDatabase();
         if (!messages.reloadCustomConfig()) {
             getServer().getScheduler().runTask(this, () -> {
-                getLogger().severe("Disabling plugin!");
+                getLogger().severe(messages.getDisablingMessage());
                 getServer().getPluginManager().disablePlugin(this);
             });
         }
         List<ReloadIssue> settingIssues = getSettingIssues();
         if (!settingIssues.isEmpty()) {
             getServer().getScheduler().runTask(this, () -> {
-                getLogger().severe("Disabling plugin!");
+                getLogger().severe(messages.getDisablingMessage());
                 getServer().getPluginManager().disablePlugin(this);
             });
         }

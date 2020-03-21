@@ -36,6 +36,10 @@ public class Messages extends CustomConfigHandler {
         this.phd = phd;
     }
 
+    public String getDisablingMessage() {
+        return getMessage("disabling-plugin", "Disabling plugin!");
+    }
+
     public String getNextPageHint(String command) {
         return getMessage("next-page-hint", "TIP: See the next page with {command}").replace("{command}", command);
     }
