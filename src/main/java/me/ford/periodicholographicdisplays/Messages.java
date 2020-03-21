@@ -36,6 +36,10 @@ public class Messages extends CustomConfigHandler {
         this.phd = phd;
     }
 
+    public String getIncorrectMessages() {
+        return getMessage("incorrect-messages", "Messages.yml is incorrectly formatted");
+    }
+
     public String getDisablingMessage() {
         return getMessage("disabling-plugin", "Disabling plugin!");
     }

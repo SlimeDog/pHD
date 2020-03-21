@@ -132,6 +132,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         
         useDbAfter = settings.useDatabase();
         if (!messages.reloadCustomConfig()) {
+            issues.add(new SimpleReloadIssue(messages.getIncorrectMessages(), null));
             getServer().getScheduler().runTask(this, () -> {
                 getLogger().severe(messages.getDisablingMessage());
                 getServer().getPluginManager().disablePlugin(this);
