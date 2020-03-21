@@ -74,7 +74,7 @@ unrecognized-conversion: "Cannot convert from {from} to {to} - unrecognized stor
 started-converting: "Started converting from {from} to {to}"
 done-converting: "Done converting from {from} to {to}"
 target-storage-has-data: "The target storage type {type} already has data; use --force if you wish to override that data"
-illegal-storage-type: "Illegal storage type {type} - only YAML and SQLITE are supported - reverting to default (SQLITE)"
+illegal-storage-type: "Illegal storage type {type} - only YAML and SQLITE are supported"
 
 # Messages produced by /phd reload
 #
@@ -87,6 +87,7 @@ config-recreated: "The config.yml file did not exist and was recreated"
 messages-recreated: "The messages.yml file did not exist and was recreated"
 sqlite-connection-established: "Connection to SQLite has been established"
 problem-in-config: "Problem in config for {key}; expected {type} got {value}"
+save-frequency-low: "Configuration save-frequency set to {value} seconds may result in decreased performance"
 
 # Information messages
 #
@@ -97,4 +98,3 @@ legacy-version-mctime: "MCTIME holograms can behave unpredicably because of the 
 no-luckperms: "LuckPerms not found - unable to readjust permissions on the fly or tab-complete permissions"
 invalid-page: "Page needs to be between 1 and {max-page}"
 next-page-hint: "TIP: See the next page with &n{command}&r"
-save-frequency-low: "Configuration save-frequency set to {value} seconds may result in decreased performance"
