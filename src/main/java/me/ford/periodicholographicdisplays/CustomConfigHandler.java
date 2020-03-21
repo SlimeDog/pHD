@@ -23,11 +23,12 @@ public class CustomConfigHandler {
 		this.fileName = fileName;
 	}
 
-	public void reloadCustomConfig() {
+	public boolean reloadCustomConfig() {
 		if (customConfigFile == null) {
 			customConfigFile = new File(plugin.getDataFolder(), fileName);
 		}
 		customConfig = YamlConfiguration.loadConfiguration(customConfigFile);
+		if (customConfig.getKeys(true).isEmpty()) return false;
 
 		// Look for defaults in the jar
 		Reader defConfigStream = null;
@@ -37,17 +38,21 @@ public class CustomConfigHandler {
 				defConfigStream = new InputStreamReader(resource, "UTF8");
 			} catch (UnsupportedEncodingException e) {
 				plugin.getLogger().log(Level.SEVERE, "Unsupported encoding while loading resource " + fileName, e);
+				return false;
 			}
 		}
 		if (defConfigStream != null) {
 			YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
 			customConfig.setDefaults(defConfig);
 		}
+		return true;
 	}
 
 	public FileConfiguration getCustomConfig() {
 		if (customConfig == null) {
-			reloadCustomConfig();
+			if (!reloadCustomConfig()) {
+				throw new IllegalStateException("Failed to load custom config!");
+			}
 		}
 		return customConfig;
 	}

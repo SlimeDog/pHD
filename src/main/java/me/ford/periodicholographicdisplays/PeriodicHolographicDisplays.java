@@ -41,6 +41,15 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         settings = new Settings(this);
         holograms = new HologramStorage(this);
 
+        // check messages
+        try {
+            messages.getCustomConfig();
+        } catch (IllegalStateException e) {
+            getLogger().severe("Disabling plugin!");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
         // LuckPerms hook if possible
         try {
             lpHook = new LuckPermsHook(this);
@@ -81,6 +90,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
             getLogger().severe(messages.getProblemsReloadingConfigMessage(issues));
             getLogger().severe("Disabling plugin!");
             getServer().getPluginManager().disablePlugin(this);
+            return;
         }
         
         if (settings.checkForUpdates()) {
@@ -121,7 +131,12 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         boolean useDbAfter;
         
         useDbAfter = settings.useDatabase();
-        messages.reloadCustomConfig();
+        if (!messages.reloadCustomConfig()) {
+            getServer().getScheduler().runTask(this, () -> {
+                getLogger().severe("Disabling plugin!");
+                getServer().getPluginManager().disablePlugin(this);
+            });
+        }
         List<ReloadIssue> settingIssues = getSettingIssues();
         if (!settingIssues.isEmpty()) {
             getServer().getScheduler().runTask(this, () -> {
