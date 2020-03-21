@@ -82,7 +82,7 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getIllegalStorageMessage(String type) {
-        return getMessage("illegal-storage-type", "Illegal storage type {type} - only YAML and SQLITE are supported - reverting to default (SQLITE)")
+        return getMessage("illegal-storage-type", "Illegal storage type {type} - only YAML and SQLITE are supported")
                         .replace("{type}", type);
     }
 
