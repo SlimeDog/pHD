@@ -46,9 +46,11 @@ public class MCTimeHologram extends PeriodicHologramBase {
         schedule(0);
     }
 
+    private final static long TIME_FIX = 6000L;
+
     private void schedule(long amount) {
         if (task != null) task.cancel();
-        long newTime = (getLocation().getWorld().getTime() + amount)%24000;
+        long newTime = (getLocation().getWorld().getTime() + amount + TIME_FIX)%24000;
         long curDelay = (atTime - newTime)%24000;// in MC time = ticks
         task = plugin.getServer().getScheduler().runTaskTimer(plugin, displayer, curDelay, DELAY);
     }
