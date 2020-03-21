@@ -43,6 +43,7 @@ public class ReloadSub extends SubCommand {
             phd.getLogger().severe(msg);
             if (sender instanceof Player) {
                 sender.sendMessage(msg);
+                sender.sendMessage(messages.getDisablingMessage());
             }
         }
         return true;
