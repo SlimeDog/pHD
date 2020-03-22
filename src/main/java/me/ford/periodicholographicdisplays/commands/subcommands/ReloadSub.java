@@ -38,6 +38,11 @@ public class ReloadSub extends SubCommand {
                 sender.sendMessage(messages.getSqlConnectionMessage());
             }
             sender.sendMessage(messages.getConfigReloadedMessage());
+            String typeMessage = messages.getActiveStorageMessage(phd.getSettings().useDatabase());
+            sender.sendMessage(typeMessage);
+            if (sender instanceof Player) {
+                phd.getLogger().info(typeMessage);
+            }
         } else {
             String msg = messages.getProblemsReloadingConfigMessage(issues);
             phd.getLogger().severe(msg);

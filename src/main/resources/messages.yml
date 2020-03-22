@@ -90,6 +90,7 @@ problem-in-config: "Problem in config for {key}; expected {type} got {value}"
 save-frequency-low: "Configuration save-frequency set to {value} seconds may result in decreased performance"
 incorrect-messages: "Messages.yml is incorrectly formatted"
 disabling-plugin: "Disabling plugin!"
+active-storage: "Active storage-type is {storage}"
 
 # Information messages
 #

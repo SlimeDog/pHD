@@ -36,6 +36,11 @@ public class Messages extends CustomConfigHandler {
         this.phd = phd;
     }
 
+    public String getActiveStorageMessage(boolean useDatabase) {
+        return getMessage("active-storage", "Active storage-type is {storage}")
+                        .replace("{storage}", useDatabase ? "SQLITE" : "YAML");
+    }
+
     public String getIncorrectMessages() {
         return getMessage("incorrect-messages", "Messages.yml is incorrectly formatted");
     }
