@@ -3,7 +3,7 @@ package me.ford.periodicholographicdisplays.commands.subcommands;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 import org.bukkit.command.CommandSender;
@@ -23,7 +23,7 @@ public abstract class OptionPairSetSub extends SubCommand {
 
     protected Map<String, String> getOptionPairs(String[] args) {
         if (args.length%2 != 0) throw new IllegalArgumentException("Expected an even number of arguments!");
-        Map<String, String> map = new TreeMap<>();
+        Map<String, String> map = new LinkedHashMap<>();
         boolean isKey = true;
         String curKey = "";
         String curValue = "";
