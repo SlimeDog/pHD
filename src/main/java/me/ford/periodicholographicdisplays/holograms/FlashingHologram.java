@@ -44,22 +44,24 @@ public abstract class FlashingHologram extends PeriodicHologramBase {
         flashes = true;
         this.flashOn = flashOn;
         this.flashOff = flashOff;
+        markChanged();
     }
 
     public void changeFlashOn(double flashOn) {
         if (!flashes) throw new IllegalStateException("Cannot change flash on time when the hologram was previously not flashing");
-        this.flashOn = flashOn;
+        setFlashOnOff(flashOn, this.flashOff);
     }
 
     public void changeFlashOff(double flashOff) {
         if (!flashes) throw new IllegalStateException("Cannot change flash off time when the hologram was previously not flashing");
-        this.flashOff = flashOff;
+        setFlashOnOff(this.flashOn, flashOff);
     }
 
     public void setNoFlash() {
         flashes = false;
         flashOn = NO_FLASH;
         flashOff = NO_FLASH;
+        markChanged();
     }
 
     @Override
