@@ -119,7 +119,7 @@ public class HologramStorage {
     public void reload(boolean newStorage) {
         danglingInfos.clear();
         for (WorldHologramStorage storage : holograms.values()) {
-            for (PeriodicHologramBase hologram : storage.getHolograms()) {
+            for (FlashingHologram hologram : storage.getHolograms()) {
                 storage.removeHologram(hologram, false);
             }
         }
@@ -151,13 +151,13 @@ public class HologramStorage {
 
     // adding
 
-    public void addHologram(PeriodicHologramBase hologram) {
+    public void addHologram(FlashingHologram hologram) {
         WorldHologramStorage storage = getHolograms(hologram.getLocation().getWorld());
         storage.addHologram(hologram);
         storage.saveHolograms(false, HologramSaveReason.ADD);
     }
 
-    public void removeHologram(PeriodicHologramBase hologram) {
+    public void removeHologram(FlashingHologram hologram) {
         Validate.notNull(hologram, "Cannot remove null hologram");
         WorldHologramStorage storage = holograms.get(hologram.getLocation().getWorld());
         storage.removeHologram(hologram);
@@ -187,7 +187,7 @@ public class HologramStorage {
             IndividualHologramHandler handler = storage.getHandler(name);
             if (handler != null) {
                 List<PeriodicType> types = new ArrayList<>();
-                for (PeriodicHologramBase holo : handler.getHolograms()) {
+                for (FlashingHologram holo : handler.getHolograms()) {
                     types.add(holo.getType());
                 }
                 return types;
@@ -196,9 +196,9 @@ public class HologramStorage {
         return new ArrayList<>();
     }
 
-    public PeriodicHologramBase getHologram(String name, PeriodicType type) {
+    public FlashingHologram getHologram(String name, PeriodicType type) {
         for (WorldHologramStorage storage : holograms.values()) {
-            PeriodicHologramBase holo = storage.getHologram(name, type);
+            FlashingHologram holo = storage.getHologram(name, type);
             if (holo != null) return holo;
         }
         return null;
@@ -207,7 +207,7 @@ public class HologramStorage {
     public void mcTimeChanged(World world, long amount) {
         WorldHologramStorage storage = holograms.get(world);
         if (storage == null) return; // nothing being tracked
-        for (PeriodicHologramBase holo : storage.getHolograms()) {
+        for (FlashingHologram holo : storage.getHolograms()) {
             if (holo.getType() == PeriodicType.MCTIME) {
                 ((MCTimeHologram) holo).timeChanged(amount);
             }
@@ -223,7 +223,7 @@ public class HologramStorage {
     public void joinedWorld(Player player, World world) {
         if (hook != null && hook.isNPC(player)) return;
         WorldHologramStorage worldStorage = getHolograms(world);
-        for (PeriodicHologramBase holo : worldStorage.getHolograms()) {
+        for (FlashingHologram holo : worldStorage.getHolograms()) {
             if (holo.getType() == PeriodicType.ALWAYS) {
                 AlwaysHologram always = (AlwaysHologram) holo;
                 if (always.isShownOnWorldJoin()) {
@@ -239,7 +239,7 @@ public class HologramStorage {
 
     public void leftWorld(Player player, World world) {
         WorldHologramStorage worldStorage = getHolograms(world);
-        for (PeriodicHologramBase holo : worldStorage.getHolograms()) {
+        for (FlashingHologram holo : worldStorage.getHolograms()) {
             if (holo.getType() == PeriodicType.ALWAYS) {
                 AlwaysHologram always = (AlwaysHologram) holo;
                 if (always.isShownOnWorldJoin()) {

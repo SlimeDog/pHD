@@ -38,19 +38,19 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         this.hook = plugin.getNPCHook();
     }
 
-    public PeriodicHologramBase getHologram(String name, PeriodicType type) {
+    public FlashingHologram getHologram(String name, PeriodicType type) {
         IndividualHologramHandler handler = getHandler(name);
         if (handler == null)
             return null;
         return handler.getHologram(type);
     }
 
-    public List<PeriodicHologramBase> getHolograms() {
+    public List<FlashingHologram> getHolograms() {
         return getHolograms(false);
     }
 
-    public List<PeriodicHologramBase> getHolograms(boolean onlyLoaded) {
-        List<PeriodicHologramBase> holos = new ArrayList<>();
+    public List<FlashingHologram> getHolograms(boolean onlyLoaded) {
+        List<FlashingHologram> holos = new ArrayList<>();
         for (IndividualHologramHandler handler : getHandlers(onlyLoaded)) {
             holos.addAll(handler.getHolograms());
         }
@@ -69,7 +69,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         if (holo.getWorld() != getWorld()) return; // don't load
         IndividualHologramHandler handler = null;
         for (HologramInfo hInfo : info.getInfos()) {
-            PeriodicHologramBase hologram;
+            FlashingHologram hologram;
             TypeInfo typeInfo = hInfo.getTypeInfo();
             double distance = hInfo.getActivationDistance();
             long seconds = hInfo.getShowTime();
@@ -148,12 +148,12 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
 
     private HDHologramInfo getInfo(IndividualHologramHandler handler) {
         HDHologramInfo info = new HDHologramInfo(handler.getName());
-        for (Entry<PeriodicType, PeriodicHologramBase> entry : handler.getToSave().entrySet()) {
+        for (Entry<PeriodicType, FlashingHologram> entry : handler.getToSave().entrySet()) {
             double distance = -1;
             long seconds = -1;
             String perms = null;
             PeriodicType type = entry.getKey();
-            PeriodicHologramBase holo = entry.getValue();
+            FlashingHologram holo = entry.getValue();
             TypeInfo typeInfo = getTypeInfo(type, holo);
             if (!(typeInfo instanceof NullTypeInfo)) {
                 distance = holo.getActivationDistance();
@@ -167,7 +167,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         return info;
     }
 
-    private TypeInfo getTypeInfo(PeriodicType type, PeriodicHologramBase holo) {
+    private TypeInfo getTypeInfo(PeriodicType type, FlashingHologram holo) {
         if (holo == null) {
             return new NullTypeInfo(type);
         }
@@ -185,11 +185,11 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         } 
     }
 
-    void addHologram(PeriodicHologramBase hologram) {
+    void addHologram(FlashingHologram hologram) {
         addHologram(hologram, false);
     }
 
-    void addHologram(PeriodicHologramBase hologram, boolean wasLoaded) {
+    void addHologram(FlashingHologram hologram, boolean wasLoaded) {
         Validate.notNull(hologram, "Cannot add null hologram!");
         Validate.isTrue(hologram.getLocation().getWorld() == getWorld(), "Cannot add holograms in a different world!");
         IndividualHologramHandler handler = getHandler(hologram.getName());
@@ -200,11 +200,11 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         handler.addHologram(hologram.getType(), hologram, wasLoaded);
     }
 
-    void removeHologram(PeriodicHologramBase hologram) {
+    void removeHologram(FlashingHologram hologram) {
         removeHologram(hologram, true);
     }
 
-    void removeHologram(PeriodicHologramBase hologram, boolean markForRemoval) {
+    void removeHologram(FlashingHologram hologram, boolean markForRemoval) {
         Validate.notNull(hologram, "Cannot remove null hologram!");
         Validate.isTrue(hologram.getLocation().getWorld() == getWorld(), "Cannot remove holograms in a different world!");
         IndividualHologramHandler handler = getHandler(hologram.getName());

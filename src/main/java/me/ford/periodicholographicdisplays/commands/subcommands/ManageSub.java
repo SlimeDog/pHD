@@ -15,6 +15,7 @@ import org.bukkit.util.StringUtil;
 
 import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.holograms.AlwaysHologram;
+import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.IRLTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.MCTimeHologram;
@@ -127,7 +128,7 @@ public class ManageSub extends OptionPairSetSub {
             }
         }
         WorldHologramStorage worldStorage = storage.getHolograms(holo.getWorld());
-        PeriodicHologramBase existing = worldStorage.getHologram(holo.getName(), type);
+        FlashingHologram existing = worldStorage.getHologram(holo.getName(), type);
         if (existing != null) { // already managed
             sender.sendMessage(messages.getHologramAlreadyManagedMessage(holo.getName(), type));
             return true;
@@ -169,8 +170,8 @@ public class ManageSub extends OptionPairSetSub {
     }
 
     // TODO - SRP - this should throw exceptions that are caught and the appropriate message sent in onCommand
-    private PeriodicHologramBase adoptHologram(CommandSender sender, NamedHologram holo, PeriodicType type, Map<String, String> optionPairs) {
-        PeriodicHologramBase existing;
+    private FlashingHologram adoptHologram(CommandSender sender, NamedHologram holo, PeriodicType type, Map<String, String> optionPairs) {
+        FlashingHologram existing;
         double defaultDistance = PeriodicHologramBase.NO_DISTANCE;
         int showTime = PeriodicHologramBase.NO_SECONDS;
         String perms = null; // default to nothing

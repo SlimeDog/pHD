@@ -85,7 +85,7 @@ public abstract class FlashingHologram extends PeriodicHologramBase {
         @Override
         public void run() {
             if (!player.isValid() || !player.isOnline()) return;
-            if (!isBeingShownTo(player)) {
+            if (!isBeingShownTo(player) || !flashes()) {
                 cancel();
                 return;
             }

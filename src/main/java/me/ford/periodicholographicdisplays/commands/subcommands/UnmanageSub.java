@@ -8,8 +8,8 @@ import org.bukkit.util.StringUtil;
 
 import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.commands.SubCommand;
+import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
-import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 
 /**
@@ -54,7 +54,7 @@ public class UnmanageSub extends SubCommand {
             sender.sendMessage(messages.getTypeNotRecognizedMessage(args[1]));
             return true;
         }
-        PeriodicHologramBase holo = storage.getHologram(args[0], type);
+        FlashingHologram holo = storage.getHologram(args[0], type);
         if (holo == null) {
             sender.sendMessage(messages.getHologramNotFoundMessage(args[0], type));
             return true;

@@ -9,10 +9,10 @@ import java.util.Map.Entry;
 import org.bukkit.command.CommandSender;
 
 import me.ford.periodicholographicdisplays.commands.SubCommand;
+import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
 import me.ford.periodicholographicdisplays.holograms.IRLTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.MCTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
-import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.util.TimeUtils;
 
@@ -41,7 +41,7 @@ public abstract class OptionPairSetSub extends SubCommand {
         return map;
     }
 
-    protected void setAll(CommandSender sender, PeriodicHologramBase holo, Map<String, String> options, boolean doSpecial) throws OptionPairException {
+    protected void setAll(CommandSender sender, FlashingHologram holo, Map<String, String> options, boolean doSpecial) throws OptionPairException {
         Set<String> invalidOptions = new HashSet<>();
         for (Entry<String, String> entry : options.entrySet()) {
             String result = entry.getValue();

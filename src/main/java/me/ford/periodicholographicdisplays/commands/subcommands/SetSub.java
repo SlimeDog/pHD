@@ -11,8 +11,8 @@ import org.bukkit.util.StringUtil;
 
 import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.Settings;
+import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
-import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.holograms.WorldHologramStorageBase.HologramSaveReason;
 import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
@@ -113,7 +113,7 @@ public class SetSub extends OptionPairSetSub {
             sender.sendMessage(messages.getNeedPairedOptionsMessage());
             return true;
         }
-        PeriodicHologramBase existing = storage.getHologram(holoName, type);
+        FlashingHologram existing = storage.getHologram(holoName, type);
         if (existing == null) {
             sender.sendMessage(messages.getHologramNotTrackedMessage(holoName, type));
             return true;

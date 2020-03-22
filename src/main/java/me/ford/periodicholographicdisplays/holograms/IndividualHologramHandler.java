@@ -22,8 +22,8 @@ import me.ford.periodicholographicdisplays.holograms.events.StoppedManagingHolog
 public class IndividualHologramHandler {
     private final Hologram hologram;
     private final String name;
-    private final Map<PeriodicType, PeriodicHologramBase> holograms = new HashMap<>();
-    private final Map<PeriodicType, PeriodicHologramBase> toSave = new HashMap<>();
+    private final Map<PeriodicType, FlashingHologram> holograms = new HashMap<>();
+    private final Map<PeriodicType, FlashingHologram> toSave = new HashMap<>();
 
     public IndividualHologramHandler(NamedHologram hologram) {
         Validate.notNull(hologram, "Periodic hologram cannot be null");
@@ -31,11 +31,11 @@ public class IndividualHologramHandler {
         this.name = hologram.getName();
     }
 
-    void addHologram(PeriodicType type, PeriodicHologramBase holo) {
+    void addHologram(PeriodicType type, FlashingHologram holo) {
         addHologram(type, holo, false);
     }
 
-    void addHologram(PeriodicType type, PeriodicHologramBase holo, boolean wasLoaded) {
+    void addHologram(PeriodicType type, FlashingHologram holo, boolean wasLoaded) {
         Validate.notNull(type, "PeriodicType cannot be null");
         Validate.notNull(holo, "Periodic hologram cannot be null");
         Validate.isTrue(holo.getType() == type, "Wrong type of hologram. Expected " + type.name() + " got " + holo.getType().name());
@@ -45,7 +45,7 @@ public class IndividualHologramHandler {
         if (!wasLoaded) toSave.put(type, holo);
     }
 
-    void removeHologram(PeriodicHologramBase hologram, boolean markForRemoval) {
+    void removeHologram(FlashingHologram hologram, boolean markForRemoval) {
         Validate.notNull(hologram, "Cannot remove null hologram");
         Validate.isTrue(this.hologram == hologram.getHologram(), "Can only add pHD holograms that affect the same HD hologram");
         Bukkit.getPluginManager().callEvent(new StoppedManagingHologramEvent(hologram));
@@ -67,15 +67,15 @@ public class IndividualHologramHandler {
         return holograms.size() == 0;
     }
 
-    public PeriodicHologramBase getHologram(PeriodicType type) {
+    public FlashingHologram getHologram(PeriodicType type) {
         return holograms.get(type);
     }
 
-    Map<PeriodicType, PeriodicHologramBase> getToSave() {
+    Map<PeriodicType, FlashingHologram> getToSave() {
         return new HashMap<>(toSave);
     }
 
-    public Set<PeriodicHologramBase> getHolograms() {
+    public Set<FlashingHologram> getHolograms() {
         return new HashSet<>(holograms.values());
     }
 
@@ -88,7 +88,7 @@ public class IndividualHologramHandler {
     }
 
     public boolean needsSaved() {
-        for (PeriodicHologramBase holo : holograms.values()) {
+        for (FlashingHologram holo : holograms.values()) {
             if (holo.needsSaved()) {
                 toSave.put(holo.getType(), holo);
             }
@@ -97,7 +97,7 @@ public class IndividualHologramHandler {
     }
 
     public void markSaved() {
-        for (PeriodicHologramBase holo : holograms.values()) {
+        for (FlashingHologram holo : holograms.values()) {
             holo.markSaved();
         }
         toSave.clear();

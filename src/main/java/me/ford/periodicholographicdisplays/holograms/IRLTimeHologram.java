@@ -16,7 +16,7 @@ import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 /**
  * IRLTimeHologram
  */
-public class IRLTimeHologram extends PeriodicHologramBase {
+public class IRLTimeHologram extends FlashingHologram {
     private static final long DELAY = 24 * 60 * 60 * 20; // 24 hours, 60 minutes, 60 seconds, 20 ticks 
     private final PeriodicHolographicDisplays plugin;
     private final IRLTimeHologramDisplayer displayer;
