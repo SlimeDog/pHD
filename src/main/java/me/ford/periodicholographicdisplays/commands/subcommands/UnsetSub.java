@@ -121,6 +121,8 @@ public class UnsetSub extends SubCommand {
                 break;
                 case "flash":
                 hologram.setNoFlash();
+                usedOptions.remove(opt);
+                sender.sendMessage(messages.getUnsetFlashMessage());
                 break;
                 case "playercount":
                 if (hologram.getType() != PeriodicType.NTIMES) {

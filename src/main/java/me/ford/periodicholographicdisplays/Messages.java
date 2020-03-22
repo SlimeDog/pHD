@@ -266,6 +266,10 @@ public class Messages extends CustomConfigHandler {
         return getMessage("player-not-found", "Player not found: {player}").replace("{player}", name);
     }
 
+    public String getUnsetFlashMessage() {
+        return getMessage("unset-flash", "Unset flash");
+    }
+
     public String getUnsetPlayerCountMessage(OfflinePlayer player) {
         return getMessage("unset-playercount", "Unset playercount of {player}; now 0")
                         .replace("{player}", player.getName());

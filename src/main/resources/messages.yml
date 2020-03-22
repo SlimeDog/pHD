@@ -59,6 +59,7 @@ flash-time-too-small: "Flash time {time} is to small needs to be 1 or greater"
 #
 unset-options: "Unset {options}; now using default"
 unset-playercount: "Unset playercount of {player}; now 0"
+unset-flash: "Unset flash"
 cannot-unset-required-option: "Cannot unset required option {option} for type {type}; use /phd unmanage instead"
 nothing-to-unset: "Did not find a suitable option, nothing was unset"
 need-player-after-playercount: "Need to specify a player after 'playercount'"
