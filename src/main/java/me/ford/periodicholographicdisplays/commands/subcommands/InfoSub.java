@@ -8,9 +8,9 @@ import org.bukkit.util.StringUtil;
 
 import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.commands.SubCommand;
+import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
-import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.util.HintUtil;
 import me.ford.periodicholographicdisplays.util.PageUtils;
@@ -78,7 +78,7 @@ public class InfoSub extends SubCommand {
                 return true;
             }
         }
-        PeriodicHologramBase hologram = storage.getHologram(args[0], type);
+        FlashingHologram hologram = storage.getHologram(args[0], type);
         if (hologram == null) {
             sender.sendMessage(messages.getHologramNotFoundMessage(args[0], type));
             return true;
@@ -94,7 +94,7 @@ public class InfoSub extends SubCommand {
         return true;
     }
 
-    private int getMaxPages(PeriodicHologramBase hologram) {
+    private int getMaxPages(FlashingHologram hologram) {
         if (hologram.getType() != PeriodicType.NTIMES) return 1;
         NTimesHologram ntimes = (NTimesHologram) hologram;
         return PageUtils.getNumberOfPages(ntimes.getShownTo().size(), PageUtils.PLAYERS_PER_PAGE);

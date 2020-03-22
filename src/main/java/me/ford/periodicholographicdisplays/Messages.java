@@ -14,6 +14,7 @@ import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.DefaultRe
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.ReloadIssue;
 import me.ford.periodicholographicdisplays.Settings.SettingIssue;
 import me.ford.periodicholographicdisplays.holograms.AlwaysHologram;
+import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
 import me.ford.periodicholographicdisplays.holograms.IRLTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.MCTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
@@ -327,15 +328,18 @@ public class Messages extends CustomConfigHandler {
                         .replace("{name}", name).replace("{type}", type.name()).replace("{options}", String.join(", ", opts));
     }
 
-    public String getHologramInfoMessage(PeriodicHologramBase hologram, int page) {
+    public String getHologramInfoMessage(FlashingHologram hologram, int page) {
         String typeinfo = getTypeInfo(hologram, page);
         String typeName = (hologram.getType() == PeriodicType.NTIMES && ((NTimesHologram) hologram).getTimesToShow() < 0) ? PeriodicType.ALWAYS.name() : hologram.getType().name();
         String time = getShowTimeString(hologram);
         String distance = getDistanceString(hologram);
-        return getMessage("hologram-info", "Hologram '{name}':\nWorld: {world}\nType: {type}\nShowTime: {time}\nActivationDistance: {distance}\nPermission: {perms}\nTypeInfo: {typeinfo}")
+        String flashOn = hologram.flashes() ? String.format("%3.2f", hologram.getFlashOn()) : "-";
+        String flashOff = hologram.flashes() ? String.format("%3.2f", hologram.getFlashOn()) : "-";
+        return getMessage("hologram-info", "Hologram '{name}':\nWorld: {world}\nType: {type}\nShowTime: {time}\nFlash: {flashOn}/{flashOff}\nActivationDistance: {distance}\nPermission: {perms}\nTypeInfo: {typeinfo}")
                         .replace("{name}", hologram.getName()).replace("{world}", hologram.getLocation().getWorld().getName())
                         .replace("{type}", typeName).replace("{time}", time)
                         .replace("{typeinfo}", typeinfo).replace("{distance}", distance)
+                        .replace("{flashOn}", flashOn).replace("{flashOff}", flashOff)
                         .replace("{perms}", hologram.hasPermissions() ? hologram.getPermissions() : "");
     }
 
