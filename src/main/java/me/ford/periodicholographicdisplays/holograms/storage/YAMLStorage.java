@@ -15,6 +15,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
+import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.holograms.events.HologramsLoadedEvent;
@@ -60,6 +61,10 @@ public class YAMLStorage implements Storage {
         }
         if (info.getShowTime() != PeriodicHologramBase.NO_SECONDS) {
             section.set("show-time", info.getShowTime());
+        }
+        if (info.getFlashOn() != FlashingHologram.NO_FLASH && info.getFlashOff() != FlashingHologram.NO_FLASH) {
+            section.set("flash-on", info.getFlashOn());
+            section.set("flash-off", info.getFlashOff());
         }
         section.set("permission", info.getPermissions());
         if (typeInfo instanceof NTimesTypeInfo) {
@@ -117,6 +122,8 @@ public class YAMLStorage implements Storage {
         double distance = section.getDouble("activation-distance", PeriodicHologramBase.NO_DISTANCE);
         long showTime = section.getLong("show-time", PeriodicHologramBase.NO_SECONDS);
         String perms = section.getString("permission"); // defaults to null
+        double flashOn = section.getDouble("flash-on", FlashingHologram.NO_FLASH);
+        double flashOff = section.getDouble("flash-off", FlashingHologram.NO_FLASH);
         final TypeInfo typeInfo;
         switch (type) {
         case IRLTIME:
@@ -141,7 +148,7 @@ public class YAMLStorage implements Storage {
             phd.getLogger().info("Undefined loading behavour with type: " + type);
             return null;
         }
-        return new HologramInfo(name, type, distance, showTime, perms, typeInfo);
+        return new HologramInfo(name, type, distance, showTime, perms, typeInfo, flashOn, flashOff);
     }
 
     private Map<UUID, Integer> getShownToTimes(ConfigurationSection section) {

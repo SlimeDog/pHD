@@ -12,14 +12,18 @@ public class HologramInfo {
     private final long showTime;
     private final String perms;
     private final TypeInfo typeInfo;
+    private final double flashOn, flashOff;
 
-    public HologramInfo(String name, PeriodicType type, double activationDistance, long showTime, String perms, TypeInfo typeInfo) {
+    public HologramInfo(String name, PeriodicType type, double activationDistance, long showTime, String perms, TypeInfo typeInfo, 
+                            double flashOn, double flashOff) {
         this.name = name;
         this.type = type;
         this.activationDistance = activationDistance;
         this.showTime = showTime;
         this.perms = perms;
         this.typeInfo = typeInfo;
+        this.flashOn = flashOn;
+        this.flashOff = flashOff;
     }
 
     public String getName() {
@@ -44,6 +48,14 @@ public class HologramInfo {
 
     public TypeInfo getTypeInfo() {
         return typeInfo;
+    }
+
+    public double getFlashOn() {
+        return flashOn;
+    }
+
+    public double getFlashOff() {
+        return flashOff;
     }
 
     @Override

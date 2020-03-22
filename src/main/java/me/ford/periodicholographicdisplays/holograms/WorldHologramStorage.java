@@ -149,8 +149,10 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
     private HDHologramInfo getInfo(IndividualHologramHandler handler) {
         HDHologramInfo info = new HDHologramInfo(handler.getName());
         for (Entry<PeriodicType, FlashingHologram> entry : handler.getToSave().entrySet()) {
-            double distance = -1;
-            long seconds = -1;
+            double distance = PeriodicHologramBase.NO_DISTANCE;
+            long seconds = PeriodicHologramBase.NO_SECONDS;
+            double flashOn = FlashingHologram.NO_FLASH;
+            double flashOff = FlashingHologram.NO_FLASH;
             String perms = null;
             PeriodicType type = entry.getKey();
             FlashingHologram holo = entry.getValue();
@@ -159,9 +161,11 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
                 distance = holo.getActivationDistance();
                 seconds = holo.getShowTime();
                 perms = holo.getPermissions();
+                flashOn = holo.getFlashOn();
+                flashOff = holo.getFlashOff();
             }
             HologramInfo hInfo = new HologramInfo(handler.getName(), type, distance, 
-                                seconds, perms, typeInfo);
+                                seconds, perms, typeInfo, flashOn, flashOff);
             info.addInfo(hInfo);
         }
         return info;

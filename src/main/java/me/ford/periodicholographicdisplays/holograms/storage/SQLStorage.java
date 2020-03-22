@@ -14,6 +14,7 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
+import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.holograms.events.HologramsLoadedEvent;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.IRLTimeTypeInfo;
@@ -61,13 +62,14 @@ public class SQLStorage implements Storage {
         }
     }
 
-    // hologram, type, activation_distance, display_seconds, periodic_time, activation_times, permission
+    // hologram, type, activation_distance, display_seconds, periodic_time, activation_times, permission, flashon, flashoff
     private void saveHologramsAsync(Set<HDHologramInfo> holograms) {
         createHologramTableIfNotExists();
         createPlayerTableIfNotExists();
         String deleteQuery = "DELETE FROM " + hologramTableName + " WHERE hologram=? AND type=?";
-        String query = "INSERT INTO " + hologramTableName + " VALUES (?, ?, ?, ?, ?, ?, ?)" 
-        + " ON CONFLICT(hologram, type) DO UPDATE SET activation_distance=? , display_seconds=? , periodic_time=?, activation_times=?, permission=?;";
+        String query = "INSERT INTO " + hologramTableName + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)" 
+                        + " ON CONFLICT(hologram, type) DO UPDATE SET activation_distance=? , display_seconds=? , "
+                        + "periodic_time=?, activation_times=?, permission=?, flashon=?, flashoff=?;";
         for (HDHologramInfo hologram : holograms) {
             for (HologramInfo info : hologram.getInfos()) {
                 TypeInfo typeInfo = info.getTypeInfo();
@@ -105,11 +107,15 @@ public class SQLStorage implements Storage {
                     statement.setString(5, time);
                     statement.setInt(6, activationTimes);
                     statement.setString(7, info.getPermissions());
-                    statement.setDouble(8, info.getActivationDistance());
-                    statement.setLong(9, info.getShowTime());
-                    statement.setString(10, time);
-                    statement.setInt(11, activationTimes);
-                    statement.setString(12, info.getPermissions());
+                    statement.setDouble(8, info.getFlashOn());
+                    statement.setDouble(9, info.getFlashOff());
+                    statement.setDouble(10, info.getActivationDistance());
+                    statement.setLong(11, info.getShowTime());
+                    statement.setString(12, time);
+                    statement.setInt(13, activationTimes);
+                    statement.setString(14, info.getPermissions());
+                    statement.setDouble(15, info.getFlashOn());
+                    statement.setDouble(16, info.getFlashOff());
                 } catch (SQLException e) {
                     phd.getLogger().log(Level.WARNING, "Problem while setting up prepared statement", e);
                     continue;
@@ -173,7 +179,7 @@ public class SQLStorage implements Storage {
     }
     
     
-    // hologram, type, activation_distance, display_seconds, periodic_time, activation_times, permission
+    // hologram, type, activation_distance, display_seconds, periodic_time, activation_times, permission, flashon, flashoff
 	private void loadHologramsAsync(Consumer<HDHologramInfo> consumer) {
         createHologramTableIfNotExists();
         createPlayerTableIfNotExists();
@@ -197,6 +203,12 @@ public class SQLStorage implements Storage {
                 int seconds = rs.getInt("display_seconds");
                 String time = rs.getString("periodic_time");
                 String perms = rs.getString("permission");
+                double flashOn = rs.getDouble("flashon");
+                double flashOff = rs.getDouble("flashoff");
+                if (flashOn == 0.0D || flashOff == 0.0D) { // to get started
+                    flashOn = FlashingHologram.NO_FLASH;
+                    flashOff = FlashingHologram.NO_FLASH;
+                }
                 HDHologramInfo info = infos.get(holoName);
                 if (info == null) {
                     info = new HDHologramInfo(holoName);
@@ -210,7 +222,7 @@ public class SQLStorage implements Storage {
                     phd.getLogger().log(Level.WARNING, "Unable to get typeinfo of " + holoName + " of type " + type.name());
                     continue;
                 }
-                HologramInfo holo = new HologramInfo(holoName, type, distance, seconds, perms, typeInfo);
+                HologramInfo holo = new HologramInfo(holoName, type, distance, seconds, perms, typeInfo, flashOn, flashOff);
                 info.addInfo(holo);
             }
             rs.close();
@@ -361,6 +373,8 @@ public class SQLStorage implements Storage {
                     "periodic_time STRING, " + 
                     "activation_times INT, " + 
                     "permission STRING(255), " +
+                    "flashon REAL, " + 
+                    "flashoff REAL, " + 
                     "PRIMARY KEY (hologram, type)" +
                     ");";
 		if (!executeUpdate(query)) {

@@ -12,10 +12,11 @@ import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
  * FlashingHologram
  */
 public abstract class FlashingHologram extends PeriodicHologramBase {
+    public static final double NO_FLASH = 1.0D;
     private final PeriodicHolographicDisplays phd;
     private boolean flashes = false;
-    private double flashOn = 0.0D;
-    private double flashOff = 0.0D;
+    private double flashOn = NO_FLASH;
+    private double flashOff = NO_FLASH;
 
     public FlashingHologram(Hologram hologram, String name, double activationDistance, long showTime, PeriodicType type,
             boolean isNew, String perms) {
@@ -57,6 +58,8 @@ public abstract class FlashingHologram extends PeriodicHologramBase {
 
     public void setNoFlash() {
         flashes = false;
+        flashOn = NO_FLASH;
+        flashOff = NO_FLASH;
     }
 
     @Override
