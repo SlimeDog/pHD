@@ -53,5 +53,13 @@ public class AlwaysHologram extends NTimesHologram {
     protected boolean specialDisable() {
         return isShownOnWorldJoin() || isShownWhileInArea();
     }
+
+    @Override
+    public void resetVisibility() {
+        super.resetVisibility();
+        if (isShownOnWorldJoin()) {
+            checkWorldPlayers();
+        }
+    }
     
 }
