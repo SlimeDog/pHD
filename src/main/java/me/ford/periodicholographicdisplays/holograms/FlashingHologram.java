@@ -42,10 +42,14 @@ public abstract class FlashingHologram extends PeriodicHologramBase {
     }
 
     public void setFlashOnOff(double flashOn, double flashOff) {
+        setFlashOnOff(flashOn, flashOff, false);
+    }
+
+    public void setFlashOnOff(double flashOn, double flashOff, boolean onLoad) {
         flashes = true;
         this.flashOn = flashOn;
         this.flashOff = flashOff;
-        markChanged();
+        if (!onLoad) markChanged();
     }
 
     public void changeFlashOn(double flashOn) {

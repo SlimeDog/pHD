@@ -99,7 +99,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
                 throw new IllegalArgumentException("Unexpected pHD type " + hInfo.getType());
             }
             if (hInfo.getFlashOn() != FlashingHologram.NO_FLASH && hInfo.getFlashOff() != FlashingHologram.NO_FLASH) {
-                hologram.setFlashOnOff(hInfo.getFlashOn(), hInfo.getFlashOff());
+                hologram.setFlashOnOff(hInfo.getFlashOn(), hInfo.getFlashOff(), true);
             }
             if (handler == null) {
                 handler = new IndividualHologramHandler(holo);
