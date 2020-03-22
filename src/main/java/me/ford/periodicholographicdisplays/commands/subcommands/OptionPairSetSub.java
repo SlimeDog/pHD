@@ -104,6 +104,9 @@ public abstract class OptionPairSetSub extends SubCommand {
                 } catch (NumberFormatException e) {
                     throw new OptionPairException(OptionPairExceptionType.NEED_A_NUMBER, result);
                 }
+                if (flashTime < FlashingHologram.MIN_FLASH) {
+                    throw new OptionPairException(OptionPairExceptionType.FLASH_TOO_SMALL, result);
+                }
                 holo.setFlashOnOff(flashTime);
                 break;
                 case "flashon":
@@ -116,6 +119,9 @@ public abstract class OptionPairSetSub extends SubCommand {
                 } catch (NumberFormatException e) {
                     throw new OptionPairException(OptionPairExceptionType.NEED_A_NUMBER, result);
                 }
+                if (flashOn < FlashingHologram.MIN_FLASH) {
+                    throw new OptionPairException(OptionPairExceptionType.FLASH_TOO_SMALL, result);
+                }
                 holo.setFlashOnOff(flashOn, holo.getFlashOff());
                 break;
                 case "flashoff":
@@ -127,6 +133,9 @@ public abstract class OptionPairSetSub extends SubCommand {
                     flashOff = Double.parseDouble(result);
                 } catch (NumberFormatException e) {
                     throw new OptionPairException(OptionPairExceptionType.NEED_A_NUMBER, result);
+                }
+                if (flashOff < FlashingHologram.MIN_FLASH) {
+                    throw new OptionPairException(OptionPairExceptionType.FLASH_TOO_SMALL, result);
                 }
                 holo.setFlashOnOff(holo.getFlashOn(), flashOff);
                 break;
@@ -169,7 +178,8 @@ public abstract class OptionPairSetSub extends SubCommand {
         NO_SUCH_OPTION,
         DISTANCE_NEGATIVE,
         SECONDS_NEGATIVE,
-        FLASH_ONLY_ONE
+        FLASH_ONLY_ONE,
+        FLASH_TOO_SMALL
     }
     
 }

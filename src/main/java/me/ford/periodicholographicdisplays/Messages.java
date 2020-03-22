@@ -37,6 +37,11 @@ public class Messages extends CustomConfigHandler {
         this.phd = phd;
     }
 
+    public String getFlashTimeTooSmallMessage(String specified) {
+        return getMessage("flash-time-too-small", "Flash time {time} is to small needs to be 1 or greater")
+                        .replace("{time}", specified);
+    }
+
     public String getFlashMustHaveBothMessage(String specified) {
         return getMessage("flash-must-have-both", "Need to specify both 'flashOn' and 'flashOff'; alternatively use 'flash' to set both at once");
     }

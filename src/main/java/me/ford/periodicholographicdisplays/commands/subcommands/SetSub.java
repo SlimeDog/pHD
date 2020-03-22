@@ -143,6 +143,9 @@ public class SetSub extends OptionPairSetSub {
                 case FLASH_ONLY_ONE:
                 sender.sendMessage(messages.getFlashMustHaveBothMessage(e.getExtra()));
                 break;
+                case FLASH_TOO_SMALL:
+                sender.sendMessage(messages.getFlashTimeTooSmallMessage(e.getExtra()));
+                break;
                 default:
                 sender.sendMessage("Unusual problem: " + e);
             }
