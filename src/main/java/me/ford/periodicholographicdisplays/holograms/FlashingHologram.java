@@ -12,7 +12,7 @@ import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
  * FlashingHologram
  */
 public abstract class FlashingHologram extends PeriodicHologramBase {
-    public static final double NO_FLASH = 1.0D;
+    public static final double NO_FLASH = -1.0D;
     private final PeriodicHolographicDisplays phd;
     private boolean flashes = false;
     private double flashOn = NO_FLASH;
