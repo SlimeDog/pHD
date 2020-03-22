@@ -155,8 +155,12 @@ public abstract class PeriodicHologramBase {
             String info = plugin.getMessages().getHologramInfoMessage(this, 1).replace("\n", ";");
             plugin.debug(String.format("Hiding from %s: %s", player.getName(), info));
         }
-        hologram.getVisibilityManager().hideTo(player);
+        hideFromInternal(player);
         beingShownTo.remove(player.getUniqueId());
+    }
+
+    protected void hideFromInternal(Player player) {
+        hologram.getVisibilityManager().hideTo(player);
     }
 
     public boolean show(Player player) {
@@ -167,13 +171,17 @@ public abstract class PeriodicHologramBase {
             String info = plugin.getMessages().getHologramInfoMessage(this, 1).replace("\n", ";");
             plugin.debug(String.format("Showing to %s: %s", player.getName(), info));
         }
-        hologram.getVisibilityManager().showTo(player);
+        showInternal(player);
         beingShownTo.add(id);
         boolean scheduleHide = !specialDisable();
         if (scheduleHide) {
             plugin.getServer().getScheduler().runTaskLater(plugin, () -> hideFrom(player), showTimeTicks);
         }
         return true;
+    }
+
+    protected void showInternal(Player player) {
+        hologram.getVisibilityManager().showTo(player);        
     }
 
     public void defaultDistance(Settings settings) {

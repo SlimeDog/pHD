@@ -4,7 +4,7 @@ import com.gmail.filoghost.holographicdisplays.api.Hologram;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 
@@ -68,17 +68,12 @@ public abstract class FlashingHologram extends PeriodicHologramBase {
         if (!showing) return false;
         long cycleTicks = (int) ((flashOn + flashOff) * 20L);
         long offDelay = (int) (flashOn * 20L);
-        BukkitTask on = phd.getServer().getScheduler().runTaskTimer(phd, new Flasher(player, true), 0L, cycleTicks);
-        BukkitTask off = phd.getServer().getScheduler().runTaskTimer(phd, new Flasher(player, false), offDelay, cycleTicks);
-        phd.getServer().getScheduler().runTaskLater(phd, () -> {
-            on.cancel();
-            off.cancel();
-            hideFrom(player);
-        }, getShowTimeTicks());
+        new Flasher(player, true).runTaskTimer(phd, 0L, cycleTicks);
+        new Flasher(player, true).runTaskTimer(phd, offDelay, cycleTicks);
         return true;
     }
 
-    private class Flasher implements Runnable {
+    private class Flasher extends BukkitRunnable {
         private final Player player;
         private final boolean show;
 
@@ -90,10 +85,14 @@ public abstract class FlashingHologram extends PeriodicHologramBase {
         @Override
         public void run() {
             if (!player.isValid() || !player.isOnline()) return;
+            if (!isBeingShownTo(player)) {
+                cancel();
+                return;
+            }
             if (show) {
-                FlashingHologram.super.show(player);
+                showInternal(player);
             } else {
-                hideFrom(player);
+                hideFromInternal(player);
             }
 
         }
