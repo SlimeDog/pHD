@@ -157,10 +157,10 @@ public abstract class PeriodicHologramBase {
         beingShownTo.remove(player.getUniqueId());
     }
 
-    public void show(Player player) {
-        if (player == null) return;
+    public boolean show(Player player) {
+        if (player == null) return false;
         UUID id = player.getUniqueId();
-        if (beingShownTo.contains(id)) return;
+        if (beingShownTo.contains(id)) return false;
         if (plugin.getSettings().onDebug()) {
             String info = plugin.getMessages().getHologramInfoMessage(this, 1).replace("\n", ";");
             plugin.debug(String.format("Showing to %s: %s", player.getName(), info));
@@ -178,6 +178,7 @@ public abstract class PeriodicHologramBase {
         if (scheduleHide) {
             plugin.getServer().getScheduler().runTaskLater(plugin, () -> hideFrom(player), showTimeTicks);
         }
+        return true;
     }
 
     public void defaultDistance(Settings settings) {
