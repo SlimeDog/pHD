@@ -46,7 +46,7 @@ flash-must-have-both: "Need to specify both 'flashOn' and 'flashOff'; alternativ
 # Messages produced by /phd set
 #
 set-new-values: "Set new values for hologram {name} of type {type}: {options}"
-incorrect-set-options: "Need a set of key-value pairs to set,  got an odd number of arguments"
+incorrect-set-options: "Need a set of key-value pairs to set, got an odd number of arguments"
 incorrect-time: "Unable to parse time {time}"
 need-a-number: "Value must be a number, got {msg}"
 need-an-integer: "Value must be an integer, got {msg}"
