@@ -183,7 +183,12 @@ public class UnsetSub extends SubCommand {
             prevOpt = opt;
         }
         if (usedOptions.isEmpty()) {
-            if (!unsetPlayerCount && !unsetFlash) sender.sendMessage(messages.getNothingToUnsetMessage());
+            if (!unsetPlayerCount && !unsetFlash) {
+                sender.sendMessage(messages.getNothingToUnsetMessage());
+            } else {
+                hologram.resetVisibility();
+                storage.save(HologramSaveReason.CHANGE, false);
+            }
             return true;
         }
         sender.sendMessage(messages.getUnsetOptionsMessage(usedOptions));
