@@ -36,6 +36,10 @@ public class Messages extends CustomConfigHandler {
         this.phd = phd;
     }
 
+    public String getFlashMustHaveBothMessage(String specified) {
+        return getMessage("flash-must-have-both", "Need to specify both 'flashOn' and 'flashOff'; alternatively use 'flash' to set both at once");
+    }
+
     public String getActiveStorageMessage(boolean useDatabase) {
         return getMessage("active-storage", "Active storage-type is {storage}")
                         .replace("{storage}", useDatabase ? "SQLITE" : "YAML");

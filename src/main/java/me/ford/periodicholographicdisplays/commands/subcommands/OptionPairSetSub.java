@@ -97,6 +97,39 @@ public abstract class OptionPairSetSub extends SubCommand {
                 case "permission":
                 holo.setPermissions(result);
                 break;
+                case "flash":
+                double flashTime;
+                try {
+                    flashTime = Double.parseDouble(result);
+                } catch (NumberFormatException e) {
+                    throw new OptionPairException(OptionPairExceptionType.NEED_A_NUMBER, result);
+                }
+                holo.setFlashOnOff(flashTime);
+                break;
+                case "flashon":
+                if (!holo.flashes() && !options.containsKey("flashoff")) {
+                    throw new OptionPairException(OptionPairExceptionType.FLASH_ONLY_ONE, "flashon");
+                }
+                double flashOn;
+                try {
+                    flashOn = Double.parseDouble(result);
+                } catch (NumberFormatException e) {
+                    throw new OptionPairException(OptionPairExceptionType.NEED_A_NUMBER, result);
+                }
+                holo.setFlashOnOff(flashOn, holo.getFlashOff());
+                break;
+                case "flashoff":
+                if (!holo.flashes() && !options.containsKey("flashon")) {
+                    throw new OptionPairException(OptionPairExceptionType.FLASH_ONLY_ONE, "flashon");
+                }
+                double flashOff;
+                try {
+                    flashOff = Double.parseDouble(result);
+                } catch (NumberFormatException e) {
+                    throw new OptionPairException(OptionPairExceptionType.NEED_A_NUMBER, result);
+                }
+                holo.setFlashOnOff(holo.getFlashOn(), flashOff);
+                break;
                 default:
                 throw new OptionPairException(OptionPairExceptionType.NO_SUCH_OPTION, entry.getKey());
             }
@@ -135,7 +168,8 @@ public abstract class OptionPairSetSub extends SubCommand {
         INCORRECT_TIME,
         NO_SUCH_OPTION,
         DISTANCE_NEGATIVE,
-        SECONDS_NEGATIVE
+        SECONDS_NEGATIVE,
+        FLASH_ONLY_ONE
     }
     
 }

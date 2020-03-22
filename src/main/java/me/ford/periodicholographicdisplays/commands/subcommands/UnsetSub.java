@@ -13,6 +13,7 @@ import org.bukkit.util.StringUtil;
 import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.Settings;
 import me.ford.periodicholographicdisplays.commands.SubCommand;
+import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
@@ -24,11 +25,11 @@ import me.ford.periodicholographicdisplays.holograms.WorldHologramStorageBase.Ho
  */
 public class UnsetSub extends SubCommand {
     private static final String PERMS = "phd.set";
-    private static final String USAGE = "/phd unset {hologram} {type} [seconds] [distance] [permission] [playercount {player}]";
+    private static final String USAGE = "/phd unset {hologram} {type} [seconds] [distance] [permission] [flash] [playercount {player}]";
     private final HologramStorage storage;
     private final Settings settings;
     private final Messages messages;
-    private final List<String> optionList = Arrays.asList("seconds", "distance", "permission", "playercount");
+    private final List<String> optionList = Arrays.asList("seconds", "distance", "permission", "playercount", "flash");
 
     public UnsetSub(HologramStorage storage, Settings settings, Messages messages) {
         this.storage = storage;
@@ -63,7 +64,7 @@ public class UnsetSub extends SubCommand {
             if (type == PeriodicType.NTIMES && args[args.length -2].equalsIgnoreCase("playercount")) {
                 return null; // player names
             }
-            PeriodicHologramBase hologram = storage.getHologram(args[0], type);
+            FlashingHologram hologram = storage.getHologram(args[0], type);
             if (hologram == null) return list;
             if (!hologram.hasPermissions()) {
                 options.remove("permission");
@@ -76,6 +77,9 @@ public class UnsetSub extends SubCommand {
             }
             if (type != PeriodicType.NTIMES) {
                 options.remove("playercount");
+            }
+            if (!hologram.flashes()) {
+                options.remove("flash");
             }
             for (String prevArg : Arrays.copyOfRange(args, 2, args.length - 1)) {
                 options.remove(prevArg);
@@ -95,7 +99,7 @@ public class UnsetSub extends SubCommand {
             sender.sendMessage(messages.getTypeNotRecognizedMessage(args[1]));
             return true;
         }
-        PeriodicHologramBase hologram = storage.getHologram(args[0], type);
+        FlashingHologram hologram = storage.getHologram(args[0], type);
         if (hologram == null) {
             sender.sendMessage(messages.getHologramNotFoundMessage(args[0], type));
             return true;
@@ -114,6 +118,9 @@ public class UnsetSub extends SubCommand {
                 break;
                 case "permission":
                 hologram.setPermissions(null);
+                break;
+                case "flash":
+                hologram.setNoFlash();
                 break;
                 case "playercount":
                 if (hologram.getType() != PeriodicType.NTIMES) {

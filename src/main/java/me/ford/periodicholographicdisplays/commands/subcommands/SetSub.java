@@ -22,11 +22,11 @@ import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
  */
 public class SetSub extends OptionPairSetSub {
     private static final String PERMS = "phd.set";
-    private static final String USAGE = "/phd set {hologram} {type} [times {integer}] [time {hh:mm}] [seconds {integer}] [distance {integer|decimal}] [permission {string}]";
+    private static final String USAGE = "/phd set {hologram} {type} [times {integer}] [time {hh:mm}] [seconds {integer}] [distance {integer|decimal}] [permission {string}] [flash {integer|decimal}] [flashOn {integer|decimal}] [flashOff {integer|decimal}]";
     private final HologramStorage storage;
     private final LuckPermsHook hook;
     private final Messages messages;
-    private final List<String> settables = Arrays.asList("times", "time", "seconds", "distance", "permission");
+    private final List<String> settables = Arrays.asList("times", "time", "seconds", "distance", "permission", "flash", "flashOn", "flashOff");
 
     public SetSub(HologramStorage storage, LuckPermsHook hook, Settings settings, Messages messages) {
         this.storage = storage;
@@ -139,6 +139,9 @@ public class SetSub extends OptionPairSetSub {
                 break;
                 case SECONDS_NEGATIVE:
                 sender.sendMessage(messages.getNegativeSecondsMessage(e.getExtra()));
+                break;
+                case FLASH_ONLY_ONE:
+                sender.sendMessage(messages.getFlashMustHaveBothMessage(e.getExtra()));
                 break;
                 default:
                 sender.sendMessage("Unusual problem: " + e);
