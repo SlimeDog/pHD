@@ -338,13 +338,17 @@ public class Messages extends CustomConfigHandler {
         String typeName = (hologram.getType() == PeriodicType.NTIMES && ((NTimesHologram) hologram).getTimesToShow() < 0) ? PeriodicType.ALWAYS.name() : hologram.getType().name();
         String time = getShowTimeString(hologram);
         String distance = getDistanceString(hologram);
-        String flashOn = hologram.flashes() ? String.format("%3.2f", hologram.getFlashOn()) : "-";
-        String flashOff = hologram.flashes() ? String.format("%3.2f", hologram.getFlashOn()) : "-";
-        return getMessage("hologram-info", "Hologram '{name}':\nWorld: {world}\nType: {type}\nShowTime: {time}\nFlash: {flashOn}/{flashOff}\nActivationDistance: {distance}\nPermission: {perms}\nTypeInfo: {typeinfo}")
+        String flash;
+        if (hologram.flashes()) {
+            flash = String.format("%3.2f/%3.2f", hologram.getFlashOn(), hologram.getFlashOff());
+        } else {
+            flash = "None";
+        }
+        return getMessage("hologram-info", "Hologram '{name}':\nWorld: {world}\nType: {type}\nShowTime: {time}\nFlash: {flash}\nActivationDistance: {distance}\nPermission: {perms}\nTypeInfo: {typeinfo}")
                         .replace("{name}", hologram.getName()).replace("{world}", hologram.getLocation().getWorld().getName())
                         .replace("{type}", typeName).replace("{time}", time)
                         .replace("{typeinfo}", typeinfo).replace("{distance}", distance)
-                        .replace("{flashOn}", flashOn).replace("{flashOff}", flashOff)
+                        .replace("{flash}", flash)
                         .replace("{perms}", hologram.hasPermissions() ? hologram.getPermissions() : "");
     }
 
