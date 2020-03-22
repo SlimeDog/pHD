@@ -48,5 +48,10 @@ public class AlwaysHologram extends NTimesHologram {
     public boolean hasActivationDistance() {
         return getActivationDistance() != NO_DISTANCE;
     }
+
+    @Override
+    protected boolean specialDisable() {
+        return isShownOnWorldJoin() || isShownWhileInArea();
+    }
     
 }

@@ -75,6 +75,11 @@ public class MCTimeHologram extends FlashingHologram {
         }
     }
 
+    @Override
+    protected boolean specialDisable() {
+        return false;
+    }
+
     private class MCTimeHologramDisplayer implements Runnable {
 
         @Override

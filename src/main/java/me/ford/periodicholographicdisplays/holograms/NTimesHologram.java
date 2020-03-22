@@ -91,5 +91,10 @@ public class NTimesHologram extends FlashingHologram {
         super.markSaved();
         toSave.clear();
     }
+
+    @Override
+    protected boolean specialDisable() {
+        return false;
+    }
     
 }
