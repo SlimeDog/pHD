@@ -62,14 +62,14 @@ public class SQLStorage implements Storage {
         }
     }
 
-    // hologram, type, activation_distance, display_seconds, periodic_time, activation_times, permission, flashon, flashoff
+    // hologram, type, activation_distance, display_seconds, periodic_time, activation_times, permission, flash_on, flash_off
     private void saveHologramsAsync(Set<HDHologramInfo> holograms) {
         createHologramTableIfNotExists();
         createPlayerTableIfNotExists();
         String deleteQuery = "DELETE FROM " + hologramTableName + " WHERE hologram=? AND type=?";
         String query = "INSERT INTO " + hologramTableName + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)" 
                         + " ON CONFLICT(hologram, type) DO UPDATE SET activation_distance=? , display_seconds=? , "
-                        + "periodic_time=?, activation_times=?, permission=?, flashon=?, flashoff=?;";
+                        + "periodic_time=?, activation_times=?, permission=?, flash_on=?, flash_off=?;";
         for (HDHologramInfo hologram : holograms) {
             for (HologramInfo info : hologram.getInfos()) {
                 TypeInfo typeInfo = info.getTypeInfo();
@@ -179,7 +179,7 @@ public class SQLStorage implements Storage {
     }
     
     
-    // hologram, type, activation_distance, display_seconds, periodic_time, activation_times, permission, flashon, flashoff
+    // hologram, type, activation_distance, display_seconds, periodic_time, activation_times, permission, flash_on, flash_off
 	private void loadHologramsAsync(Consumer<HDHologramInfo> consumer) {
         createHologramTableIfNotExists();
         createPlayerTableIfNotExists();
@@ -203,8 +203,8 @@ public class SQLStorage implements Storage {
                 int seconds = rs.getInt("display_seconds");
                 String time = rs.getString("periodic_time");
                 String perms = rs.getString("permission");
-                double flashOn = rs.getDouble("flashon");
-                double flashOff = rs.getDouble("flashoff");
+                double flashOn = rs.getDouble("flash_on");
+                double flashOff = rs.getDouble("flash_off");
                 if (flashOn == 0.0D || flashOff == 0.0D) { // to get started
                     flashOn = FlashingHologram.NO_FLASH;
                     flashOff = FlashingHologram.NO_FLASH;
@@ -373,8 +373,8 @@ public class SQLStorage implements Storage {
                     "periodic_time STRING, " + 
                     "activation_times INT, " + 
                     "permission STRING(255), " +
-                    "flashon REAL, " + 
-                    "flashoff REAL, " + 
+                    "flash_on REAL, " + 
+                    "flash_off REAL, " + 
                     "PRIMARY KEY (hologram, type)" +
                     ");";
 		if (!executeUpdate(query)) {
