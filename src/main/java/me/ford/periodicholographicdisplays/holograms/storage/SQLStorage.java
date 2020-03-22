@@ -227,7 +227,7 @@ public class SQLStorage implements Storage {
             }
             rs.close();
         } catch (SQLException e) {
-			phd.getLogger().log(Level.WARNING, "Issue while loading holohrams from database!", e);
+			phd.getLogger().log(Level.WARNING, "Issue while loading holograms from database!", e);
         }
         
         for (HDHologramInfo info : infos.values()) {
