@@ -108,6 +108,7 @@ public class UnsetSub extends SubCommand {
         List<String> usedOptions = new ArrayList<>(Arrays.asList(opts));
         String prevOpt = "";
         boolean unsetPlayerCount = false;
+        boolean unsetFlash = false;
         for (String opt : opts) {
             switch(opt) {
                 case "distance":
@@ -123,6 +124,7 @@ public class UnsetSub extends SubCommand {
                 hologram.setNoFlash();
                 usedOptions.remove(opt);
                 sender.sendMessage(messages.getUnsetFlashMessage());
+                unsetFlash = true;
                 break;
                 case "playercount":
                 if (hologram.getType() != PeriodicType.NTIMES) {
@@ -181,7 +183,7 @@ public class UnsetSub extends SubCommand {
             prevOpt = opt;
         }
         if (usedOptions.isEmpty()) {
-            if (!unsetPlayerCount) sender.sendMessage(messages.getNothingToUnsetMessage());
+            if (!unsetPlayerCount && !unsetFlash) sender.sendMessage(messages.getNothingToUnsetMessage());
             return true;
         }
         sender.sendMessage(messages.getUnsetOptionsMessage(usedOptions));
