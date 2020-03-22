@@ -65,11 +65,12 @@ public abstract class FlashingHologram extends PeriodicHologramBase {
         if (!flashes()) {
             return showing;
         }
+        phd.debug(String.format("Starting to flash! %3.2f on and %3.2f off", flashOn, flashOff));
         if (!showing) return false;
         long cycleTicks = (int) ((flashOn + flashOff) * 20L);
         long offDelay = (int) (flashOn * 20L);
         new Flasher(player, true).runTaskTimer(phd, 0L, cycleTicks);
-        new Flasher(player, true).runTaskTimer(phd, offDelay, cycleTicks);
+        new Flasher(player, false).runTaskTimer(phd, offDelay, cycleTicks);
         return true;
     }
 
