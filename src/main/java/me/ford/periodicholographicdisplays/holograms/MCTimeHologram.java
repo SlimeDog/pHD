@@ -14,7 +14,7 @@ import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 /**
  * MCTimeHologram
  */
-public class MCTimeHologram extends PeriodicHologramBase {
+public class MCTimeHologram extends FlashingHologram {
     private static final long DELAY = 20 * 60 * 20; // 20 minutes, 60 seconds, 20 ticks 
     private final PeriodicHolographicDisplays plugin;
     private final MCTimeHologramDisplayer displayer;

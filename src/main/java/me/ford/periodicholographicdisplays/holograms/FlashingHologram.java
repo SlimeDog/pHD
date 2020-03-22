@@ -18,8 +18,8 @@ public abstract class FlashingHologram extends PeriodicHologramBase {
     private double flashOff = 0.0D;
 
     public FlashingHologram(Hologram hologram, String name, double activationDistance, long showTime, PeriodicType type,
-            boolean isNew) {
-        super(hologram, name, activationDistance, showTime, type, isNew);
+            boolean isNew, String perms) {
+        super(hologram, name, activationDistance, showTime, type, isNew, perms);
         phd = JavaPlugin.getPlugin(PeriodicHolographicDisplays.class);
     }
 
@@ -91,7 +91,7 @@ public abstract class FlashingHologram extends PeriodicHologramBase {
         public void run() {
             if (!player.isValid() || !player.isOnline()) return;
             if (show) {
-                show(player);
+                FlashingHologram.super.show(player);
             } else {
                 hideFrom(player);
             }

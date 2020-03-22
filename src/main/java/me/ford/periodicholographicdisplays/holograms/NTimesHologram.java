@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 /**
  * NTimesHologram
  */
-public class NTimesHologram extends PeriodicHologramBase {
+public class NTimesHologram extends FlashingHologram {
     private int timesToShow;
     private final Map<UUID, Integer> shownTo = new HashMap<>();
     private final Map<UUID, Integer> toSave = new HashMap<>();
