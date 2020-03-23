@@ -38,6 +38,9 @@ public abstract class OptionPairSetSub extends SubCommand {
             }
             isKey = !isKey;
         }
+        if (map.containsKey("flashon") && map.containsKey("flashoff")) {
+            map.put("flashoff", map.remove("flashoff"));
+        }
         return map;
     }
 
