@@ -38,7 +38,7 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getFlashTimeTooSmallMessage(String specified) {
-        return getMessage("flash-time-too-small", "Flash time {time} is to small needs to be 1 or greater")
+        return getMessage("flash-time-too-small", "Minimum flash time is 1.0, got {time}")
                         .replace("{time}", specified);
     }
 
@@ -246,7 +246,7 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getNeedPairedOptionsMessage() {
-        return getMessage("incorrect-set-options", "Need a set of key-value pairs to set (got an odd number of arguments)");
+        return getMessage("incorrect-set-options", "Need a set of key-value pairs to set, got an odd number of arguments");
     }
 
     public String getOptionMissingMessage(PeriodicType type, String option) {
@@ -280,7 +280,7 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getProblemWithConfigMessage(SettingIssue issue, String value) {
-        return getMessage("problem-in-config", "Problem in config for {key}; expected {type} got {value}")
+        return getMessage("problem-in-config", "Problem in config for {key}; expected {type}, got {value}")
                         .replace("{key}", issue.getPath()).replace("{type}", issue.getType().getName())
                         .replace("{value}", value);
     }
