@@ -47,6 +47,8 @@ public class ManageSub extends OptionPairSetSub {
                 msg = msg.replace("[times <integer>] ", "");
                 break;
                 case NTIMES:
+                msg = msg.replace("[time <hh:mm>] ", "");
+                break;
                 default:
                 break; // do nothing
             }
