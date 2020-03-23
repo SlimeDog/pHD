@@ -37,6 +37,10 @@ public class Messages extends CustomConfigHandler {
         this.phd = phd;
     }
 
+    public String getUnrecognizedCommandMessage(String input) {
+        return getMessage("unrecognized-command", "Unrecognized command; try /phd help");
+    }
+
     public String getFlashTimeTooSmallMessage(String specified) {
         return getMessage("flash-time-too-small", "Minimum flash time is 1.0, got {time}")
                         .replace("{time}", specified);

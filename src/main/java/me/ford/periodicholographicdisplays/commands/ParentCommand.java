@@ -81,10 +81,21 @@ public abstract class ParentCommand implements TabExecutor {
 		SubCommand cmd = subCommands.get(args[0]);
 		if (cmd == null) {
 			int page = 1;
+			String pageStr = "1";
+			if (args[0].equalsIgnoreCase("help")) {
+				if (args.length > 1) {
+					pageStr = args[1];
+				}
+			} else {
+				pageStr = args[0];
+			}
 			try {
-				page = Integer.parseInt(args[0]);
+				page = Integer.parseInt(pageStr);
 			} catch (NumberFormatException e) {
-				// remains 1 -> regular usage
+				if (!args[0].equalsIgnoreCase("help")) {
+					sender.sendMessage(messages.getUnrecognizedCommandMessage(args[0]));
+					return true;
+				}
 			}
 			sender.sendMessage(getUsage(sender, page));
 			return true;
