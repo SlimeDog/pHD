@@ -31,7 +31,7 @@ import me.ford.periodicholographicdisplays.util.TimeUtils;
  */
 public class ManageSub extends OptionPairSetSub {
     private static final String PERMS = "phd.manage";
-    private static final String USAGE_1 = "/phd manage <hologram> <type> <times <integer>> <time <hh:mm>> " +
+    private static final String USAGE_1 = "/phd manage <hologram> <type> times <integer> time <hh:mm> " +
                                 "[seconds <integer>] [distance <number>] [permission <string>] " +
                                 "[flash <number>] [flashOn <number>] [flashOff <number>]";
     private static final String USAGE;
@@ -41,13 +41,13 @@ public class ManageSub extends OptionPairSetSub {
             String msg = USAGE_1.replace("<type>", type.name());
             switch(type) {
                 case ALWAYS:
-                msg = msg.replace("<time <hh:mm>> ", "");
+                msg = msg.replace("time <hh:mm> ", "");
                 case IRLTIME:
                 case MCTIME:
-                msg = msg.replace("<times <integer>> ", "");
+                msg = msg.replace("times <integer> ", "");
                 break;
                 case NTIMES:
-                msg = msg.replace("<time <hh:mm>> ", "");
+                msg = msg.replace("time <hh:mm> ", "");
                 break;
                 default:
                 break; // do nothing
