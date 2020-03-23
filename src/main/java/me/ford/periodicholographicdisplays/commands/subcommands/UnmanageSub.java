@@ -17,7 +17,7 @@ import me.ford.periodicholographicdisplays.holograms.PeriodicType;
  */
 public class UnmanageSub extends SubCommand {
     private static final String PERMS = "phd.commands.phd.unmanage";
-    private static final String USAGE = "/phd unmanage {hologram} {type}";
+    private static final String USAGE = "/phd unmanage <hologram> <type>";
     private final HologramStorage storage;
     private final Messages messages;
 
