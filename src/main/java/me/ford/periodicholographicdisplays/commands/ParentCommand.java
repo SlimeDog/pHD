@@ -52,7 +52,7 @@ public abstract class ParentCommand implements TabExecutor {
 	
 	private String getUsage(CommandSender sender, int page) {
 		List<String> msgs = new ArrayList<>();
-		String header = getUsage().replace("[page]", String.valueOf(page));
+		String header = getUsage().replace("{page}", String.valueOf(page));
 		for (SubCommand cmd : subCommands.values()) {
 			if (cmd.hasPermission(sender)) {
 				for (String part : cmd.getUsage(sender).split("\n")) {
@@ -64,6 +64,7 @@ public abstract class ParentCommand implements TabExecutor {
 		if (page < 1 || page > maxPage) {
 			return messages.getInvalidPageMessage(maxPage);
 		}
+		header = header.replace("{maxpage}", String.valueOf(maxPage));
 		int start = (page - 1) * PER_PAGE;
 		if (start > msgs.size()) start = msgs.size();
 		int end = page * PER_PAGE;

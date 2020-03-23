@@ -14,7 +14,7 @@ import me.ford.periodicholographicdisplays.commands.subcommands.UnsetSub;
  * PHDCommand
  */
 public class PHDCommand extends ParentCommand {
-    private static final String USAGE = "/phd <subcommand> args (page [page])";
+    private static final String USAGE = "/phd <subcommand> args (page {page}/{maxpage})";
     private final PeriodicHolographicDisplays plugin;
     private final ConvertSub convertSub;
 
