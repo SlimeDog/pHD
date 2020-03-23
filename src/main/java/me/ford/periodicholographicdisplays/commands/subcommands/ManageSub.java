@@ -31,7 +31,9 @@ import me.ford.periodicholographicdisplays.util.TimeUtils;
  */
 public class ManageSub extends OptionPairSetSub {
     private static final String PERMS = "phd.manage";
-    private static final String USAGE = "/phd manage {hologram} {type} [times {integer}] [time {hh:mm}] [seconds {integer}] [distance {integer|decimal}] [permission {string}] [times {integer}] [time {hh:mm}] [seconds {integer}] [distance {integer|decimal}] [permission {string}] [flash {integer|decimal}] [flashOn {integer|decimal}] [flashOff {integer|decimal}]";
+    private static final String USAGE = "/phd manage <hologram> <type> [times <integer>] [time <hh:mm>] " +
+                                "[seconds <integer>] [distance <number>] [permission <string>] " +
+                                "[flash <number>] [flashOn <number>] [flashOff <number>]";
     private final HologramStorage storage;
     private final LuckPermsHook hook;
     private final Messages messages;
