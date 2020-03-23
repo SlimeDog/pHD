@@ -31,9 +31,29 @@ import me.ford.periodicholographicdisplays.util.TimeUtils;
  */
 public class ManageSub extends OptionPairSetSub {
     private static final String PERMS = "phd.manage";
-    private static final String USAGE = "/phd manage <hologram> <type> [times <integer>] [time <hh:mm>] " +
+    private static final String USAGE_1 = "/phd manage <hologram> <type> [times <integer>] [time <hh:mm>] " +
                                 "[seconds <integer>] [distance <number>] [permission <string>] " +
                                 "[flash <number>] [flashOn <number>] [flashOff <number>]";
+    private static final String USAGE;
+    static {
+        List<String> lines = new ArrayList<>();
+        for (PeriodicType type : PeriodicType.values()) {
+            String msg = USAGE_1.replace("<type>", type.name());
+            switch(type) {
+                case ALWAYS:
+                msg = msg.replace("[time <hh:mm>] ", "");
+                case IRLTIME:
+                case MCTIME:
+                msg = msg.replace("[times <integer>] ", "");
+                break;
+                case NTIMES:
+                default:
+                break; // do nothing
+            }
+            lines.add(msg);
+        }
+        USAGE = String.join("\n", lines);
+    }
     private final HologramStorage storage;
     private final LuckPermsHook hook;
     private final Messages messages;
