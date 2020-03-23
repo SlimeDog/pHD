@@ -11,11 +11,20 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.util.StringUtil;
 
+import me.ford.periodicholographicdisplays.Messages;
+import me.ford.periodicholographicdisplays.util.PageUtils;
+
 /**
  * ParentCommand
  */
 public abstract class ParentCommand implements TabExecutor {
-    private final Map<String, SubCommand> subCommands = new LinkedHashMap<>();
+	private final Messages messages;
+	private static final int PER_PAGE = 8;
+	private final Map<String, SubCommand> subCommands = new LinkedHashMap<>();
+	
+	public ParentCommand(Messages messages) {
+		this.messages = messages;
+	}
     
     protected void addSubCommand(String name, SubCommand subCommand) {
         subCommands.put(name.toLowerCase(), subCommand);
@@ -41,12 +50,26 @@ public abstract class ParentCommand implements TabExecutor {
 		}
 	}
 	
-	private String getUsage(CommandSender sender) {
-		String msg = getUsage();
+	private String getUsage(CommandSender sender, int page) {
+		List<String> msgs = new ArrayList<>();
+		String header = getUsage().replace("[page]", String.valueOf(page));
 		for (SubCommand cmd : subCommands.values()) {
-			if (cmd.hasPermission(sender)) msg += "\n" + cmd.getUsage(sender);
+			if (cmd.hasPermission(sender)) {
+				for (String part : cmd.getUsage(sender).split("\n")) {
+					msgs.add(part);
+				}
+			}
 		}
-		return msg;
+		int maxPage = PageUtils.getNumberOfPages(msgs.size(), PER_PAGE);
+		if (page < 1 || page > maxPage) {
+			return messages.getInvalidPageMessage(maxPage);
+		}
+		int start = (page - 1) * PER_PAGE;
+		if (start > msgs.size()) start = msgs.size();
+		int end = page * PER_PAGE;
+		if (end > msgs.size()) end = msgs.size();
+		List<String> onPage = msgs.subList(start, end);
+		return header + "\n" + String.join("\n", onPage);
 	}
 
 	@Override
@@ -56,12 +79,18 @@ public abstract class ParentCommand implements TabExecutor {
 		}
 		SubCommand cmd = subCommands.get(args[0]);
 		if (cmd == null) {
-			sender.sendMessage(getUsage(sender));
+			int page = 1;
+			try {
+				page = Integer.parseInt(args[0]);
+			} catch (NumberFormatException e) {
+				// remains 1 -> regular usage
+			}
+			sender.sendMessage(getUsage(sender, page));
 			return true;
 		}
 		
 		if (!cmd.hasPermission(sender)) {
-            sender.sendMessage(getUsage(sender));
+            sender.sendMessage(getUsage(sender, 1));
         } else if (!cmd.onCommand(sender, command, label, args)) {
 			sender.sendMessage(cmd.getUsage(sender));
 		}
@@ -69,7 +98,7 @@ public abstract class ParentCommand implements TabExecutor {
     }
 
     protected boolean noArgs(CommandSender sender) { // can be overwritten
-        sender.sendMessage(getUsage(sender));
+        sender.sendMessage(getUsage(sender, 1));
         return true;
     }
 

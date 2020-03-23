@@ -14,11 +14,12 @@ import me.ford.periodicholographicdisplays.commands.subcommands.UnsetSub;
  * PHDCommand
  */
 public class PHDCommand extends ParentCommand {
-    private static final String USAGE = "/phd <subcommand> args";
+    private static final String USAGE = "/phd <subcommand> args (page [page])";
     private final PeriodicHolographicDisplays plugin;
     private final ConvertSub convertSub;
 
     public PHDCommand(PeriodicHolographicDisplays plugin) {
+        super(plugin.getMessages());
         this.plugin = plugin;
         addSubCommand("info", new InfoSub(plugin.getHolograms(), this.plugin.getMessages()));
         addSubCommand("list", new ListSub(plugin.getHolograms(), this.plugin.getMessages()));
