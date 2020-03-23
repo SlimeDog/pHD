@@ -100,6 +100,15 @@ public class ManageSub extends OptionPairSetSub {
             for (int i = 2; i<args.length - 2; i+=2) {
                 options.remove(args[i]);
             }
+            for (String arg : args) {
+                if (arg.equalsIgnoreCase("flash")) {
+                    options.remove("flashOn");
+                    options.remove("flashOff");
+                } else if (arg.equalsIgnoreCase("flashOn") ||
+                            arg.equalsIgnoreCase("flashOff")) {
+                    options.remove("flash");
+                }
+            }
             return StringUtil.copyPartialMatches(args[args.length - 1], options, list);
         case 4:
         case 6:
