@@ -15,15 +15,15 @@ import me.ford.periodicholographicdisplays.commands.subcommands.UnsetSub;
  * PHDCommand
  */
 public class PHDCommand extends ParentCommand {
-    private static final String USAGE = "/phd <subcommand> args (page {page}/{maxpage})";
+    private static final String USAGE = "/phd subcommand parameters (page {page}/{maxpage})";
     private final PeriodicHolographicDisplays plugin;
     private final ConvertSub convertSub;
 
     public PHDCommand(PeriodicHolographicDisplays plugin) {
         super(plugin.getMessages());
         this.plugin = plugin;
-        addSubCommand("info", new InfoSub(plugin.getHolograms(), this.plugin.getMessages()));
         addSubCommand("list", new ListSub(plugin.getHolograms(), this.plugin.getMessages()));
+        addSubCommand("info", new InfoSub(plugin.getHolograms(), this.plugin.getMessages()));
         addSubCommand("report", new ReportSub(plugin.getHolograms(), plugin.getMessages()));
         addSubCommand("manage", new ManageSub(plugin.getHolograms(), plugin.getLuckPermsHook(), this.plugin.getMessages()));
         addSubCommand("set", new SetSub(plugin.getHolograms(), plugin.getLuckPermsHook(), plugin.getSettings(), this.plugin.getMessages()));
