@@ -3,7 +3,7 @@ name: Feature request
 about: Suggest an new feature
 title: ''
 labels: 'type: feature request'
-assignees: ''
+assignees: 'SlimeDog'
 
 ---
 
