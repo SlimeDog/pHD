@@ -5,6 +5,7 @@ import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 
@@ -18,6 +19,8 @@ public abstract class FlashingHologram extends PeriodicHologramBase {
     private boolean flashes = false;
     private double flashOn = NO_FLASH;
     private double flashOff = NO_FLASH;
+    private BukkitTask on = null;
+    private BukkitTask off = null;
 
     public FlashingHologram(Hologram hologram, String name, double activationDistance, long showTime, PeriodicType type,
             boolean isNew, String perms, double flashOn, double flashOff) {
@@ -71,6 +74,16 @@ public abstract class FlashingHologram extends PeriodicHologramBase {
     }
 
     @Override
+    public void resetVisibility() {
+        super.resetVisibility();
+        if (!flashes()) return;
+        if (on == null || off == null) return;
+        if (on.isCancelled() || off.isCancelled()) return;
+        on.cancel();
+        off.cancel();
+    }
+
+    @Override
     public boolean show(Player player) {
         boolean showing = super.show(player);
         if (!flashes()) {
@@ -80,8 +93,8 @@ public abstract class FlashingHologram extends PeriodicHologramBase {
         if (!showing) return false;
         long cycleTicks = (int) ((flashOn + flashOff) * 20L);
         long offDelay = (int) (flashOn * 20L);
-        new Flasher(player, true).runTaskTimer(phd, 0L, cycleTicks);
-        new Flasher(player, false).runTaskTimer(phd, offDelay, cycleTicks);
+        on = new Flasher(player, true).runTaskTimer(phd, 0L, cycleTicks);
+        off = new Flasher(player, false).runTaskTimer(phd, offDelay, cycleTicks);
         return true;
     }
 
