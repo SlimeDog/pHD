@@ -343,12 +343,30 @@ public class Messages extends CustomConfigHandler {
 
     private String timesString = "%s %d/%d";
 
-    public String getNtimesReportMessage(OfflinePlayer player, List<NTimesHologram> holos) {
+    public String getNtimesReportMessage(OfflinePlayer player, List<NTimesHologram> holos, int page) {
         org.bukkit.Bukkit.getLogger().info("CUSTOM!!");
-        String msg = getMessage("ntimes-report", "{player} has seen the following NTIMES holograms:\n{times}");
+        String msg = getMessage("ntimes-report", "{player} has seen the following NTIMES holograms (holograms {holograms}, page {page}/{max-pages}):\n{times}");
         msg = msg.replace("{player}", player.getName());
+
+        PageInfo pageInfo = PageUtils.getPageInfo(holos.size(), PageUtils.HOLOGRAMS_PER_PAGE, page);
+        int startNr = pageInfo.getStartNumber();
+        int endNr = pageInfo.getEndNumber();
+        String numbers;
+        if (endNr <= startNr && startNr == 1) {
+            numbers = String.valueOf(endNr);
+        } else {
+            numbers = String.format("%d-%d", startNr, endNr);
+        }
+        msg = msg.replace("{holograms}", numbers);
+        msg = msg.replace("{page}", String.valueOf(page)).replace("{max-pages}", String.valueOf(pageInfo.getNumberOfPages()));
+
         StringBuilder builder = new StringBuilder();
+        int i = 0;
         for (NTimesHologram hologram : holos) {
+            i++;
+            if (i < pageInfo.getStartNumber() || i > pageInfo.getEndNumber()) {
+                continue;
+            }
             Integer amount = hologram.getShownTo().get(player.getUniqueId());
             if (amount == null) continue; // skip ones that haven't been shown
             if (builder.length() != 0) builder.append("\n");

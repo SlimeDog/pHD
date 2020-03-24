@@ -14,13 +14,14 @@ import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
+import me.ford.periodicholographicdisplays.util.PageUtils;
 
 /**
  * ReportSub
  */
 public class ReportSub extends SubCommand {
     private static final String PERMS = "phd.report";
-    private static final String USAGE = "/phd report NTIMES <player>"; // TODO - might need pages?
+    private static final String USAGE = "/phd report NTIMES <player> [page]";
     private final HologramStorage storage;
     private final Messages messages;
 
@@ -59,16 +60,34 @@ public class ReportSub extends SubCommand {
             sender.sendMessage(messages.getPlayerNotFoundMessage(args[1]));
             return true;
         }
+
+        int page = 1;
+        if (args.length > 2) {
+            try {
+                page = Integer.parseInt(args[2]);
+            } catch (NumberFormatException e) {
+                sender.sendMessage(messages.getNeedAnIntegerMessage(args[2]));
+                return true;
+            }
+        }
+
         // get all NTIMES holograms
         List<NTimesHologram> holograms = new ArrayList<>();
         for (World world : storage.getActiveWorlds()) {
             for (FlashingHologram holo : storage.getHolograms(world).getHolograms()) {
-                if (holo instanceof NTimesHologram) {
+                if (holo instanceof NTimesHologram && ((NTimesHologram) holo).getShownTo().get(player.getUniqueId()) != null) {
                     holograms.add((NTimesHologram) holo);
                 }
             }
         }
-        sender.sendMessage(messages.getNtimesReportMessage(player, holograms));
+
+        int maxPage = PageUtils.getNumberOfPages(holograms.size(), PageUtils.HOLOGRAMS_PER_PAGE);
+        if (page < 1 || page > maxPage) {
+            sender.sendMessage(messages.getInvalidPageMessage(maxPage));
+            return true;
+        }
+
+        sender.sendMessage(messages.getNtimesReportMessage(player, holograms, page));
         return true;
     }
 
