@@ -15,7 +15,7 @@ import me.ford.periodicholographicdisplays.commands.SubCommand;
  * ReloadSub
  */
 public class ReloadSub extends SubCommand {
-    private static final String PERMS = "phd.commands.phd.reload";
+    private static final String PERMS = "phd.reload";
     private static final String USAGE = "/phd reload";
     private final PeriodicHolographicDisplays phd;
     private final Messages messages;

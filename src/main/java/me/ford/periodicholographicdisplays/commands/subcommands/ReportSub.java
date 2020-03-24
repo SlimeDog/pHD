@@ -20,7 +20,7 @@ import me.ford.periodicholographicdisplays.util.PageUtils;
  * ReportSub
  */
 public class ReportSub extends SubCommand {
-    private static final String PERMS = "phd.commands.phd.report";
+    private static final String PERMS = "phd.report";
     private static final String USAGE = "/phd report NTIMES <name> [page]";
     private final HologramStorage storage;
     private final Messages messages;

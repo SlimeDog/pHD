@@ -50,6 +50,7 @@ permissions:
     default: op
     children:
       phd.info: true
+      phd.report: true
       phd.list: true
       phd.manage: true
       phd.set: true
@@ -63,7 +64,7 @@ permissions:
   phd.info:
     description: Allows listing of attributes of specified hologram
     default: op
-  phd.commands.phd.report:
+  phd.report:
     description: Allows listing of player seen times for NTIMES hologram
     default: op
   phd.manage:

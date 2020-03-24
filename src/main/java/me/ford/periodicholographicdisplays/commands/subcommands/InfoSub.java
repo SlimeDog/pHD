@@ -19,7 +19,7 @@ import me.ford.periodicholographicdisplays.util.PageUtils;
  * InfoSub
  */
 public class InfoSub extends SubCommand {
-    private static final String PERMS = "phd.commands.phd.info";
+    private static final String PERMS = "phd.info";
     private static final String USAGE = "/phd info <name> <type> [page]";
     private final HologramStorage storage;
     private final Messages messages;

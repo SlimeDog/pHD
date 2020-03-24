@@ -24,7 +24,7 @@ import me.ford.periodicholographicdisplays.holograms.WorldHologramStorageBase.Ho
  * UnsetSub
  */
 public class UnsetSub extends SubCommand {
-    private static final String PERMS = "phd.set";
+    private static final String PERMS = "phd.unset";
     private static final String USAGE = "/phd unset <hologram> <type> [seconds] [distance] [permission] [flash] [playercount <player>]";
     private final HologramStorage storage;
     private final Settings settings;

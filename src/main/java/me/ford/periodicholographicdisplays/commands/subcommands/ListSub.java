@@ -18,7 +18,7 @@ import me.ford.periodicholographicdisplays.util.PageUtils;
  * ListSub
  */
 public class ListSub extends SubCommand {
-    private static final String PERMS = "phd.commands.phd.list";
+    private static final String PERMS = "phd.list";
     private static final String USAGE = "/phd list [page]";
     private final HologramStorage storage;
     private final Messages messages;
