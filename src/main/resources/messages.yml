@@ -20,10 +20,14 @@ PHD_PREFIX: "[pHD] "
 # Messages produced by ...
 #
 
+# Messages produced by /phd list
+#
+hologram-list: "Holograms (holograms {numbers}, page {page}/{max-pages}): \n{holograms}"
+
 # Messages produced by /phd info
 #
 available-types: "Types available for {hologram}: {types}"
-hologram-info: "Hologram '{name}':\nWorld: {world}\nType: {type}\nShowTime: {time}\nFlash: {flash}\nActivationDistance: {distance}\nPermission: {perms}\nTypeInfo: {typeinfo}"
+hologram-info: "Hologram {name}:\nWorld: {world}\nType: {type}\nShowTime: {time}\nFlash: {flash}\nActivationDistance: {distance}\nPermission: {perms}\nTypeInfo: {typeinfo}"
 typeinfo:
   MCTIME: "Shown at: {time}"
   IRLTIME: "Shown at: {time}"
@@ -33,10 +37,6 @@ typeinfo:
 # Messages produced by /phd report
 #
 ntimes-report: "{name} has been shown to (players {players}, page {page}/{max-pages}): {players:times}"
-
-# Messages produced by /phd list
-#
-hologram-list: "Holograms (holograms {numbers}, page {page}/{max-pages}): \n{holograms}"
 
 # Messages produced by /phd manage
 #
