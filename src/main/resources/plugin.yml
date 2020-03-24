@@ -15,7 +15,7 @@ commands:
   phd:
     description: Main command
     usage: /<command> <subcommand> <parameters>
-    permission: phd.command.phd
+    permission: phd.use
   phd info <name> <type>:
     description: See info about a pHD hologram
     usage: /<command> <subcommand> <parameters>
@@ -49,6 +49,7 @@ permissions:
     description: All phd permissions
     default: op
     children:
+      phd.use: true
       phd.info: true
       phd.report: true
       phd.list: true
@@ -58,6 +59,9 @@ permissions:
       phd.unmanage: true
       phd.reload: true
       phd.convert: true
+  phd.use:
+    description: Allows using the phd command
+    default: op
   phd.list:
     description: Allows listing of pHD holograms
     default: op
