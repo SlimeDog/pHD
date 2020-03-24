@@ -216,6 +216,14 @@ public class ManageSub extends OptionPairSetSub {
         String perms = null; // default to nothing
         double flashOn = FlashingHologram.NO_FLASH;
         double flashOff = FlashingHologram.NO_FLASH;
+        if (optionPairs.containsKey("flash")) {
+            double flash;
+            try {
+                flash = Double.parseDouble(optionPairs.get("flash"));
+                flashOn = flash;
+                flashOff = flash;
+            } catch (NumberFormatException e) {} // remain default
+        }
         if (optionPairs.containsKey("flashon")) {
             try {
                 flashOn = Double.parseDouble(optionPairs.get("flashon"));
