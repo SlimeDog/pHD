@@ -341,41 +341,23 @@ public class Messages extends CustomConfigHandler {
                         .replace("{name}", name).replace("{type}", type.name()).replace("{options}", String.join(", ", opts));
     }
 
-    public String getNtimesReportMessage(NTimesHologram hologram, int page) {
+    private String timesString = "%s %d/%d";
+
+    public String getNtimesReportMessage(OfflinePlayer player, List<NTimesHologram> holos) {
         org.bukkit.Bukkit.getLogger().info("CUSTOM!!");
-        String msg = getMessage("ntimes-report", "{name} has been shown to (players {players}, page {page}/{max-pages}): {players:times}");
-        msg = msg.replace("{name}", hologram.getName());
-        int toShow = hologram.getTimesToShow();
-        final int nrOfPlayers = hologram.getShownTo().size();
-        PageInfo pageInfo = PageUtils.getPageInfo(nrOfPlayers, PageUtils.PLAYERS_PER_PAGE, page);
-        int startNr = pageInfo.getStartNumber();
-        int endNr = pageInfo.getEndNumber();
-        String numbers;
-        if (endNr <= startNr && startNr == 1) {
-            numbers = String.valueOf(endNr);
-        } else {
-            numbers = String.format("%d-%d", startNr, endNr);
+        String msg = getMessage("ntimes-report", "{player} has seen the following NTIMES holograms:\n{times}");
+        msg = msg.replace("{player}", player.getName());
+        StringBuilder builder = new StringBuilder();
+        for (NTimesHologram hologram : holos) {
+            Integer amount = hologram.getShownTo().get(player.getUniqueId());
+            if (amount == null) continue; // skip ones that haven't been shown
+            if (builder.length() != 0) builder.append("\n");
+            builder.append(String.format(timesString, hologram.getName(), amount, hologram.getTimesToShow()));
         }
-        msg = msg.replace("{players}", numbers);
-        msg = msg.replace("{page}", String.valueOf(page)).replace("{max-pages}", String.valueOf(pageInfo.getNumberOfPages()));
-        List<String> playersAndTimes = new ArrayList<>();
-        int i = 1;
-        for (Entry<UUID, Integer> entry : hologram.getShownTo().entrySet()) {
-            if (i < pageInfo.getStartNumber() || i > pageInfo.getEndNumber()) {
-                i++;
-                continue;
-            }
-            OfflinePlayer player = phd.getServer().getOfflinePlayer(entry.getKey());
-            String playerName = (player == null || !player.hasPlayedBefore()) ? "UNKNOWNPLAYER" : player.getName();
-            playersAndTimes.add(String.format("%s %d/%d", playerName, + entry.getValue(), toShow));
-            i++;
+        if (builder.length() == 0) {
+            builder.append("None");
         }
-        if (playersAndTimes.isEmpty()) {
-            msg = msg.replace("{players:times}", "none");
-        } else {
-            msg = msg.replace("{players:times}", "\n" + String.join("\n", playersAndTimes));
-        }
-        return msg;
+        return msg.replace("{times}", builder.toString());
     }
 
     public String getHologramInfoMessage(FlashingHologram hologram, int page) {

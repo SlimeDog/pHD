@@ -32,7 +32,7 @@ typeinfo:
 
 # Messages produced by /phd report
 #
-ntimes-report: "{name} has been shown to (players {players}, page {page}/{max-pages}): {players:times}"
+ntimes-report: "{player} has seen the following NTIMES holograms:\n{times}"
 
 # Messages produced by /phd list
 #

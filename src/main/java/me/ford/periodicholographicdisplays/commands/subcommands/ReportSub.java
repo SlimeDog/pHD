@@ -3,9 +3,10 @@ package me.ford.periodicholographicdisplays.commands.subcommands;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.bukkit.util.StringUtil;
 
 import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.commands.SubCommand;
@@ -13,15 +14,13 @@ import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
-import me.ford.periodicholographicdisplays.util.HintUtil;
-import me.ford.periodicholographicdisplays.util.PageUtils;
 
 /**
  * ReportSub
  */
 public class ReportSub extends SubCommand {
     private static final String PERMS = "phd.report";
-    private static final String USAGE = "/phd report NTIMES <name> [page]";
+    private static final String USAGE = "/phd report NTIMES <player>"; // TODO - might need pages?
     private final HologramStorage storage;
     private final Messages messages;
 
@@ -38,14 +37,7 @@ public class ReportSub extends SubCommand {
             list.add(PeriodicType.NTIMES.name());
             return list;
         case 2:
-            List<String> names = new ArrayList<>();
-            for (World world : storage.getActiveWorlds()) {
-                for (FlashingHologram hologram : storage.getHolograms(world).getHolograms(false)) {
-                    if (hologram.getType() == PeriodicType.NTIMES) names.add(hologram.getName());
-                }
-            }
-            names.sort(String.CASE_INSENSITIVE_ORDER);
-            return StringUtil.copyPartialMatches(args[1], names, list);
+            return null; // in game player names
         } 
         return list;
     }
@@ -62,35 +54,22 @@ public class ReportSub extends SubCommand {
             return false;
         }
         if (type != PeriodicType.NTIMES) return false;
-        int page = 1;
-        if (args.length > 2) {
-            try {
-                page = Integer.parseInt(args[2]);
-            } catch (NumberFormatException e) {
-                sender.sendMessage(messages.getNeedAnIntegerMessage(args[2]));
-                return true;
+        OfflinePlayer player = Bukkit.getPlayer(args[1]); // TODO - do I need offline players?
+        if (player == null || !player.hasPlayedBefore()) {
+            sender.sendMessage(messages.getPlayerNotFoundMessage(args[1]));
+            return true;
+        }
+        // get all NTIMES holograms
+        List<NTimesHologram> holograms = new ArrayList<>();
+        for (World world : storage.getActiveWorlds()) {
+            for (FlashingHologram holo : storage.getHolograms(world).getHolograms()) {
+                if (holo instanceof NTimesHologram) {
+                    holograms.add((NTimesHologram) holo);
+                }
             }
         }
-        NTimesHologram hologram = (NTimesHologram) storage.getHologram(args[1], type);
-        if (hologram == null) {
-            sender.sendMessage(messages.getHologramNotFoundMessage(args[1], type));
-            return true;
-        }
-        int maxPage = getMaxPages(hologram);
-        if (maxPage == 0) maxPage++;
-        if (page <= 0 || page > maxPage) {
-            sender.sendMessage(messages.getInvalidPageMessage(maxPage));
-            return true;
-        }
-        sender.sendMessage(messages.getNtimesReportMessage(hologram, page));
-        if (page < maxPage) HintUtil.sendHint(sender, messages.getNextPageHint("{command}"), String.format("/phd report NTIMES %s %d", hologram.getName(), page +1));
+        sender.sendMessage(messages.getNtimesReportMessage(player, holograms));
         return true;
-    }
-
-    private int getMaxPages(NTimesHologram hologram) {
-        if (hologram.getType() != PeriodicType.NTIMES) return 1;
-        NTimesHologram ntimes = (NTimesHologram) hologram;
-        return PageUtils.getNumberOfPages(ntimes.getShownTo().size(), PageUtils.PLAYERS_PER_PAGE);
     }
 
     @Override
