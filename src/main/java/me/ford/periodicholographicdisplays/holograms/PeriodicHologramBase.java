@@ -124,6 +124,7 @@ public abstract class PeriodicHologramBase {
     public void markRemoved() {
         this.hologram.getVisibilityManager().setVisibleByDefault(true);
         this.hologram.getVisibilityManager().resetVisibilityAll();
+        this.beingShownTo.clear();
     }
 
     protected void markChanged() {
