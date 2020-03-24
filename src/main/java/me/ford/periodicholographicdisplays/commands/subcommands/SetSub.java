@@ -22,8 +22,7 @@ import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
  */
 public class SetSub extends OptionPairSetSub {
     private static final String PERMS = "phd.set";
-    private static final String USAGE = "/phd set <hologram> <type> [times <integer>] [time <hh:mm>] [seconds <integer>] " +
-                        "[distance <number>] [permission <string>] [flash <number>] [flashOn <number>] [flashOff <number>]";
+    private static final String USAGE = "/phd set <hologram> <type> <options...>";
     private final HologramStorage storage;
     private final LuckPermsHook hook;
     private final Messages messages;
