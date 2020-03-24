@@ -14,35 +14,35 @@ softdepend: [Citizens, LuckPerms, Multiverse-Core, MultiWorld]
 commands:
   phd:
     description: Main command
-    usage: /<command> <subcommand> args
+    usage: /<command> <subcommand> <parameters>
     permission: phd.command.phd
   phd info <name> <type>:
     description: See info about a pHD hologram
-    usage: /<command> <subcommand> args
+    usage: /<command> <subcommand> <parameters>
   phd report NTIMES <name>:
     description: See how many times certain players have seen the NTIMES hologram
-    usage: /<command> <sucommand> args
+    usage: /<command> <subcommand> <parameters>
   phd list:
     description: List pHD holograms
-    usage: /<command>
+    usage: /<command> <subcommand> <parameters>
   phd manage <name> <type> <params...>:
     description: Manage a hologram as a pHD hologram
-    usage: /<command>
+    usage: /<command> <subcommand> <parameters>
   phd set <name> <type> <params...>:
     description: Set a parameter of a pHD hologram
-    usage: /<command>
+    usage: /<command> <subcommand> <parameters>
   phd unset <name> <type> <params...>:
     description: Unset a parameter of a pHD hologram
-    usage: /<command>
+    usage: /<command> <subcommand> <parameters>
   phd unmanage <name> <type>:
     description: Unmanage
-    usage: /<command> <subcommand> args
+    usage: /<command> <subcommand> <parameters>
   phd reload:
     description: Reload the config and the holograms
     usage: /<command>
   phd convert <sourceStorageType> <targetStorageType> [--force]:
     description: Convert storage from source storage to target storage
-    usage: /<command>
+    usage: /<command> <subcommand> <parameters>
 
 permissions:
   phd.*:
