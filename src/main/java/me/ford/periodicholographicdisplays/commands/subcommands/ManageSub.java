@@ -32,8 +32,7 @@ import me.ford.periodicholographicdisplays.util.TimeUtils;
 public class ManageSub extends OptionPairSetSub {
     private static final String PERMS = "phd.manage";
     private static final String USAGE_1 = "/phd manage <hologram> <type> times <integer> time <hh:mm> " +
-                                "[seconds <integer>] [distance <number>] [permission <string>] " +
-                                "[flash <number>] [flashOn <number>] [flashOff <number>]";
+                                "[<options...>]";
     private static final String USAGE;
     static {
         List<String> lines = new ArrayList<>();
