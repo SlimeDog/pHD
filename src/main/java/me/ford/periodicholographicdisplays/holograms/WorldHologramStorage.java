@@ -73,33 +73,36 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
             TypeInfo typeInfo = hInfo.getTypeInfo();
             double distance = hInfo.getActivationDistance();
             long seconds = hInfo.getShowTime();
+            double flashOn = hInfo.getFlashOn();
+            double flashOff = hInfo.getFlashOff();
             switch (hInfo.getType()) {
                 case MCTIME:
                 hologram = new MCTimeHologram(holo, info.getHoloName(), distance, 
                                                 seconds, ((MCTimeTypeInfo) typeInfo).getAtTime(), 
-                                                false, hInfo.getPermissions());
+                                                false, hInfo.getPermissions(),
+                                                flashOn, flashOff);
                 break;
                 case IRLTIME:
                 hologram = new IRLTimeHologram(holo, info.getHoloName(), distance,
                                                 seconds, ((IRLTimeTypeInfo) typeInfo).getAtTime(), 
-                                                false, hInfo.getPermissions());
+                                                false, hInfo.getPermissions(),
+                                                flashOn, flashOff);
                 break;
                 case NTIMES:
                 NTimesTypeInfo ntimesInfo = (NTimesTypeInfo) typeInfo;
                 NTimesHologram ntimes = new NTimesHologram(holo, info.getHoloName(), distance,
                                                 seconds, ntimesInfo.getShowTimes(), 
-                                                false, hInfo.getPermissions());
+                                                false, hInfo.getPermissions(),
+                                                flashOn, flashOff);
                 ntimes.addAllShownTo(ntimesInfo.getShownToTimes());
                 hologram = ntimes;
                 break;
                 case ALWAYS:
-                hologram = new AlwaysHologram(holo, info.getHoloName(), distance, seconds, false, hInfo.getPermissions());
+                hologram = new AlwaysHologram(holo, info.getHoloName(), distance, seconds, false, hInfo.getPermissions(),
+                                                flashOn, flashOff);
                 break;
                 default:
                 throw new IllegalArgumentException("Unexpected pHD type " + hInfo.getType());
-            }
-            if (hInfo.getFlashOn() != FlashingHologram.NO_FLASH && hInfo.getFlashOff() != FlashingHologram.NO_FLASH) {
-                hologram.setFlashOnOff(hInfo.getFlashOn(), hInfo.getFlashOff(), true);
             }
             if (handler == null) {
                 handler = new IndividualHologramHandler(holo);

@@ -214,6 +214,18 @@ public class ManageSub extends OptionPairSetSub {
         double defaultDistance = PeriodicHologramBase.NO_DISTANCE;
         int showTime = PeriodicHologramBase.NO_SECONDS;
         String perms = null; // default to nothing
+        double flashOn = FlashingHologram.NO_FLASH;
+        double flashOff = FlashingHologram.NO_FLASH;
+        if (optionPairs.containsKey("flashon")) {
+            try {
+                flashOn = Double.parseDouble(optionPairs.get("flashon"));
+            } catch (NumberFormatException e) {} // remains default
+        }
+        if (optionPairs.containsKey("flashoff")) {
+            try {
+                flashOff = Double.parseDouble(optionPairs.get("flashoff"));
+            } catch (NumberFormatException e) {} // remains default
+        }
         switch (type) {
             case IRLTIME:
             String tResult = optionPairs.get("time");
@@ -228,7 +240,8 @@ public class ManageSub extends OptionPairSetSub {
                 sender.sendMessage(messages.getIncorrectTimeMessage(tResult));
                 return null;
             }
-            existing = new IRLTimeHologram(holo, holo.getName(), defaultDistance, showTime, time, true, perms);
+            existing = new IRLTimeHologram(holo, holo.getName(), defaultDistance, showTime, time, true, perms,
+                            flashOn, flashOff);
             break;
             case MCTIME:
             String timeResult = optionPairs.get("time");
@@ -243,10 +256,12 @@ public class ManageSub extends OptionPairSetSub {
                 sender.sendMessage(messages.getIncorrectTimeMessage(timeResult));
                 return null;
             }
-            existing = new MCTimeHologram(holo, holo.getName(), defaultDistance, showTime, timeAt, true, perms);
+            existing = new MCTimeHologram(holo, holo.getName(), defaultDistance, showTime, timeAt, true, perms,
+                            flashOn, flashOff);
             break;
             case ALWAYS:
-            existing = new AlwaysHologram(holo, holo.getName(), defaultDistance, showTime, true, perms);
+            existing = new AlwaysHologram(holo, holo.getName(), defaultDistance, showTime, true, perms,
+                            flashOn, flashOff);
             break;
             case NTIMES:
             default:
@@ -260,7 +275,8 @@ public class ManageSub extends OptionPairSetSub {
                     return null;
                 }
             }
-            existing = new NTimesHologram(holo, holo.getName(), defaultDistance, showTime, timesToShow, true, perms);
+            existing = new NTimesHologram(holo, holo.getName(), defaultDistance, showTime, timesToShow, true, perms,
+                            flashOn, flashOff);
             break;
         }
         return existing;

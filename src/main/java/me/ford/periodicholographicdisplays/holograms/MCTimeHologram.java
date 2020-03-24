@@ -21,12 +21,9 @@ public class MCTimeHologram extends FlashingHologram {
     private BukkitTask task;
     private long atTime; // between 0 and 23999
 
-    public MCTimeHologram(Hologram hologram, String name, double activationDistance, long showTime, long atTime, boolean isNew) {
-        this(hologram, name, activationDistance, showTime, atTime, isNew, null);
-    }
-
-    public MCTimeHologram(Hologram hologram, String name, double activationDistance, long showTime, long atTime, boolean isNew, String perms) {
-        super(hologram, name, activationDistance, showTime, PeriodicType.MCTIME, isNew, perms);
+    public MCTimeHologram(Hologram hologram, String name, double activationDistance, long showTime, long atTime, boolean isNew, String perms, 
+                        double flashOn, double flashOff) {
+        super(hologram, name, activationDistance, showTime, PeriodicType.MCTIME, isNew, perms, flashOn, flashOff);
         this.atTime = atTime;
         plugin = JavaPlugin.getPlugin(PeriodicHolographicDisplays.class);
         displayer = new MCTimeHologramDisplayer();

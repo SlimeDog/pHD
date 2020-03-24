@@ -18,13 +18,8 @@ public class NTimesHologram extends FlashingHologram {
     private final Map<UUID, Integer> toSave = new HashMap<>();
 
     public NTimesHologram(Hologram hologram, String name, double activationDistance, long showTime,
-            int timesToShow, boolean isNew) {
-        this(hologram, name, activationDistance, showTime, timesToShow, isNew, null);
-    }
-
-    public NTimesHologram(Hologram hologram, String name, double activationDistance, long showTime,
-            int timesToShow, boolean isNew, String perms) {
-        super(hologram, name, activationDistance, showTime, PeriodicType.NTIMES, isNew, perms);
+            int timesToShow, boolean isNew, String perms, double flashOn, double flashOff) {
+        super(hologram, name, activationDistance, showTime, PeriodicType.NTIMES, isNew, perms, flashOn, flashOff);
         this.timesToShow = timesToShow;
     }
 

@@ -23,12 +23,9 @@ public class IRLTimeHologram extends FlashingHologram {
     private BukkitTask task;
     private long atTime; // in day in seconds
 
-    public IRLTimeHologram(Hologram hologram, String name, double activationDistance, long showTime, long atTime, boolean isNew) {
-        this(hologram, name, activationDistance, showTime, atTime, isNew, null);
-    }
-
-    public IRLTimeHologram(Hologram hologram, String name, double activationDistance, long showTime, long atTime, boolean isNew, String perms) {
-        super(hologram, name, activationDistance, showTime, PeriodicType.IRLTIME, isNew, perms);
+    public IRLTimeHologram(Hologram hologram, String name, double activationDistance, long showTime, long atTime, boolean isNew, String perms,
+                    double flashOn, double flashOff) {
+        super(hologram, name, activationDistance, showTime, PeriodicType.IRLTIME, isNew, perms, flashOn, flashOff);
         this.atTime = atTime;
         plugin = JavaPlugin.getPlugin(PeriodicHolographicDisplays.class);
         displayer = new IRLTimeHologramDisplayer();
