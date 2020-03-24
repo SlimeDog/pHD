@@ -106,6 +106,10 @@ public class HologramStorage {
         }
     }
 
+    public Set<World> getActiveWorlds() {
+        return new HashSet<>(holograms.keySet());
+    }
+
     public WorldHologramStorage getHolograms(World world) {
         Validate.notNull(world, "Cannot get holograms of a null world!");
         WorldHologramStorage storage = holograms.get(world);

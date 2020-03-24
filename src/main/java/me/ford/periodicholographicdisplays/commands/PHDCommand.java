@@ -6,6 +6,7 @@ import me.ford.periodicholographicdisplays.commands.subcommands.InfoSub;
 import me.ford.periodicholographicdisplays.commands.subcommands.ListSub;
 import me.ford.periodicholographicdisplays.commands.subcommands.ManageSub;
 import me.ford.periodicholographicdisplays.commands.subcommands.ReloadSub;
+import me.ford.periodicholographicdisplays.commands.subcommands.ReportSub;
 import me.ford.periodicholographicdisplays.commands.subcommands.SetSub;
 import me.ford.periodicholographicdisplays.commands.subcommands.UnmanageSub;
 import me.ford.periodicholographicdisplays.commands.subcommands.UnsetSub;
@@ -23,6 +24,7 @@ public class PHDCommand extends ParentCommand {
         this.plugin = plugin;
         addSubCommand("info", new InfoSub(plugin.getHolograms(), this.plugin.getMessages()));
         addSubCommand("list", new ListSub(plugin.getHolograms(), this.plugin.getMessages()));
+        addSubCommand("report", new ReportSub(plugin.getHolograms(), plugin.getMessages()));
         addSubCommand("manage", new ManageSub(plugin.getHolograms(), plugin.getLuckPermsHook(), this.plugin.getMessages()));
         addSubCommand("set", new SetSub(plugin.getHolograms(), plugin.getLuckPermsHook(), plugin.getSettings(), this.plugin.getMessages()));
         addSubCommand("unset", new UnsetSub(plugin.getHolograms(), plugin.getSettings(), this.plugin.getMessages()));

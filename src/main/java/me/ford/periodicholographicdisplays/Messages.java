@@ -341,6 +341,43 @@ public class Messages extends CustomConfigHandler {
                         .replace("{name}", name).replace("{type}", type.name()).replace("{options}", String.join(", ", opts));
     }
 
+    public String getNtimesReportMessage(NTimesHologram hologram, int page) {
+        org.bukkit.Bukkit.getLogger().info("CUSTOM!!");
+        String msg = getMessage("ntimes-report", "{name} has been shown to (players {players}, page {page}/{max-pages}): {players:times}");
+        msg = msg.replace("{name}", hologram.getName());
+        int toShow = hologram.getTimesToShow();
+        final int nrOfPlayers = hologram.getShownTo().size();
+        PageInfo pageInfo = PageUtils.getPageInfo(nrOfPlayers, PageUtils.PLAYERS_PER_PAGE, page);
+        int startNr = pageInfo.getStartNumber();
+        int endNr = pageInfo.getEndNumber();
+        String numbers;
+        if (endNr <= startNr && startNr == 1) {
+            numbers = String.valueOf(endNr);
+        } else {
+            numbers = String.format("%d-%d", startNr, endNr);
+        }
+        msg = msg.replace("{players}", numbers);
+        msg = msg.replace("{page}", String.valueOf(page)).replace("{max-pages}", String.valueOf(pageInfo.getNumberOfPages()));
+        List<String> playersAndTimes = new ArrayList<>();
+        int i = 1;
+        for (Entry<UUID, Integer> entry : hologram.getShownTo().entrySet()) {
+            if (i < pageInfo.getStartNumber() || i > pageInfo.getEndNumber()) {
+                i++;
+                continue;
+            }
+            OfflinePlayer player = phd.getServer().getOfflinePlayer(entry.getKey());
+            String playerName = (player == null || !player.hasPlayedBefore()) ? "UNKNOWNPLAYER" : player.getName();
+            playersAndTimes.add(String.format("%s %d/%d", playerName, + entry.getValue(), toShow));
+            i++;
+        }
+        if (playersAndTimes.isEmpty()) {
+            msg = msg.replace("{players:times}", "none");
+        } else {
+            msg = msg.replace("{players:times}", "\n" + String.join("\n", playersAndTimes));
+        }
+        return msg;
+    }
+
     public String getHologramInfoMessage(FlashingHologram hologram, int page) {
         String typeinfo = getTypeInfo(hologram, page);
         String typeName = (hologram.getType() == PeriodicType.NTIMES && ((NTimesHologram) hologram).getTimesToShow() < 0) ? PeriodicType.ALWAYS.name() : hologram.getType().name();

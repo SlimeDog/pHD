@@ -19,6 +19,9 @@ commands:
   phd info <name> <type>:
     description: See info about a pHD hologram
     usage: /<command> <subcommand> args
+  phd report NTIMES <name>:
+    description: See how many times certain players have seen the NTIMES hologram
+    usage: /<command> <sucommand> args
   phd list:
     description: List pHD holograms
     usage: /<command>
@@ -59,6 +62,9 @@ permissions:
     default: op
   phd.info:
     description: Allows listing of attributes of specified hologram
+    default: op
+  phd.commands.phd.report:
+    description: Allows listing of player seen times for NTIMES hologram
     default: op
   phd.manage:
     description: Allows managing a HolographicDisplays hologram

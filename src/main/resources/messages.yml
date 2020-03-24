@@ -30,6 +30,10 @@ typeinfo:
   ALWAYS: "Always shown"
   NTIMES: "Show times: {times}; Shown to (players {players}, page {page}/{max-pages}): {players:times}"
 
+# Messages produced by /phd report
+#
+ntimes-report: "{name} has been shown to (players {players}, page {page}/{max-pages}): {players:times}"
+
 # Messages produced by /phd list
 #
 hologram-list: "Holograms (holograms {numbers}, page {page}/{max-pages}): \n{holograms}"
