@@ -26,7 +26,9 @@ public abstract class FlashingHologram extends PeriodicHologramBase {
             boolean isNew, String perms, double flashOn, double flashOff) {
         super(hologram, name, activationDistance, showTime, type, isNew, perms);
         phd = JavaPlugin.getPlugin(PeriodicHolographicDisplays.class);
-        setFlashOnOff(flashOn, flashOff, true);
+        if (flashOn != NO_FLASH && flashOff != NO_FLASH) {
+            setFlashOnOff(flashOn, flashOff, true);
+        }
     }
 
     public boolean flashes() {
