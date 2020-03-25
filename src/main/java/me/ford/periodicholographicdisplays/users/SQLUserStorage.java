@@ -45,7 +45,7 @@ public class SQLUserStorage extends SQLStorageBase implements UserStorage {
         Map<UUID, String> map = new HashMap<>();
         try {
             while (rs.next()) {
-                String id = rs.getString("uuid");
+                String id = rs.getString("player_UUID");
                 UUID uuid;
                 try {
                     uuid = UUID.fromString(id);
@@ -53,7 +53,7 @@ public class SQLUserStorage extends SQLStorageBase implements UserStorage {
                     phd.getLogger().log(Level.WARNING, "Unable to parse UUID from database: " + id);
                     continue;
                 }
-                String name = rs.getString("name");
+                String name = rs.getString("player_name");
                 map.put(uuid, name);
             }
         } catch (SQLException e) {
@@ -80,7 +80,7 @@ public class SQLUserStorage extends SQLStorageBase implements UserStorage {
     private void saveInAsync(Map<UUID, String> map) {
         createTableIfNotExists();
         String query = "INSERT INTO " + TABLE_NAME + " VALUES (?, ?) " + 
-                        "ON CONFLICT(uuid) DO UPDATE SET name=?";
+                        "ON CONFLICT(player_UUID) DO UPDATE SET player_name=?";
         for (Entry<UUID, String> entry : map.entrySet()) {
             executeUpdate(query, entry.getKey().toString(), entry.getValue(), entry.getValue());
         }
@@ -89,14 +89,14 @@ public class SQLUserStorage extends SQLStorageBase implements UserStorage {
 	private void createTableIfNotExists() {
         String query = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" + 
                     "player_UUID VARCHAR(36) UNIQUE NOT NULL, " +
-                    "player_name VARCHAR(16) NOT NULL" +
+                    "player_name VARCHAR(16) NOT NULL, " +
                     "PRIMARY KEY (player_name, player_UUID)" +
                     ");";
 		if (!executeUpdate(query)) {
 			phd.getLogger().log(Level.SEVERE, "Unable to create table: " + TABLE_NAME);
 		}
-        String indexQuery1 = "CREATE INDEX phd_playerUUIDmap_UUID ON " + TABLE_NAME + " ( player_UUID );";
-        String indexQuery2 = "CREATE INDEX phd_playerUUIDmap_name ON " + TABLE_NAME + " ( player_name );";
+        String indexQuery1 = "CREATE INDEX IF NOT EXISTS phd_playerUUIDmap_UUID ON " + TABLE_NAME + " ( player_UUID );";
+        String indexQuery2 = "CREATE INDEX IF NOT EXISTS phd_playerUUIDmap_name ON " + TABLE_NAME + " ( player_name );";
         if (!executeUpdate(indexQuery1)) {
             phd.getLogger().log(Level.SEVERE, "Unable to create index (1) for " + TABLE_NAME);
         }
