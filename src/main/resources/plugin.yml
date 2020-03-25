@@ -21,7 +21,7 @@ commands:
     usage: /<command> <subcommand> <parameters>
     permission: phd.info
   phd report NTIMES <name>:
-    description: See how many times certain players have seen the NTIMES hologram
+    description: See how many times a player has viewed a NTIMES hologram
     usage: /<command> <subcommand> <parameters>
     permission: phd.report
   phd list:
