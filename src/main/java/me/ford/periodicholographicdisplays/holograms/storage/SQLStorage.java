@@ -44,14 +44,14 @@ public class SQLStorage extends SQLStorageBase implements Storage {
         }
     }
 
-    // hologram, type, activation_distance, display_seconds, periodic_time, activation_times, permission, flash_on, flash_off
+    // hologram_name, hologram_type, activation_distance, display_seconds, clock_time, max_views, permission, flash_on, flash_off
     private void saveHologramsAsync(Set<HDHologramInfo> holograms) {
         createHologramTableIfNotExists();
         createPlayerTableIfNotExists();
-        String deleteQuery = "DELETE FROM " + hologramTableName + " WHERE hologram=? AND type=?";
+        String deleteQuery = "DELETE FROM " + hologramTableName + " WHERE hologram_name=? AND hologram_type=?";
         String query = "INSERT INTO " + hologramTableName + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)" 
-                        + " ON CONFLICT(hologram, type) DO UPDATE SET activation_distance=? , display_seconds=? , "
-                        + "periodic_time=?, activation_times=?, permission=?, flash_on=?, flash_off=?;";
+                        + " ON CONFLICT(hologram_name, hologram_type) DO UPDATE SET activation_distance=? , display_seconds=? , "
+                        + "clock_time=?, max_views=?, permission=?, flash_on=?, flash_off=?;";
         for (HDHologramInfo hologram : holograms) {
             for (HologramInfo info : hologram.getInfos()) {
                 TypeInfo typeInfo = info.getTypeInfo();
@@ -161,7 +161,7 @@ public class SQLStorage extends SQLStorageBase implements Storage {
     }
     
     
-    // hologram, type, activation_distance, display_seconds, periodic_time, activation_times, permission, flash_on, flash_off
+    // hologram_name, hologram_type, activation_distance, display_seconds, clock_time, max_views, permission, flash_on, flash_off
 	private void loadHologramsAsync(Consumer<HDHologramInfo> consumer) {
         createHologramTableIfNotExists();
         createPlayerTableIfNotExists();
@@ -172,8 +172,8 @@ public class SQLStorage extends SQLStorageBase implements Storage {
 
         try {
             while(rs.next()) {
-                String holoName = rs.getString("hologram");
-                String typeStr = rs.getString("type");
+                String holoName = rs.getString("hologram_name");
+                String typeStr = rs.getString("hologram_type");
                 PeriodicType type;
                 try {
                     type = PeriodicType.valueOf(typeStr);
@@ -183,7 +183,7 @@ public class SQLStorage extends SQLStorageBase implements Storage {
                 }
                 double distance = rs.getDouble("activation_distance");
                 int seconds = rs.getInt("display_seconds");
-                String time = rs.getString("periodic_time");
+                String time = rs.getString("clock_time");
                 String perms = rs.getString("permission");
                 double flashOn = rs.getDouble("flash_on");
                 double flashOff = rs.getDouble("flash_off");
@@ -196,7 +196,7 @@ public class SQLStorage extends SQLStorageBase implements Storage {
                     info = new HDHologramInfo(holoName);
                     infos.put(holoName, info);
                 }
-                String activationTimes = rs.getString("activation_times");
+                String activationTimes = rs.getString("max_views");
                 TypeInfo typeInfo;
                 try {
                     typeInfo = getTypeInfo(type, time, activationTimes);
@@ -281,17 +281,17 @@ public class SQLStorage extends SQLStorageBase implements Storage {
     }
 
 	public void createHologramTableIfNotExists() {
-        String query = "CREATE TABLE IF NOT EXISTS " + hologramTableName + "(" + 
-                    "hologram STRING(255) NOT NULL, " +
-                    "type STRING(255) NOT NULL, " +
-                    "activation_distance REAL, " +
-                    "display_seconds INT, " +
-                    "periodic_time STRING, " + 
-                    "activation_times INT, " + 
-                    "permission STRING(255), " +
-                    "flash_on REAL, " + 
-                    "flash_off REAL, " + 
-                    "PRIMARY KEY (hologram, type)" +
+        String query = "CREATE TABLE IF NOT EXISTS " + hologramTableName + " (" +
+                    "hologram_name STRING(255) NOT NULL," +
+                    "hologram_type STRING(16) NOT NULL," +
+                    "activation_distance REAL," +
+                    "display_seconds INTEGER," +
+                    "clock_time STRING(8)," +
+                    "max_views INTEGER," +
+                    "permission STRING(255)," +
+                    "flash_on REAL," +
+                    "flash_off REAL," +
+                    "PRIMARY KEY (hologram_name, hologram_type)" +
                     ");";
 		if (!executeUpdate(query)) {
 			phd.getLogger().severe("Unable to create table: " + hologramTableName);
