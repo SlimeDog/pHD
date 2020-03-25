@@ -61,6 +61,7 @@ public abstract class ParentCommand implements TabExecutor {
 			}
 		}
 		int maxPage = PageUtils.getNumberOfPages(msgs.size(), PER_PAGE);
+		if (maxPage == 0) maxPage++;
 		if (page < 1 || page > maxPage) {
 			return messages.getInvalidPageMessage(maxPage);
 		}
