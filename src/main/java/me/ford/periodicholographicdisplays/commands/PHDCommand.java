@@ -15,7 +15,8 @@ import me.ford.periodicholographicdisplays.commands.subcommands.UnsetSub;
  * PHDCommand
  */
 public class PHDCommand extends ParentCommand {
-    private static final String USAGE = "/phd subcommand parameters (page {page}/{maxpage})";
+    private static final String USAGE = "/phd subcommand parameters (page {page}/{maxpage}):";
+    private static final String HELP_HINT = "/phd help {page}";
     private final PeriodicHolographicDisplays plugin;
     private final ConvertSub convertSub;
 
@@ -41,6 +42,11 @@ public class PHDCommand extends ParentCommand {
     @Override
     protected String getUsage() {
         return USAGE;
+    }
+
+    @Override
+    protected String getHintCommand(int page) {
+        return HELP_HINT.replace("{page}", String.valueOf(page));
     }
     
 }

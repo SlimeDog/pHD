@@ -12,6 +12,7 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.util.StringUtil;
 
 import me.ford.periodicholographicdisplays.Messages;
+import me.ford.periodicholographicdisplays.util.HintUtil;
 import me.ford.periodicholographicdisplays.util.PageUtils;
 
 /**
@@ -50,7 +51,7 @@ public abstract class ParentCommand implements TabExecutor {
 		}
 	}
 	
-	private String getUsage(CommandSender sender, int page) {
+	private UsageInfo getUsage(CommandSender sender, int page) {
 		List<String> msgs = new ArrayList<>();
 		String header = getUsage().replace("{page}", String.valueOf(page));
 		for (SubCommand cmd : subCommands.values()) {
@@ -63,7 +64,7 @@ public abstract class ParentCommand implements TabExecutor {
 		int maxPage = PageUtils.getNumberOfPages(msgs.size(), PER_PAGE);
 		if (maxPage == 0) maxPage++;
 		if (page < 1 || page > maxPage) {
-			return messages.getInvalidPageMessage(maxPage);
+			return new UsageInfo(messages.getInvalidPageMessage(maxPage), 1);
 		}
 		header = header.replace("{maxpage}", String.valueOf(maxPage));
 		int start = (page - 1) * PER_PAGE;
@@ -71,7 +72,7 @@ public abstract class ParentCommand implements TabExecutor {
 		int end = page * PER_PAGE;
 		if (end > msgs.size()) end = msgs.size();
 		List<String> onPage = msgs.subList(start, end);
-		return header + "\n" + String.join("\n", onPage);
+		return new UsageInfo(header + "\n" + String.join("\n", onPage), maxPage);
 	}
 
 	@Override
@@ -80,7 +81,7 @@ public abstract class ParentCommand implements TabExecutor {
             return noArgs(sender);
 		}
 		SubCommand cmd = subCommands.get(args[0]);
-		if (cmd == null) {
+		if (cmd == null || !cmd.hasPermission(sender)) {
 			int page = 1;
 			String pageStr = "1";
 			if (args[0].equalsIgnoreCase("help")) {
@@ -98,23 +99,42 @@ public abstract class ParentCommand implements TabExecutor {
 					return true;
 				}
 			}
-			sender.sendMessage(getUsage(sender, page));
+			showUsage(sender, page);
 			return true;
 		}
 		
-		if (!cmd.hasPermission(sender)) {
-            sender.sendMessage(getUsage(sender, 1));
-        } else if (!cmd.onCommand(sender, command, label, args)) {
+		if (!cmd.onCommand(sender, command, label, args)) {
 			sender.sendMessage(cmd.getUsage(sender));
 		}
 		return true;
-    }
+	}
+	
+	private void showUsage(CommandSender sender, int page) {
+		UsageInfo info = getUsage(sender, page);
+		sender.sendMessage(info.usage);
+		if (page < info.maxPage) {
+			HintUtil.sendHint(sender, messages.getNextPageHint("{command}"), "{command}", getHintCommand(page + 1));
+		}
+	}
 
     protected boolean noArgs(CommandSender sender) { // can be overwritten
-        sender.sendMessage(getUsage(sender, 1));
+        showUsage(sender, 1);
         return true;
-    }
+	}
+	
+	protected abstract String getHintCommand(int page);
 
-    protected abstract String getUsage();
+	protected abstract String getUsage();
+	
+	private class UsageInfo {
+		private final String usage;
+		private final int maxPage;
+
+		private UsageInfo(String usage, int maxPage) {
+			this.usage = usage;
+			this.maxPage = maxPage;
+		}
+
+	}
     
 }
