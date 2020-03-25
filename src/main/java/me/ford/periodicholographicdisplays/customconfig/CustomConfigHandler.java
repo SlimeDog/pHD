@@ -15,13 +15,13 @@ import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 /**
  * CustomConfig
  */
-public class CustomConfig {
+public class CustomConfigHandler {
     private final PeriodicHolographicDisplays phd;
     private final String fileName;
     private FileConfiguration customConfig = null;
     private File customConfigFile = null;
 
-    public CustomConfig(PeriodicHolographicDisplays phd, String name) {
+    public CustomConfigHandler(PeriodicHolographicDisplays phd, String name) {
         this.phd = phd;
         this.fileName = name;
     }
