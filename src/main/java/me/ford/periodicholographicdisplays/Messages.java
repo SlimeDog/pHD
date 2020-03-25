@@ -368,7 +368,7 @@ public class Messages extends CustomConfigHandler {
                 continue;
             }
             Integer amount = hologram.getShownTo().get(player.getUniqueId());
-            if (amount == null) continue; // skip ones that haven't been shown
+            if (amount == null) amount = 0;
             if (builder.length() != 0) builder.append("\n");
             builder.append(String.format(timesString, hologram.getName(), amount, hologram.getTimesToShow()));
         }

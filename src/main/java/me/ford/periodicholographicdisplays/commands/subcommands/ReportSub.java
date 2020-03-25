@@ -1,6 +1,7 @@
 package me.ford.periodicholographicdisplays.commands.subcommands;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -75,11 +76,17 @@ public class ReportSub extends SubCommand {
         List<NTimesHologram> holograms = new ArrayList<>();
         for (World world : storage.getActiveWorlds()) {
             for (FlashingHologram holo : storage.getHolograms(world).getHolograms()) {
-                if (holo instanceof NTimesHologram && ((NTimesHologram) holo).getShownTo().get(player.getUniqueId()) != null) {
+                if (holo instanceof NTimesHologram) {
                     holograms.add((NTimesHologram) holo);
                 }
             }
         }
+        holograms.sort(new Comparator<NTimesHologram>() {
+            @Override
+            public int compare(NTimesHologram o1, NTimesHologram o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
 
         int maxPage = PageUtils.getNumberOfPages(holograms.size(), PageUtils.HOLOGRAMS_PER_PAGE);
         if (maxPage == 0) maxPage++;
