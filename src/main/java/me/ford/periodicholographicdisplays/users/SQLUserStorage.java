@@ -80,16 +80,16 @@ public class SQLUserStorage extends SQLStorageBase implements UserStorage {
     private void saveInAsync(Map<UUID, String> map) {
         createTableIfNotExists();
         String query = "INSERT INTO " + TABLE_NAME + " VALUES (?, ?) " + 
-                        "ON CONFLICT(hologram, type) DO UPDATE SET name=?";
+                        "ON CONFLICT(uuid) DO UPDATE SET name=?";
         for (Entry<UUID, String> entry : map.entrySet()) {
-            executeUpdate(query, entry.getKey().toString(), entry.getValue());
+            executeUpdate(query, entry.getKey().toString(), entry.getValue(), entry.getValue());
         }
     }
 
 	private void createTableIfNotExists() {
         String query = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" + 
                     "uuid STRING(36) UNIQUE NOT NULL, " +
-                    "name STRING(255) NOT NULL, " +
+                    "name STRING(255) NOT NULL" +
                     ");";
 		if (!executeUpdate(query)) {
 			phd.getLogger().log(Level.SEVERE, "Unable to create table: " + TABLE_NAME);
