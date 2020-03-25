@@ -284,13 +284,13 @@ public class SQLStorage extends SQLStorageBase implements Storage {
         String query = "CREATE TABLE IF NOT EXISTS " + hologramTableName + " (" +
                     "hologram_name STRING(255) NOT NULL," +
                     "hologram_type STRING(16) NOT NULL," +
-                    "activation_distance REAL," +
-                    "display_seconds INTEGER," +
+                    "activation_distance REAL DEFAULT -1.0," +
+                    "display_seconds INTEGER DEFAULT -1," +
                     "clock_time STRING(8)," +
                     "max_views INTEGER," +
                     "permission STRING(255)," +
-                    "flash_on REAL," +
-                    "flash_off REAL," +
+                    "flash_on REAL DEFAULT -1.0," +
+                    "flash_off REAL DEFAULT -1.0," +
                     "PRIMARY KEY (hologram_name, hologram_type)" +
                     ");";
 		if (!executeUpdate(query)) {
