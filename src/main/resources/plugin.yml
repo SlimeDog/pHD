@@ -20,7 +20,7 @@ commands:
     description: See info about a pHD hologram
     usage: /<command> <subcommand> <parameters>
   phd report NTIMES <name>:
-    description: See how many times certain players have seen the NTIMES hologram
+    description: See how many times a player has viewed a NTIMES hologram
     usage: /<command> <subcommand> <parameters>
   phd list:
     description: List pHD holograms
