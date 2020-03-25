@@ -23,6 +23,9 @@ import me.ford.periodicholographicdisplays.listeners.SimpleWorldTimeListener;
 import me.ford.periodicholographicdisplays.listeners.WorldListener;
 import me.ford.periodicholographicdisplays.listeners.WorldTimeListener;
 import me.ford.periodicholographicdisplays.listeners.legacy.LegacyWorldTimeListener;
+import me.ford.periodicholographicdisplays.users.SQLUserStorage;
+import me.ford.periodicholographicdisplays.users.UserStorage;
+import me.ford.periodicholographicdisplays.users.YamlUserStorage;
 
 /**
  * PeriodicHolographicDisplays
@@ -33,6 +36,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
     private Messages messages;
     private LuckPermsHook lpHook;
     private NPCHook citizensHook = null;
+    private UserStorage userStorage;
 
     @Override
     public void onEnable() {
@@ -40,6 +44,20 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         messages = new Messages(this);
         settings = new Settings(this);
         holograms = new HologramStorage(this);
+
+        // user storage and cache
+        if (settings.useDatabase()) {
+            userStorage = new SQLUserStorage(this);
+        } else {
+            userStorage = new YamlUserStorage(this);
+        }
+        // checking cache a few ticks later - if empty, then populate
+        getServer().getScheduler().runTaskLater(this, () -> {
+            getLogger().info("Populating UUID to name cache with all players");
+            if (userStorage.getCache().isEmpty()) {
+                userStorage.populate();
+            }
+        }, 20L);
 
         // check messages
         try {
@@ -96,6 +114,10 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         if (settings.checkForUpdates()) {
             // TODO - check for updates
         }
+    }
+
+    public UserStorage getUserStorage() {
+        return userStorage;
     }
 
     public NPCHook getNPCHook() {
@@ -188,6 +210,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
     @Override
     public void onDisable() {
         holograms.save(true);
+        userStorage.save(true);
     }
 
     public HologramStorage getHolograms() {
