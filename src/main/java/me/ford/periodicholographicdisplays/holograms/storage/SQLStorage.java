@@ -112,13 +112,13 @@ public class SQLStorage extends SQLStorageBase implements Storage {
         }
     }
 
-    // playerUUID, hologram_id, type, ntimes
+    // player_UUID, hologram_name, hologram_type, views
     private void saveTypeInfoAsync(String holoName, TypeInfo info) {
         String insertQuery = "INSERT INTO " + playerTableName + " VALUES (?, ?, ?, ?)" 
-                            + " ON CONFLICT(playerUUID, hologram_id, type) DO UPDATE SET ntimes=?;";
+                            + " ON CONFLICT(player_UUID, hologram_name, hologram_type) DO UPDATE SET views=?;";
         String query;
         if (info instanceof NullTypeInfo) {
-            String deleteQuery = "DELETE FROM " + playerTableName + " WHERE hologram_id=? AND type=?;";
+            String deleteQuery = "DELETE FROM " + playerTableName + " WHERE hologram_name=? AND hologram_type=?;";
             executeUpdate(deleteQuery, holoName, info.getType().name());
             return;
         } else {
@@ -228,15 +228,15 @@ public class SQLStorage extends SQLStorageBase implements Storage {
         });
     }
 
-    // playerUUID, hologram_id, type, ntimes
+    // player_UUID, hologram_name, hologram_type, views
     private void addShownTo(String name, NTimesTypeInfo info) {
-        String query = "SELECT * FROM " + playerTableName + " WHERE hologram_id=?;";
+        String query = "SELECT * FROM " + playerTableName + " WHERE hologram_name=?;";
         ResultSet rs = executeQuery(query, name);
         if (rs == null) return;
 
         try {
             while (rs.next()) {
-                String id = rs.getString("playerUUID");
+                String id = rs.getString("player_UUID");
                 UUID uuid;
                 try {
                     uuid = UUID.fromString(id);
@@ -244,7 +244,7 @@ public class SQLStorage extends SQLStorageBase implements Storage {
                     phd.getLogger().log(Level.WARNING, "Cannot parse UUID " + id);
                     continue;
                 }
-                int ntimes = rs.getInt("ntimes");
+                int ntimes = rs.getInt("views");
                 info.addShownTo(uuid, ntimes);
             }
             rs.close();
@@ -304,11 +304,11 @@ public class SQLStorage extends SQLStorageBase implements Storage {
     
     public void createPlayerTableIfNotExists() {
         String query = "CREATE TABLE IF NOT EXISTS " + playerTableName + "(" + 
-                    "playerUUID STRING(36) NOT NULL, " +
-                    "hologram_id STRING(255), " +
-                    "type STRING(255) NOT NULL, " +
-                    "ntimes INT, " +
-                    "PRIMARY KEY (playerUUID, hologram_id, type)" +
+                    "player_UUID STRING(36) NOT NULL, " +
+                    "hologram_name STRING(255), " +
+                    "hologram_type STRING(255) NOT NULL, " +
+                    "views INTEGER, " +
+                    "PRIMARY KEY (player_UUID, hologram_name, hologram_type)" +
                     ");";
 		if (!executeUpdate(query)) {
 			phd.getLogger().severe("Unable to create table: " + playerTableName);
