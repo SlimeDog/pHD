@@ -88,12 +88,21 @@ public class SQLUserStorage extends SQLStorageBase implements UserStorage {
 
 	private void createTableIfNotExists() {
         String query = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" + 
-                    "uuid STRING(36) UNIQUE NOT NULL, " +
-                    "name STRING(255) NOT NULL" +
+                    "uuid VARCHAR(36) UNIQUE NOT NULL, " +
+                    "name VARCHAR(16) NOT NULL" +
+                    "PRIMARY KEY (player_name, player_UUID)" +
                     ");";
 		if (!executeUpdate(query)) {
 			phd.getLogger().log(Level.SEVERE, "Unable to create table: " + TABLE_NAME);
 		}
+        String indexQuery1 = "CREATE INDEX phd_playerUUIDmap_UUID ON " + TABLE_NAME + " ( player_UUID );";
+        String indexQuery2 = "CREATE INDEX phd_playerUUIDmap_name ON " + TABLE_NAME + " ( player_name );";
+        if (!executeUpdate(indexQuery1)) {
+            phd.getLogger().log(Level.SEVERE, "Unable to create index (1) for " + TABLE_NAME);
+        }
+        if (!executeUpdate(indexQuery2)) {
+            phd.getLogger().log(Level.SEVERE, "Unable to create index (2) for " + TABLE_NAME);
+        }
     }
     
 }
