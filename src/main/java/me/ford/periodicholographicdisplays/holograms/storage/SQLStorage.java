@@ -282,13 +282,13 @@ public class SQLStorage extends SQLStorageBase implements Storage {
 
 	public void createHologramTableIfNotExists() {
         String query = "CREATE TABLE IF NOT EXISTS " + hologramTableName + " (" +
-                    "hologram_name STRING(255) NOT NULL," +
-                    "hologram_type STRING(16) NOT NULL," +
+                    "hologram_name VARCHAR(255) NOT NULL," +
+                    "hologram_type VARCHAR(16) NOT NULL," +
                     "activation_distance REAL DEFAULT -1.0," +
                     "display_seconds INTEGER DEFAULT -1," +
-                    "clock_time STRING(8)," +
+                    "clock_time VARCHAR(8)," +
                     "max_views INTEGER," +
-                    "permission STRING(255)," +
+                    "permission VARCHAR(255)," +
                     "flash_on REAL DEFAULT -1.0," +
                     "flash_off REAL DEFAULT -1.0," +
                     "PRIMARY KEY (hologram_name, hologram_type)" +
@@ -304,9 +304,9 @@ public class SQLStorage extends SQLStorageBase implements Storage {
     
     public void createPlayerTableIfNotExists() {
         String query = "CREATE TABLE IF NOT EXISTS " + playerTableName + "(" + 
-                    "player_UUID STRING(36) NOT NULL, " +
-                    "hologram_name STRING(255), " +
-                    "hologram_type STRING(16) NOT NULL, " +
+                    "player_UUID VARCHAR(36) NOT NULL, " +
+                    "hologram_name VARCHAR(255), " +
+                    "hologram_type VARCHAR(16) NOT NULL, " +
                     "views INTEGER, " +
                     "PRIMARY KEY (player_UUID, hologram_name, hologram_type)" +
                     ");";
