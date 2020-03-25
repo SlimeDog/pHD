@@ -88,8 +88,8 @@ public class SQLUserStorage extends SQLStorageBase implements UserStorage {
 
 	private void createTableIfNotExists() {
         String query = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" + 
-                    "uuid VARCHAR(36) UNIQUE NOT NULL, " +
-                    "name VARCHAR(16) NOT NULL" +
+                    "player_UUID VARCHAR(36) UNIQUE NOT NULL, " +
+                    "player_name VARCHAR(16) NOT NULL" +
                     "PRIMARY KEY (player_name, player_UUID)" +
                     ");";
 		if (!executeUpdate(query)) {
