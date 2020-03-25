@@ -1,7 +1,5 @@
 package me.ford.periodicholographicdisplays.holograms.storage;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,36 +19,20 @@ import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.IRLTimeTyp
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.MCTimeTypeInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.NTimesTypeInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.NullTypeInfo;
+import me.ford.periodicholographicdisplays.storage.sqlite.SQLStorageBase;
 import me.ford.periodicholographicdisplays.util.TimeUtils;
 
 /**
  * SQLStorage
  */
-public class SQLStorage implements Storage {
-    private static Connection conn; // shared connection
+public class SQLStorage extends SQLStorageBase implements Storage {
     private final PeriodicHolographicDisplays phd;
-    // private final Settings settings;
     private final String hologramTableName = "phd_hologram";
     private final String playerTableName = "phd_player";
 
     public SQLStorage(PeriodicHolographicDisplays phd) {
+        super(phd);
         this.phd = phd;
-        // this.settings = phd.getSettings();
-        conn = connect();
-    } 
-
-    private Connection connect() {
-        Connection conn = null;
-        try {
-            // db parameters
-            String url = "jdbc:sqlite:" + phd.getDataFolder().getAbsolutePath() + "/database.db";
-            // create a connection to the database
-            conn = DriverManager.getConnection(url);
-            phd.getLogger().info(phd.getMessages().getSqlConnectionMessage());
-        } catch (SQLException e) {
-            phd.getLogger().log(Level.SEVERE, "Problem connecting to database", e);
-        }
-        return conn;
     }
 
     @Override
@@ -297,72 +279,6 @@ public class SQLStorage implements Storage {
         }
         return typeInfo;
     }
-
-    public ResultSet executeQuery(String query, String... args) {
-		checkConnection();
-		try {
-			PreparedStatement statement = conn.prepareStatement(query);
-			int i = 1;
-			for (String arg : args) {
-				statement.setString(i, arg);
-				i++;
-			}
-			return statement.executeQuery();
-		} catch (SQLException e) {
-			phd.getLogger().warning("Unable to execute QUERY:" + query);
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	public boolean tableExists(String table) {
-		checkConnection();
-		ResultSet rs;
-		try {
-			PreparedStatement statement = conn.prepareStatement("SHOW TABLES LIKE '" + table + "';");
-			rs = statement.executeQuery();
-		} catch (SQLException e) {
-			phd.getLogger().log(Level.WARNING, "Unable to check if table exists: " + table, e);
-			return false;
-		}
-		try {
-            boolean can = rs.next();
-            rs.close();
-            return can;
-		} catch (SQLException e) {
-			phd.getLogger().log(Level.WARNING, "Unable to check if table exists(next): " + table, e);
-			return false;
-		}
-	}
-	
-	public void checkConnection() {
-		try {
-			if (conn.isClosed() || !conn.isValid(10)) {
-				conn.close();
-				conn = connect();
-				phd.getLogger().info("Creating a new connection for DB");
-			}
-		} catch (SQLException e) {
-			phd.getLogger().log(Level.WARNING, "Unable to check if connection is closed!", e);
-		}
-	}
-	
-	public boolean executeUpdate(String query, String... args) {
-		checkConnection();
-		try {
-			PreparedStatement statement = conn.prepareStatement(query);
-			int i = 1;
-			for (String arg : args) {
-				statement.setString(i, arg);
-				i++;
-			}
-			statement.executeUpdate();
-			return true;
-		} catch (SQLException e) {
-			phd.getLogger().log(Level.WARNING, "Unable to update QUERY: " + query, e);
-			return false;
-		}
-	}
 
 	public void createHologramTableIfNotExists() {
         String query = "CREATE TABLE IF NOT EXISTS " + hologramTableName + "(" + 
