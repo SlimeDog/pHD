@@ -19,6 +19,8 @@ import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.holograms.WorldHologramStorageBase.HologramSaveReason;
+import me.ford.periodicholographicdisplays.users.UserCache;
+import me.ford.periodicholographicdisplays.users.UserStorage;
 
 /**
  * UnsetSub
@@ -29,12 +31,14 @@ public class UnsetSub extends SubCommand {
     private final HologramStorage storage;
     private final Settings settings;
     private final Messages messages;
+    private final UserStorage userStorage;
     private final List<String> optionList = Arrays.asList("seconds", "distance", "permission", "playercount", "flash");
 
-    public UnsetSub(HologramStorage storage, Settings settings, Messages messages) {
+    public UnsetSub(HologramStorage storage, Settings settings, Messages messages, UserStorage userStorage) {
         this.storage = storage;
         this.settings = settings;
         this.messages = messages;
+        this.userStorage = userStorage;
     }
 
     @Override
@@ -62,7 +66,10 @@ public class UnsetSub extends SubCommand {
                 return list;
             }
             if (type == PeriodicType.NTIMES && args[args.length -2].equalsIgnoreCase("playercount")) {
-                return null; // player names
+                if (args[args.length - 1].length() < UserCache.MIN_NAME_MATCH) {
+                    return null;
+                }
+                return userStorage.getCache().getNamesStartingWith(args[args.length - 1]);
             }
             FlashingHologram hologram = storage.getHologram(args[0], type);
             if (hologram == null) return list;
@@ -144,14 +151,11 @@ public class UnsetSub extends SubCommand {
                 String playerName = opts[optAt + 1];
                 OfflinePlayer player = Bukkit.getPlayer(playerName); 
                 if (player == null) {
-                    for (UUID id : ntimes.getShownTo().keySet()) {
-                        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(id);
-                        if (offlinePlayer != null && offlinePlayer.hasPlayedBefore() && offlinePlayer.getName().equalsIgnoreCase(playerName)) {
-                            player = offlinePlayer;
-                            break;
-                        }
+                    UUID id = userStorage.getCache().getUuid(playerName);
+                    if (id != null) {
+                        player = Bukkit.getOfflinePlayer(id);
                     }
-                    if (player == null) {
+                    if (player == null || !player.hasPlayedBefore()) {
                         sender.sendMessage(messages.getPlayerNotFoundMessage(playerName));
                         return true;
                     }
