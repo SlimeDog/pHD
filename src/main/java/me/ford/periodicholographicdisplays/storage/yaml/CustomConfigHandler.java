@@ -1,4 +1,4 @@
-package me.ford.periodicholographicdisplays.yaml;
+package me.ford.periodicholographicdisplays.storage.yaml;
 
 import java.io.File;
 import java.io.IOException;
