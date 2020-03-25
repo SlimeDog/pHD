@@ -295,7 +295,11 @@ public class SQLStorage extends SQLStorageBase implements Storage {
                     ");";
 		if (!executeUpdate(query)) {
 			phd.getLogger().severe("Unable to create table: " + hologramTableName);
-		}
+        }
+        String indexQuery = "CREATE INDEX phd_hologram_hindex ON phd_hologram ( hologram_name, hologram_type );";
+        if (!executeUpdate(indexQuery)) {
+            phd.getLogger().severe("Unable to create index for " + hologramTableName);
+        }
     }
     
     public void createPlayerTableIfNotExists() {
