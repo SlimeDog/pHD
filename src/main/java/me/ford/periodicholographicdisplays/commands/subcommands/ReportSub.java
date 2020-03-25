@@ -82,6 +82,7 @@ public class ReportSub extends SubCommand {
         }
 
         int maxPage = PageUtils.getNumberOfPages(holograms.size(), PageUtils.HOLOGRAMS_PER_PAGE);
+        if (maxPage == 0) maxPage++;
         if (page < 1 || page > maxPage) {
             sender.sendMessage(messages.getInvalidPageMessage(maxPage));
             return true;
