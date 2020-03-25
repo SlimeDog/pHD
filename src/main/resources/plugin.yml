@@ -19,30 +19,39 @@ commands:
   phd info <name> <type>:
     description: See info about a pHD hologram
     usage: /<command> <subcommand> <parameters>
+    permission: phd.info
   phd report NTIMES <name>:
     description: See how many times certain players have seen the NTIMES hologram
     usage: /<command> <subcommand> <parameters>
+    permission: phd.report
   phd list:
     description: List pHD holograms
     usage: /<command> <subcommand> <parameters>
+    permission: phd.list
   phd manage <name> <type> <params...>:
     description: Manage a hologram as a pHD hologram
     usage: /<command> <subcommand> <parameters>
+    permission: phd.manage
   phd set <name> <type> <params...>:
     description: Set a parameter of a pHD hologram
     usage: /<command> <subcommand> <parameters>
+    permission: phd.set
   phd unset <name> <type> <params...>:
     description: Unset a parameter of a pHD hologram
     usage: /<command> <subcommand> <parameters>
+    permission: phd.unset
   phd unmanage <name> <type>:
     description: Unmanage
     usage: /<command> <subcommand> <parameters>
+    permission: phd.unmanage
   phd reload:
     description: Reload the config and the holograms
     usage: /<command>
+    permission: phd.reload
   phd convert <sourceStorageType> <targetStorageType> [--force]:
     description: Convert storage from source storage to target storage
     usage: /<command> <subcommand> <parameters>
+    permission: phd.convert
 
 permissions:
   phd.*:
