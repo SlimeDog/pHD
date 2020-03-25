@@ -76,7 +76,7 @@ public class ReportSub extends SubCommand {
         List<NTimesHologram> holograms = new ArrayList<>();
         for (World world : storage.getActiveWorlds()) {
             for (FlashingHologram holo : storage.getHolograms(world).getHolograms()) {
-                if (holo instanceof NTimesHologram) {
+                if (holo.getType() == type) {
                     holograms.add((NTimesHologram) holo);
                 }
             }
