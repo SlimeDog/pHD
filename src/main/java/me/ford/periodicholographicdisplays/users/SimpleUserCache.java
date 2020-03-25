@@ -29,6 +29,11 @@ public class SimpleUserCache implements UserCache {
     }
 
     @Override
+    public boolean isEmpty() {
+        return idToName.isEmpty();
+    }
+
+    @Override
     public UUID getUuid(String name) {
         return nameToId.get(name);
     }

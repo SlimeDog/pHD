@@ -10,6 +10,8 @@ import java.util.UUID;
 public interface UserCache {
     public static final int MIN_NAME_MATCH = 2;
 
+    public boolean isEmpty();
+
     public UUID getUuid(String name);
 
     public String getName(UUID id);
