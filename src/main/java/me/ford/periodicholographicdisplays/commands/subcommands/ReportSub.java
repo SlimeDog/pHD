@@ -84,7 +84,7 @@ public class ReportSub extends SubCommand {
         holograms.sort(new Comparator<NTimesHologram>() {
             @Override
             public int compare(NTimesHologram o1, NTimesHologram o2) {
-                return o1.getName().compareTo(o2.getName());
+                return String.CASE_INSENSITIVE_ORDER.compare(o1.getName(),o2.getName());
             }
         });
 
