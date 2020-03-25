@@ -1,4 +1,4 @@
-package me.ford.periodicholographicdisplays.customconfig;
+package me.ford.periodicholographicdisplays.yaml;
 
 import java.io.File;
 import java.io.IOException;
