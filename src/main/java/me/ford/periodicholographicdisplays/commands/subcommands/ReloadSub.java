@@ -43,8 +43,8 @@ public class ReloadSub extends SubCommand {
             if (sender instanceof Player) {
                 phd.getLogger().info(typeMessage);
             }
-            if (phd.getSettings().onDebug()) {
-                String debug = "DEBUG is true";
+            if (phd.getConfig().isSet("debug")) {
+                String debug = "DEBUG is " + phd.getSettings().onDebug();
                 sender.sendMessage(debug);
                 if (sender instanceof Player) {
                     phd.getLogger().info(debug);
