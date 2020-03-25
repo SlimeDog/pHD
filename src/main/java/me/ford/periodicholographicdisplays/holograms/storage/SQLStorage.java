@@ -296,7 +296,7 @@ public class SQLStorage extends SQLStorageBase implements Storage {
 		if (!executeUpdate(query)) {
 			phd.getLogger().severe("Unable to create table: " + hologramTableName);
         }
-        String indexQuery = "CREATE INDEX phd_hologram_hindex ON " + hologramTableName + " ( hologram_name, hologram_type );";
+        String indexQuery = "CREATE INDEX IF NOT EXISTS phd_hologram_hindex ON " + hologramTableName + " ( hologram_name, hologram_type );";
         if (!executeUpdate(indexQuery)) {
             phd.getLogger().severe("Unable to create index for " + hologramTableName);
         }
@@ -313,11 +313,11 @@ public class SQLStorage extends SQLStorageBase implements Storage {
 		if (!executeUpdate(query)) {
 			phd.getLogger().severe("Unable to create table: " + playerTableName);
         }
-        String indexQuery1 = "CREATE INDEX phd_player_pindex ON " + playerTableName + " ( player_UUID );";
+        String indexQuery1 = "CREATE INDEX IF NOT EXISTS phd_player_pindex ON " + playerTableName + " ( player_UUID );";
         if (!executeUpdate(indexQuery1)) {
             phd.getLogger().severe("Unable to create index (1) for " + playerTableName);
         }
-        String indexQuery2 = "CREATE INDEX phd_player_hindex ON " + playerTableName + " ( hologram_name, hologram_type );";
+        String indexQuery2 = "CREATE INDEX IF NOT EXISTS phd_player_hindex ON " + playerTableName + " ( hologram_name, hologram_type );";
         if (!executeUpdate(indexQuery2)) {
             phd.getLogger().severe("Unable to create index (2) for " + playerTableName);
         }
