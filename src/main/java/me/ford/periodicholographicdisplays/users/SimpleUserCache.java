@@ -35,7 +35,7 @@ public class SimpleUserCache implements UserCache {
 
     @Override
     public UUID getUuid(String name) {
-        return nameToId.get(name.toUpperCase());
+        return nameToId.get(name.toLowerCase());
     }
 
     @Override
