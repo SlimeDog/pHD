@@ -305,7 +305,7 @@ public class SQLStorage extends SQLStorageBase implements Storage {
     public void createPlayerTableIfNotExists() {
         String query = "CREATE TABLE IF NOT EXISTS " + playerTableName + "(" + 
                     "player_UUID VARCHAR(36) NOT NULL, " +
-                    "hologram_name VARCHAR(255), " +
+                    "hologram_name VARCHAR(255) NOT NULL, " +
                     "hologram_type VARCHAR(16) NOT NULL, " +
                     "views INTEGER, " +
                     "PRIMARY KEY (player_UUID, hologram_name, hologram_type)" +
