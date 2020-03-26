@@ -13,7 +13,7 @@ import org.bukkit.util.StringUtil;
  */
 public class SimpleUserCache implements UserCache {
     private final Map<UUID, String> idToName = new HashMap<>();
-    private final Map<String, UUID> nameToId = new HashMap<>();
+    private final Map<String, UUID> nameToId = new HashMap<>(); // lower case here
     private final Map<UUID, String> toSave = new HashMap<>();
 
     void addOnStartup(UUID id, String name) {
@@ -22,7 +22,7 @@ public class SimpleUserCache implements UserCache {
 
     private void put(UUID id, String name, boolean atStartup) {
         idToName.put(id, name);
-        nameToId.put(name, id);
+        nameToId.put(name.toLowerCase(), id);
         if (!atStartup) {
             toSave.put(id, name);
         }
@@ -35,7 +35,7 @@ public class SimpleUserCache implements UserCache {
 
     @Override
     public UUID getUuid(String name) {
-        return nameToId.get(name);
+        return nameToId.get(name.toUpperCase());
     }
 
     @Override
@@ -52,7 +52,7 @@ public class SimpleUserCache implements UserCache {
     public List<String> getNamesStartingWith(String start) {
         List<String> list = new ArrayList<>();
         if (start.length() < MIN_NAME_MATCH) return list; 
-        return StringUtil.copyPartialMatches(start, nameToId.keySet(), list);
+        return StringUtil.copyPartialMatches(start, idToName.values(), list);
     }
 
     @Override
