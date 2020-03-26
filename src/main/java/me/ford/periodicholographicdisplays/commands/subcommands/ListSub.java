@@ -41,7 +41,7 @@ public class ListSub extends SubCommand {
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
         int page = 1;
-        if (args.length < 2) {
+        if (args.length < 1) {
             return false;
         }
         PeriodicType holoType = null;
@@ -51,11 +51,13 @@ public class ListSub extends SubCommand {
             sender.sendMessage(messages.getTypeNotRecognizedMessage(args[0]));
             return true;
         }
-        try {
-            page = Integer.parseInt(args[1]);
-        } catch (NumberFormatException e) {
-            sender.sendMessage(messages.getNeedAnIntegerMessage(args[1]));
-            return true;
+        if (args.length > 1) {
+            try {
+                page = Integer.parseInt(args[1]);
+            } catch (NumberFormatException e) {
+                sender.sendMessage(messages.getNeedAnIntegerMessage(args[1]));
+                return true;
+            }
         }
         List<String> names = storage.getNames(holoType);
         int maxPage = PageUtils.getNumberOfPages(names.size(), PageUtils.HOLOGRAMS_PER_PAGE);
