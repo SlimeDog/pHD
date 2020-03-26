@@ -344,7 +344,6 @@ public class Messages extends CustomConfigHandler {
     private String timesString = "%s %d/%d";
 
     public String getNtimesReportMessage(OfflinePlayer player, List<NTimesHologram> holos, int page) {
-        org.bukkit.Bukkit.getLogger().info("CUSTOM!!");
         String msg = getMessage("ntimes-report", "{player} has seen the following NTIMES holograms (holograms {holograms}, page {page}/{max-pages}):\n{times}");
         msg = msg.replace("{player}", player.getName());
 
