@@ -77,7 +77,7 @@ public class ListSub extends SubCommand {
             hologramTypes.put(name, String.join(", ", typesStr));
         }
         sender.sendMessage(messages.getHologramListMessage(hologramTypes, page));
-        if (page < maxPage) HintUtil.sendHint(sender, messages.getNextPageHint("{command}"), String.format("/phd list %d", page +1));
+        if (page < maxPage) HintUtil.sendHint(sender, messages.getNextPageHint("{command}"), String.format("/phd list %s %d", holoType.name(), page +1));
         return true;
     }
 
