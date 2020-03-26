@@ -8,6 +8,7 @@ import java.util.UUID;
 import java.util.Map.Entry;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.DefaultReloadIssue;
@@ -388,11 +389,13 @@ public class Messages extends CustomConfigHandler {
         } else {
             flash = "None";
         }
-        return getMessage("hologram-info", "Hologram '{name}':\nWorld: {world}\nType: {type}\nShowTime: {time}\nFlash: {flash}\nActivationDistance: {distance}\nPermission: {perms}\nTypeInfo: {typeinfo}")
+        Location loc = hologram.getLocation();
+        return getMessage("hologram-info", "Hologram {name}:\nWorld: {world}\nLocation: {location}\nType: {type}\nShowTime: {time}\nFlash: {flash}\nActivationDistance: {distance}\nPermission: {perms}\nTypeInfo: {typeinfo}")
                         .replace("{name}", hologram.getName()).replace("{world}", hologram.getLocation().getWorld().getName())
                         .replace("{type}", typeName).replace("{time}", time)
                         .replace("{typeinfo}", typeinfo).replace("{distance}", distance)
                         .replace("{flash}", flash)
+                        .replace("{location}", String.format("%.1f %.1f %.1f", loc.getX(), loc.getY(), loc.getZ()))
                         .replace("{perms}", hologram.hasPermissions() ? hologram.getPermissions() : "");
     }
 

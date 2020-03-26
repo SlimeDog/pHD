@@ -27,7 +27,7 @@ hologram-list: "Holograms (holograms {numbers}, page {page}/{max-pages}): \n{hol
 # Messages produced by /phd info
 #
 available-types: "Types available for {hologram}: {types}"
-hologram-info: "Hologram {name}:\nWorld: {world}\nType: {type}\nShowTime: {time}\nFlash: {flash}\nActivationDistance: {distance}\nPermission: {perms}\nTypeInfo: {typeinfo}"
+hologram-info: "Hologram {name}:\nWorld: {world}\nLocation: {location}\nType: {type}\nShowTime: {time}\nFlash: {flash}\nActivationDistance: {distance}\nPermission: {perms}\nTypeInfo: {typeinfo}"
 typeinfo:
   MCTIME: "Shown at: {time}"
   IRLTIME: "Shown at: {time}"
