@@ -254,9 +254,17 @@ public class HologramStorage {
     }
 
 	public List<String> getNames() {
+        return getNames(null);
+	}
+
+	public List<String> getNames(PeriodicType type) {
         List<String> names = new ArrayList<>();
         for (WorldHologramStorage storage: holograms.values()) {
-            names.addAll(storage.getHologramNames());
+            for (IndividualHologramHandler holo : storage.getHandlers(false)) {
+                if (type == null || holo.getHologram(type) != null) {
+                    names.add(holo.getName());
+                }
+            }
         }
 		return names;
 	}

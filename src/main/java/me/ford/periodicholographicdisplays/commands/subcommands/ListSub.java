@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.util.StringUtil;
 
 import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.commands.SubCommand;
@@ -19,7 +20,7 @@ import me.ford.periodicholographicdisplays.util.PageUtils;
  */
 public class ListSub extends SubCommand {
     private static final String PERMS = "phd.list";
-    private static final String USAGE = "/phd list [page]";
+    private static final String USAGE = "/phd list <type> [page]";
     private final HologramStorage storage;
     private final Messages messages;
 
@@ -30,21 +31,33 @@ public class ListSub extends SubCommand {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String[] args) {
-        return new ArrayList<>();
+        List<String> list = new ArrayList<>();;
+        if (args.length == 1) {
+            return StringUtil.copyPartialMatches(args[0], PeriodicType.names(), list);
+        }
+        return list;
     }
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
         int page = 1;
-        if (args.length > 0) {
-            try {
-                page = Integer.parseInt(args[0]);
-            } catch (NumberFormatException e) {
-                sender.sendMessage(messages.getNeedAnIntegerMessage(args[0]));
-                return true;
-            }
-        } 
-        List<String> names = storage.getNames();
+        if (args.length < 2) {
+            return false;
+        }
+        PeriodicType holoType = null;
+        try {
+            holoType = PeriodicType.valueOf(args[0]);
+        } catch (IllegalArgumentException e) {
+            sender.sendMessage(messages.getTypeNotRecognizedMessage(args[0]));
+            return true;
+        }
+        try {
+            page = Integer.parseInt(args[1]);
+        } catch (NumberFormatException e) {
+            sender.sendMessage(messages.getNeedAnIntegerMessage(args[1]));
+            return true;
+        }
+        List<String> names = storage.getNames(holoType);
         int maxPage = PageUtils.getNumberOfPages(names.size(), PageUtils.HOLOGRAMS_PER_PAGE);
         if (maxPage == 0) maxPage++;
         if (page <= 0 || page > maxPage) {
