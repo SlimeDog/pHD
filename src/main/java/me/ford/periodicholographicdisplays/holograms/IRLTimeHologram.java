@@ -49,6 +49,7 @@ public class IRLTimeHologram extends FlashingHologram {
         this.atTime = time;
         task.cancel();
         initTask();
+        markChanged();
     }
 
     @Override

@@ -55,6 +55,7 @@ public class MCTimeHologram extends FlashingHologram {
     public void setTime(long time) {
         this.atTime = time;
         schedule();
+        markChanged();
     }
 
     @Override
