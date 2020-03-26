@@ -116,6 +116,9 @@ public abstract class OptionPairSetSub extends SubCommand {
                 if (!holo.flashes() && !options.containsKey("flashoff")) {
                     throw new OptionPairException(OptionPairExceptionType.FLASH_ONLY_ONE, "flashon");
                 }
+                if (options.containsKey("flash")) {
+                    throw new OptionPairException(OptionPairExceptionType.FLASH_ONLY_ONE, "flash");
+                }
                 double flashOn;
                 try {
                     flashOn = Double.parseDouble(result);
@@ -130,6 +133,9 @@ public abstract class OptionPairSetSub extends SubCommand {
                 case "flashoff":
                 if (!holo.flashes() && !options.containsKey("flashon")) {
                     throw new OptionPairException(OptionPairExceptionType.FLASH_ONLY_ONE, "flashon");
+                }
+                if (options.containsKey("flash")) {
+                    throw new OptionPairException(OptionPairExceptionType.FLASH_ONLY_ONE, "flash");
                 }
                 double flashOff;
                 try {
