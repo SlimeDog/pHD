@@ -4,8 +4,8 @@ package me.ford.periodicholographicdisplays.util;
  * PageUtils
  */
 public final class PageUtils {
-    public static final int PLAYERS_PER_PAGE = 10;
-    public static final int HOLOGRAMS_PER_PAGE = 10;
+    public static final int PLAYERS_PER_PAGE = 8;
+    public static final int HOLOGRAMS_PER_PAGE = 8;
 
     private PageUtils() {
         throw new IllegalStateException("Utility classes should not be initialized!");
