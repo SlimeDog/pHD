@@ -38,6 +38,11 @@ public class Messages extends CustomConfigHandler {
         this.phd = phd;
     }
 
+    public String getNeedTypeOrPageMessage(String cur) {
+        return getMessage("need-to-specify-type-or-page", "Need to specify either periodic type or the page number, got {msg}")
+                        .replace("{msg}", cur);
+    }
+
     public String getUnrecognizedCommandMessage(String input) {
         return getMessage("unrecognized-command", "Unrecognized command; try /phd help");
     }

@@ -23,6 +23,7 @@ PHD_PREFIX: "[pHD] "
 # Messages produced by /phd list
 #
 hologram-list: "Holograms (holograms {numbers}, page {page}/{max-pages}): \n{holograms}"
+need-to-specify-type-or-page: "Need to specify either periodic type or the page number, got {msg}"
 
 # Messages produced by /phd info
 #

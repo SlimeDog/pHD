@@ -40,22 +40,37 @@ public class ListSub extends SubCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
+        String pageStr = null;
+        String typeStr = null;
+        boolean fuzzy = args.length == 1;
+        if (fuzzy) {
+            typeStr = args[0];
+            pageStr = args[0];
+        } else if (args.length > 1) {
+            typeStr = args[0];
+            pageStr = args[1];            
+        }
         int page = 1;
-        if (args.length < 1) {
-            return false;
-        }
         PeriodicType holoType = null;
-        try {
-            holoType = PeriodicType.valueOf(args[0]);
-        } catch (IllegalArgumentException e) {
-            sender.sendMessage(messages.getTypeNotRecognizedMessage(args[0]));
-            return true;
-        }
-        if (args.length > 1) {
+        if (args.length > 0) {
             try {
-                page = Integer.parseInt(args[1]);
+                holoType = PeriodicType.valueOf(typeStr);
+            } catch (IllegalArgumentException e) {
+            }
+            boolean gotPage = true;
+            try {
+                page = Integer.parseInt(pageStr);
             } catch (NumberFormatException e) {
-                sender.sendMessage(messages.getNeedAnIntegerMessage(args[1]));
+                gotPage = false;
+            }
+            if (fuzzy && holoType == null && !gotPage) {
+                sender.sendMessage(messages.getNeedTypeOrPageMessage(typeStr));
+                return true;
+            } else if (!fuzzy && holoType == null) {
+                sender.sendMessage(messages.getTypeNotRecognizedMessage(typeStr));
+                return true;
+            } else if (!fuzzy && !gotPage) {
+                sender.sendMessage(messages.getNeedAnIntegerMessage(pageStr));
                 return true;
             }
         }
@@ -77,7 +92,8 @@ public class ListSub extends SubCommand {
             hologramTypes.put(name, String.join(", ", typesStr));
         }
         sender.sendMessage(messages.getHologramListMessage(hologramTypes, page));
-        if (page < maxPage) HintUtil.sendHint(sender, messages.getNextPageHint("{command}"), String.format("/phd list %s %d", holoType.name(), page +1));
+        String typeName = holoType == null ? "" : " " + holoType.name();
+        if (page < maxPage) HintUtil.sendHint(sender, messages.getNextPageHint("{command}"), String.format("/phd list%s %d", typeName, page +1));
         return true;
     }
 
