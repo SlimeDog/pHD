@@ -21,7 +21,9 @@ public final class HintUtil {
 
     public static void sendHint(CommandSender sender, String fullHint, String commandPlaceHolder, String hintCommand) {
         int hintStart = fullHint.indexOf(commandPlaceHolder);
-        if (hintStart == -1) throw new IllegalArgumentException(String.format("The placeholder '%s' was not found in the hint message '%s'", commandPlaceHolder, fullHint));
+        if (hintStart == -1)
+            throw new IllegalArgumentException(String.format(
+                    "The placeholder '%s' was not found in the hint message '%s'", commandPlaceHolder, fullHint));
         int hintStop = hintStart + commandPlaceHolder.length();
         String before = fullHint.substring(0, hintStart);
         String after = fullHint.substring(hintStop);
@@ -31,5 +33,5 @@ public final class HintUtil {
         TextComponent ca = new TextComponent(after);
         sender.spigot().sendMessage(cb, hint, ca);
     }
-    
+
 }

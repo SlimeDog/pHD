@@ -15,14 +15,14 @@ import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
  * MCTimeHologram
  */
 public class MCTimeHologram extends FlashingHologram {
-    private static final long DELAY = 20 * 60 * 20; // 20 minutes, 60 seconds, 20 ticks 
+    private static final long DELAY = 20 * 60 * 20; // 20 minutes, 60 seconds, 20 ticks
     private final PeriodicHolographicDisplays plugin;
     private final MCTimeHologramDisplayer displayer;
     private BukkitTask task;
     private long atTime; // between 0 and 23999
 
-    public MCTimeHologram(Hologram hologram, String name, double activationDistance, long showTime, long atTime, boolean isNew, String perms, 
-                        double flashOn, double flashOff) {
+    public MCTimeHologram(Hologram hologram, String name, double activationDistance, long showTime, long atTime,
+            boolean isNew, String perms, double flashOn, double flashOff) {
         super(hologram, name, activationDistance, showTime, PeriodicType.MCTIME, isNew, perms, flashOn, flashOff);
         this.atTime = atTime;
         plugin = JavaPlugin.getPlugin(PeriodicHolographicDisplays.class);
@@ -35,7 +35,8 @@ public class MCTimeHologram extends FlashingHologram {
     }
 
     public void timeChanged(long amount) {
-        if (amount == 0) return;
+        if (amount == 0)
+            return;
         schedule(amount);
     }
 
@@ -46,9 +47,10 @@ public class MCTimeHologram extends FlashingHologram {
     private final static long TIME_FIX = 6000L;
 
     private void schedule(long amount) {
-        if (task != null) task.cancel();
-        long newTime = (getLocation().getWorld().getTime() + amount + TIME_FIX)%24000;
-        long curDelay = (atTime - newTime)%24000;// in MC time = ticks
+        if (task != null)
+            task.cancel();
+        long newTime = (getLocation().getWorld().getTime() + amount + TIME_FIX) % 24000;
+        long curDelay = (atTime - newTime) % 24000;// in MC time = ticks
         task = plugin.getServer().getScheduler().runTaskTimer(plugin, displayer, curDelay, DELAY);
     }
 
@@ -66,8 +68,10 @@ public class MCTimeHologram extends FlashingHologram {
     private void showInRange() {
         World world = getLocation().getWorld();
         double dist = getActivationDistance();
-        if (dist == NO_DISTANCE) dist = plugin.getSettings().getDefaultActivationDistance();
-        for (Entity entity : world.getNearbyEntities(getLocation(), dist, dist, dist, (e) -> e.getType() == EntityType.PLAYER)) {
+        if (dist == NO_DISTANCE)
+            dist = plugin.getSettings().getDefaultActivationDistance();
+        for (Entity entity : world.getNearbyEntities(getLocation(), dist, dist, dist,
+                (e) -> e.getType() == EntityType.PLAYER)) {
             Player player = (Player) entity;
             show(player);
         }
@@ -84,7 +88,7 @@ public class MCTimeHologram extends FlashingHologram {
         public void run() {
             showInRange();
         }
-        
+
     }
-    
+
 }

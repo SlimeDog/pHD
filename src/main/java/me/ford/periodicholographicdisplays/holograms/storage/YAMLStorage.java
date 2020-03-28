@@ -42,7 +42,8 @@ public class YAMLStorage implements Storage {
     public void saveHolograms(Set<HDHologramInfo> holograms, boolean inSync) {
         for (HDHologramInfo hdHoloInfo : holograms) {
             ConfigurationSection nameSection = getConfig().getConfigurationSection(hdHoloInfo.getHoloName());
-            if (nameSection == null) nameSection = getConfig().createSection(hdHoloInfo.getHoloName());
+            if (nameSection == null)
+                nameSection = getConfig().createSection(hdHoloInfo.getHoloName());
             for (HologramInfo info : hdHoloInfo.getInfos()) {
                 saveInfo(nameSection.createSection(info.getType().name()), info);
             }
@@ -101,7 +102,8 @@ public class YAMLStorage implements Storage {
             try {
                 holo = loadType(name, section.getConfigurationSection(typeStr));
             } catch (HologramLoadException e) {
-                phd.getLogger().log(Level.WARNING, "Problem loading hologram of type " + typeStr + " from file for hologram " + name, e);
+                phd.getLogger().log(Level.WARNING,
+                        "Problem loading hologram of type " + typeStr + " from file for hologram " + name, e);
                 continue;
             }
             info.addInfo(holo);
@@ -111,7 +113,8 @@ public class YAMLStorage implements Storage {
 
     private HologramInfo loadType(String name, ConfigurationSection section) throws HologramLoadException {
         if (section == null) {
-            throw new HologramLoadException("Unable to parse hologram because of incorrect config (using the old system?): " + name);
+            throw new HologramLoadException(
+                    "Unable to parse hologram because of incorrect config (using the old system?): " + name);
         }
         PeriodicType type;
         try {
@@ -126,40 +129,43 @@ public class YAMLStorage implements Storage {
         double flashOff = section.getDouble("flash-off", FlashingHologram.NO_FLASH);
         final TypeInfo typeInfo;
         switch (type) {
-        case IRLTIME:
-            long atTime = section.getLong("show-at", 0); // seconds from 00:00
-            typeInfo = new IRLTimeTypeInfo(atTime);
-            break;
-        case MCTIME:
-            long time = section.getLong("show-at", 0);
-            typeInfo = new MCTimeTypeInfo(time);
-            break;
-        case ALWAYS:
-        case NTIMES:
-            int timesToShow;
-            if (type == PeriodicType.ALWAYS) {
-                timesToShow = -1;
-            } else {
-                timesToShow = section.getInt("times-to-show", -1);
-            }
-            typeInfo = new NTimesTypeInfo(timesToShow, getShownToTimes(section.getConfigurationSection("shown-to")));
-            break;
-        default:
-            phd.getLogger().info("Undefined loading behavour with type: " + type);
-            return null;
+            case IRLTIME:
+                long atTime = section.getLong("show-at", 0); // seconds from 00:00
+                typeInfo = new IRLTimeTypeInfo(atTime);
+                break;
+            case MCTIME:
+                long time = section.getLong("show-at", 0);
+                typeInfo = new MCTimeTypeInfo(time);
+                break;
+            case ALWAYS:
+            case NTIMES:
+                int timesToShow;
+                if (type == PeriodicType.ALWAYS) {
+                    timesToShow = -1;
+                } else {
+                    timesToShow = section.getInt("times-to-show", -1);
+                }
+                typeInfo = new NTimesTypeInfo(timesToShow,
+                        getShownToTimes(section.getConfigurationSection("shown-to")));
+                break;
+            default:
+                phd.getLogger().info("Undefined loading behavour with type: " + type);
+                return null;
         }
         return new HologramInfo(name, type, distance, showTime, perms, typeInfo, flashOn, flashOff);
     }
 
     private Map<UUID, Integer> getShownToTimes(ConfigurationSection section) {
         Map<UUID, Integer> map = new HashMap<>();
-        if (section == null) return map;
+        if (section == null)
+            return map;
         for (String uuid : section.getKeys(false)) {
             UUID id;
             try {
                 id = UUID.fromString(uuid);
             } catch (IllegalArgumentException e) {
-                phd.getLogger().warning("Unable to parse UUID of Periodic hologram " + section.getCurrentPath() + " : " + uuid);
+                phd.getLogger().warning(
+                        "Unable to parse UUID of Periodic hologram " + section.getCurrentPath() + " : " + uuid);
                 continue;
             }
             map.put(id, section.getInt(uuid));
@@ -201,5 +207,5 @@ public class YAMLStorage implements Storage {
             phd.getLogger().log(Level.SEVERE, "Could not save config to " + storageFile, ex);
         }
     }
-    
+
 }

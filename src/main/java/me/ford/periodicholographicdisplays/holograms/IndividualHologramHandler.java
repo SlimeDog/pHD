@@ -38,21 +38,26 @@ public class IndividualHologramHandler {
     void addHologram(PeriodicType type, FlashingHologram holo, boolean wasLoaded) {
         Validate.notNull(type, "PeriodicType cannot be null");
         Validate.notNull(holo, "Periodic hologram cannot be null");
-        Validate.isTrue(holo.getType() == type, "Wrong type of hologram. Expected " + type.name() + " got " + holo.getType().name());
+        Validate.isTrue(holo.getType() == type,
+                "Wrong type of hologram. Expected " + type.name() + " got " + holo.getType().name());
         Validate.isTrue(holo.getName().equals(name), "Can only handle pHD holograms of the same HD hologram");
         Bukkit.getPluginManager().callEvent(new StartedManagingHologramEvent(holo));
         holograms.put(type, holo);
-        if (!wasLoaded) toSave.put(type, holo);
+        if (!wasLoaded)
+            toSave.put(type, holo);
     }
 
     void removeHologram(FlashingHologram hologram, boolean markForRemoval) {
         Validate.notNull(hologram, "Cannot remove null hologram");
-        Validate.isTrue(this.hologram == hologram.getHologram(), "Can only add pHD holograms that affect the same HD hologram");
+        Validate.isTrue(this.hologram == hologram.getHologram(),
+                "Can only add pHD holograms that affect the same HD hologram");
         Bukkit.getPluginManager().callEvent(new StoppedManagingHologramEvent(hologram));
         holograms.remove(hologram.getType());
         hologram.resetVisibility();
-        if (holograms.isEmpty()) hologram.markRemoved();
-        if (markForRemoval) toSave.put(hologram.getType(), null); // i.e to remove
+        if (holograms.isEmpty())
+            hologram.markRemoved();
+        if (markForRemoval)
+            toSave.put(hologram.getType(), null); // i.e to remove
     }
 
     Hologram getHologram() {
@@ -111,8 +116,9 @@ public class IndividualHologramHandler {
     @Override
     public String toString() {
         List<String> types = new ArrayList<>();
-        for (PeriodicType type : holograms.keySet()) types.add(type.name());
+        for (PeriodicType type : holograms.keySet())
+            types.add(type.name());
         return String.format("[IHH:%s;types:%s]", name, String.join(", ", types));
     }
-    
+
 }

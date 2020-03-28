@@ -29,5 +29,5 @@ public class WorldListener implements Listener {
     public void onWorldLoad(WorldLoadEvent event) {
         storage.newWorld(event.getWorld());
     }
-    
+
 }

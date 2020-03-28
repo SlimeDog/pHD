@@ -33,29 +33,32 @@ public class LegacyWorldTimeListener extends WorldTimeListener {
 
     @EventHandler
     public void onStartManage(StartedManagingHologramEvent event) {
-        if (event.getHologram().getType() != PeriodicType.MCTIME) return; // don't care for anything other than MCTIME
+        if (event.getHologram().getType() != PeriodicType.MCTIME)
+            return; // don't care for anything other than MCTIME
         World world = event.getHologram().getLocation().getWorld();
-        if (!worldTimes.containsKey(world)) addWorld(world);
+        if (!worldTimes.containsKey(world))
+            addWorld(world);
     }
 
     @EventHandler
     public void onStopManage(StoppedManagingHologramEvent event) {
-        if (event.getHologram().getType() != PeriodicType.MCTIME) return; // don't care for anything other than MCTIME
+        if (event.getHologram().getType() != PeriodicType.MCTIME)
+            return; // don't care for anything other than MCTIME
         phd.getServer().getScheduler().runTask(phd, new WorldChecker(event.getHologram().getLocation().getWorld()));
     }
 
     private void addWorld(World world) {
-        phd.debug("Adding world to LegacyWorldTimeListener: " + world.getName()); 
+        phd.debug("Adding world to LegacyWorldTimeListener: " + world.getName());
         worldTimes.put(world, world.getFullTime());
     }
 
     private void removeWorld(World world) {
-        phd.debug("Removing world from LegacyWorldTimeListener: " + world.getName()); 
+        phd.debug("Removing world from LegacyWorldTimeListener: " + world.getName());
         worldTimes.remove(world);
     }
 
     private void timeChanged(World world, long addTime) {
-        phd.debug("Time changed in " + world.getName() + " by " + addTime); 
+        phd.debug("Time changed in " + world.getName() + " by " + addTime);
         getStorage().mcTimeChanged(world, addTime);
     }
 
@@ -106,5 +109,5 @@ public class LegacyWorldTimeListener extends WorldTimeListener {
         }
 
     }
-    
+
 }

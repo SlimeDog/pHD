@@ -67,9 +67,9 @@ public class CustomConfigHandler {
         if (customConfigFile == null) {
             customConfigFile = new File(phd.getDataFolder(), fileName);
         }
-        if (!customConfigFile.exists()) {            
-             phd.saveResource(fileName, false);
-         }
+        if (!customConfigFile.exists()) {
+            phd.saveResource(fileName, false);
+        }
     }
-    
+
 }

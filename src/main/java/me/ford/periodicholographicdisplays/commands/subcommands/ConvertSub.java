@@ -70,10 +70,12 @@ public class ConvertSub extends SubCommand {
 
         YAMLStorage yamlStorage;
         if (phd.getSettings().useDatabase()) {
-            if (sqlStorage == null) sqlStorage = (SQLStorage) phd.getHolograms().getStorage();
+            if (sqlStorage == null)
+                sqlStorage = (SQLStorage) phd.getHolograms().getStorage();
             yamlStorage = new YAMLStorage();
         } else {
-            if (sqlStorage == null) sqlStorage = new SQLStorage(phd);
+            if (sqlStorage == null)
+                sqlStorage = new SQLStorage(phd);
             yamlStorage = (YAMLStorage) phd.getHolograms().getStorage();
         }
 
@@ -82,16 +84,16 @@ public class ConvertSub extends SubCommand {
         Storage targetStorage;
         switch (type) {
             case YAML_TO_SQLITE:
-            sourceStorage = yamlStorage;
-            targetStorage = sqlStorage;
-            break;
+                sourceStorage = yamlStorage;
+                targetStorage = sqlStorage;
+                break;
             case SQLITE_TO_YAML:
-            sourceStorage = sqlStorage;
-            targetStorage = yamlStorage;
-            break;
+                sourceStorage = sqlStorage;
+                targetStorage = yamlStorage;
+                break;
             default:
-            sender.sendMessage(messages.getUnrecognizedStorageTypeMessage(from, to));
-            return true;
+                sender.sendMessage(messages.getUnrecognizedStorageTypeMessage(from, to));
+                return true;
         }
 
         // find out if there is an instance of SOURCE storage type
@@ -119,7 +121,8 @@ public class ConvertSub extends SubCommand {
     }
 
     private void closeSqlite(String from, String to) {
-        if (phd.getSettings().useDatabase()) return;
+        if (phd.getSettings().useDatabase())
+            return;
         if (to.equals(SQLITE)) {
             // TODO - perhaps an event?
             phd.getServer().getScheduler().runTaskLater(phd, () -> closeSqlite(from, "..."), 40L);
@@ -158,15 +161,17 @@ public class ConvertSub extends SubCommand {
 
         @Override
         public void run() {
-            phd.getServer().getScheduler().runTask(phd, () -> sender.sendMessage(messages.getDoneConvertingMessage(from, to))); // so it gets sent after the start message (for YAML mostly)
+            phd.getServer().getScheduler().runTask(phd,
+                    () -> sender.sendMessage(messages.getDoneConvertingMessage(from, to))); // so it gets sent after the
+                                                                                            // start message (for YAML
+                                                                                            // mostly)
             closeSqlite(from, to);
         }
 
     }
 
     private enum ConvertTypes {
-        SQLITE_TO_YAML,
-        YAML_TO_SQLITE
+        SQLITE_TO_YAML, YAML_TO_SQLITE
     }
-    
+
 }

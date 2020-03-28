@@ -8,20 +8,19 @@ import java.util.regex.Pattern;
  */
 public final class TimeUtils {
 
-    private TimeUtils() { throw new IllegalAccessError("TimeUtils should not be initialized");}
+    private TimeUtils() {
+        throw new IllegalAccessError("TimeUtils should not be initialized");
+    }
 
-    private static final Pattern timePattern = Pattern.compile("(?:([0-9]+)\\s*y[a-z]*[,\\s]*)?" + 
-                                                        "(?:([0-9]+)\\s*mo[a-z]*[,\\s]*)?" + 
-                                                        "(?:([0-9]+)\\s*w[a-z]*[,\\s]*)?" + 
-                                                        "(?:([0-9]+)\\s*d[a-z]*[,\\s]*)?" + 
-                                                        "(?:([0-9]+)\\s*h[a-z]*[,\\s]*)?" + 
-                                                        "(?:([0-9]+)\\s*m[a-z]*[,\\s]*)?" + 
-                                                        "(?:([0-9]+)\\s*(?:s[a-z]*)?)?", Pattern.CASE_INSENSITIVE);
-    
+    private static final Pattern timePattern = Pattern.compile("(?:([0-9]+)\\s*y[a-z]*[,\\s]*)?"
+            + "(?:([0-9]+)\\s*mo[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*w[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*d[a-z]*[,\\s]*)?"
+            + "(?:([0-9]+)\\s*h[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*m[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*(?:s[a-z]*)?)?",
+            Pattern.CASE_INSENSITIVE);
+
     private static final Pattern mcTimePattern = Pattern.compile("(\\d\\d):(\\d\\d)");
-	    
+
     public static long parseDateDiff(String time) throws IllegalArgumentException {
-    	Matcher m = timePattern.matcher(time);
+        Matcher m = timePattern.matcher(time);
         int years = 0;
         int months = 0;
         int weeks = 0;
@@ -75,20 +74,20 @@ public final class TimeUtils {
         timems += hours * 60L * 60L * 1000L;
         timems += minutes * 60L * 1000L;
         timems += seconds * 1000L;
-    	return timems;
+        return timems;
     }
-    
+
     /**
      * Get a string value of time difference of
      * 
-     * @param datediff  difference (in milliseconds)
-     * @return          string value of the time difference
+     * @param datediff difference (in milliseconds)
+     * @return string value of the time difference
      */
     public static String formatDateFromDiff(long datediff) {
-    	if (datediff < 1000L) { // less than a second
-    		return "0s ";
-    	}
-    	long year = 365L * 24L * 60L * 60L * 1000L;
+        if (datediff < 1000L) { // less than a second
+            return "0s ";
+        }
+        long year = 365L * 24L * 60L * 60L * 1000L;
         long month = 30L * 24L * 60L * 60L * 1000L;
         long day = 24L * 60L * 60L * 1000L;
         long hour = 60L * 60L * 1000L;
@@ -103,64 +102,68 @@ public final class TimeUtils {
         String time = "";
         long rdiff = datediff;
         if (rdiff > year) {
-        	years = rdiff/year;
-        	time += String.valueOf(years) + " years ";
-        	rdiff -= years * year;
+            years = rdiff / year;
+            time += String.valueOf(years) + " years ";
+            rdiff -= years * year;
         }
         if (rdiff > month) {
-        	months = rdiff/month;
-        	time += String.valueOf(months) + " months ";
-        	rdiff -= months * month;
+            months = rdiff / month;
+            time += String.valueOf(months) + " months ";
+            rdiff -= months * month;
         }
         if (rdiff > day) {
-        	days = rdiff/day;
-        	time += String.valueOf(days) + " days ";
-        	rdiff -= days * day;
+            days = rdiff / day;
+            time += String.valueOf(days) + " days ";
+            rdiff -= days * day;
         }
         if (rdiff > hour) {
-        	hours = rdiff/hour;
-        	time += String.valueOf(hours) + " hours ";
-        	rdiff -= hours * hour;
+            hours = rdiff / hour;
+            time += String.valueOf(hours) + " hours ";
+            rdiff -= hours * hour;
         }
         if (rdiff > minute) {
-        	minutes = rdiff/minute;
-        	time += String.valueOf(minutes) + " minutes ";
-        	rdiff -= minutes * minute;
+            minutes = rdiff / minute;
+            time += String.valueOf(minutes) + " minutes ";
+            rdiff -= minutes * minute;
         }
         if (rdiff > second) {
-        	seconds = rdiff/second;
-        	time += String.valueOf(seconds) + " seconds ";
-        	rdiff -= seconds * second;
+            seconds = rdiff / second;
+            time += String.valueOf(seconds) + " seconds ";
+            rdiff -= seconds * second;
         }
         return time;
     }
 
     public static long parseMCTime(String mcTime) {
         Matcher matcher = mcTimePattern.matcher(mcTime);
-        if (!matcher.matches()) throw new IllegalArgumentException("The time does not match the pattern 'hh:mm' : " + mcTime);
-        int hours = Integer.parseInt(matcher.group(1)); // NumberFormatException should be avoided deu to the pattern matching
+        if (!matcher.matches())
+            throw new IllegalArgumentException("The time does not match the pattern 'hh:mm' : " + mcTime);
+        int hours = Integer.parseInt(matcher.group(1)); // NumberFormatException should be avoided deu to the pattern
+                                                        // matching
         int minutes = Integer.parseInt(matcher.group(2));
-        return hours * 1000 + (minutes * 1000)/60;
+        return hours * 1000 + (minutes * 1000) / 60;
     }
 
     public static String toMCTime(long time) {
-        long hours = time/1000;
-        long minutes = ((time%1000) * 60)/1000;
+        long hours = time / 1000;
+        long minutes = ((time % 1000) * 60) / 1000;
         return String.format("%02d:%02d", hours, minutes);
     }
 
     public static long parseHoursAndMinutesToSeconds(String time) {
         Matcher matcher = mcTimePattern.matcher(time);
-        if (!matcher.matches()) throw new IllegalArgumentException("The time does not match the pattern 'hh:mm' : " + time);
-        int hours = Integer.parseInt(matcher.group(1)); // NumberFormatException should be avoided due to the pattern matching
+        if (!matcher.matches())
+            throw new IllegalArgumentException("The time does not match the pattern 'hh:mm' : " + time);
+        int hours = Integer.parseInt(matcher.group(1)); // NumberFormatException should be avoided due to the pattern
+                                                        // matching
         int minutes = Integer.parseInt(matcher.group(2));
         return hours * 3600 + minutes * 60;
     }
 
     public static String toIRLTime(long time) {
-        long hours = time/3600;
-        long minutes = (time%3600)/ 60;
+        long hours = time / 3600;
+        long minutes = (time % 3600) / 60;
         return String.format("%02d:%02d", hours, minutes);
     }
-    
+
 }

@@ -66,11 +66,13 @@ public abstract class WorldHologramStorageBase {
 
     protected void removeHandler(String name) {
         IndividualHologramHandler handler = holograms.remove(name);
-        if (handler != null) loadedHandlers.remove(handler);
+        if (handler != null)
+            loadedHandlers.remove(handler);
     }
 
     protected Collection<IndividualHologramHandler> getHandlers(boolean onlyLoaded) {
-        if (onlyLoaded) return new ArrayList<>(loadedHandlers);
+        if (onlyLoaded)
+            return new ArrayList<>(loadedHandlers);
         return new ArrayList<>(holograms.values());
     }
 
@@ -79,9 +81,9 @@ public abstract class WorldHologramStorageBase {
     }
 
     protected abstract boolean saveHolograms(boolean inSync, HologramSaveReason reason);
-    
+
     public static enum HologramSaveReason {
         ADD, PERIODIC, MANUAL, CHANGE, REMOVE
     }
-    
+
 }

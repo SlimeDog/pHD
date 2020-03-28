@@ -66,7 +66,8 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
     }
 
     public void loaded(NamedHologram holo, HDHologramInfo info, boolean imported) {
-        if (holo.getWorld() != getWorld()) return; // don't load
+        if (holo.getWorld() != getWorld())
+            return; // don't load
         IndividualHologramHandler handler = null;
         for (HologramInfo hInfo : info.getInfos()) {
             FlashingHologram hologram;
@@ -77,47 +78,43 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
             double flashOff = hInfo.getFlashOff();
             switch (hInfo.getType()) {
                 case MCTIME:
-                hologram = new MCTimeHologram(holo, info.getHoloName(), distance, 
-                                                seconds, ((MCTimeTypeInfo) typeInfo).getAtTime(), 
-                                                false, hInfo.getPermissions(),
-                                                flashOn, flashOff);
-                break;
+                    hologram = new MCTimeHologram(holo, info.getHoloName(), distance, seconds,
+                            ((MCTimeTypeInfo) typeInfo).getAtTime(), false, hInfo.getPermissions(), flashOn, flashOff);
+                    break;
                 case IRLTIME:
-                hologram = new IRLTimeHologram(holo, info.getHoloName(), distance,
-                                                seconds, ((IRLTimeTypeInfo) typeInfo).getAtTime(), 
-                                                false, hInfo.getPermissions(),
-                                                flashOn, flashOff);
-                break;
+                    hologram = new IRLTimeHologram(holo, info.getHoloName(), distance, seconds,
+                            ((IRLTimeTypeInfo) typeInfo).getAtTime(), false, hInfo.getPermissions(), flashOn, flashOff);
+                    break;
                 case NTIMES:
-                NTimesTypeInfo ntimesInfo = (NTimesTypeInfo) typeInfo;
-                NTimesHologram ntimes = new NTimesHologram(holo, info.getHoloName(), distance,
-                                                seconds, ntimesInfo.getShowTimes(), 
-                                                false, hInfo.getPermissions(),
-                                                flashOn, flashOff);
-                ntimes.addAllShownTo(ntimesInfo.getShownToTimes());
-                hologram = ntimes;
-                break;
+                    NTimesTypeInfo ntimesInfo = (NTimesTypeInfo) typeInfo;
+                    NTimesHologram ntimes = new NTimesHologram(holo, info.getHoloName(), distance, seconds,
+                            ntimesInfo.getShowTimes(), false, hInfo.getPermissions(), flashOn, flashOff);
+                    ntimes.addAllShownTo(ntimesInfo.getShownToTimes());
+                    hologram = ntimes;
+                    break;
                 case ALWAYS:
-                hologram = new AlwaysHologram(holo, info.getHoloName(), distance, seconds, false, hInfo.getPermissions(),
-                                                flashOn, flashOff);
-                break;
+                    hologram = new AlwaysHologram(holo, info.getHoloName(), distance, seconds, false,
+                            hInfo.getPermissions(), flashOn, flashOff);
+                    break;
                 default:
-                throw new IllegalArgumentException("Unexpected pHD type " + hInfo.getType());
+                    throw new IllegalArgumentException("Unexpected pHD type " + hInfo.getType());
             }
             if (handler == null) {
                 handler = new IndividualHologramHandler(holo);
             }
             handler.addHologram(hInfo.getType(), hologram, !imported);
-            
+
         }
-        plugin.debug("Loaded pHD " + handler.getName() + " with types " + handler.getTypes() + " in " + getWorld().getName());
+        plugin.debug("Loaded pHD " + handler.getName() + " with types " + handler.getTypes() + " in "
+                + getWorld().getName());
         if (handler != null) {
             addHandler(handler.getName(), handler);
         }
     }
 
     public void resetAlwaysHologramPermissions(Player player) {
-        if (hook != null && hook.isNPC(player)) return;
+        if (hook != null && hook.isNPC(player))
+            return;
         for (PeriodicHologramBase holo : getHolograms()) {
             if (holo instanceof AlwaysHologram) {
                 AlwaysHologram always = (AlwaysHologram) holo;
@@ -136,12 +133,13 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
     protected boolean saveHolograms(boolean inSync, HologramSaveReason reason) {
         Set<HDHologramInfo> infos = new HashSet<>();
         for (IndividualHologramHandler handler : getHandlers(false)) {
-            if (handler.needsSaved()){
+            if (handler.needsSaved()) {
                 infos.add(getInfo(handler));
                 handler.markSaved();
             }
         }
-        if (infos.isEmpty()) return false;
+        if (infos.isEmpty())
+            return false;
         if (plugin.getSettings().onDebug()) {
             plugin.debug("in world " + getWorld().getName() + " for reason " + reason.name() + " saving:");
             for (HDHologramInfo info : infos) {
@@ -170,8 +168,8 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
                 flashOn = holo.getFlashOn();
                 flashOff = holo.getFlashOff();
             }
-            HologramInfo hInfo = new HologramInfo(handler.getName(), type, distance, 
-                                seconds, perms, typeInfo, flashOn, flashOff);
+            HologramInfo hInfo = new HologramInfo(handler.getName(), type, distance, seconds, perms, typeInfo, flashOn,
+                    flashOff);
             info.addInfo(hInfo);
         }
         return info;
@@ -183,16 +181,17 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         }
         switch (type) {
             case MCTIME:
-            return new MCTimeTypeInfo(((MCTimeHologram) holo).getTime());
+                return new MCTimeTypeInfo(((MCTimeHologram) holo).getTime());
             case IRLTIME:
-            return new IRLTimeTypeInfo(((IRLTimeHologram) holo).getTime());
+                return new IRLTimeTypeInfo(((IRLTimeHologram) holo).getTime());
             case ALWAYS:
             case NTIMES:
-            NTimesHologram ntimes = (NTimesHologram) holo;
-            return new NTimesTypeInfo(ntimes.getTimesToShow(), ntimes.getShownTo());
+                NTimesHologram ntimes = (NTimesHologram) holo;
+                return new NTimesTypeInfo(ntimes.getTimesToShow(), ntimes.getShownTo());
             default:
-            throw new IllegalArgumentException("Need to specify type of hologram to get type info, got " + holo.getType());
-        } 
+                throw new IllegalArgumentException(
+                        "Need to specify type of hologram to get type info, got " + holo.getType());
+        }
     }
 
     void addHologram(FlashingHologram hologram) {
@@ -216,7 +215,8 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
 
     void removeHologram(FlashingHologram hologram, boolean markForRemoval) {
         Validate.notNull(hologram, "Cannot remove null hologram!");
-        Validate.isTrue(hologram.getLocation().getWorld() == getWorld(), "Cannot remove holograms in a different world!");
+        Validate.isTrue(hologram.getLocation().getWorld() == getWorld(),
+                "Cannot remove holograms in a different world!");
         IndividualHologramHandler handler = getHandler(hologram.getName());
         handler.removeHologram(hologram, markForRemoval);
         if (handler.isEmpty()) {
@@ -224,5 +224,5 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
             removeHandler(hologram.getName());
         }
     }
-    
+
 }

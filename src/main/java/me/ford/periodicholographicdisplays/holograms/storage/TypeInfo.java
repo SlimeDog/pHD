@@ -60,7 +60,7 @@ public interface TypeInfo {
         public String toString() {
             return String.format("<%s(%d):%s>", getType().name(), showTimes, shownToTimes.toString());
         }
-        
+
     }
 
     public class MCTimeTypeInfo implements TypeInfo {
@@ -78,7 +78,7 @@ public interface TypeInfo {
         public long getAtTime() {
             return atTime;
         }
-        
+
     }
 
     public class IRLTimeTypeInfo implements TypeInfo {
@@ -96,7 +96,7 @@ public interface TypeInfo {
         public long getAtTime() {
             return atTime;
         }
-        
+
     }
-    
+
 }

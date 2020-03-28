@@ -17,5 +17,5 @@ public class SimpleCitizensHook extends NPCHook {
     public Citizens getCitizens() {
         return citizens;
     }
-    
+
 }

@@ -28,5 +28,5 @@ public class StoppedManagingHologramEvent extends Event {
     public static HandlerList getHandlerList() {
         return handlers;
     }
-    
+
 }

@@ -51,7 +51,8 @@ public class SimpleUserCache implements UserCache {
     @Override
     public List<String> getNamesStartingWith(String start) {
         List<String> list = new ArrayList<>();
-        if (start.length() < MIN_NAME_MATCH) return list; 
+        if (start.length() < MIN_NAME_MATCH)
+            return list;
         return StringUtil.copyPartialMatches(start, idToName.values(), list);
     }
 
@@ -64,5 +65,5 @@ public class SimpleUserCache implements UserCache {
     public void markSaved() {
         toSave.clear();
     }
-    
+
 }

@@ -32,19 +32,19 @@ public class InfoSub extends SubCommand {
     @Override
     public List<String> onTabComplete(CommandSender sender, String[] args) {
         List<String> list = new ArrayList<>();
-        switch(args.length) {
-        case 1:
-            List<String> names = storage.getNames();
-            names.sort(String.CASE_INSENSITIVE_ORDER);
-            return StringUtil.copyPartialMatches(args[0], names, list);
-        case 2:
-            List<PeriodicType> types = storage.getAvailableTypes(args[0]);
-            List<String> availableTypes = new ArrayList<>();
-            for (PeriodicType type : types) {
-                availableTypes.add(type.name());
-            }
-            return StringUtil.copyPartialMatches(args[1], availableTypes, list);
-        } 
+        switch (args.length) {
+            case 1:
+                List<String> names = storage.getNames();
+                names.sort(String.CASE_INSENSITIVE_ORDER);
+                return StringUtil.copyPartialMatches(args[0], names, list);
+            case 2:
+                List<PeriodicType> types = storage.getAvailableTypes(args[0]);
+                List<String> availableTypes = new ArrayList<>();
+                for (PeriodicType type : types) {
+                    availableTypes.add(type.name());
+                }
+                return StringUtil.copyPartialMatches(args[1], availableTypes, list);
+        }
         return list;
     }
 
@@ -84,18 +84,22 @@ public class InfoSub extends SubCommand {
             return true;
         }
         int maxPage = getMaxPages(hologram);
-        if (maxPage == 0) maxPage++;
+        if (maxPage == 0)
+            maxPage++;
         if (page <= 0 || page > maxPage) {
             sender.sendMessage(messages.getInvalidPageMessage(maxPage));
             return true;
         }
         sender.sendMessage(messages.getHologramInfoMessage(hologram, page));
-        if (page < maxPage) HintUtil.sendHint(sender, messages.getNextPageHint("{command}"), String.format("/phd info %s %s %d", hologram.getName(), type.name(), page +1));
+        if (page < maxPage)
+            HintUtil.sendHint(sender, messages.getNextPageHint("{command}"),
+                    String.format("/phd info %s %s %d", hologram.getName(), type.name(), page + 1));
         return true;
     }
 
     private int getMaxPages(FlashingHologram hologram) {
-        if (hologram.getType() != PeriodicType.NTIMES) return 1;
+        if (hologram.getType() != PeriodicType.NTIMES)
+            return 1;
         NTimesHologram ntimes = (NTimesHologram) hologram;
         return PageUtils.getNumberOfPages(ntimes.getShownTo().size(), PageUtils.PLAYERS_PER_PAGE);
     }
@@ -109,5 +113,5 @@ public class InfoSub extends SubCommand {
     public String getUsage(CommandSender sender) {
         return USAGE;
     }
-    
+
 }

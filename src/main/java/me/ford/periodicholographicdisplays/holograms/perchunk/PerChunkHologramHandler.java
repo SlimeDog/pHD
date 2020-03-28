@@ -27,8 +27,10 @@ public class PerChunkHologramHandler {
     public Set<IndividualHologramHandler> getHandlersInChunk(int x, int z) {
         HChunk chunk = HChunk.of(x, z);
         Set<IndividualHologramHandler> set = perChunkHandlers.get(chunk);
-        if (set == null) return new HashSet<>();
-        else return new HashSet<>(set);
+        if (set == null)
+            return new HashSet<>();
+        else
+            return new HashSet<>(set);
     }
 
     private void removeFromChunk(IndividualHologramHandler handler) {
@@ -50,5 +52,5 @@ public class PerChunkHologramHandler {
         set.add(handler);
         chunksOfHandlers.put(handler, chunk);
     }
-    
+
 }

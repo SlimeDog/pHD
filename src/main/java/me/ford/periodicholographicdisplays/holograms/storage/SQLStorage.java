@@ -44,14 +44,15 @@ public class SQLStorage extends SQLStorageBase implements Storage {
         }
     }
 
-    // hologram_name, hologram_type, activation_distance, display_seconds, clock_time, max_views, permission, flash_on, flash_off
+    // hologram_name, hologram_type, activation_distance, display_seconds,
+    // clock_time, max_views, permission, flash_on, flash_off
     private void saveHologramsAsync(Set<HDHologramInfo> holograms) {
         createHologramTableIfNotExists();
         createPlayerTableIfNotExists();
         String deleteQuery = "DELETE FROM " + hologramTableName + " WHERE hologram_name=? AND hologram_type=?";
-        String query = "INSERT INTO " + hologramTableName + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)" 
-                        + " ON CONFLICT(hologram_name, hologram_type) DO UPDATE SET activation_distance=? , display_seconds=? , "
-                        + "clock_time=?, max_views=?, permission=?, flash_on=?, flash_off=?;";
+        String query = "INSERT INTO " + hologramTableName + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                + " ON CONFLICT(hologram_name, hologram_type) DO UPDATE SET activation_distance=? , display_seconds=? , "
+                + "clock_time=?, max_views=?, permission=?, flash_on=?, flash_off=?;";
         for (HDHologramInfo hologram : holograms) {
             for (HologramInfo info : hologram.getInfos()) {
                 TypeInfo typeInfo = info.getTypeInfo();
@@ -61,24 +62,25 @@ public class SQLStorage extends SQLStorageBase implements Storage {
                     continue; // next
                 }
                 String time = "";
-                switch(info.getType()) {
+                switch (info.getType()) {
                     case IRLTIME:
-                    IRLTimeTypeInfo irlTypeInfo = (IRLTimeTypeInfo) typeInfo;
-                    time = TimeUtils.toIRLTime(irlTypeInfo.getAtTime());
-                    break;
+                        IRLTimeTypeInfo irlTypeInfo = (IRLTimeTypeInfo) typeInfo;
+                        time = TimeUtils.toIRLTime(irlTypeInfo.getAtTime());
+                        break;
                     case MCTIME:
-                    MCTimeTypeInfo mcTypeInfo = (MCTimeTypeInfo) typeInfo;
-                    time = TimeUtils.toMCTime(mcTypeInfo.getAtTime());
-                    break;
+                        MCTimeTypeInfo mcTypeInfo = (MCTimeTypeInfo) typeInfo;
+                        time = TimeUtils.toMCTime(mcTypeInfo.getAtTime());
+                        break;
                     case ALWAYS:
                     case NTIMES:
-                    time = "";
-                    break;
+                        time = "";
+                        break;
                     default:
-                    throw new IllegalArgumentException("Incorrect type of info:" + info.getType());
+                        throw new IllegalArgumentException("Incorrect type of info:" + info.getType());
                 }
                 int activationTimes = 0;
-                if (info.getType() == PeriodicType.NTIMES) activationTimes = ((NTimesTypeInfo) info.getTypeInfo()).getShowTimes();
+                if (info.getType() == PeriodicType.NTIMES)
+                    activationTimes = ((NTimesTypeInfo) info.getTypeInfo()).getShowTimes();
                 PreparedStatement statement;
                 try {
                     statement = conn.prepareStatement(query);
@@ -114,8 +116,8 @@ public class SQLStorage extends SQLStorageBase implements Storage {
 
     // player_UUID, hologram_name, hologram_type, views
     private void saveTypeInfoAsync(String holoName, TypeInfo info) {
-        String insertQuery = "INSERT INTO " + playerTableName + " VALUES (?, ?, ?, ?)" 
-                            + " ON CONFLICT(player_UUID, hologram_name, hologram_type) DO UPDATE SET views=?;";
+        String insertQuery = "INSERT INTO " + playerTableName + " VALUES (?, ?, ?, ?)"
+                + " ON CONFLICT(player_UUID, hologram_name, hologram_type) DO UPDATE SET views=?;";
         String query;
         if (info instanceof NullTypeInfo) {
             String deleteQuery = "DELETE FROM " + playerTableName + " WHERE hologram_name=? AND hologram_type=?;";
@@ -124,34 +126,34 @@ public class SQLStorage extends SQLStorageBase implements Storage {
         } else {
             query = insertQuery;
         }
-        switch(info.getType()) {
+        switch (info.getType()) {
             case NTIMES:
-            NTimesTypeInfo ninfo = (NTimesTypeInfo) info;
-            for (Entry<UUID, Integer> entry : ninfo.getShownToTimes().entrySet()) {
-                PreparedStatement statement;
-                try {
-                    statement = conn.prepareStatement(query);
-                    statement.setString(1, entry.getKey().toString());
-                    statement.setString(2, holoName);
-                    statement.setString(3, info.getType().name());
-                    statement.setInt(4, entry.getValue());
-                    statement.setInt(5, entry.getValue());
-                } catch (SQLException e) {
-                    phd.getLogger().log(Level.WARNING, "Problem while setting up prepared statement", e);
-                    continue;
+                NTimesTypeInfo ninfo = (NTimesTypeInfo) info;
+                for (Entry<UUID, Integer> entry : ninfo.getShownToTimes().entrySet()) {
+                    PreparedStatement statement;
+                    try {
+                        statement = conn.prepareStatement(query);
+                        statement.setString(1, entry.getKey().toString());
+                        statement.setString(2, holoName);
+                        statement.setString(3, info.getType().name());
+                        statement.setInt(4, entry.getValue());
+                        statement.setInt(5, entry.getValue());
+                    } catch (SQLException e) {
+                        phd.getLogger().log(Level.WARNING, "Problem while setting up prepared statement", e);
+                        continue;
+                    }
+                    try {
+                        statement.executeUpdate();
+                    } catch (SQLException e) {
+                        phd.getLogger().log(Level.WARNING, "Problem while executing update", e);
+                    }
                 }
-                try {
-                    statement.executeUpdate();
-                } catch (SQLException e) {
-                    phd.getLogger().log(Level.WARNING, "Problem while executing update", e);
-                }
-            }
-            break;
+                break;
             case IRLTIME:
             case MCTIME:
             case ALWAYS:
             default:
-            // don't do anything
+                // don't do anything
         }
     }
 
@@ -159,19 +161,20 @@ public class SQLStorage extends SQLStorageBase implements Storage {
     public void loadHolograms(Consumer<HDHologramInfo> consumer) {
         phd.getServer().getScheduler().runTaskAsynchronously(phd, () -> loadHologramsAsync(consumer));
     }
-    
-    
-    // hologram_name, hologram_type, activation_distance, display_seconds, clock_time, max_views, permission, flash_on, flash_off
-	private void loadHologramsAsync(Consumer<HDHologramInfo> consumer) {
+
+    // hologram_name, hologram_type, activation_distance, display_seconds,
+    // clock_time, max_views, permission, flash_on, flash_off
+    private void loadHologramsAsync(Consumer<HDHologramInfo> consumer) {
         createHologramTableIfNotExists();
         createPlayerTableIfNotExists();
         Map<String, HDHologramInfo> infos = new HashMap<>();
         String query = "SELECT * FROM " + hologramTableName + ";";
         ResultSet rs = executeQuery(query);
-        if (rs == null) return;
+        if (rs == null)
+            return;
 
         try {
-            while(rs.next()) {
+            while (rs.next()) {
                 String holoName = rs.getString("hologram_name");
                 String typeStr = rs.getString("hologram_type");
                 PeriodicType type;
@@ -201,17 +204,19 @@ public class SQLStorage extends SQLStorageBase implements Storage {
                 try {
                     typeInfo = getTypeInfo(type, time, activationTimes);
                 } catch (IllegalArgumentException e) {
-                    phd.getLogger().log(Level.WARNING, "Unable to get typeinfo of " + holoName + " of type " + type.name());
+                    phd.getLogger().log(Level.WARNING,
+                            "Unable to get typeinfo of " + holoName + " of type " + type.name());
                     continue;
                 }
-                HologramInfo holo = new HologramInfo(holoName, type, distance, seconds, perms, typeInfo, flashOn, flashOff);
+                HologramInfo holo = new HologramInfo(holoName, type, distance, seconds, perms, typeInfo, flashOn,
+                        flashOff);
                 info.addInfo(holo);
             }
             rs.close();
         } catch (SQLException e) {
-			phd.getLogger().log(Level.WARNING, "Issue while loading holograms from database!", e);
+            phd.getLogger().log(Level.WARNING, "Issue while loading holograms from database!", e);
         }
-        
+
         for (HDHologramInfo info : infos.values()) {
             for (HologramInfo hinfo : info.getInfos()) {
                 if (hinfo.getType() == PeriodicType.NTIMES) {
@@ -232,7 +237,8 @@ public class SQLStorage extends SQLStorageBase implements Storage {
     private void addShownTo(String name, NTimesTypeInfo info) {
         String query = "SELECT * FROM " + playerTableName + " WHERE hologram_name=?;";
         ResultSet rs = executeQuery(query, name);
-        if (rs == null) return;
+        if (rs == null)
+            return;
 
         try {
             while (rs.next()) {
@@ -249,75 +255,66 @@ public class SQLStorage extends SQLStorageBase implements Storage {
             }
             rs.close();
         } catch (SQLException e) {
-			phd.getLogger().log(Level.WARNING, "Issue while loading user shown times from database!", e);
+            phd.getLogger().log(Level.WARNING, "Issue while loading user shown times from database!", e);
         }
     }
-    
+
     private TypeInfo getTypeInfo(PeriodicType type, String time, String activationTimes) {
         TypeInfo typeInfo;
         int times = -1;
-        switch(type) {
+        switch (type) {
             case IRLTIME:
-            typeInfo = new IRLTimeTypeInfo(TimeUtils.parseHoursAndMinutesToSeconds(time));
-            break;
+                typeInfo = new IRLTimeTypeInfo(TimeUtils.parseHoursAndMinutesToSeconds(time));
+                break;
             case MCTIME:
-            typeInfo = new MCTimeTypeInfo(TimeUtils.parseMCTime(time));
-            break;
+                typeInfo = new MCTimeTypeInfo(TimeUtils.parseMCTime(time));
+                break;
             case ALWAYS:
             case NTIMES:
-            if (type == PeriodicType.NTIMES) {
-                try {
-                    times = Integer.parseInt(activationTimes);
-                } catch (NumberFormatException e) {
-                    throw new IllegalArgumentException("Incorrect activation times specified:" + activationTimes);
+                if (type == PeriodicType.NTIMES) {
+                    try {
+                        times = Integer.parseInt(activationTimes);
+                    } catch (NumberFormatException e) {
+                        throw new IllegalArgumentException("Incorrect activation times specified:" + activationTimes);
+                    }
                 }
-            }
-            typeInfo = new NTimesTypeInfo(times, new HashMap<>());
-            break;
+                typeInfo = new NTimesTypeInfo(times, new HashMap<>());
+                break;
             default:
-            throw new IllegalArgumentException("Incorrect type specified:" + type);
+                throw new IllegalArgumentException("Incorrect type specified:" + type);
         }
         return typeInfo;
     }
 
-	public void createHologramTableIfNotExists() {
-        String query = "CREATE TABLE IF NOT EXISTS " + hologramTableName + " (" +
-                    "hologram_name VARCHAR(255) NOT NULL," +
-                    "hologram_type VARCHAR(16) NOT NULL," +
-                    "activation_distance REAL DEFAULT -1.0," +
-                    "display_seconds INTEGER DEFAULT -1," +
-                    "clock_time VARCHAR(8)," +
-                    "max_views INTEGER," +
-                    "permission VARCHAR(255)," +
-                    "flash_on REAL DEFAULT -1.0," +
-                    "flash_off REAL DEFAULT -1.0," +
-                    "PRIMARY KEY (hologram_name, hologram_type)" +
-                    ");";
-		if (!executeUpdate(query)) {
-			phd.getLogger().severe("Unable to create table: " + hologramTableName);
+    public void createHologramTableIfNotExists() {
+        String query = "CREATE TABLE IF NOT EXISTS " + hologramTableName + " (" + "hologram_name VARCHAR(255) NOT NULL,"
+                + "hologram_type VARCHAR(16) NOT NULL," + "activation_distance REAL DEFAULT -1.0,"
+                + "display_seconds INTEGER DEFAULT -1," + "clock_time VARCHAR(8)," + "max_views INTEGER,"
+                + "permission VARCHAR(255)," + "flash_on REAL DEFAULT -1.0," + "flash_off REAL DEFAULT -1.0,"
+                + "PRIMARY KEY (hologram_name, hologram_type)" + ");";
+        if (!executeUpdate(query)) {
+            phd.getLogger().severe("Unable to create table: " + hologramTableName);
         }
-        String indexQuery = "CREATE INDEX IF NOT EXISTS phd_hologram_hindex ON " + hologramTableName + " ( hologram_name, hologram_type );";
+        String indexQuery = "CREATE INDEX IF NOT EXISTS phd_hologram_hindex ON " + hologramTableName
+                + " ( hologram_name, hologram_type );";
         if (!executeUpdate(indexQuery)) {
             phd.getLogger().severe("Unable to create index for " + hologramTableName);
         }
     }
-    
+
     public void createPlayerTableIfNotExists() {
-        String query = "CREATE TABLE IF NOT EXISTS " + playerTableName + "(" + 
-                    "player_UUID VARCHAR(36) NOT NULL, " +
-                    "hologram_name VARCHAR(255) NOT NULL, " +
-                    "hologram_type VARCHAR(16) NOT NULL, " +
-                    "views INTEGER, " +
-                    "PRIMARY KEY (player_UUID, hologram_name, hologram_type)" +
-                    ");";
-		if (!executeUpdate(query)) {
-			phd.getLogger().severe("Unable to create table: " + playerTableName);
+        String query = "CREATE TABLE IF NOT EXISTS " + playerTableName + "(" + "player_UUID VARCHAR(36) NOT NULL, "
+                + "hologram_name VARCHAR(255) NOT NULL, " + "hologram_type VARCHAR(16) NOT NULL, " + "views INTEGER, "
+                + "PRIMARY KEY (player_UUID, hologram_name, hologram_type)" + ");";
+        if (!executeUpdate(query)) {
+            phd.getLogger().severe("Unable to create table: " + playerTableName);
         }
         String indexQuery1 = "CREATE INDEX IF NOT EXISTS phd_player_pindex ON " + playerTableName + " ( player_UUID );";
         if (!executeUpdate(indexQuery1)) {
             phd.getLogger().severe("Unable to create index (1) for " + playerTableName);
         }
-        String indexQuery2 = "CREATE INDEX IF NOT EXISTS phd_player_hindex ON " + playerTableName + " ( hologram_name, hologram_type );";
+        String indexQuery2 = "CREATE INDEX IF NOT EXISTS phd_player_hindex ON " + playerTableName
+                + " ( hologram_name, hologram_type );";
         if (!executeUpdate(indexQuery2)) {
             phd.getLogger().severe("Unable to create index (2) for " + playerTableName);
         }
@@ -328,9 +325,11 @@ public class SQLStorage extends SQLStorageBase implements Storage {
         String holgorams = "SELECT name FROM sqlite_master WHERE type='table' AND name='" + hologramTableName + "';";
         String players = "SELECT name FROM sqlite_master WHERE type='table' AND name='" + playerTableName + "';";
         ResultSet rs = executeQuery(holgorams);
-        if (rs == null) return false;
+        if (rs == null)
+            return false;
         try {
-            if (!rs.next()) return false;
+            if (!rs.next())
+                return false;
         } catch (SQLException e) {
             phd.getLogger().log(Level.WARNING, "Problem checking for existance of table (hologram table)", e);
         }
@@ -340,9 +339,11 @@ public class SQLStorage extends SQLStorageBase implements Storage {
             phd.getLogger().log(Level.WARNING, "Problem releasing resultset (hologram table)", e);
         }
         rs = executeQuery(players);
-        if (rs == null) return false;
+        if (rs == null)
+            return false;
         try {
-            if (!rs.next()) return false;
+            if (!rs.next())
+                return false;
         } catch (SQLException e) {
             phd.getLogger().log(Level.WARNING, "Problem checking for existance of table (player table)", e);
         }
@@ -359,25 +360,27 @@ public class SQLStorage extends SQLStorageBase implements Storage {
         phd.getServer().getScheduler().runTaskAsynchronously(phd, () -> {
             String delHologramTable = "DELETE FROM " + hologramTableName + ";";
             executeUpdate(delHologramTable);
-            String delPlayerTable = "DELETE FROM " + playerTableName + ";";;
+            String delPlayerTable = "DELETE FROM " + playerTableName + ";";
+            ;
             executeUpdate(delPlayerTable);
         });
-    }    
+    }
 
-	public void close() {
-		try {
-			if (conn.isClosed()) {
+    public void close() {
+        try {
+            if (conn.isClosed()) {
                 conn.close();
-				return;
-			}
-		} catch (SQLException e) {
-			phd.getLogger().log(Level.WARNING, "Issue while closing connection (while checking if connection is closed)", e);
-		}
-		try {
-			conn.close();
-		} catch (SQLException e) {
-			phd.getLogger().log(Level.WARNING, "Issue while closing connection:", e);
-		}
-	}
-    
+                return;
+            }
+        } catch (SQLException e) {
+            phd.getLogger().log(Level.WARNING,
+                    "Issue while closing connection (while checking if connection is closed)", e);
+        }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            phd.getLogger().log(Level.WARNING, "Issue while closing connection:", e);
+        }
+    }
+
 }

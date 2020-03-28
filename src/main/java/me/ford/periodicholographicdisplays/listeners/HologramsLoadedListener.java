@@ -21,5 +21,5 @@ public class HologramsLoadedListener implements Listener {
         whenLoaded.run();
         HandlerList.unregisterAll(this); // only once
     }
-    
+
 }

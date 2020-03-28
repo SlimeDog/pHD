@@ -55,16 +55,21 @@ public abstract class FlashingHologram extends PeriodicHologramBase {
         flashes = true;
         this.flashOn = flashOn;
         this.flashOff = flashOff;
-        if (!onLoad) markChanged();
+        if (!onLoad)
+            markChanged();
     }
 
     public void changeFlashOn(double flashOn) {
-        if (!flashes) throw new IllegalStateException("Cannot change flash on time when the hologram was previously not flashing");
+        if (!flashes)
+            throw new IllegalStateException(
+                    "Cannot change flash on time when the hologram was previously not flashing");
         setFlashOnOff(flashOn, this.flashOff);
     }
 
     public void changeFlashOff(double flashOff) {
-        if (!flashes) throw new IllegalStateException("Cannot change flash off time when the hologram was previously not flashing");
+        if (!flashes)
+            throw new IllegalStateException(
+                    "Cannot change flash off time when the hologram was previously not flashing");
         setFlashOnOff(this.flashOn, flashOff);
     }
 
@@ -78,9 +83,12 @@ public abstract class FlashingHologram extends PeriodicHologramBase {
     @Override
     public void resetVisibility() {
         super.resetVisibility();
-        if (!flashes()) return;
-        if (on == null || off == null) return;
-        if (on.isCancelled() || off.isCancelled()) return;
+        if (!flashes())
+            return;
+        if (on == null || off == null)
+            return;
+        if (on.isCancelled() || off.isCancelled())
+            return;
         on.cancel();
         off.cancel();
     }
@@ -92,7 +100,8 @@ public abstract class FlashingHologram extends PeriodicHologramBase {
             return showing;
         }
         phd.debug(String.format("Starting to flash! %3.2f on and %3.2f off", flashOn, flashOff));
-        if (!showing) return false;
+        if (!showing)
+            return false;
         long cycleTicks = (int) ((flashOn + flashOff) * 20L);
         long offDelay = (int) (flashOn * 20L);
         on = new Flasher(player, true).runTaskTimer(phd, 0L, cycleTicks);
@@ -111,7 +120,8 @@ public abstract class FlashingHologram extends PeriodicHologramBase {
 
         @Override
         public void run() {
-            if (!player.isValid() || !player.isOnline()) return;
+            if (!player.isValid() || !player.isOnline())
+                return;
             if (!isBeingShownTo(player) || !flashes()) {
                 cancel();
                 return;
@@ -125,5 +135,5 @@ public abstract class FlashingHologram extends PeriodicHologramBase {
         }
 
     }
-    
+
 }

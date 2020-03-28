@@ -32,7 +32,7 @@ import me.ford.periodicholographicdisplays.users.YamlUserStorage;
  */
 public class PeriodicHolographicDisplays extends JavaPlugin {
     private HologramStorage holograms;
-    private Settings settings;    
+    private Settings settings;
     private Messages messages;
     private LuckPermsHook lpHook;
     private NPCHook citizensHook = null;
@@ -95,8 +95,8 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(worldTimeListener, this);
 
         // metrics
-		if (settings.enableMetrics()) {
-			new Metrics(this);
+        if (settings.enableMetrics()) {
+            new Metrics(this);
         }
 
         // commands
@@ -110,7 +110,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-        
+
         if (settings.checkForUpdates()) {
             // TODO - check for updates
         }
@@ -192,7 +192,8 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
                     issue.setExtra(entry.getValue());
                     issues.add(issue);
                 } else {
-                    issues.add(new SimpleReloadIssue(messages.getProblemWithConfigMessage(entry.getKey(), entry.getValue()), null));
+                    issues.add(new SimpleReloadIssue(
+                            messages.getProblemWithConfigMessage(entry.getKey(), entry.getValue()), null));
                 }
             }
         }
@@ -232,12 +233,10 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
     }
 
     public static enum DefaultReloadIssue implements ReloadIssue {
-        NONE(null),
-        NO_FOLDER("folder had to be recreated!"),
-        NO_CONFIG("the config had to be recreated"),
-        NO_MESSAGES("the messages file had to be recreated"),
-        ILLEGA_STORAGE_TYPE("storage type not understood");
+        NONE(null), NO_FOLDER("folder had to be recreated!"), NO_CONFIG("the config had to be recreated"),
+        NO_MESSAGES("the messages file had to be recreated"), ILLEGA_STORAGE_TYPE("storage type not understood");
         ;
+
         private final String issue;
         private String extra = null;
 
@@ -258,7 +257,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         public void setExtra(String extra) {
             this.extra = extra;
         }
-        
+
     }
 
     public static class SimpleReloadIssue implements ReloadIssue {
@@ -279,7 +278,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         public String getExtra() {
             return extra;
         }
-        
+
     }
 
     public static interface ReloadIssue {
@@ -289,5 +288,5 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         public String getExtra();
 
     }
-    
+
 }

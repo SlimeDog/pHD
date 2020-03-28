@@ -42,5 +42,5 @@ public class StorageConverter<A extends Storage, B extends Storage> {
     public B getTo() {
         return to;
     }
-    
+
 }

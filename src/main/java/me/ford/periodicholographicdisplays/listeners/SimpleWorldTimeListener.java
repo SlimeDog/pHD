@@ -20,5 +20,4 @@ public class SimpleWorldTimeListener extends WorldTimeListener {
         getStorage().mcTimeChanged(event.getWorld(), event.getSkipAmount());
     }
 
-    
 }

@@ -39,16 +39,16 @@ public class ReportSub extends SubCommand {
     @Override
     public List<String> onTabComplete(CommandSender sender, String[] args) {
         List<String> list = new ArrayList<>();
-        switch(args.length) {
-        case 1:
-            list.add(PeriodicType.NTIMES.name());
-            return list;
-        case 2:
-            if (args[1].length() < UserCache.MIN_NAME_MATCH) {
-                return null;
-            }
-            return userStorage.getCache().getNamesStartingWith(args[1]);
-        } 
+        switch (args.length) {
+            case 1:
+                list.add(PeriodicType.NTIMES.name());
+                return list;
+            case 2:
+                if (args[1].length() < UserCache.MIN_NAME_MATCH) {
+                    return null;
+                }
+                return userStorage.getCache().getNamesStartingWith(args[1]);
+        }
         return list;
     }
 
@@ -63,7 +63,8 @@ public class ReportSub extends SubCommand {
         } catch (IllegalArgumentException e) {
             return false;
         }
-        if (type != PeriodicType.NTIMES) return false;
+        if (type != PeriodicType.NTIMES)
+            return false;
         OfflinePlayer player = Bukkit.getPlayer(args[1]); // TODO - do I need offline players?
         if (player == null) {
             UUID id = userStorage.getCache().getUuid(args[1]);
@@ -98,12 +99,13 @@ public class ReportSub extends SubCommand {
         holograms.sort(new Comparator<NTimesHologram>() {
             @Override
             public int compare(NTimesHologram o1, NTimesHologram o2) {
-                return String.CASE_INSENSITIVE_ORDER.compare(o1.getName(),o2.getName());
+                return String.CASE_INSENSITIVE_ORDER.compare(o1.getName(), o2.getName());
             }
         });
 
         int maxPage = PageUtils.getNumberOfPages(holograms.size(), PageUtils.HOLOGRAMS_PER_PAGE);
-        if (maxPage == 0) maxPage++;
+        if (maxPage == 0)
+            maxPage++;
         if (page < 1 || page > maxPage) {
             sender.sendMessage(messages.getInvalidPageMessage(maxPage));
             return true;
@@ -122,5 +124,5 @@ public class ReportSub extends SubCommand {
     public String getUsage(CommandSender sender) {
         return USAGE;
     }
-    
+
 }

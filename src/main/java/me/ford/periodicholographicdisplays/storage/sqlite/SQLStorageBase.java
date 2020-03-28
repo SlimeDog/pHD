@@ -20,7 +20,8 @@ public abstract class SQLStorageBase {
     public SQLStorageBase(PeriodicHolographicDisplays phd) {
         this.phd = phd;
         try {
-            if (conn == null || conn.isClosed()) conn = connect();
+            if (conn == null || conn.isClosed())
+                conn = connect();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -41,69 +42,69 @@ public abstract class SQLStorageBase {
     }
 
     protected ResultSet executeQuery(String query, String... args) {
-		checkConnection();
-		try {
-			PreparedStatement statement = conn.prepareStatement(query);
-			int i = 1;
-			for (String arg : args) {
-				statement.setString(i, arg);
-				i++;
-			}
-			return statement.executeQuery();
-		} catch (SQLException e) {
-			phd.getLogger().warning("Unable to execute QUERY:" + query);
-			e.printStackTrace();
-			return null;
-		}
+        checkConnection();
+        try {
+            PreparedStatement statement = conn.prepareStatement(query);
+            int i = 1;
+            for (String arg : args) {
+                statement.setString(i, arg);
+                i++;
+            }
+            return statement.executeQuery();
+        } catch (SQLException e) {
+            phd.getLogger().warning("Unable to execute QUERY:" + query);
+            e.printStackTrace();
+            return null;
+        }
     }
-    
+
     protected boolean tableExists(String table) {
-		checkConnection();
-		ResultSet rs;
-		try {
-			PreparedStatement statement = conn.prepareStatement("SHOW TABLES LIKE '" + table + "';");
-			rs = statement.executeQuery();
-		} catch (SQLException e) {
-			phd.getLogger().log(Level.WARNING, "Unable to check if table exists: " + table, e);
-			return false;
-		}
-		try {
+        checkConnection();
+        ResultSet rs;
+        try {
+            PreparedStatement statement = conn.prepareStatement("SHOW TABLES LIKE '" + table + "';");
+            rs = statement.executeQuery();
+        } catch (SQLException e) {
+            phd.getLogger().log(Level.WARNING, "Unable to check if table exists: " + table, e);
+            return false;
+        }
+        try {
             boolean can = rs.next();
             rs.close();
             return can;
-		} catch (SQLException e) {
-			phd.getLogger().log(Level.WARNING, "Unable to check if table exists(next): " + table, e);
-			return false;
-		}
-	}
-	
-	protected void checkConnection() {
-		try {
-			if (conn.isClosed() || !conn.isValid(10)) {
-				conn.close();
-				conn = connect();
-				phd.getLogger().info("Creating a new connection for DB");
-			}
-		} catch (SQLException e) {
-			phd.getLogger().log(Level.WARNING, "Unable to check if connection is closed!", e);
-		}
-	}
-	
-	protected boolean executeUpdate(String query, String... args) {
-		checkConnection();
-		try {
-			PreparedStatement statement = conn.prepareStatement(query);
-			int i = 1;
-			for (String arg : args) {
-				statement.setString(i, arg);
-				i++;
-			}
-			statement.executeUpdate();
-			return true;
-		} catch (SQLException e) {
-			phd.getLogger().log(Level.WARNING, "Unable to update QUERY: " + query, e);
-			return false;
-		}
-	}
-    
+        } catch (SQLException e) {
+            phd.getLogger().log(Level.WARNING, "Unable to check if table exists(next): " + table, e);
+            return false;
+        }
+    }
+
+    protected void checkConnection() {
+        try {
+            if (conn.isClosed() || !conn.isValid(10)) {
+                conn.close();
+                conn = connect();
+                phd.getLogger().info("Creating a new connection for DB");
+            }
+        } catch (SQLException e) {
+            phd.getLogger().log(Level.WARNING, "Unable to check if connection is closed!", e);
+        }
+    }
+
+    protected boolean executeUpdate(String query, String... args) {
+        checkConnection();
+        try {
+            PreparedStatement statement = conn.prepareStatement(query);
+            int i = 1;
+            for (String arg : args) {
+                statement.setString(i, arg);
+                i++;
+            }
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            phd.getLogger().log(Level.WARNING, "Unable to update QUERY: " + query, e);
+            return false;
+        }
+    }
+
 }

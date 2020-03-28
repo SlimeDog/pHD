@@ -18,5 +18,5 @@ public interface UserStorage {
         }
         save(false);
     }
-    
+
 }

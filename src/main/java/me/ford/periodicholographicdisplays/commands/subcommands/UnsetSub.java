@@ -44,61 +44,63 @@ public class UnsetSub extends SubCommand {
     @Override
     public List<String> onTabComplete(CommandSender sender, String[] args) {
         List<String> list = new ArrayList<>();
-        switch(args.length) {
-        case 1:
-            return StringUtil.copyPartialMatches(args[0], storage.getNames(), list);
-        case 2:
-            List<String> typeNames = new ArrayList<>();
-            for (PeriodicType type : storage.getAvailableTypes(args[0])) {
-                typeNames.add(type.name());
-            }
-            return StringUtil.copyPartialMatches(args[1], typeNames, list);
-        case 3:
-        case 4:
-        case 5:
-        case 6:
-        case 7:
-            List<String> options = new ArrayList<>(optionList);
-            PeriodicType type;
-            try {
-                type = PeriodicType.valueOf(args[1]);
-            } catch (IllegalArgumentException e) {
-                return list;
-            }
-            if (type == PeriodicType.NTIMES && args[args.length -2].equalsIgnoreCase("playercount")) {
-                if (args[args.length - 1].length() < UserCache.MIN_NAME_MATCH) {
-                    return null;
+        switch (args.length) {
+            case 1:
+                return StringUtil.copyPartialMatches(args[0], storage.getNames(), list);
+            case 2:
+                List<String> typeNames = new ArrayList<>();
+                for (PeriodicType type : storage.getAvailableTypes(args[0])) {
+                    typeNames.add(type.name());
                 }
-                return userStorage.getCache().getNamesStartingWith(args[args.length - 1]);
-            }
-            FlashingHologram hologram = storage.getHologram(args[0], type);
-            if (hologram == null) return list;
-            if (!hologram.hasPermissions()) {
-                options.remove("permission");
-            }
-            if (hologram.getActivationDistance() == PeriodicHologramBase.NO_DISTANCE) {
-                options.remove("distance");
-            }
-            if (hologram.getShowTime() == PeriodicHologramBase.NO_SECONDS) {
-                options.remove("seconds");
-            }
-            if (type != PeriodicType.NTIMES) {
-                options.remove("playercount");
-            }
-            if (!hologram.flashes()) {
-                options.remove("flash");
-            }
-            for (String prevArg : Arrays.copyOfRange(args, 2, args.length - 1)) {
-                options.remove(prevArg);
-            }
-            return StringUtil.copyPartialMatches(args[args.length - 1], options, list);
+                return StringUtil.copyPartialMatches(args[1], typeNames, list);
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+                List<String> options = new ArrayList<>(optionList);
+                PeriodicType type;
+                try {
+                    type = PeriodicType.valueOf(args[1]);
+                } catch (IllegalArgumentException e) {
+                    return list;
+                }
+                if (type == PeriodicType.NTIMES && args[args.length - 2].equalsIgnoreCase("playercount")) {
+                    if (args[args.length - 1].length() < UserCache.MIN_NAME_MATCH) {
+                        return null;
+                    }
+                    return userStorage.getCache().getNamesStartingWith(args[args.length - 1]);
+                }
+                FlashingHologram hologram = storage.getHologram(args[0], type);
+                if (hologram == null)
+                    return list;
+                if (!hologram.hasPermissions()) {
+                    options.remove("permission");
+                }
+                if (hologram.getActivationDistance() == PeriodicHologramBase.NO_DISTANCE) {
+                    options.remove("distance");
+                }
+                if (hologram.getShowTime() == PeriodicHologramBase.NO_SECONDS) {
+                    options.remove("seconds");
+                }
+                if (type != PeriodicType.NTIMES) {
+                    options.remove("playercount");
+                }
+                if (!hologram.flashes()) {
+                    options.remove("flash");
+                }
+                for (String prevArg : Arrays.copyOfRange(args, 2, args.length - 1)) {
+                    options.remove(prevArg);
+                }
+                return StringUtil.copyPartialMatches(args[args.length - 1], options, list);
         }
         return list;
     }
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
-        if (args.length < 3) return false;
+        if (args.length < 3)
+            return false;
         PeriodicType type;
         try {
             type = PeriodicType.valueOf(args[1]);
@@ -117,72 +119,73 @@ public class UnsetSub extends SubCommand {
         boolean unsetPlayerCount = false;
         boolean unsetFlash = false;
         for (String opt : opts) {
-            switch(opt) {
+            switch (opt) {
                 case "distance":
-                hologram.defaultDistance(settings);
-                break;
+                    hologram.defaultDistance(settings);
+                    break;
                 case "seconds":
-                hologram.defaultShowtime(settings);
-                break;
+                    hologram.defaultShowtime(settings);
+                    break;
                 case "permission":
-                hologram.setPermissions(null);
-                break;
+                    hologram.setPermissions(null);
+                    break;
                 case "flash":
-                hologram.setNoFlash();
-                usedOptions.remove(opt);
-                sender.sendMessage(messages.getUnsetFlashMessage());
-                unsetFlash = true;
-                break;
+                    hologram.setNoFlash();
+                    usedOptions.remove(opt);
+                    sender.sendMessage(messages.getUnsetFlashMessage());
+                    unsetFlash = true;
+                    break;
                 case "playercount":
-                if (hologram.getType() != PeriodicType.NTIMES) {
-                    sender.sendMessage(messages.getNoSuchOptionMessage(type, opt));
-                    return true;
-                }
-                NTimesHologram ntimes = (NTimesHologram) hologram;
-                int optAt = 0;
-                for (String copt : opts) {
-                    if (opt == copt) break;
-                    optAt++;
-                }
-                if (opts.length < optAt + 2) {
-                    sender.sendMessage(messages.getNeedCountAfterPlayercount());
-                    return true;
-                }
-                String playerName = opts[optAt + 1];
-                OfflinePlayer player = Bukkit.getPlayer(playerName); 
-                if (player == null) {
-                    UUID id = userStorage.getCache().getUuid(playerName);
-                    if (id != null) {
-                        player = Bukkit.getOfflinePlayer(id);
-                    }
-                    if (player == null || !player.hasPlayedBefore()) {
-                        sender.sendMessage(messages.getPlayerNotFoundMessage(playerName));
+                    if (hologram.getType() != PeriodicType.NTIMES) {
+                        sender.sendMessage(messages.getNoSuchOptionMessage(type, opt));
                         return true;
                     }
-                }
-                ntimes.resetShownTo(player.getUniqueId());
-                unsetPlayerCount = true;
-                usedOptions.remove(opt);
-                sender.sendMessage(messages.getUnsetPlayerCountMessage(player));
-                break;
+                    NTimesHologram ntimes = (NTimesHologram) hologram;
+                    int optAt = 0;
+                    for (String copt : opts) {
+                        if (opt == copt)
+                            break;
+                        optAt++;
+                    }
+                    if (opts.length < optAt + 2) {
+                        sender.sendMessage(messages.getNeedCountAfterPlayercount());
+                        return true;
+                    }
+                    String playerName = opts[optAt + 1];
+                    OfflinePlayer player = Bukkit.getPlayer(playerName);
+                    if (player == null) {
+                        UUID id = userStorage.getCache().getUuid(playerName);
+                        if (id != null) {
+                            player = Bukkit.getOfflinePlayer(id);
+                        }
+                        if (player == null || !player.hasPlayedBefore()) {
+                            sender.sendMessage(messages.getPlayerNotFoundMessage(playerName));
+                            return true;
+                        }
+                    }
+                    ntimes.resetShownTo(player.getUniqueId());
+                    unsetPlayerCount = true;
+                    usedOptions.remove(opt);
+                    sender.sendMessage(messages.getUnsetPlayerCountMessage(player));
+                    break;
                 case "time":
-                if (type == PeriodicType.MCTIME || type == PeriodicType.IRLTIME) {
-                    sender.sendMessage(messages.getCannotUnSetRequiredMessage(opt, type));
-                    usedOptions.remove(opt);
-                    break;
-                }
+                    if (type == PeriodicType.MCTIME || type == PeriodicType.IRLTIME) {
+                        sender.sendMessage(messages.getCannotUnSetRequiredMessage(opt, type));
+                        usedOptions.remove(opt);
+                        break;
+                    }
                 case "times":
-                if (type == PeriodicType.NTIMES) {
-                    sender.sendMessage(messages.getCannotUnSetRequiredMessage(opt, type));
+                    if (type == PeriodicType.NTIMES) {
+                        sender.sendMessage(messages.getCannotUnSetRequiredMessage(opt, type));
+                        usedOptions.remove(opt);
+                        break;
+                    }
+                default:
+                    if (!prevOpt.equalsIgnoreCase("playercount")) {
+                        sender.sendMessage(messages.getNoSuchOptionMessage(type, opt));
+                    }
                     usedOptions.remove(opt);
                     break;
-                }
-                default:
-                if (!prevOpt.equalsIgnoreCase("playercount")) {
-                    sender.sendMessage(messages.getNoSuchOptionMessage(type, opt));
-                }
-                usedOptions.remove(opt);
-                break;
             }
             prevOpt = opt;
         }
@@ -211,5 +214,4 @@ public class UnsetSub extends SubCommand {
         return USAGE;
     }
 
-    
 }

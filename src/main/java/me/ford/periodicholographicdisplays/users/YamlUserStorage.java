@@ -54,5 +54,4 @@ public class YamlUserStorage implements UserStorage {
         return cache;
     }
 
-    
 }

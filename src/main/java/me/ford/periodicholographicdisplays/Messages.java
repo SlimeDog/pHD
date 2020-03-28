@@ -39,8 +39,8 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getNeedTypeOrPageMessage(String cur) {
-        return getMessage("need-to-specify-type-or-page", "Need to specify either periodic type or the page number, got {msg}")
-                        .replace("{msg}", cur);
+        return getMessage("need-to-specify-type-or-page",
+                "Need to specify either periodic type or the page number, got {msg}").replace("{msg}", cur);
     }
 
     public String getUnrecognizedCommandMessage(String input) {
@@ -48,17 +48,17 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getFlashTimeTooSmallMessage(String specified) {
-        return getMessage("flash-time-too-small", "Minimum flash time is 1.0, got {time}")
-                        .replace("{time}", specified);
+        return getMessage("flash-time-too-small", "Minimum flash time is 1.0, got {time}").replace("{time}", specified);
     }
 
     public String getFlashMustHaveBothMessage(String specified) {
-        return getMessage("flash-must-have-both", "Need to specify both 'flashOn' and 'flashOff'; alternatively use 'flash' to set both at once");
+        return getMessage("flash-must-have-both",
+                "Need to specify both 'flashOn' and 'flashOff'; alternatively use 'flash' to set both at once");
     }
 
     public String getActiveStorageMessage(boolean useDatabase) {
-        return getMessage("active-storage", "Active storage-type is {storage}")
-                        .replace("{storage}", useDatabase ? "SQLITE" : "YAML");
+        return getMessage("active-storage", "Active storage-type is {storage}").replace("{storage}",
+                useDatabase ? "SQLITE" : "YAML");
     }
 
     public String getIncorrectMessages() {
@@ -74,15 +74,16 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getInvalidPageMessage(int maxPage) {
-        return getMessage("invalid-page", "Page needs to be between 1 and {max-page}")
-                        .replace("{max-page}", String.valueOf(maxPage));
+        return getMessage("invalid-page", "Page needs to be between 1 and {max-page}").replace("{max-page}",
+                String.valueOf(maxPage));
     }
 
     public String getAvailableTypesMessage(String name, Collection<PeriodicType> availableTypes) {
         String msg = getMessage("available-types", "Types available for {hologram}: {types}");
         msg = msg.replace("{hologram}", name);
         List<String> types = new ArrayList<>();
-        for (PeriodicType type : availableTypes) types.add(type.name());
+        for (PeriodicType type : availableTypes)
+            types.add(type.name());
         return msg.replace("{types}", String.join(", ", types));
     }
 
@@ -103,30 +104,33 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getNoPluginFolderMessage() {
-        return getMessage("plugin-folder-removed", "Plugin folder does not exist or is unreadable at reload; attempting to recreate");
+        return getMessage("plugin-folder-removed",
+                "Plugin folder does not exist or is unreadable at reload; attempting to recreate");
     }
 
     public String getNoLPMessage() {
-        return getMessage("no-luckperms", "LuckPerms not found - unable to readjust permissions on the fly or tab-complete permissions");
+        return getMessage("no-luckperms",
+                "LuckPerms not found - unable to readjust permissions on the fly or tab-complete permissions");
     }
 
     public String getLegacyMessage() {
-        return getMessage("legacy-version-mctime", "MCTIME holograms can behave unpredicably because of the use of a legacy version of MC");
+        return getMessage("legacy-version-mctime",
+                "MCTIME holograms can behave unpredicably because of the use of a legacy version of MC");
     }
 
     public String getIllegalStorageMessage(String type) {
         return getMessage("illegal-storage-type", "Illegal storage type {type} - only YAML and SQLITE are supported")
-                        .replace("{type}", type);
+                .replace("{type}", type);
     }
 
     public String getNegativeSecondsMessage(String given) {
-        return getMessage("seconds-cannot-be-negative", "Seconds cannot be negative: {seconds}")
-                        .replace("{seconds}", given);
+        return getMessage("seconds-cannot-be-negative", "Seconds cannot be negative: {seconds}").replace("{seconds}",
+                given);
     }
 
     public String getNegativeDistanceMessage(String given) {
         return getMessage("distance-cannot-be-negative", "Distance cannot be negative: {distance}")
-                        .replace("{distance}", given);
+                .replace("{distance}", given);
     }
 
     public String getNothingToUnsetMessage() {
@@ -134,48 +138,50 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getCannotUnSetRequiredMessage(String option, PeriodicType type) {
-        return getMessage("cannot-unset-required-option", "Cannot unset required option {option} for type {type}; use /phd unmanage instead")
+        return getMessage("cannot-unset-required-option",
+                "Cannot unset required option {option} for type {type}; use /phd unmanage instead")
                         .replace("{option}", option).replace("{type}", type.name());
     }
 
     public String getStorageTypeDoesNotExistMessage(String type) {
-        return getMessage("source-storage-does-not-exist", "{type} source storage type does not exist; no data will be converted")
-                        .replace("{type}", type);
+        return getMessage("source-storage-does-not-exist",
+                "{type} source storage type does not exist; no data will be converted").replace("{type}", type);
     }
 
     public String getAlreadyHasDataMessage(String type) {
-        return getMessage("target-storage-has-data", "The target storage type {type} already has data; use --force if you wish to override that data")
+        return getMessage("target-storage-has-data",
+                "The target storage type {type} already has data; use --force if you wish to override that data")
                         .replace("{type}", type);
     }
 
     public String getStartedConvertingMessage(String from, String to) {
-        return getMessage("started-converting", "Started converting from {from} to {to}")
-                        .replace("{from}", from).replace("{to}", to);
+        return getMessage("started-converting", "Started converting from {from} to {to}").replace("{from}", from)
+                .replace("{to}", to);
     }
 
     public String getDoneConvertingMessage(String from, String to) {
-        return getMessage("done-converting", "Done converting from {from} to {to}")
-                        .replace("{from}", from).replace("{to}", to);
+        return getMessage("done-converting", "Done converting from {from} to {to}").replace("{from}", from)
+                .replace("{to}", to);
     }
 
     public String getUnrecognizedStorageTypeMessage(String from, String to) {
         return getMessage("unrecognized-conversion", "Cannot convert from {from} to {to} - unrecognized storage types")
-                        .replace("{from}", from).replace("{to}", to);
+                .replace("{from}", from).replace("{to}", to);
     }
 
     public String getCannotConvertSameMessage(String storageType) {
         return getMessage("cannot-convert-from-same", "Cannot convert from the same storage type ({type})")
-                        .replace("{type}", storageType);
+                .replace("{type}", storageType);
     }
 
     public String getHologramNotTrackedMessage(String name, PeriodicType type) {
         return getMessage("hologram-not-managed", "Hologram {name} of type {type} is not managed by pHD")
-                        .replace("{name}", name).replace("{type}", type.name());
+                .replace("{name}", name).replace("{type}", type.name());
     }
 
     public String getHologramAlreadyManagedMessage(String name, PeriodicType type) {
         return getMessage("hologram-already-managed", "Hologram {name} of type {type} is already managed by pHD")
-                        .replace("{name}", name).replace("{type}", type.name());
+                .replace("{name}", name).replace("{type}", type.name());
     }
 
     public String getStartedManagingMessage(String name, PeriodicType type, Map<String, String> options) {
@@ -184,27 +190,26 @@ public class Messages extends CustomConfigHandler {
             opts.add(String.format("%s=%s", entry.getKey(), entry.getValue()));
         }
         return getMessage("started-managing-hologram", "Started managing hologram {name} of type {type}: {options}")
-                        .replace("{name}", name).replace("{type}", type.name()).replace("{options}", String.join(", ", opts));
+                .replace("{name}", name).replace("{type}", type.name()).replace("{options}", String.join(", ", opts));
     }
 
     public String getHDHologramNotFoundMessage(String name) {
         return getMessage("hd-hologram-not-found", "HolographicDisplays hologram {name} was not found")
-                        .replace("{name}", name);
+                .replace("{name}", name);
     }
 
     public String getHologramNotManagedMessage(String name) {
-        return getMessage("hologram-not-managed", "Hologram not managed: {name}")
-                        .replace("{name}", name);
+        return getMessage("hologram-not-managed", "Hologram not managed: {name}").replace("{name}", name);
     }
 
     public String getHologramNotFoundMessage(String name, PeriodicType type) {
-        return getMessage("hologram-not-found", "Hologram not found: {name} of type {type}")
-                        .replace("{name}", name).replace("{type}", type.name());
+        return getMessage("hologram-not-found", "Hologram not found: {name} of type {type}").replace("{name}", name)
+                .replace("{type}", type.name());
     }
 
-	public String getTypeNotRecognizedMessage(String type) {
-		return getMessage("type-not-recognized", "Hologram type {type} is not recognized").replace("{type}", type);
-	}
+    public String getTypeNotRecognizedMessage(String type) {
+        return getMessage("type-not-recognized", "Hologram type {type} is not recognized").replace("{type}", type);
+    }
 
     public String getNeedAnIntegerMessage(String msg) {
         return getMessage("need-an-integer", "Value must be an integer, got {msg}").replace("{msg}", msg);
@@ -215,7 +220,8 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getIllegalTimeMessage(String msg) {
-        return getMessage("illega-time", "Time must be specified as e.g '1d' or '10h30m'. Available units: y, mo, d, h, m, s. Got {msg} instead")
+        return getMessage("illega-time",
+                "Time must be specified as e.g '1d' or '10h30m'. Available units: y, mo, d, h, m, s. Got {msg} instead")
                         .replace("{msg}", msg);
     }
 
@@ -231,7 +237,8 @@ public class Messages extends CustomConfigHandler {
             lines.add(entry.getKey() + " " + entry.getValue());
             i++;
         }
-        String msg = getMessage("hologram-list", "Holograms (holograms {numbers}, page {page}/{max-pages}): \n{holograms}");
+        String msg = getMessage("hologram-list",
+                "Holograms (holograms {numbers}, page {page}/{max-pages}): \n{holograms}");
         int startNr = pageInfo.getStartNumber();
         int endNr = pageInfo.getEndNumber();
         String numbers;
@@ -241,27 +248,29 @@ public class Messages extends CustomConfigHandler {
             numbers = String.format("%d-%d", startNr, endNr);
         }
         msg = msg.replace("{numbers}", numbers);
-        msg = msg.replace("{page}", String.valueOf(page)).replace("{max-pages}", String.valueOf(pageInfo.getNumberOfPages()));
+        msg = msg.replace("{page}", String.valueOf(page)).replace("{max-pages}",
+                String.valueOf(pageInfo.getNumberOfPages()));
         return msg.replace("{holograms}", String.join("\n", lines));
     }
 
     public String getUnmanagedHologramMessage(String name, PeriodicType type) {
-        return getMessage("unmanaged-hologram", "Unmanaged hologram {name} of type {type}")
-                        .replace("{name}", name).replace("{type}", type.name());
+        return getMessage("unmanaged-hologram", "Unmanaged hologram {name} of type {type}").replace("{name}", name)
+                .replace("{type}", type.name());
     }
 
     public String getNoSuchOptionMessage(PeriodicType type, String option) {
-        return getMessage("no-such-option", "{type} holograms have no {option} option")
-                        .replace("{type}", type.name()).replace("{option}", option);
+        return getMessage("no-such-option", "{type} holograms have no {option} option").replace("{type}", type.name())
+                .replace("{option}", option);
     }
 
     public String getNeedPairedOptionsMessage() {
-        return getMessage("incorrect-set-options", "Need a set of key-value pairs to set, got an odd number of arguments");
+        return getMessage("incorrect-set-options",
+                "Need a set of key-value pairs to set, got an odd number of arguments");
     }
 
     public String getOptionMissingMessage(PeriodicType type, String option) {
-        return getMessage("option-missing", "Need to set {option} for a {type} hologram")
-                        .replace("{type}", type.name()).replace("{option}", option);
+        return getMessage("option-missing", "Need to set {option} for a {type} hologram").replace("{type}", type.name())
+                .replace("{option}", option);
     }
 
     public String getIncorrectTimeMessage(String msg) {
@@ -281,18 +290,19 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getUnsetPlayerCountMessage(OfflinePlayer player) {
-        return getMessage("unset-playercount", "Unset playercount of {player}; now 0")
-                        .replace("{player}", player.getName());
+        return getMessage("unset-playercount", "Unset playercount of {player}; now 0").replace("{player}",
+                player.getName());
     }
 
     public String getUnsetOptionsMessage(List<String> opts) {
-        return getMessage("unset-options", "Unset {options}; now using default").replace("{options}", String.join(", ", opts));
+        return getMessage("unset-options", "Unset {options}; now using default").replace("{options}",
+                String.join(", ", opts));
     }
 
     public String getProblemWithConfigMessage(SettingIssue issue, String value) {
         return getMessage("problem-in-config", "Problem in config for {key}; expected {type}, got {value}")
-                        .replace("{key}", issue.getPath()).replace("{type}", issue.getType().getName())
-                        .replace("{value}", value);
+                .replace("{key}", issue.getPath()).replace("{type}", issue.getType().getName())
+                .replace("{value}", value);
     }
 
     public String getConfigReloadedMessage() {
@@ -312,30 +322,33 @@ public class Messages extends CustomConfigHandler {
                 DefaultReloadIssue dri = (DefaultReloadIssue) issue;
                 switch (dri) {
                     case NO_FOLDER:
-                    desc = getNoPluginFolderMessage();
-                    problems.append(desc);
-                    problems.append("\n");
-                    desc = Boolean.valueOf(dri.getExtra()) ? getPluginFolderRecreatedMessage() : getProblemRecreatingPluginFolder();
-                    break;
+                        desc = getNoPluginFolderMessage();
+                        problems.append(desc);
+                        problems.append("\n");
+                        desc = Boolean.valueOf(dri.getExtra()) ? getPluginFolderRecreatedMessage()
+                                : getProblemRecreatingPluginFolder();
+                        break;
                     case ILLEGA_STORAGE_TYPE:
-                    desc = getIllegalStorageMessage(dri.getExtra());
-                    break;
+                        desc = getIllegalStorageMessage(dri.getExtra());
+                        break;
                     case NO_CONFIG:
-                    desc = getConfigRecreatedMessage();
-                    break;
+                        desc = getConfigRecreatedMessage();
+                        break;
                     case NO_MESSAGES:
-                    desc = getMessagesRecreatedMessage();
-                    break;
+                        desc = getMessagesRecreatedMessage();
+                        break;
                     default:
                 }
             }
             if (desc == null) {
-                desc = issue.getExtra() == null ? issue.getIssue() : String.format("%s: %s", issue.getIssue(), issue.getExtra());;
+                desc = issue.getExtra() == null ? issue.getIssue()
+                        : String.format("%s: %s", issue.getIssue(), issue.getExtra());
+                ;
             }
             problems.append(desc);
         }
-        return getMessage("problems-reloading-config", "Problems reloading config: {problems}")
-                        .replace("{problems}", problems.toString());
+        return getMessage("problems-reloading-config", "Problems reloading config: {problems}").replace("{problems}",
+                problems.toString());
     }
 
     public String getSetNewOptionsMessage(String name, PeriodicType type, Map<String, String> options) {
@@ -344,13 +357,14 @@ public class Messages extends CustomConfigHandler {
             opts.add(String.format("%s=%s", entry.getKey(), entry.getValue()));
         }
         return getMessage("set-new-values", "Set new values for hologram {name} of type {type}: {options}")
-                        .replace("{name}", name).replace("{type}", type.name()).replace("{options}", String.join(", ", opts));
+                .replace("{name}", name).replace("{type}", type.name()).replace("{options}", String.join(", ", opts));
     }
 
     private String timesString = "%s %d/%d";
 
     public String getNtimesReportMessage(OfflinePlayer player, List<NTimesHologram> holos, int page) {
-        String msg = getMessage("ntimes-report", "{player} has seen the following NTIMES holograms (holograms {holograms}, page {page}/{max-pages}):\n{times}");
+        String msg = getMessage("ntimes-report",
+                "{player} has seen the following NTIMES holograms (holograms {holograms}, page {page}/{max-pages}):\n{times}");
         msg = msg.replace("{player}", player.getName());
 
         PageInfo pageInfo = PageUtils.getPageInfo(holos.size(), PageUtils.HOLOGRAMS_PER_PAGE, page);
@@ -363,7 +377,8 @@ public class Messages extends CustomConfigHandler {
             numbers = String.format("%d-%d", startNr, endNr);
         }
         msg = msg.replace("{holograms}", numbers);
-        msg = msg.replace("{page}", String.valueOf(page)).replace("{max-pages}", String.valueOf(pageInfo.getNumberOfPages()));
+        msg = msg.replace("{page}", String.valueOf(page)).replace("{max-pages}",
+                String.valueOf(pageInfo.getNumberOfPages()));
 
         StringBuilder builder = new StringBuilder();
         int i = 0;
@@ -373,8 +388,10 @@ public class Messages extends CustomConfigHandler {
                 continue;
             }
             Integer amount = hologram.getShownTo().get(player.getUniqueId());
-            if (amount == null) amount = 0;
-            if (builder.length() != 0) builder.append("\n");
+            if (amount == null)
+                amount = 0;
+            if (builder.length() != 0)
+                builder.append("\n");
             builder.append(String.format(timesString, hologram.getName(), amount, hologram.getTimesToShow()));
         }
         if (builder.length() == 0) {
@@ -385,7 +402,9 @@ public class Messages extends CustomConfigHandler {
 
     public String getHologramInfoMessage(FlashingHologram hologram, int page) {
         String typeinfo = getTypeInfo(hologram, page);
-        String typeName = (hologram.getType() == PeriodicType.NTIMES && ((NTimesHologram) hologram).getTimesToShow() < 0) ? PeriodicType.ALWAYS.name() : hologram.getType().name();
+        String typeName = (hologram.getType() == PeriodicType.NTIMES
+                && ((NTimesHologram) hologram).getTimesToShow() < 0) ? PeriodicType.ALWAYS.name()
+                        : hologram.getType().name();
         String time = getShowTimeString(hologram);
         String distance = getDistanceString(hologram);
         String flash;
@@ -395,10 +414,11 @@ public class Messages extends CustomConfigHandler {
             flash = "None";
         }
         Location loc = hologram.getLocation();
-        return getMessage("hologram-info", "Hologram {name}:\nWorld: {world}\nLocation: {location}\nType: {type}\nShowTime: {time}\nFlash: {flash}\nActivationDistance: {distance}\nPermission: {perms}\nTypeInfo: {typeinfo}")
-                        .replace("{name}", hologram.getName()).replace("{world}", hologram.getLocation().getWorld().getName())
-                        .replace("{type}", typeName).replace("{time}", time)
-                        .replace("{typeinfo}", typeinfo).replace("{distance}", distance)
+        return getMessage("hologram-info",
+                "Hologram {name}:\nWorld: {world}\nLocation: {location}\nType: {type}\nShowTime: {time}\nFlash: {flash}\nActivationDistance: {distance}\nPermission: {perms}\nTypeInfo: {typeinfo}")
+                        .replace("{name}", hologram.getName())
+                        .replace("{world}", hologram.getLocation().getWorld().getName()).replace("{type}", typeName)
+                        .replace("{time}", time).replace("{typeinfo}", typeinfo).replace("{distance}", distance)
                         .replace("{flash}", flash)
                         .replace("{location}", String.format("%.1f %.1f %.1f", loc.getX(), loc.getY(), loc.getZ()))
                         .replace("{perms}", hologram.hasPermissions() ? hologram.getPermissions() : "");
@@ -446,38 +466,42 @@ public class Messages extends CustomConfigHandler {
 
     public String getTypeInfo(PeriodicHologramBase hologram, int page) {
         String typeinfo;
-        switch(hologram.getType()) {
+        switch (hologram.getType()) {
             case MCTIME:
-            typeinfo = getMCTimeTypeInfo((MCTimeHologram) hologram);
-            break;
+                typeinfo = getMCTimeTypeInfo((MCTimeHologram) hologram);
+                break;
             case IRLTIME:
-            typeinfo = getIRLTimeTypeInfo((IRLTimeHologram) hologram);
-            break;
+                typeinfo = getIRLTimeTypeInfo((IRLTimeHologram) hologram);
+                break;
             case NTIMES:
-            NTimesHologram nth = (NTimesHologram) hologram;
-            typeinfo = getNTimesTypeInfo(nth, nth.getTimesToShow() < 0, page);
-            break;
+                NTimesHologram nth = (NTimesHologram) hologram;
+                typeinfo = getNTimesTypeInfo(nth, nth.getTimesToShow() < 0, page);
+                break;
             case ALWAYS:
-            typeinfo = getNTimesTypeInfo((NTimesHologram) hologram, true, page);
-            break;
+                typeinfo = getNTimesTypeInfo((NTimesHologram) hologram, true, page);
+                break;
             default:
-            typeinfo = "N/A"; // this shouldn't happen!
-            phd.getLogger().warning("Unable to get info for hologram of type " + hologram.getType() + " - " + hologram);
+                typeinfo = "N/A"; // this shouldn't happen!
+                phd.getLogger()
+                        .warning("Unable to get info for hologram of type " + hologram.getType() + " - " + hologram);
         }
         return typeinfo;
     }
 
     private String getIRLTimeTypeInfo(IRLTimeHologram hologram) {
-        return getMessage("typeinfo.IRLTIME", "Shown at: {time}").replace("{time}", TimeUtils.toIRLTime(hologram.getTime()));
+        return getMessage("typeinfo.IRLTIME", "Shown at: {time}").replace("{time}",
+                TimeUtils.toIRLTime(hologram.getTime()));
     }
 
     private String getMCTimeTypeInfo(MCTimeHologram hologram) {
-        return getMessage("typeinfo.MCTIME", "Shown at: {time}").replace("{time}", TimeUtils.toMCTime(hologram.getTime()));
+        return getMessage("typeinfo.MCTIME", "Shown at: {time}").replace("{time}",
+                TimeUtils.toMCTime(hologram.getTime()));
     }
 
-    public String getNTimesTypeInfo(NTimesHologram hologram, boolean always, int page) {// need to be sure not to specify the wrong page!
-        String msg = getMessage(always?"typeinfo.ALWAYS":"typeinfo.NTIMES", 
-                                        always ? "Always shown" : "Show times: {times}; Shown to (players {players}, page {page}/{max-pages}): {players:times}");
+    public String getNTimesTypeInfo(NTimesHologram hologram, boolean always, int page) {// need to be sure not to
+                                                                                        // specify the wrong page!
+        String msg = getMessage(always ? "typeinfo.ALWAYS" : "typeinfo.NTIMES", always ? "Always shown"
+                : "Show times: {times}; Shown to (players {players}, page {page}/{max-pages}): {players:times}");
         if (!always) {
             msg = msg.replace("{times}", String.valueOf(hologram.getTimesToShow()));
             final int nrOfPlayers = hologram.getShownTo().size();
@@ -491,7 +515,8 @@ public class Messages extends CustomConfigHandler {
                 numbers = String.format("%d-%d", startNr, endNr);
             }
             msg = msg.replace("{players}", numbers);
-            msg = msg.replace("{page}", String.valueOf(page)).replace("{max-pages}", String.valueOf(pageInfo.getNumberOfPages()));
+            msg = msg.replace("{page}", String.valueOf(page)).replace("{max-pages}",
+                    String.valueOf(pageInfo.getNumberOfPages()));
             List<String> playersAndTimes = new ArrayList<>();
             int i = 1;
             for (Entry<UUID, Integer> entry : hologram.getShownTo().entrySet()) {
@@ -514,12 +539,13 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getLowSaveDelayMessage(long seconds) {
-        return getMessage("save-frequency-low", "Configuration save-frequency set to {value} seconds may result in decreased performance")
+        return getMessage("save-frequency-low",
+                "Configuration save-frequency set to {value} seconds may result in decreased performance")
                         .replace("{value}", String.valueOf(seconds));
     }
 
     public String getMessage(String path, String def) {
         return ChatColor.translateAlternateColorCodes('&', (getCustomConfig().getString(path, def)));
     }
-    
+
 }

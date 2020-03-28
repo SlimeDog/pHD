@@ -20,7 +20,7 @@ public class JoinLeaveListener implements Listener {
         this.storage = storage;
         this.userStorage = userStorage;
     }
-    
+
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
@@ -34,5 +34,5 @@ public class JoinLeaveListener implements Listener {
     public void onLeave(PlayerQuitEvent event) {
         storage.left(event.getPlayer());
     }
-    
+
 }

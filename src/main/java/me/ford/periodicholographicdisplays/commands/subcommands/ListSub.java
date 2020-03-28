@@ -31,7 +31,8 @@ public class ListSub extends SubCommand {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String[] args) {
-        List<String> list = new ArrayList<>();;
+        List<String> list = new ArrayList<>();
+        ;
         if (args.length == 1) {
             return StringUtil.copyPartialMatches(args[0], PeriodicType.names(), list);
         }
@@ -48,7 +49,7 @@ public class ListSub extends SubCommand {
             pageStr = args[0];
         } else if (args.length > 1) {
             typeStr = args[0];
-            pageStr = args[1];            
+            pageStr = args[1];
         }
         int page = 1;
         PeriodicType holoType = null;
@@ -76,7 +77,8 @@ public class ListSub extends SubCommand {
         }
         List<String> names = storage.getNames(holoType);
         int maxPage = PageUtils.getNumberOfPages(names.size(), PageUtils.HOLOGRAMS_PER_PAGE);
-        if (maxPage == 0) maxPage++;
+        if (maxPage == 0)
+            maxPage++;
         if (page <= 0 || page > maxPage) {
             sender.sendMessage(messages.getInvalidPageMessage(maxPage));
             return true;
@@ -93,7 +95,9 @@ public class ListSub extends SubCommand {
         }
         sender.sendMessage(messages.getHologramListMessage(hologramTypes, page));
         String typeName = holoType == null ? "" : " " + holoType.name();
-        if (page < maxPage) HintUtil.sendHint(sender, messages.getNextPageHint("{command}"), String.format("/phd list%s %d", typeName, page +1));
+        if (page < maxPage)
+            HintUtil.sendHint(sender, messages.getNextPageHint("{command}"),
+                    String.format("/phd list%s %d", typeName, page + 1));
         return true;
     }
 
@@ -106,5 +110,5 @@ public class ListSub extends SubCommand {
     public String getUsage(CommandSender sender) {
         return USAGE;
     }
-    
+
 }

@@ -41,10 +41,11 @@ public interface Storage {
         @Override
         public String toString() {
             List<String> types = new ArrayList<>();
-            for (HologramInfo info: infos) types.add(info.getType().name());
+            for (HologramInfo info : infos)
+                types.add(info.getType().name());
             return String.format("[HDHoloInfo:%s(%s)]", holoName, infos.toString());
         }
 
     }
-    
+
 }

@@ -20,5 +20,5 @@ public enum PeriodicType {
     public static List<String> names() {
         return NAMES;
     }
-    
+
 }

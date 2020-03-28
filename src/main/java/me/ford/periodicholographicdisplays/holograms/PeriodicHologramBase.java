@@ -32,11 +32,13 @@ public abstract class PeriodicHologramBase {
     private final Hologram hologram;
     private String perms;
 
-    public PeriodicHologramBase(Hologram hologram, String name, double activationDistance, long showTime, PeriodicType type, boolean isNew) {
+    public PeriodicHologramBase(Hologram hologram, String name, double activationDistance, long showTime,
+            PeriodicType type, boolean isNew) {
         this(hologram, name, activationDistance, showTime, type, isNew, null);
     }
 
-    public PeriodicHologramBase(Hologram hologram, String name, double activationDistance, long showTime, PeriodicType type, boolean isNew, String perms) {
+    public PeriodicHologramBase(Hologram hologram, String name, double activationDistance, long showTime,
+            PeriodicType type, boolean isNew, String perms) {
         Validate.notNull(hologram, "Hologram cannot be null!");
         this.hologram = hologram;
         this.name = name;
@@ -55,7 +57,7 @@ public abstract class PeriodicHologramBase {
         this.perms = perms;
         hologram.getVisibilityManager().setVisibleByDefault(false);
     }
-    
+
     public String getName() {
         return name;
     }
@@ -63,7 +65,7 @@ public abstract class PeriodicHologramBase {
     Hologram getHologram() {
         return hologram;
     }
-    
+
     public void setActivationDistance(double distance) {
         setActivationDistance(distance, distance * distance);
     }
@@ -150,7 +152,7 @@ public abstract class PeriodicHologramBase {
     public boolean canSee(Player player) {
         return (!hasPermissions() || player.hasPermission(getPermissions()));
     }
-    
+
     public void hideFrom(Player player) {
         if (plugin.getSettings().onDebug() && this instanceof FlashingHologram) {
             String info = plugin.getMessages().getHologramInfoMessage((FlashingHologram) this, 1).replace("\n", ";");
@@ -165,9 +167,11 @@ public abstract class PeriodicHologramBase {
     }
 
     public boolean show(Player player) {
-        if (player == null) return false;
+        if (player == null)
+            return false;
         UUID id = player.getUniqueId();
-        if (beingShownTo.contains(id)) return false;
+        if (beingShownTo.contains(id))
+            return false;
         if (plugin.getSettings().onDebug() && this instanceof FlashingHologram) {
             String info = plugin.getMessages().getHologramInfoMessage((FlashingHologram) this, 1).replace("\n", ";");
             plugin.debug(String.format("Showing to %s: %s", player.getName(), info));
@@ -182,7 +186,7 @@ public abstract class PeriodicHologramBase {
     }
 
     protected void showInternal(Player player) {
-        hologram.getVisibilityManager().showTo(player);        
+        hologram.getVisibilityManager().showTo(player);
     }
 
     public void defaultDistance(Settings settings) {
@@ -202,9 +206,10 @@ public abstract class PeriodicHologramBase {
     public void resetVisibility() {
         for (UUID id : beingShownTo) {
             Player player = plugin.getServer().getPlayer(id);
-            if (player != null) hideFrom(player);
+            if (player != null)
+                hideFrom(player);
         }
         beingShownTo.clear();
     }
-    
+
 }

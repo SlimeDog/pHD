@@ -17,5 +17,5 @@ public abstract class WorldTimeListener implements Listener {
     public HologramStorage getStorage() {
         return storage;
     }
-    
+
 }

@@ -29,13 +29,13 @@ public class HologramListener implements Listener {
     }
 
     private void movedTo(Player player, Location location) {
-        if (hook != null && hook.isNPC(player)) return; // ignore
+        if (hook != null && hook.isNPC(player))
+            return; // ignore
         WorldHologramStorage wh = holograms.getHolograms(location.getWorld());
         for (PeriodicHologramBase base : wh.getHolograms(true)) {
             double dist2 = base.getLocation().distanceSquared(location);
             if (dist2 < base.getSquareDistance()) {
-                if (base.getType() == PeriodicType.ALWAYS &&
-                      ((AlwaysHologram) base).isShownOnWorldJoin()) {
+                if (base.getType() == PeriodicType.ALWAYS && ((AlwaysHologram) base).isShownOnWorldJoin()) {
                     continue; // ignore
                 }
                 base.attemptToShow(player);
@@ -43,7 +43,8 @@ public class HologramListener implements Listener {
             // handle leaving ALWAYS holograms with activation distance and FOREVER settings
             if (base.getType() == PeriodicType.ALWAYS) {
                 AlwaysHologram always = (AlwaysHologram) base;
-                if (!always.isShownWhileInArea()) continue;
+                if (!always.isShownWhileInArea())
+                    continue;
                 if (base.getLocation().distanceSquared(location) > base.getSquareDistance()) {
                     always.leftArea(player);
                 }
@@ -53,7 +54,8 @@ public class HologramListener implements Listener {
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
-        if (event.getFrom().distanceSquared(event.getTo()) == 0) return;
+        if (event.getFrom().distanceSquared(event.getTo()) == 0)
+            return;
         movedTo(event.getPlayer(), event.getTo());
     }
 

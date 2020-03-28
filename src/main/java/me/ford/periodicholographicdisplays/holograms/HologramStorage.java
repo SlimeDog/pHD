@@ -54,7 +54,8 @@ public class HologramStorage {
             plugin.getLogger().warning(plugin.getMessages().getLowSaveDelayMessage(seconds));
         }
         long delay = seconds * 20L;
-        plugin.getServer().getScheduler().runTaskTimer(plugin, () -> save(HologramSaveReason.PERIODIC, false), delay, delay);
+        plugin.getServer().getScheduler().runTaskTimer(plugin, () -> save(HologramSaveReason.PERIODIC, false), delay,
+                delay);
     }
 
     private void scheduleLoad() {
@@ -66,7 +67,8 @@ public class HologramStorage {
     private void scheduleDanglingCheck() {
         plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
             if (!danglingInfos.isEmpty()) {
-                plugin.getLogger().warning("Some pHD holograms were loaded such that they have not found their corresponding hologram:");
+                plugin.getLogger().warning(
+                        "Some pHD holograms were loaded such that they have not found their corresponding hologram:");
             }
         }, 200L);
     }
@@ -77,12 +79,14 @@ public class HologramStorage {
         try {
             holo = CommandValidator.getNamedHologram(info.getHoloName());
         } catch (CommandException e) {
-            plugin.getLogger().log(Level.WARNING, "Problem loading hologram " + info.getHoloName() + ": HD hologram not found (perhaps the world isn't loaded?)");
+            plugin.getLogger().log(Level.WARNING, "Problem loading hologram " + info.getHoloName()
+                    + ": HD hologram not found (perhaps the world isn't loaded?)");
             return;
         }
         WorldHologramStorage whs = holograms.get(holo.getWorld());
         if (whs == null) {
-            plugin.getLogger().info("Loaded hologram before world was initialized: " + holo.getName() + " - it should be sorted out once the world loads");
+            plugin.getLogger().info("Loaded hologram before world was initialized: " + holo.getName()
+                    + " - it should be sorted out once the world loads");
         } else {
             danglingInfos.remove(info);
         }
@@ -203,14 +207,16 @@ public class HologramStorage {
     public FlashingHologram getHologram(String name, PeriodicType type) {
         for (WorldHologramStorage storage : holograms.values()) {
             FlashingHologram holo = storage.getHologram(name, type);
-            if (holo != null) return holo;
+            if (holo != null)
+                return holo;
         }
         return null;
     }
 
     public void mcTimeChanged(World world, long amount) {
         WorldHologramStorage storage = holograms.get(world);
-        if (storage == null) return; // nothing being tracked
+        if (storage == null)
+            return; // nothing being tracked
         for (FlashingHologram holo : storage.getHolograms()) {
             if (holo.getType() == PeriodicType.MCTIME) {
                 ((MCTimeHologram) holo).timeChanged(amount);
@@ -225,7 +231,8 @@ public class HologramStorage {
     }
 
     public void joinedWorld(Player player, World world) {
-        if (hook != null && hook.isNPC(player)) return;
+        if (hook != null && hook.isNPC(player))
+            return;
         WorldHologramStorage worldStorage = getHolograms(world);
         for (FlashingHologram holo : worldStorage.getHolograms()) {
             if (holo.getType() == PeriodicType.ALWAYS) {
@@ -253,20 +260,20 @@ public class HologramStorage {
         }
     }
 
-	public List<String> getNames() {
+    public List<String> getNames() {
         return getNames(null);
-	}
+    }
 
-	public List<String> getNames(PeriodicType type) {
+    public List<String> getNames(PeriodicType type) {
         List<String> names = new ArrayList<>();
-        for (WorldHologramStorage storage: holograms.values()) {
+        for (WorldHologramStorage storage : holograms.values()) {
             for (IndividualHologramHandler holo : storage.getHandlers(false)) {
                 if (type == null || holo.getHologram(type) != null) {
                     names.add(holo.getName());
                 }
             }
         }
-		return names;
-	}
-    
+        return names;
+    }
+
 }

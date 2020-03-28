@@ -28,5 +28,4 @@ public class HologramChangeListener implements Listener {
         hConsumer.accept(event.getNamedHologram());
     }
 
-    
 }

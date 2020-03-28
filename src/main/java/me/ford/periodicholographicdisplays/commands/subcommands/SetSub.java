@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
 
@@ -26,7 +25,8 @@ public class SetSub extends OptionPairSetSub {
     private final HologramStorage storage;
     private final LuckPermsHook hook;
     private final Messages messages;
-    private final List<String> settables = Arrays.asList("times", "time", "seconds", "distance", "permission", "flash", "flashOn", "flashOff");
+    private final List<String> settables = Arrays.asList("times", "time", "seconds", "distance", "permission", "flash",
+            "flashOn", "flashOff");
 
     public SetSub(HologramStorage storage, LuckPermsHook hook, Settings settings, Messages messages) {
         this.storage = storage;
@@ -38,56 +38,56 @@ public class SetSub extends OptionPairSetSub {
     public List<String> onTabComplete(CommandSender sender, String[] args) {
         List<String> list = new ArrayList<>();
         switch (args.length) {
-        case 1:
-            List<String> names = storage.getNames();
-            names.sort(String.CASE_INSENSITIVE_ORDER);
-            return StringUtil.copyPartialMatches(args[0], names, list);
-        case 2:
-            List<String> typeNames = new ArrayList<>();
-            for (PeriodicType type : storage.getAvailableTypes(args[0])) {
-                typeNames.add(type.name());
-            }
-            return StringUtil.copyPartialMatches(args[1], typeNames, list);
-        case 3:
-        case 5:
-        case 7:
-        case 9:
-        case 11:
-            List<String> options = new ArrayList<>(settables);
-            PeriodicType type;
-            try {
-                type = PeriodicType.valueOf(args[1]);
-            } catch (IllegalArgumentException e) {
-                return list;
-            }
-            if (type != PeriodicType.MCTIME && type != PeriodicType.IRLTIME) {
-                options.remove("time");
-            }
-            if (type != PeriodicType.NTIMES) {
-                options.remove("times");
-            }
-            for (int i = 2; i<args.length - 2; i+=2) {
-                options.remove(args[i]);
-            }
-            for (String arg : args) {
-                if (arg.equalsIgnoreCase("flash")) {
-                    options.remove("flashOn");
-                    options.remove("flashOff");
-                } else if (arg.equalsIgnoreCase("flashOn") ||
-                            arg.equalsIgnoreCase("flashOff")) {
-                    options.remove("flash");
+            case 1:
+                List<String> names = storage.getNames();
+                names.sort(String.CASE_INSENSITIVE_ORDER);
+                return StringUtil.copyPartialMatches(args[0], names, list);
+            case 2:
+                List<String> typeNames = new ArrayList<>();
+                for (PeriodicType type : storage.getAvailableTypes(args[0])) {
+                    typeNames.add(type.name());
                 }
-            }
-            return StringUtil.copyPartialMatches(args[args.length - 1], options, list);
-        case 4:
-        case 6:
-        case 8:
-        case 10:
-        case 12:
-            if (args[args.length - 2].equalsIgnoreCase("permission")) {
-                if (hook == null) return list;
-                return hook.tabCompletePermissions(sender, args[args.length - 1]);
-            }
+                return StringUtil.copyPartialMatches(args[1], typeNames, list);
+            case 3:
+            case 5:
+            case 7:
+            case 9:
+            case 11:
+                List<String> options = new ArrayList<>(settables);
+                PeriodicType type;
+                try {
+                    type = PeriodicType.valueOf(args[1]);
+                } catch (IllegalArgumentException e) {
+                    return list;
+                }
+                if (type != PeriodicType.MCTIME && type != PeriodicType.IRLTIME) {
+                    options.remove("time");
+                }
+                if (type != PeriodicType.NTIMES) {
+                    options.remove("times");
+                }
+                for (int i = 2; i < args.length - 2; i += 2) {
+                    options.remove(args[i]);
+                }
+                for (String arg : args) {
+                    if (arg.equalsIgnoreCase("flash")) {
+                        options.remove("flashOn");
+                        options.remove("flashOff");
+                    } else if (arg.equalsIgnoreCase("flashOn") || arg.equalsIgnoreCase("flashOff")) {
+                        options.remove("flash");
+                    }
+                }
+                return StringUtil.copyPartialMatches(args[args.length - 1], options, list);
+            case 4:
+            case 6:
+            case 8:
+            case 10:
+            case 12:
+                if (args[args.length - 2].equalsIgnoreCase("permission")) {
+                    if (hook == null)
+                        return list;
+                    return hook.tabCompletePermissions(sender, args[args.length - 1]);
+                }
         }
         return list;
     }
@@ -130,33 +130,33 @@ public class SetSub extends OptionPairSetSub {
         try {
             setAll(sender, existing, optionPairs, true);
         } catch (OptionPairException e) {
-            switch(e.getType()) {
+            switch (e.getType()) {
                 case NEED_A_NUMBER:
-                sender.sendMessage(messages.getNeedANumberMessage(e.getExtra()));
-                break;
+                    sender.sendMessage(messages.getNeedANumberMessage(e.getExtra()));
+                    break;
                 case NEED_AN_INTEGER:
-                sender.sendMessage(messages.getNeedAnIntegerMessage(e.getExtra()));
-                break;
+                    sender.sendMessage(messages.getNeedAnIntegerMessage(e.getExtra()));
+                    break;
                 case INCORRECT_TIME:
-                sender.sendMessage(messages.getIncorrectTimeMessage(e.getExtra()));
-                break;
+                    sender.sendMessage(messages.getIncorrectTimeMessage(e.getExtra()));
+                    break;
                 case NO_SUCH_OPTION:
-                sender.sendMessage(messages.getNoSuchOptionMessage(type, e.getExtra()));
-                break;
+                    sender.sendMessage(messages.getNoSuchOptionMessage(type, e.getExtra()));
+                    break;
                 case DISTANCE_NEGATIVE:
-                sender.sendMessage(messages.getNegativeDistanceMessage(e.getExtra()));
-                break;
+                    sender.sendMessage(messages.getNegativeDistanceMessage(e.getExtra()));
+                    break;
                 case SECONDS_NEGATIVE:
-                sender.sendMessage(messages.getNegativeSecondsMessage(e.getExtra()));
-                break;
+                    sender.sendMessage(messages.getNegativeSecondsMessage(e.getExtra()));
+                    break;
                 case FLASH_ONLY_ONE:
-                sender.sendMessage(messages.getFlashMustHaveBothMessage(e.getExtra()));
-                break;
+                    sender.sendMessage(messages.getFlashMustHaveBothMessage(e.getExtra()));
+                    break;
                 case FLASH_TOO_SMALL:
-                sender.sendMessage(messages.getFlashTimeTooSmallMessage(e.getExtra()));
-                break;
+                    sender.sendMessage(messages.getFlashTimeTooSmallMessage(e.getExtra()));
+                    break;
                 default:
-                sender.sendMessage("Unusual problem: " + e);
+                    sender.sendMessage("Unusual problem: " + e);
             }
             return true;
         }
@@ -176,5 +176,4 @@ public class SetSub extends OptionPairSetSub {
         return USAGE;
     }
 
-    
 }

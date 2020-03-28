@@ -41,7 +41,8 @@ public class SQLUserStorage extends SQLStorageBase implements UserStorage {
         createTableIfNotExists();
         String query = "SELECT * FROM " + TABLE_NAME + ";";
         ResultSet rs = executeQuery(query);
-        if (rs == null) return;
+        if (rs == null)
+            return;
         Map<UUID, String> map = new HashMap<>();
         try {
             while (rs.next()) {
@@ -69,32 +70,30 @@ public class SQLUserStorage extends SQLStorageBase implements UserStorage {
     @Override
     public void save(boolean inSync) {
         Map<UUID, String> toSave = cache.getToSave();
-        if (toSave.isEmpty()) return;
+        if (toSave.isEmpty())
+            return;
         if (inSync) {
             saveInAsync(toSave);
         } else {
             phd.getServer().getScheduler().runTaskAsynchronously(phd, () -> saveInAsync(toSave));
-        }        
+        }
     }
 
     private void saveInAsync(Map<UUID, String> map) {
         createTableIfNotExists();
-        String query = "INSERT INTO " + TABLE_NAME + " VALUES (?, ?) " + 
-                        "ON CONFLICT(player_UUID) DO UPDATE SET player_name=?";
+        String query = "INSERT INTO " + TABLE_NAME + " VALUES (?, ?) "
+                + "ON CONFLICT(player_UUID) DO UPDATE SET player_name=?";
         for (Entry<UUID, String> entry : map.entrySet()) {
             executeUpdate(query, entry.getKey().toString(), entry.getValue(), entry.getValue());
         }
     }
 
-	private void createTableIfNotExists() {
-        String query = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" + 
-                    "player_UUID VARCHAR(36) UNIQUE NOT NULL, " +
-                    "player_name VARCHAR(16) NOT NULL, " +
-                    "PRIMARY KEY (player_name, player_UUID)" +
-                    ");";
-		if (!executeUpdate(query)) {
-			phd.getLogger().log(Level.SEVERE, "Unable to create table: " + TABLE_NAME);
-		}
+    private void createTableIfNotExists() {
+        String query = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" + "player_UUID VARCHAR(36) UNIQUE NOT NULL, "
+                + "player_name VARCHAR(16) NOT NULL, " + "PRIMARY KEY (player_name, player_UUID)" + ");";
+        if (!executeUpdate(query)) {
+            phd.getLogger().log(Level.SEVERE, "Unable to create table: " + TABLE_NAME);
+        }
         String indexQuery1 = "CREATE INDEX IF NOT EXISTS phd_playerUUIDmap_UUID ON " + TABLE_NAME + " ( player_UUID );";
         String indexQuery2 = "CREATE INDEX IF NOT EXISTS phd_playerUUIDmap_name ON " + TABLE_NAME + " ( player_name );";
         if (!executeUpdate(indexQuery1)) {
@@ -104,5 +103,5 @@ public class SQLUserStorage extends SQLStorageBase implements UserStorage {
             phd.getLogger().log(Level.SEVERE, "Unable to create index (2) for " + TABLE_NAME);
         }
     }
-    
+
 }

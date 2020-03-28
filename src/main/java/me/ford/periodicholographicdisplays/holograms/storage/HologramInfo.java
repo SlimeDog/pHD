@@ -14,8 +14,8 @@ public class HologramInfo {
     private final TypeInfo typeInfo;
     private final double flashOn, flashOff;
 
-    public HologramInfo(String name, PeriodicType type, double activationDistance, long showTime, String perms, TypeInfo typeInfo, 
-                            double flashOn, double flashOff) {
+    public HologramInfo(String name, PeriodicType type, double activationDistance, long showTime, String perms,
+            TypeInfo typeInfo, double flashOn, double flashOff) {
         this.name = name;
         this.type = type;
         this.activationDistance = activationDistance;
@@ -62,5 +62,5 @@ public class HologramInfo {
     public String toString() {
         return String.format("{%f;%d;%s;%s}", activationDistance, showTime, perms, getTypeInfo().toString());
     }
-    
+
 }

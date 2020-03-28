@@ -29,15 +29,15 @@ public class UnmanageSub extends SubCommand {
     @Override
     public List<String> onTabComplete(CommandSender sender, String[] args) {
         List<String> list = new ArrayList<>();
-        switch(args.length) {
+        switch (args.length) {
             case 1:
-            return StringUtil.copyPartialMatches(args[0], storage.getNames(), list);
+                return StringUtil.copyPartialMatches(args[0], storage.getNames(), list);
             case 2:
-            List<String> typeNames = new ArrayList<>();
-            for (PeriodicType type : storage.getAvailableTypes(args[0])) {
-                typeNames.add(type.name());
-            }
-            return StringUtil.copyPartialMatches(args[1], typeNames, list);
+                List<String> typeNames = new ArrayList<>();
+                for (PeriodicType type : storage.getAvailableTypes(args[0])) {
+                    typeNames.add(type.name());
+                }
+                return StringUtil.copyPartialMatches(args[1], typeNames, list);
         }
         return list;
     }
@@ -73,5 +73,5 @@ public class UnmanageSub extends SubCommand {
     public String getUsage(CommandSender sender) {
         return USAGE;
     }
-    
+
 }
