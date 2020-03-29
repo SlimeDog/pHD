@@ -167,6 +167,9 @@ public class ManageSub extends OptionPairSetSub {
             return true;
         }
         existing = adoptHologram(sender, holo, type, optionPairs);
+        if (existing == null) {
+            return true;
+        }
         if (!defaultedAlways) {
             try {
                 setAll(sender, existing, optionPairs, false);
