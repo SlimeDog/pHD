@@ -17,9 +17,6 @@
 #
 PHD_PREFIX: "[pHD] "
 
-# Messages produced by ...
-#
-
 # Messages produced by /phd list
 #
 hologram-list: "Holograms (holograms {numbers}, page {page}/{max-pages}): \n{holograms}"
