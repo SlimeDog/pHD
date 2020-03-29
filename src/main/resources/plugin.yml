@@ -7,49 +7,50 @@ version: ${project.version}
 api-version: 1.13
 main: ${project.groupId}.${project.artifactId}.PeriodicHolographicDisplays
 description: ${project.description}
+website: ${project.website}
 authors: [SlimeDog, drives_a_ford]
 depend: [HolographicDisplays]
 softdepend: [Citizens, LuckPerms, Multiverse-Core, MultiWorld]
 
 commands:
   phd:
-    description: Main command
+    description: See plugin help
     usage: /<command> <subcommand> <parameters>
     permission: phd.use
-  phd info <name> <type>:
+  phd info:
     description: See info about a pHD hologram
     usage: /<command> <subcommand> <parameters>
     permission: phd.info
-  phd report NTIMES <name>:
-    description: See how many times a player has viewed a NTIMES hologram
+  phd report:
+    description: See how many times a player has viewed holograms
     usage: /<command> <subcommand> <parameters>
     permission: phd.report
   phd list:
     description: List pHD holograms
     usage: /<command> <subcommand> <parameters>
     permission: phd.list
-  phd manage <name> <type> <params...>:
-    description: Manage a hologram as a pHD hologram
+  phd manage:
+    description: Manage an HD hologram with pHD
     usage: /<command> <subcommand> <parameters>
     permission: phd.manage
-  phd set <name> <type> <params...>:
-    description: Set a parameter of a pHD hologram
+  phd set:
+    description: Set parameters of a pHD hologram
     usage: /<command> <subcommand> <parameters>
     permission: phd.set
-  phd unset <name> <type> <params...>:
-    description: Unset a parameter of a pHD hologram
+  phd unset:
+    description: Unset parameters of a pHD hologram
     usage: /<command> <subcommand> <parameters>
     permission: phd.unset
-  phd unmanage <name> <type>:
-    description: Unmanage
+  phd unmanage:
+    description: Unmanage an HD hologram with pHD
     usage: /<command> <subcommand> <parameters>
     permission: phd.unmanage
   phd reload:
-    description: Reload the config and the holograms
+    description: Reload the configuration and data
     usage: /<command>
     permission: phd.reload
-  phd convert <sourceStorageType> <targetStorageType> [--force]:
-    description: Convert storage from source storage to target storage
+  phd convert:
+    description: Convert data between storage types
     usage: /<command> <subcommand> <parameters>
     permission: phd.convert
 
