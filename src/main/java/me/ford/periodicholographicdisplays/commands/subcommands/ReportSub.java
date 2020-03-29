@@ -19,6 +19,7 @@ import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.users.UserCache;
 import me.ford.periodicholographicdisplays.users.UserStorage;
+import me.ford.periodicholographicdisplays.util.HintUtil;
 import me.ford.periodicholographicdisplays.util.PageUtils;
 
 /**
@@ -113,6 +114,10 @@ public class ReportSub extends SubCommand {
         }
 
         sender.sendMessage(messages.getNtimesReportMessage(player, holograms, page, sender instanceof Player));
+        if (page < maxPage && sender instanceof Player) {
+            HintUtil.sendHint(sender, messages.getNextPageHint("{command}"), "{command}",
+                    String.format("/phd report NTIMES %d", page + 1));
+        }
         return true;
     }
 
