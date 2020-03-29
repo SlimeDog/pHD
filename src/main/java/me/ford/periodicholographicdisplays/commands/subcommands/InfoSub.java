@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import me.ford.periodicholographicdisplays.Messages;
@@ -90,7 +91,7 @@ public class InfoSub extends SubCommand {
             sender.sendMessage(messages.getInvalidPageMessage(maxPage));
             return true;
         }
-        sender.sendMessage(messages.getHologramInfoMessage(hologram, page));
+        sender.sendMessage(messages.getHologramInfoMessage(hologram, page, sender instanceof Player));
         if (page < maxPage)
             HintUtil.sendHint(sender, messages.getNextPageHint("{command}"),
                     String.format("/phd info %s %s %d", hologram.getName(), type.name(), page + 1));

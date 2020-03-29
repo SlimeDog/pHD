@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.commands.SubCommand;
@@ -111,7 +112,7 @@ public class ReportSub extends SubCommand {
             return true;
         }
 
-        sender.sendMessage(messages.getNtimesReportMessage(player, holograms, page));
+        sender.sendMessage(messages.getNtimesReportMessage(player, holograms, page, sender instanceof Player));
         return true;
     }
 

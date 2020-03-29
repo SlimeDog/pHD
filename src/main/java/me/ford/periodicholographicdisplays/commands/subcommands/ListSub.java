@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import me.ford.periodicholographicdisplays.Messages;
@@ -93,7 +94,7 @@ public class ListSub extends SubCommand {
             }
             hologramTypes.put(name, String.join(", ", typesStr));
         }
-        sender.sendMessage(messages.getHologramListMessage(hologramTypes, page));
+        sender.sendMessage(messages.getHologramListMessage(hologramTypes, page, sender instanceof Player));
         String typeName = holoType == null ? "" : " " + holoType.name();
         if (page < maxPage)
             HintUtil.sendHint(sender, messages.getNextPageHint("{command}"),

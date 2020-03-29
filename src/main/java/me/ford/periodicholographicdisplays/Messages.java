@@ -229,9 +229,9 @@ public class Messages extends CustomConfigHandler {
                         .replace("{msg}", msg);
     }
 
-    public String getHologramListMessage(Map<String, String> holograms, int page) {
+    public String getHologramListMessage(Map<String, String> holograms, int page, boolean doPages) {
         List<String> lines = new ArrayList<>();
-        PageInfo pageInfo = PageUtils.getPageInfo(holograms.size(), PageUtils.HOLOGRAMS_PER_PAGE, page);
+        PageInfo pageInfo = PageUtils.getPageInfo(holograms.size(), PageUtils.HOLOGRAMS_PER_PAGE, page, doPages);
         int i = 1;
         for (Entry<String, String> entry : holograms.entrySet()) {
             if (i < pageInfo.getStartNumber() || i > pageInfo.getEndNumber()) {
@@ -366,12 +366,12 @@ public class Messages extends CustomConfigHandler {
 
     private String timesString = "%s %d/%d";
 
-    public String getNtimesReportMessage(OfflinePlayer player, List<NTimesHologram> holos, int page) {
+    public String getNtimesReportMessage(OfflinePlayer player, List<NTimesHologram> holos, int page, boolean doPages) {
         String msg = getMessage("ntimes-report",
                 "{player} has seen the following NTIMES holograms (holograms {holograms}, page {page}/{max-pages}):\n{times}");
         msg = msg.replace("{player}", player.getName());
 
-        PageInfo pageInfo = PageUtils.getPageInfo(holos.size(), PageUtils.HOLOGRAMS_PER_PAGE, page);
+        PageInfo pageInfo = PageUtils.getPageInfo(holos.size(), PageUtils.HOLOGRAMS_PER_PAGE, page, doPages);
         int startNr = pageInfo.getStartNumber();
         int endNr = pageInfo.getEndNumber();
         String numbers;
@@ -404,8 +404,8 @@ public class Messages extends CustomConfigHandler {
         return msg.replace("{times}", builder.toString());
     }
 
-    public String getHologramInfoMessage(FlashingHologram hologram, int page) {
-        String typeinfo = getTypeInfo(hologram, page);
+    public String getHologramInfoMessage(FlashingHologram hologram, int page, boolean doPages) {
+        String typeinfo = getTypeInfo(hologram, page, doPages);
         String typeName = (hologram.getType() == PeriodicType.NTIMES
                 && ((NTimesHologram) hologram).getTimesToShow() < 0) ? PeriodicType.ALWAYS.name()
                         : hologram.getType().name();
@@ -468,7 +468,7 @@ public class Messages extends CustomConfigHandler {
         return distance;
     }
 
-    public String getTypeInfo(PeriodicHologramBase hologram, int page) {
+    public String getTypeInfo(PeriodicHologramBase hologram, int page, boolean doPages) {
         String typeinfo;
         switch (hologram.getType()) {
             case MCTIME:
@@ -479,10 +479,10 @@ public class Messages extends CustomConfigHandler {
                 break;
             case NTIMES:
                 NTimesHologram nth = (NTimesHologram) hologram;
-                typeinfo = getNTimesTypeInfo(nth, nth.getTimesToShow() < 0, page);
+                typeinfo = getNTimesTypeInfo(nth, nth.getTimesToShow() < 0, page, doPages);
                 break;
             case ALWAYS:
-                typeinfo = getNTimesTypeInfo((NTimesHologram) hologram, true, page);
+                typeinfo = getNTimesTypeInfo((NTimesHologram) hologram, true, page, doPages);
                 break;
             default:
                 typeinfo = "N/A"; // this shouldn't happen!
@@ -502,14 +502,13 @@ public class Messages extends CustomConfigHandler {
                 TimeUtils.toMCTime(hologram.getTime()));
     }
 
-    public String getNTimesTypeInfo(NTimesHologram hologram, boolean always, int page) {// need to be sure not to
-                                                                                        // specify the wrong page!
+    public String getNTimesTypeInfo(NTimesHologram hologram, boolean always, int page, boolean doPages) {
         String msg = getMessage(always ? "typeinfo.ALWAYS" : "typeinfo.NTIMES", always ? "Always shown"
                 : "Show times: {times}; Shown to (players {players}, page {page}/{max-pages}): {players:times}");
         if (!always) {
             msg = msg.replace("{times}", String.valueOf(hologram.getTimesToShow()));
             final int nrOfPlayers = hologram.getShownTo().size();
-            PageInfo pageInfo = PageUtils.getPageInfo(nrOfPlayers, PageUtils.PLAYERS_PER_PAGE, page);
+            PageInfo pageInfo = PageUtils.getPageInfo(nrOfPlayers, PageUtils.PLAYERS_PER_PAGE, page, doPages);
             int startNr = pageInfo.getStartNumber();
             int endNr = pageInfo.getEndNumber();
             String numbers;
