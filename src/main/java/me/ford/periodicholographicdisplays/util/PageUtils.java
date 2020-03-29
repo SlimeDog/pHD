@@ -37,7 +37,10 @@ public final class PageUtils {
     }
 
     public static PageInfo getPageInfo(int nrOfEntries, int perPage, int page, boolean doPages) {
-        if (!doPages) perPage = nrOfEntries;
+        if (!doPages){
+            perPage = nrOfEntries;
+            if (perPage == 0) perPage++;
+        }
         int nrOfPages = getNumberOfPages(nrOfEntries, perPage);
         if (nrOfPages == 0)
             nrOfPages++;
