@@ -82,6 +82,7 @@ public abstract class ParentCommand implements TabExecutor {
             onPage = msgs.subList(start, end);
         } else {
             onPage = msgs;
+            header = header.replace(" (page 1/1)", "");
         }
         return new UsageInfo(header + "\n" + String.join("\n", onPage), maxPage);
     }

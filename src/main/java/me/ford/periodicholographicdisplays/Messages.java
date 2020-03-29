@@ -254,6 +254,9 @@ public class Messages extends CustomConfigHandler {
         msg = msg.replace("{numbers}", numbers);
         msg = msg.replace("{page}", String.valueOf(page)).replace("{max-pages}",
                 String.valueOf(pageInfo.getNumberOfPages()));
+        if (!doPages) {
+            msg = msg.replace(", page 1/1", "");
+        }
         return msg.replace("{holograms}", String.join("\n", lines));
     }
 
@@ -401,6 +404,9 @@ public class Messages extends CustomConfigHandler {
         if (builder.length() == 0) {
             builder.append("None");
         }
+        if (!doPages) {
+            msg = msg.replace(", page 1/1", "");
+        }
         return msg.replace("{times}", builder.toString());
     }
 
@@ -537,6 +543,9 @@ public class Messages extends CustomConfigHandler {
             } else {
                 msg = msg.replace("{players:times}", "\n" + String.join("\n", playersAndTimes));
             }
+        }
+        if (!doPages) {
+            msg = msg.replace(", page 1/1", "");
         }
         return msg;
     }
