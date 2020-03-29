@@ -44,7 +44,7 @@ public class Messages extends CustomConfigHandler {
 
     public String getNeedTypeOrPageMessage(String cur) {
         return getMessage("need-to-specify-type-or-page",
-                "Need to specify either periodic type or the page number, got {msg}").replace("{msg}", cur);
+                "Need to specify either a hologram type or a page number, got {msg}").replace("{msg}", cur);
     }
 
     public String getUnrecognizedCommandMessage(String input) {
