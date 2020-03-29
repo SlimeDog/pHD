@@ -19,7 +19,13 @@ public class NTimesHologram extends FlashingHologram {
 
     public NTimesHologram(Hologram hologram, String name, double activationDistance, long showTime, int timesToShow,
             boolean isNew, String perms, double flashOn, double flashOff) {
-        super(hologram, name, activationDistance, showTime, PeriodicType.NTIMES, isNew, perms, flashOn, flashOff);
+        this(hologram, name, activationDistance, showTime, PeriodicType.NTIMES, timesToShow, isNew, perms, flashOn,
+                flashOff);
+    }
+
+    NTimesHologram(Hologram hologram, String name, double activationDistance, long showTime, PeriodicType type,
+            int timesToShow, boolean isNew, String perms, double flashOn, double flashOff) {
+        super(hologram, name, activationDistance, showTime, type, isNew, perms, flashOn, flashOff);
         this.timesToShow = timesToShow;
     }
 
@@ -39,13 +45,6 @@ public class NTimesHologram extends FlashingHologram {
             if (timesToShow > 0)
                 addShownTo(id, shown + 1);
         }
-    }
-
-    @Override
-    public PeriodicType getType() {
-        if (timesToShow == -1)
-            return PeriodicType.ALWAYS;
-        return super.getType();
     }
 
     public void setTimesToShow(int times) {

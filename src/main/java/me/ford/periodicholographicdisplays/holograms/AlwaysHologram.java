@@ -13,7 +13,7 @@ public class AlwaysHologram extends NTimesHologram {
 
     public AlwaysHologram(Hologram hologram, String name, double activationDistance, long showTime, boolean isNew,
             String perms, double flashOn, double flashOff) {
-        super(hologram, name, activationDistance, showTime, -1, isNew, perms, flashOn, flashOff);
+        super(hologram, name, activationDistance, showTime, PeriodicType.ALWAYS, -1, isNew, perms, flashOn, flashOff);
         checkWorldPlayers();
     }
 
