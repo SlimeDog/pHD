@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import me.ford.periodicholographicdisplays.Messages;
@@ -52,6 +53,8 @@ public abstract class ParentCommand implements TabExecutor {
     }
 
     private UsageInfo getUsage(CommandSender sender, int page) {
+        boolean doPages = sender instanceof Player;
+        if (!doPages) page = 1;
         List<String> msgs = new ArrayList<>();
         String header = getUsage().replace("{page}", String.valueOf(page));
         for (SubCommand cmd : subCommands.values()) {
@@ -64,17 +67,22 @@ public abstract class ParentCommand implements TabExecutor {
         int maxPage = PageUtils.getNumberOfPages(msgs.size(), PER_PAGE);
         if (maxPage == 0)
             maxPage++;
-        if (page < 1 || page > maxPage) {
+        if (doPages && page < 1 || page > maxPage) {
             return new UsageInfo(messages.getInvalidPageMessage(maxPage), 1);
         }
-        header = header.replace("{maxpage}", String.valueOf(maxPage));
+        header = header.replace("{maxpage}", String.valueOf(doPages ? maxPage : 1));
         int start = (page - 1) * PER_PAGE;
         if (start > msgs.size())
             start = msgs.size();
         int end = page * PER_PAGE;
         if (end > msgs.size())
             end = msgs.size();
-        List<String> onPage = msgs.subList(start, end);
+        List<String> onPage;
+        if (doPages) {
+            onPage = msgs.subList(start, end);
+        } else {
+            onPage = msgs;
+        }
         return new UsageInfo(header + "\n" + String.join("\n", onPage), maxPage);
     }
 
@@ -115,7 +123,7 @@ public abstract class ParentCommand implements TabExecutor {
     private void showUsage(CommandSender sender, int page) {
         UsageInfo info = getUsage(sender, page);
         sender.sendMessage(info.usage);
-        if (page < info.maxPage) {
+        if (page < info.maxPage && sender instanceof Player) {
             HintUtil.sendHint(sender, messages.getNextPageHint("{command}"), "{command}", getHintCommand(page + 1));
         }
     }
