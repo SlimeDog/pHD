@@ -38,6 +38,10 @@ public class Messages extends CustomConfigHandler {
         this.phd = phd;
     }
 
+    public String getNegativeTimesMessage(String cur) {
+        return getMessage("times-cannot-be-negative", "Times cannot be negative: {times}").replace("{times}", cur);
+    }
+
     public String getNeedTypeOrPageMessage(String cur) {
         return getMessage("need-to-specify-type-or-page",
                 "Need to specify either periodic type or the page number, got {msg}").replace("{msg}", cur);
