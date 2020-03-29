@@ -79,6 +79,14 @@
           <include>messages.yml</include>
         </includes>
       </resource>
+      <resource>
+        <filtering>true</filtering>
+        <directory>.</directory>
+        <includes>
+          <include>README.md</include>
+          <include>LICENSE</include>
+        </includes>
+      </resource>
     </resources>
     <plugins>
 
