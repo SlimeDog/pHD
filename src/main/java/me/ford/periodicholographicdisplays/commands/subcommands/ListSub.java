@@ -92,6 +92,7 @@ public class ListSub extends SubCommand {
             for (PeriodicType type : types) {
                 typesStr.add(type.name());
             }
+            typesStr.sort(String.CASE_INSENSITIVE_ORDER);
             hologramTypes.put(name, String.join(", ", typesStr));
         }
         sender.sendMessage(messages.getHologramListMessage(hologramTypes, page, sender instanceof Player));
