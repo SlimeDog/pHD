@@ -55,7 +55,7 @@ need-an-integer: "Value must be an integer, got {msg}"
 no-such-option: "{type} holograms have no {option} option"
 distance-cannot-be-negative: "Distance cannot be negative: {distance}"
 seconds-cannot-be-negative: "Seconds cannot be negative: {seconds}"
-times-cannot-be-negative: "Times cannot be negative: {times}"
+times-too-small: "Minimum times value is 1, got {times}"
 flash-time-too-small: "Minimum flash time is 1.0, got {time}"
 
 # Messages produced by /phd unset

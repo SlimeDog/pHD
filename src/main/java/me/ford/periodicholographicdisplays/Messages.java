@@ -39,7 +39,7 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getNegativeTimesMessage(String cur) {
-        return getMessage("times-cannot-be-negative", "Times cannot be negative: {times}").replace("{times}", cur);
+        return getMessage("times-too-small", "Minimum times value is 1, got {times}").replace("{times}", cur);
     }
 
     public String getNeedTypeOrPageMessage(String cur) {
