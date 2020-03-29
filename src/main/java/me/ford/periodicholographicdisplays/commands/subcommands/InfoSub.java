@@ -92,7 +92,7 @@ public class InfoSub extends SubCommand {
             return true;
         }
         sender.sendMessage(messages.getHologramInfoMessage(hologram, page, sender instanceof Player));
-        if (page < maxPage)
+        if (page < maxPage && sender instanceof Player)
             HintUtil.sendHint(sender, messages.getNextPageHint("{command}"),
                     String.format("/phd info %s %s %d", hologram.getName(), type.name(), page + 1));
         return true;

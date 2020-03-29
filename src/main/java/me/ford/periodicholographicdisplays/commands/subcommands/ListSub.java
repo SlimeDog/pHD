@@ -96,7 +96,7 @@ public class ListSub extends SubCommand {
         }
         sender.sendMessage(messages.getHologramListMessage(hologramTypes, page, sender instanceof Player));
         String typeName = holoType == null ? "" : " " + holoType.name();
-        if (page < maxPage)
+        if (page < maxPage && sender instanceof Player)
             HintUtil.sendHint(sender, messages.getNextPageHint("{command}"),
                     String.format("/phd list%s %d", typeName, page + 1));
         return true;
