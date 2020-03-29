@@ -7,7 +7,7 @@ version: ${project.version}
 api-version: 1.13
 main: ${project.groupId}.${project.artifactId}.PeriodicHolographicDisplays
 description: ${project.description}
-website: ${project.website}
+website: ${website}
 authors: [SlimeDog, drives_a_ford]
 depend: [HolographicDisplays]
 softdepend: [Citizens, LuckPerms, Multiverse-Core, MultiWorld]
