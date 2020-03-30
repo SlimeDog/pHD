@@ -124,7 +124,7 @@ public class HologramStorage {
         return storage;
     }
 
-    public void reload(boolean newStorage) {
+    public void reload() {
         danglingInfos.clear();
         for (WorldHologramStorage storage : holograms.values()) {
             for (FlashingHologram hologram : storage.getHolograms()) {
@@ -132,22 +132,12 @@ public class HologramStorage {
             }
         }
         holograms.clear();
-        if (newStorage) {
-            boolean db = plugin.getSettings().useDatabase();
-            plugin.getLogger().info("Starting new type of storage after a reload: " + (db ? "SQLITE" : "YAML"));
-            if (db) {
-                storage = new SQLStorage(plugin);
-            } else { // old was SQLITE
-                ((SQLStorage) storage).close(); // close connection
-                storage = new YAMLStorage();
-            }
+        boolean db = plugin.getSettings().useDatabase();
+        if (storage instanceof SQLStorage) ((SQLStorage) storage).close();
+        if (db) {
+            storage = new SQLStorage(plugin);
         } else {
-            if (storage instanceof SQLStorage) {
-                ((SQLStorage) storage).close();
-                storage = new SQLStorage(plugin);
-            } else {
-                storage = new YAMLStorage();
-            }
+            storage = new YAMLStorage();
         }
         initWorldStorage();
         scheduleLoad();

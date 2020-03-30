@@ -129,7 +129,6 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
     }
 
     public List<ReloadIssue> reload() {
-        boolean useDbBefore = settings.useDatabase();
         List<ReloadIssue> issues = new ArrayList<>();
         File df = getDataFolder();
         if (!df.exists() || !df.canRead()) {
@@ -157,7 +156,6 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
                 getServer().getPluginManager().disablePlugin(this);
             });
         }
-        boolean useDbAfter = settings.useDatabase();
         List<ReloadIssue> settingIssues = getSettingIssues();
         if (!settingIssues.isEmpty()) {
             getServer().getScheduler().runTask(this, () -> {
@@ -166,11 +164,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
             });
         }
         issues.addAll(settingIssues);
-        if (issues.isEmpty()) {
-            holograms.reload(useDbBefore != useDbAfter);
-        } else {
-            holograms.reload(false); // assume we have the same database type
-        }
+        holograms.reload();
         return issues;
     }
 
