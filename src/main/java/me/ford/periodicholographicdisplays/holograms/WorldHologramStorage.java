@@ -187,7 +187,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
             case ALWAYS:
             case NTIMES:
                 NTimesHologram ntimes = (NTimesHologram) holo;
-                return new NTimesTypeInfo(ntimes.getTimesToShow(), ntimes.getShownTo());
+                return new NTimesTypeInfo(ntimes.getTimesToShow(), ntimes.getToSave());
             default:
                 throw new IllegalArgumentException(
                         "Need to specify type of hologram to get type info, got " + holo.getType());

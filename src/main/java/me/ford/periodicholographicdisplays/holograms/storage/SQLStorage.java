@@ -123,18 +123,27 @@ public class SQLStorage extends SQLStorageBase implements Storage {
             executeUpdate(deleteQuery, holoName, info.getType().name());
             return;
         }
+        String deleteQuery = "DELETE FROM " + playerTableName + " WHERE player_UUID=? AND hologram_name=? AND hologram_type=?;";
         switch (info.getType()) {
             case NTIMES:
                 NTimesTypeInfo ninfo = (NTimesTypeInfo) info;
                 for (Entry<UUID, Integer> entry : ninfo.getShownToTimes().entrySet()) {
                     PreparedStatement statement;
                     try {
-                        statement = conn.prepareStatement(query);
+                        boolean isDelete = entry.getValue() != 0;
+                        if (!isDelete) {
+                            statement = conn.prepareStatement(query);
+                        } else {
+                            statement = conn.prepareStatement(deleteQuery);
+                        }
                         statement.setString(1, entry.getKey().toString());
                         statement.setString(2, holoName);
                         statement.setString(3, info.getType().name());
-                        statement.setInt(4, entry.getValue());
-                        statement.setInt(5, entry.getValue());
+                        if (!isDelete) {
+                            statement.setInt(4, entry.getValue());
+                            statement.setInt(5, entry.getValue());
+                            phd.getLogger().info("DELETING + " + entry.getKey());
+                        }
                     } catch (SQLException e) {
                         phd.getLogger().log(Level.WARNING, "Problem while setting up prepared statement", e);
                         continue;

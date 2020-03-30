@@ -83,6 +83,7 @@ public class NTimesHologram extends FlashingHologram {
 
     public void resetShownTo(UUID id) {
         shownTo.remove(id);
+        toSave.put(id, 0);
         markChanged();
     }
 

@@ -68,14 +68,13 @@ public class YAMLStorage implements Storage {
             section.set("flash-off", info.getFlashOff());
         }
         section.set("permission", info.getPermissions());
-        if (typeInfo instanceof NTimesTypeInfo) {
+        if (typeInfo.getType() == PeriodicType.NTIMES) {
             NTimesTypeInfo ntimes = (NTimesTypeInfo) typeInfo;
-            if (ntimes.getShowTimes() > -1) {
-                section.set("times-to-show", ntimes.getShowTimes());
-                ConfigurationSection shownToSection = section.createSection("shown-to");
-                for (Map.Entry<UUID, Integer> entry : ntimes.getShownToTimes().entrySet()) {
-                    shownToSection.set(entry.getKey().toString(), entry.getValue());
-                }
+            section.set("times-to-show", ntimes.getShowTimes());
+            ConfigurationSection shownToSection = section.getConfigurationSection("shown-to");
+            for (Map.Entry<UUID, Integer> entry : ntimes.getShownToTimes().entrySet()) {
+                int value = entry.getValue();
+                shownToSection.set(entry.getKey().toString(), value == 0 ? null : value);
             }
         } else if (typeInfo instanceof MCTimeTypeInfo) {
             MCTimeTypeInfo mctime = (MCTimeTypeInfo) typeInfo;
