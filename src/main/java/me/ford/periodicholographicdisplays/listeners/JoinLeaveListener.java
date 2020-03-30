@@ -25,7 +25,8 @@ public class JoinLeaveListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         storage.joined(player);
-        if (!player.hasPlayedBefore()) {
+        String prevName = userStorage.getCache().getName(player.getUniqueId());
+        if (prevName == null || !prevName.equalsIgnoreCase(player.getName())) {
             userStorage.getCache().set(player.getUniqueId(), player.getName());
         }
     }
