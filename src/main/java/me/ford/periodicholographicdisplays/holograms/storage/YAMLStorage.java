@@ -72,6 +72,7 @@ public class YAMLStorage implements Storage {
             NTimesTypeInfo ntimes = (NTimesTypeInfo) typeInfo;
             section.set("times-to-show", ntimes.getShowTimes());
             ConfigurationSection shownToSection = section.getConfigurationSection("shown-to");
+            if (shownToSection == null) shownToSection = section.createSection("shown-to");
             for (Map.Entry<UUID, Integer> entry : ntimes.getShownToTimes().entrySet()) {
                 int value = entry.getValue();
                 shownToSection.set(entry.getKey().toString(), value == 0 ? null : value);
