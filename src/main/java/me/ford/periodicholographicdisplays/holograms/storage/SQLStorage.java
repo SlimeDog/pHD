@@ -116,15 +116,12 @@ public class SQLStorage extends SQLStorageBase implements Storage {
 
     // player_UUID, hologram_name, hologram_type, views
     private void saveTypeInfoAsync(String holoName, TypeInfo info) {
-        String insertQuery = "INSERT INTO " + playerTableName + " VALUES (?, ?, ?, ?)"
+        String query = "INSERT INTO " + playerTableName + " VALUES (?, ?, ?, ?)"
                 + " ON CONFLICT(player_UUID, hologram_name, hologram_type) DO UPDATE SET views=?;";
-        String query;
         if (info instanceof NullTypeInfo) {
             String deleteQuery = "DELETE FROM " + playerTableName + " WHERE hologram_name=? AND hologram_type=?;";
             executeUpdate(deleteQuery, holoName, info.getType().name());
             return;
-        } else {
-            query = insertQuery;
         }
         switch (info.getType()) {
             case NTIMES:
