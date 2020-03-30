@@ -33,11 +33,13 @@ public class CustomConfigHandler {
         customConfig = YamlConfiguration.loadConfiguration(customConfigFile);
 
         // Look for defaults in the jar
-        Reader defConfigStream;
-        try {
-            defConfigStream = new InputStreamReader(phd.getResource(fileName), "UTF8");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
+        Reader defConfigStream = null;
+        if (phd.getResource(fileName) != null) {
+            try {
+                defConfigStream = new InputStreamReader(phd.getResource(fileName), "UTF8");
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
         }
         if (defConfigStream != null) {
             YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
