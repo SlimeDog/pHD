@@ -130,7 +130,7 @@ public class SQLStorage extends SQLStorageBase implements Storage {
                 for (Entry<UUID, Integer> entry : ninfo.getShownToTimes().entrySet()) {
                     PreparedStatement statement;
                     try {
-                        boolean isDelete = entry.getValue() != 0;
+                        boolean isDelete = entry.getValue() == 0;
                         if (!isDelete) {
                             statement = conn.prepareStatement(query);
                         } else {
@@ -142,7 +142,6 @@ public class SQLStorage extends SQLStorageBase implements Storage {
                         if (!isDelete) {
                             statement.setInt(4, entry.getValue());
                             statement.setInt(5, entry.getValue());
-                            phd.getLogger().info("DELETING + " + entry.getKey());
                         }
                     } catch (SQLException e) {
                         phd.getLogger().log(Level.WARNING, "Problem while setting up prepared statement", e);
