@@ -39,7 +39,6 @@ ntimes-report: "{player} has seen the following NTIMES holograms (holograms {hol
 # Messages produced by /phd manage
 #
 hologram-already-managed: "Hologram {name} of type {type} is already managed by pHD"
-hologram-not-managed: "Hologram {name} of type {type} is not managed by pHD"
 hd-hologram-not-found: "HolographicDisplays hologram {name} was not found"
 started-managing-hologram: "Started managing hologram {name} of type {type}: {options}"
 option-missing: "Need to set {option} for a {type} hologram"
@@ -47,6 +46,7 @@ flash-must-have-both: "Need to specify both 'flashOn' and 'flashOff'; alternativ
 
 # Messages produced by /phd set
 #
+hologram-not-managed: "Hologram {name} of type {type} is not managed by pHD"
 set-new-values: "Set new values for hologram {name} of type {type}: {options}"
 incorrect-set-options: "Need a set of key-value pairs to set, got an odd number of arguments"
 incorrect-time: "Unable to parse time {time}"
