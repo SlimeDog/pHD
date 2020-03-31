@@ -3,6 +3,7 @@ package me.ford.periodicholographicdisplays.commands.subcommands;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.bukkit.command.CommandSender;
@@ -13,6 +14,7 @@ import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.commands.SubCommand;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
+import me.ford.periodicholographicdisplays.holograms.storage.Storage.HDHologramInfo;
 import me.ford.periodicholographicdisplays.util.HintUtil;
 import me.ford.periodicholographicdisplays.util.PageUtils;
 
@@ -114,7 +116,15 @@ public class ListSub extends SubCommand {
     }
 
     private void showZombies(CommandSender sender, PeriodicType type, int page) {
-        sender.sendMessage(messages.getZombieListMessage(storage.getZombies(), page, sender instanceof Player));
+        Set<HDHologramInfo> zombies = storage.getZombies();
+        int maxPage = PageUtils.getNumberOfPages(zombies.size(), PageUtils.HOLOGRAMS_PER_PAGE);
+        if (maxPage == 0)
+            maxPage++;
+        if (page <= 0 || page > maxPage) {
+            sender.sendMessage(messages.getInvalidPageMessage(maxPage));
+            return;
+        }
+        sender.sendMessage(messages.getZombieListMessage(zombies, page, sender instanceof Player));
     }
 
     @Override
