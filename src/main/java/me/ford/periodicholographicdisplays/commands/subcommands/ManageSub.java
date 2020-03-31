@@ -291,7 +291,7 @@ public class ManageSub extends OptionPairSetSub {
                     try {
                         timesToShow = Integer.parseInt(timesResult);
                     } catch (NumberFormatException e) {
-                        messages.getNeedAnIntegerMessage(timesResult);
+                        sender.sendMessage(messages.getNeedAnIntegerMessage(timesResult));
                         return null;
                     }
                 }
