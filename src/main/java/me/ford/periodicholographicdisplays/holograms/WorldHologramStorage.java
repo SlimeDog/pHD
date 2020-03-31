@@ -160,7 +160,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
             String perms = null;
             PeriodicType type = entry.getKey();
             FlashingHologram holo = entry.getValue();
-            TypeInfo typeInfo = getTypeInfo(type, holo);
+            TypeInfo typeInfo = TypeInfo.of(type, holo);
             if (!(typeInfo instanceof NullTypeInfo)) {
                 distance = holo.getActivationDistance();
                 seconds = holo.getShowTime();
@@ -173,25 +173,6 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
             info.addInfo(hInfo);
         }
         return info;
-    }
-
-    private TypeInfo getTypeInfo(PeriodicType type, FlashingHologram holo) {
-        if (holo == null) {
-            return new NullTypeInfo(type);
-        }
-        switch (type) {
-            case MCTIME:
-                return new MCTimeTypeInfo(((MCTimeHologram) holo).getTime());
-            case IRLTIME:
-                return new IRLTimeTypeInfo(((IRLTimeHologram) holo).getTime());
-            case ALWAYS:
-            case NTIMES:
-                NTimesHologram ntimes = (NTimesHologram) holo;
-                return new NTimesTypeInfo(ntimes.getTimesToShow(), ntimes.getToSave());
-            default:
-                throw new IllegalArgumentException(
-                        "Need to specify type of hologram to get type info, got " + holo.getType());
-        }
     }
 
     void addHologram(FlashingHologram hologram) {

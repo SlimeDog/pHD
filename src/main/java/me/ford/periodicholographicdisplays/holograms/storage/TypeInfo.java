@@ -3,6 +3,10 @@ package me.ford.periodicholographicdisplays.holograms.storage;
 import java.util.Map;
 import java.util.UUID;
 
+import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
+import me.ford.periodicholographicdisplays.holograms.IRLTimeHologram;
+import me.ford.periodicholographicdisplays.holograms.MCTimeHologram;
+import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 
 /**
@@ -11,6 +15,25 @@ import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 public interface TypeInfo {
 
     public PeriodicType getType();
+
+    public static TypeInfo of(PeriodicType type, FlashingHologram holo) {
+        if (holo == null) {
+            return new NullTypeInfo(type);
+        }
+        switch (type) {
+            case MCTIME:
+                return new MCTimeTypeInfo(((MCTimeHologram) holo).getTime());
+            case IRLTIME:
+                return new IRLTimeTypeInfo(((IRLTimeHologram) holo).getTime());
+            case ALWAYS:
+            case NTIMES:
+                NTimesHologram ntimes = (NTimesHologram) holo;
+                return new NTimesTypeInfo(ntimes.getTimesToShow(), ntimes.getToSave());
+            default:
+                throw new IllegalArgumentException(
+                        "Need to specify type of hologram to get type info, got " + holo.getType());
+        }
+    }
 
     public class NullTypeInfo implements TypeInfo {
         private final PeriodicType type;
