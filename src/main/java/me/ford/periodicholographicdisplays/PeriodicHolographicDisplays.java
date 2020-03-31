@@ -165,6 +165,14 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         }
         issues.addAll(settingIssues);
         holograms.reload();
+        // reload UUID cache
+        if (settings.useDatabase()) { // since the connection is shared, the connection of the old one is closed
+            userStorage = new SQLUserStorage(this);
+        } else {
+            userStorage = new YamlUserStorage(this);
+        }
+        // commands (because userStorage instance might have changed)
+        getCommand("phd").setExecutor(new PHDCommand(this));
         return issues;
     }
 
