@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.Map.Entry;
 
@@ -21,6 +22,8 @@ import me.ford.periodicholographicdisplays.holograms.MCTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
+import me.ford.periodicholographicdisplays.holograms.storage.HologramInfo;
+import me.ford.periodicholographicdisplays.holograms.storage.Storage.HDHologramInfo;
 import me.ford.periodicholographicdisplays.util.PageUtils;
 import me.ford.periodicholographicdisplays.util.TimeUtils;
 import me.ford.periodicholographicdisplays.util.PageUtils.PageInfo;
@@ -229,6 +232,42 @@ public class Messages extends CustomConfigHandler {
                         .replace("{msg}", msg);
     }
 
+    public String getZombieListMessage(Set<HDHologramInfo> zombies, int page, boolean doPages) {
+        String msg = getListRaw();
+        PageInfo pageInfo = PageUtils.getPageInfo(zombies.size(), PageUtils.HOLOGRAMS_PER_PAGE, page, doPages);
+        int i = 0;
+        int startNr = pageInfo.getStartNumber();
+        int endNr = pageInfo.getEndNumber();
+        List<String> lines = new ArrayList<>();
+        for (HDHologramInfo zombie : zombies) {
+            i++;
+            if (i < startNr || i > endNr) continue;
+            List<String> types = new ArrayList<>();
+            for (HologramInfo info : zombie.getInfos()) {
+                types.add(info.getType().name());
+            }
+            lines.add(String.format("%s %s", zombie.getHoloName(), String.join(", ", types)));
+        }
+        String numbers;
+        if (endNr <= startNr && startNr == 1) {
+            numbers = String.valueOf(endNr);
+        } else {
+            numbers = String.format("%d-%d", startNr, endNr);
+        }
+        msg = msg.replace("{numbers}", numbers);
+        msg = msg.replace("{page}", String.valueOf(page)).replace("{max-pages}",
+                String.valueOf(pageInfo.getNumberOfPages()));
+        if (!doPages) {
+            msg = msg.replace(", page 1/1", "");
+        }
+        msg = msg.replace("{holograms}", String.join("\n", lines));
+        return msg;
+    }
+
+    private String getListRaw() {
+        return getMessage("hologram-list", "Holograms (holograms {numbers}, page {page}/{max-pages}): \n{holograms}");
+    }
+
     public String getHologramListMessage(Map<String, String> holograms, int page, boolean doPages) {
         List<String> lines = new ArrayList<>();
         PageInfo pageInfo = PageUtils.getPageInfo(holograms.size(), PageUtils.HOLOGRAMS_PER_PAGE, page, doPages);
@@ -241,8 +280,7 @@ public class Messages extends CustomConfigHandler {
             lines.add(entry.getKey() + " " + entry.getValue());
             i++;
         }
-        String msg = getMessage("hologram-list",
-                "Holograms (holograms {numbers}, page {page}/{max-pages}): \n{holograms}");
+        String msg = getListRaw();
         int startNr = pageInfo.getStartNumber();
         int endNr = pageInfo.getEndNumber();
         String numbers;

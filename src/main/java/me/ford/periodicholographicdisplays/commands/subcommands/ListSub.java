@@ -35,7 +35,11 @@ public class ListSub extends SubCommand {
         List<String> list = new ArrayList<>();
         ;
         if (args.length == 1) {
-            return StringUtil.copyPartialMatches(args[0], PeriodicType.names(), list);
+            List<String> names = PeriodicType.names();
+            if (args[0].startsWith("-") && storage.hasZombies()) {
+                names.add("--zombies");
+            }
+            return StringUtil.copyPartialMatches(args[0], names, list);
         }
         return list;
     }
@@ -54,7 +58,9 @@ public class ListSub extends SubCommand {
         }
         int page = 1;
         PeriodicType holoType = null;
+        boolean zombies = false;
         if (args.length > 0) {
+            zombies = args[args.length - 1].equalsIgnoreCase("--zombies");
             try {
                 holoType = PeriodicType.valueOf(typeStr.toUpperCase());
             } catch (IllegalArgumentException e) {
@@ -65,7 +71,7 @@ public class ListSub extends SubCommand {
             } catch (NumberFormatException e) {
                 gotPage = false;
             }
-            if (fuzzy && holoType == null && !gotPage) {
+            if (fuzzy && holoType == null && !gotPage && !zombies) {
                 sender.sendMessage(messages.getNeedTypeOrPageMessage(typeStr));
                 return true;
             } else if (!fuzzy && holoType == null) {
@@ -75,6 +81,10 @@ public class ListSub extends SubCommand {
                 sender.sendMessage(messages.getNeedAnIntegerMessage(pageStr));
                 return true;
             }
+        }
+        if (zombies) {
+            showZombies(sender, holoType, page);
+            return true;
         }
         List<String> names = storage.getNames(holoType);
         int maxPage = PageUtils.getNumberOfPages(names.size(), PageUtils.HOLOGRAMS_PER_PAGE);
@@ -101,6 +111,10 @@ public class ListSub extends SubCommand {
             HintUtil.sendHint(sender, messages.getNextPageHint("{command}"),
                     String.format("/phd list%s %d", typeName, page + 1));
         return true;
+    }
+
+    private void showZombies(CommandSender sender, PeriodicType type, int page) {
+        sender.sendMessage(messages.getZombieListMessage(storage.getZombies(), page, sender instanceof Player));
     }
 
     @Override
