@@ -52,12 +52,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
             userStorage = new YamlUserStorage(this);
         }
         // checking cache a few ticks later - if empty, then populate
-        getServer().getScheduler().runTaskLater(this, () -> {
-            getLogger().info("Populating UUID to name cache with all players");
-            if (userStorage.getCache().isEmpty()) {
-                userStorage.populate();
-            }
-        }, 20L);
+        scheduleCacheSizeCheck();
 
         // check messages
         try {
@@ -115,6 +110,15 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
             // TODO - check for updates
         }
     }
+    
+    private void scheduleCacheSizeCheck() {
+        getServer().getScheduler().runTaskLater(this, () -> {
+            getLogger().info("Populating UUID to name cache with all players");
+            if (userStorage.getCache().isEmpty()) {
+                userStorage.populate();
+            }
+        }, 20L);
+    }
 
     public UserStorage getUserStorage() {
         return userStorage;
@@ -171,6 +175,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         } else {
             userStorage = new YamlUserStorage(this);
         }
+        scheduleCacheSizeCheck();
         // commands (because userStorage instance might have changed)
         getCommand("phd").setExecutor(new PHDCommand(this));
         return issues;
