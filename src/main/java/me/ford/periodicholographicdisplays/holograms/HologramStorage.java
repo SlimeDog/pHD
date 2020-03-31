@@ -18,8 +18,10 @@ import org.bukkit.entity.Player;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.holograms.WorldHologramStorageBase.HologramSaveReason;
+import me.ford.periodicholographicdisplays.holograms.storage.HologramInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.SQLStorage;
 import me.ford.periodicholographicdisplays.holograms.storage.Storage;
+import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.YAMLStorage;
 import me.ford.periodicholographicdisplays.holograms.storage.Storage.HDHologramInfo;
 import me.ford.periodicholographicdisplays.hooks.NPCHook;
@@ -264,6 +266,31 @@ public class HologramStorage {
             }
         }
         return names;
+    }
+
+    // zombies
+    public boolean hasZombies() {
+        return !danglingInfos.isEmpty();
+    }
+
+    public Set<HDHologramInfo> getZombies() {
+        return new HashSet<>(danglingInfos);
+    }
+
+    public void removeZombie(HDHologramInfo info) {
+        if (danglingInfos.remove(info)) {
+            HDHologramInfo delInfo = new HDHologramInfo(info.getHoloName());
+            for (HologramInfo i : info.getInfos()) {
+                TypeInfo ti = TypeInfo.of(i.getType(), null);
+                HologramInfo ni = new HologramInfo(delInfo.getHoloName(), i.getType(), -1.0, -1, null, ti, -1.0, -1.0);
+                delInfo.addInfo(ni);
+            }
+            Set<HDHologramInfo> set = new HashSet<>();
+            set.add(delInfo);
+            storage.saveHolograms(set, false);
+        } else {
+            plugin.getLogger().log(Level.WARNING, "Attempting to remove zombie but did not find it in the list:" + info);
+        }
     }
 
 }
