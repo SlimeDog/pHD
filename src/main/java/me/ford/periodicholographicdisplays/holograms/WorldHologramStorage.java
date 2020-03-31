@@ -219,8 +219,8 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
                 "Cannot remove holograms in a different world!");
         IndividualHologramHandler handler = getHandler(hologram.getName());
         handler.removeHologram(hologram, markForRemoval);
+        saveHolograms(false, HologramSaveReason.REMOVE);
         if (handler.isEmpty()) {
-            saveHolograms(false, HologramSaveReason.REMOVE);
             removeHandler(hologram.getName());
         }
     }
