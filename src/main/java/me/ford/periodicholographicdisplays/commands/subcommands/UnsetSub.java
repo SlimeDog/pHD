@@ -61,7 +61,7 @@ public class UnsetSub extends SubCommand {
                 List<String> options = new ArrayList<>(optionList);
                 PeriodicType type;
                 try {
-                    type = PeriodicType.valueOf(args[1]);
+                    type = PeriodicType.valueOf(args[1].toUpperCase());
                 } catch (IllegalArgumentException e) {
                     return list;
                 }
@@ -103,7 +103,7 @@ public class UnsetSub extends SubCommand {
             return false;
         PeriodicType type;
         try {
-            type = PeriodicType.valueOf(args[1]);
+            type = PeriodicType.valueOf(args[1].toUpperCase());
         } catch (IllegalArgumentException e) {
             sender.sendMessage(messages.getTypeNotRecognizedMessage(args[1]));
             return true;

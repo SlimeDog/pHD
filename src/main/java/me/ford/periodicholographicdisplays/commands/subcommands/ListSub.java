@@ -56,7 +56,7 @@ public class ListSub extends SubCommand {
         PeriodicType holoType = null;
         if (args.length > 0) {
             try {
-                holoType = PeriodicType.valueOf(typeStr);
+                holoType = PeriodicType.valueOf(typeStr.toUpperCase());
             } catch (IllegalArgumentException e) {
             }
             boolean gotPage = true;

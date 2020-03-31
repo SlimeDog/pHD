@@ -87,7 +87,7 @@ public class ManageSub extends OptionPairSetSub {
                 List<String> options = new ArrayList<>(settables);
                 PeriodicType type;
                 try {
-                    type = PeriodicType.valueOf(args[1]);
+                    type = PeriodicType.valueOf(args[1].toUpperCase());
                 } catch (IllegalArgumentException e) {
                     return list;
                 }
@@ -140,7 +140,7 @@ public class ManageSub extends OptionPairSetSub {
         }
         PeriodicType type;
         try {
-            type = PeriodicType.valueOf(args[1]);
+            type = PeriodicType.valueOf(args[1].toUpperCase());
         } catch (IllegalArgumentException e) {
             sender.sendMessage(messages.getTypeNotRecognizedMessage(args[1]));
             return true;

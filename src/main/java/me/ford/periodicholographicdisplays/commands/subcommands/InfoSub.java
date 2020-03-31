@@ -65,7 +65,7 @@ public class InfoSub extends SubCommand {
         }
         PeriodicType type;
         try {
-            type = PeriodicType.valueOf(args[1]);
+            type = PeriodicType.valueOf(args[1].toUpperCase());
         } catch (IllegalArgumentException e) {
             sender.sendMessage(messages.getTypeNotRecognizedMessage(args[1]));
             return true;

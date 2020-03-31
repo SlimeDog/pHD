@@ -61,7 +61,7 @@ public class ReportSub extends SubCommand {
         }
         PeriodicType type;
         try {
-            type = PeriodicType.valueOf(args[0]);
+            type = PeriodicType.valueOf(args[0].toUpperCase());
         } catch (IllegalArgumentException e) {
             return false;
         }
