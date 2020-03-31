@@ -294,6 +294,9 @@ public class ManageSub extends OptionPairSetSub {
                         sender.sendMessage(messages.getNeedAnIntegerMessage(timesResult));
                         return null;
                     }
+                } else {
+                    sender.sendMessage(messages.getOptionMissingMessage(type, "times"));
+                    return null;
                 }
                 existing = new NTimesHologram(holo, holo.getName(), defaultDistance, showTime, timesToShow, true, perms,
                         flashOn, flashOff);
