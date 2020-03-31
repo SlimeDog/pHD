@@ -11,6 +11,7 @@ import me.ford.periodicholographicdisplays.commands.SubCommand;
 import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
+import me.ford.periodicholographicdisplays.holograms.storage.Storage.HDHologramInfo;
 
 /**
  * UnmanageSub
@@ -55,12 +56,26 @@ public class UnmanageSub extends SubCommand {
             return true;
         }
         FlashingHologram holo = storage.getHologram(args[0], type);
+        HDHologramInfo zombie = null;
         if (holo == null) {
-            sender.sendMessage(messages.getHologramNotFoundMessage(args[0], type));
-            return true;
+            for (HDHologramInfo info : storage.getZombies()) {
+                if (info.getHoloName().equalsIgnoreCase(args[0])) {
+                    zombie = info;
+                    break;
+                }
+            }
+            if (zombie == null) {
+                sender.sendMessage(messages.getHologramNotFoundMessage(args[0], type));
+                return true;
+            }
         }
-        storage.removeHologram(holo);
-        sender.sendMessage(messages.getUnmanagedHologramMessage(holo.getName(), type));
+        if (holo != null) {
+            storage.removeHologram(holo);
+            sender.sendMessage(messages.getUnmanagedHologramMessage(holo.getName(), type));
+        } else {
+            storage.removeZombie(zombie);
+            sender.sendMessage(messages.getUnmanagedHologramMessage(zombie.getHoloName(), type));
+        }
         return true;
     }
 
