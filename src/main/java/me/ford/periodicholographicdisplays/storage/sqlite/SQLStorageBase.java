@@ -107,4 +107,21 @@ public abstract class SQLStorageBase {
         }
     }
 
+    public void close() {
+        try {
+            if (conn.isClosed()) {
+                conn.close();
+                return;
+            }
+        } catch (SQLException e) {
+            phd.getLogger().log(Level.WARNING,
+                    "Issue while closing connection (while checking if connection is closed)", e);
+        }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            phd.getLogger().log(Level.WARNING, "Issue while closing connection:", e);
+        }
+    }
+
 }
