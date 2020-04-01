@@ -113,8 +113,8 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
     
     private void scheduleCacheSizeCheck() {
         getServer().getScheduler().runTaskLater(this, () -> {
-            getLogger().info("Populating UUID to name cache with all players");
             if (userStorage.getCache().isEmpty()) {
+                getLogger().info("Populating UUID to name cache with all players");
                 userStorage.populate();
             }
         }, 20L);
