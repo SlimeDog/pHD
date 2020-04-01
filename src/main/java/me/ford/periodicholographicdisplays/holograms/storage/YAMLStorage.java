@@ -1,7 +1,5 @@
 package me.ford.periodicholographicdisplays.holograms.storage;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -10,9 +8,6 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
@@ -23,19 +18,18 @@ import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.IRLTimeTyp
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.MCTimeTypeInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.NTimesTypeInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.NullTypeInfo;
+import me.ford.periodicholographicdisplays.storage.yaml.CustomConfigHandler;
 
 /**
  * YAMLStorage
  */
-public class YAMLStorage implements Storage {
-    private final String fileName = "database.yml";
-    private final File storageFile;
+public class YAMLStorage extends CustomConfigHandler implements Storage {
+    private static final String FILE_NAME = "database.yml";
     private final PeriodicHolographicDisplays phd;
-    private FileConfiguration storage;
 
-    public YAMLStorage() {
-        phd = JavaPlugin.getPlugin(PeriodicHolographicDisplays.class);
-        storageFile = new File(this.phd.getDataFolder(), fileName);
+    public YAMLStorage(PeriodicHolographicDisplays phd) {
+        super(phd, FILE_NAME);
+        this.phd = phd;
     }
 
     @Override
@@ -48,7 +42,7 @@ public class YAMLStorage implements Storage {
                 saveInfo(nameSection.createSection(info.getType().name()), info);
             }
         }
-        save();
+        saveConfig();
     }
 
     private void saveInfo(ConfigurationSection section, HologramInfo info) {
@@ -174,7 +168,7 @@ public class YAMLStorage implements Storage {
     }
 
     public void reload() {
-        storage = YamlConfiguration.loadConfiguration(storageFile);
+        reloadConfig();
     }
 
     @Override
@@ -184,28 +178,10 @@ public class YAMLStorage implements Storage {
 
     @Override
     public void clear() {
-        for (String key : storage.getKeys(false)) {
-            storage.set(key, null);
+        for (String key : getConfig().getKeys(false)) {
+            getConfig().set(key, null);
         }
-        save();
-    }
-
-    protected FileConfiguration getConfig() {
-        if (storage == null) {
-            reload();
-        }
-        return storage;
-    }
-
-    public void save() {
-        if (storage == null || storageFile == null) {
-            return;
-        }
-        try {
-            getConfig().save(storageFile);
-        } catch (IOException ex) {
-            phd.getLogger().log(Level.SEVERE, "Could not save config to " + storageFile, ex);
-        }
+        saveConfig();
     }
 
 }

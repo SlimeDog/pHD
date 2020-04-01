@@ -71,7 +71,7 @@ public class ConvertSub extends SubCommand {
         if (phd.getSettings().useDatabase()) {
             if (sqlStorage == null)
                 sqlStorage = (SQLStorage) phd.getHolograms().getStorage();
-            yamlStorage = new YAMLStorage();
+            yamlStorage = new YAMLStorage(phd);
         } else {
             if (sqlStorage == null)
                 sqlStorage = new SQLStorage(phd);
