@@ -79,7 +79,7 @@ cannot-convert-from-same: "Cannot convert from the same storage type ({type})"
 unrecognized-conversion: "Cannot convert from {from} to {to} - unrecognized storage types"
 started-converting: "Started converting from {from} to {to}"
 done-converting: "Done converting from {from} to {to}"
-target-storage-has-data: "The target storage type {type} already has data; move or remove the file ({file}) before proceeding"
+target-storage-has-data: "The target storage type {type} already has data\nMove or remove the file ({file}) before proceeding"
 illegal-storage-type: "Illegal storage type {type} - only YAML and SQLITE are supported"
 
 # Messages produced by /phd reload (or server start-up)

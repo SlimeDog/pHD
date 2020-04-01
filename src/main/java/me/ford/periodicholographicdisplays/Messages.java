@@ -158,7 +158,7 @@ public class Messages extends CustomConfigHandler {
     public String getAlreadyHasDataMessage(String type, boolean isDatabase) {
         String fileName = "database." + (isDatabase ? "db" : "yml");
         return getMessage("target-storage-has-data",
-                "The target storage type {type} already has data;  move or remove the file ({file}) before proceeding")
+                "The target storage type {type} already has data\nMove or remove the file ({file}) before proceeding")
                         .replace("{type}", type).replace("{file}", fileName);
     }
 
