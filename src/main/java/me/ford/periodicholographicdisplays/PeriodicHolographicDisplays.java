@@ -56,7 +56,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
 
         // check messages
         try {
-            messages.getCustomConfig();
+            messages.getConfig();
         } catch (IllegalStateException e) {
             getLogger().severe(messages.getDisablingMessage());
             getServer().getPluginManager().disablePlugin(this);
@@ -153,7 +153,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
             messages.saveDefaultConfig();
             issues.add(DefaultReloadIssue.NO_MESSAGES);
         }
-        if (!messages.reloadCustomConfig()) {
+        if (!messages.reloadConfig()) {
             issues.add(new SimpleReloadIssue(messages.getIncorrectMessages(), null));
             getServer().getScheduler().runTask(this, () -> {
                 getLogger().severe(messages.getDisablingMessage());

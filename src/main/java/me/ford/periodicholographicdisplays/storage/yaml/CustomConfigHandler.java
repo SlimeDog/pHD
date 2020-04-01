@@ -2,6 +2,7 @@ package me.ford.periodicholographicdisplays.storage.yaml;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
@@ -26,7 +27,7 @@ public class CustomConfigHandler {
         this.fileName = name;
     }
 
-    public void reloadConfig() {
+    public boolean reloadConfig() {
         if (customConfigFile == null) {
             customConfigFile = new File(phd.getDataFolder(), fileName);
         }
@@ -34,9 +35,10 @@ public class CustomConfigHandler {
 
         // Look for defaults in the jar
         Reader defConfigStream = null;
-        if (phd.getResource(fileName) != null) {
+        InputStream resource = phd.getResource(fileName);
+        if (resource != null) {
             try {
-                defConfigStream = new InputStreamReader(phd.getResource(fileName), "UTF8");
+                defConfigStream = new InputStreamReader(resource, "UTF8");
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             }
@@ -45,6 +47,17 @@ public class CustomConfigHandler {
             YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
             customConfig.setDefaults(defConfig);
         }
+        if (customConfig.getKeys(true).isEmpty()) {
+            saveConfig();
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public File getFile() {
+        getConfig();
+        return customConfigFile;
     }
 
     public FileConfiguration getConfig() {

@@ -24,6 +24,7 @@ import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.holograms.storage.HologramInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.Storage.HDHologramInfo;
+import me.ford.periodicholographicdisplays.storage.yaml.CustomConfigHandler;
 import me.ford.periodicholographicdisplays.util.PageUtils;
 import me.ford.periodicholographicdisplays.util.TimeUtils;
 import me.ford.periodicholographicdisplays.util.PageUtils.PageInfo;
@@ -596,7 +597,7 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getMessage(String path, String def) {
-        return ChatColor.translateAlternateColorCodes('&', (getCustomConfig().getString(path, def)));
+        return ChatColor.translateAlternateColorCodes('&', (getConfig().getString(path, def)));
     }
 
 }
