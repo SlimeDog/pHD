@@ -181,6 +181,9 @@ public class HologramStorage {
         if (inSync && storage instanceof SQLStorage) {
             ((SQLStorage) storage).close();
         }
+        if (reason == HologramSaveReason.PERIODIC) {
+            plugin.getUserStorage().save(inSync);
+        }
     }
 
     public List<PeriodicType> getAvailableTypes(String name) {
