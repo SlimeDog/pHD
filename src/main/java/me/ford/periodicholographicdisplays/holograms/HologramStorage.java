@@ -70,7 +70,7 @@ public class HologramStorage {
         plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
             if (!danglingInfos.isEmpty()) {
                 plugin.getLogger().warning(
-                        "Some pHD holograms were loaded such that they have not found their corresponding hologram:");
+                        "Some pHD holograms were loaded such that they have not found their corresponding hologram:" + danglingInfos);
             }
         }, 200L);
     }
@@ -143,6 +143,7 @@ public class HologramStorage {
         }
         initWorldStorage();
         scheduleLoad();
+        scheduleDanglingCheck();
     }
 
     public void imported(HDHologramInfo info) {
