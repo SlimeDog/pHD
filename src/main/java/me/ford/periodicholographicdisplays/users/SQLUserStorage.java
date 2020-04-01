@@ -72,11 +72,13 @@ public class SQLUserStorage extends SQLStorageBase implements UserStorage {
         Map<UUID, String> toSave = cache.getToSave();
         if (toSave.isEmpty())
             return;
+        phd.debug("Saving to UUID cache:" + toSave);
         if (inSync) {
             saveInAsync(toSave);
         } else {
             phd.getServer().getScheduler().runTaskAsynchronously(phd, () -> saveInAsync(toSave));
         }
+        cache.markSaved();
     }
 
     private void saveInAsync(Map<UUID, String> map) {
