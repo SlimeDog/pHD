@@ -277,20 +277,29 @@ public class HologramStorage {
         return new HashSet<>(danglingInfos);
     }
 
-    public void removeZombie(HDHologramInfo info) {
-        if (danglingInfos.remove(info)) {
-            HDHologramInfo delInfo = new HDHologramInfo(info.getHoloName());
-            for (HologramInfo i : info.getInfos()) {
-                TypeInfo ti = TypeInfo.of(i.getType(), null);
-                HologramInfo ni = new HologramInfo(delInfo.getHoloName(), i.getType(), -1.0, -1, null, ti, -1.0, -1.0);
-                delInfo.addInfo(ni);
+    public void removeZombie(HologramInfo info) {
+        HDHologramInfo parent = null;
+        for (HDHologramInfo hdInfo : danglingInfos) {
+            if (hdInfo.getHoloName().equals(info.getName())) {
+                parent = hdInfo;
+                break;
             }
+        }
+        if (parent == null) {
+            plugin.getLogger().log(Level.WARNING, "Attempting to remove zombie but did not find it in the list(1):" + info);
+            return;
+        }
+        if (parent.removeInfo(info)) {
+            HDHologramInfo delInfo = new HDHologramInfo(info.getName());
+            TypeInfo ti = TypeInfo.of(info.getType(), null);
+            HologramInfo holoInfo = new HologramInfo(delInfo.getHoloName(), info.getType(), -1.0, -1, null, ti, -1.0, -1.0);
+            delInfo.addInfo(holoInfo);
             Set<HDHologramInfo> set = new HashSet<>();
             set.add(delInfo);
             plugin.debug("Removing 'zombie' hologram: " + info);
             storage.saveHolograms(set, false);
         } else {
-            plugin.getLogger().log(Level.WARNING, "Attempting to remove zombie but did not find it in the list:" + info);
+            plugin.getLogger().log(Level.WARNING, "Attempting to remove zombie but did not find it in the list(2):" + info);
         }
     }
 

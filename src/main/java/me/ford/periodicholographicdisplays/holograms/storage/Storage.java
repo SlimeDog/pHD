@@ -34,6 +34,10 @@ public interface Storage {
             infos.add(info);
         }
 
+        public boolean removeInfo(HologramInfo info) {
+            return infos.remove(info);
+        }
+
         public List<HologramInfo> getInfos() {
             return infos; // I don't think I need to return a copy
         }
