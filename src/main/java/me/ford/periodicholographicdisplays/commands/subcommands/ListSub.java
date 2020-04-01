@@ -38,7 +38,7 @@ public class ListSub extends SubCommand {
         ;
         if (args.length == 1) {
             List<String> names = PeriodicType.names();
-            if (args[0].startsWith("-") && storage.hasZombies()) {
+            if (args[0].startsWith("-")) {
                 names.add("--zombies");
             }
             return StringUtil.copyPartialMatches(args[0], names, list);
