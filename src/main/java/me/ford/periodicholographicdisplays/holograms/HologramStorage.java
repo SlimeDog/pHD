@@ -299,6 +299,7 @@ public class HologramStorage {
             set.add(delInfo);
             plugin.debug("Removing 'zombie' hologram: " + info);
             storage.saveHolograms(set, false);
+            if (parent.getInfos().isEmpty()) danglingInfos.remove(parent);
         } else {
             plugin.getLogger().log(Level.WARNING, "Attempting to remove zombie but did not find it in the list(2):" + info);
         }
