@@ -105,7 +105,7 @@ public class ConvertSub extends SubCommand {
         // find out if there is a previous instance of target storage type
         boolean hasData = targetStorage.hasData();
         if (hasData) {
-            sender.sendMessage(messages.getAlreadyHasDataMessage(to));
+            sender.sendMessage(messages.getAlreadyHasDataMessage(to, targetStorage instanceof SQLStorage));
             return true;
         } else if (hasData) {
             targetStorage.clear();
