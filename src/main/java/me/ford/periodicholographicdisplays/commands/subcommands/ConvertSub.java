@@ -22,7 +22,7 @@ public class ConvertSub extends SubCommand {
     private static final String SQLITE = "SQLITE";
     private static final String YAML = "YAML";
     private static final String PERMS = "phd.convert";
-    private static final String USAGE = "/phd convert <sourceStorageType> <targetStorageType> [--force]";
+    private static final String USAGE = "/phd convert <sourceStorageType> <targetStorageType>";
     private final PeriodicHolographicDisplays phd;
     private final Messages messages;
     private SQLStorage sqlStorage = null; // to close the SQLite connection
@@ -51,7 +51,6 @@ public class ConvertSub extends SubCommand {
         if (args.length < 2) {
             return false;
         }
-        boolean force = args.length > 2 && args[2].equalsIgnoreCase("--force");
         String from = args[0];
         String to = args[1];
         if (from.equalsIgnoreCase(to)) {
@@ -105,7 +104,7 @@ public class ConvertSub extends SubCommand {
 
         // find out if there is a previous instance of target storage type
         boolean hasData = targetStorage.hasData();
-        if (hasData && !force) {
+        if (hasData) {
             sender.sendMessage(messages.getAlreadyHasDataMessage(to));
             return true;
         } else if (hasData) {
