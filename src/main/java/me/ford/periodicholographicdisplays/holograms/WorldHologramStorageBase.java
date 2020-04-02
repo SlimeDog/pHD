@@ -12,7 +12,7 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
+import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.holograms.perchunk.PerChunkHologramHandler;
 import me.ford.periodicholographicdisplays.listeners.PerChunkListener;
 
@@ -21,12 +21,12 @@ import me.ford.periodicholographicdisplays.listeners.PerChunkListener;
  */
 public abstract class WorldHologramStorageBase {
     private final World world;
-    private final PeriodicHolographicDisplays phd;
+    private final IPeriodicHolographicDisplays phd;
     private final Map<String, IndividualHologramHandler> holograms = new HashMap<>();
     private final Set<IndividualHologramHandler> loadedHandlers = new HashSet<>();
     private final PerChunkHologramHandler perChunkHandler;
 
-    WorldHologramStorageBase(PeriodicHolographicDisplays phd, World world) {
+    WorldHologramStorageBase(IPeriodicHolographicDisplays phd, World world) {
         this.phd = phd;
         this.world = world;
         perChunkHandler = new PerChunkHologramHandler();
@@ -41,7 +41,7 @@ public abstract class WorldHologramStorageBase {
         loadedHandlers.removeAll(perChunkHandler.getHandlersInChunk(chunk.getX(), chunk.getZ()));
     }
 
-    public PeriodicHolographicDisplays getPlugin() {
+    public IPeriodicHolographicDisplays getPlugin() {
         return phd;
     }
 

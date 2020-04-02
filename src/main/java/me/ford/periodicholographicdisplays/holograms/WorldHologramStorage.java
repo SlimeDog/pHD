@@ -12,7 +12,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
+import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.holograms.storage.HologramInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.Storage;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo;
@@ -27,11 +27,11 @@ import me.ford.periodicholographicdisplays.holograms.storage.Storage.HDHologramI
  * Storage
  */
 public class WorldHologramStorage extends WorldHologramStorageBase {
-    private final PeriodicHolographicDisplays plugin;
+    private final IPeriodicHolographicDisplays plugin;
     private final Storage storage;
     private final NPCHook hook;
 
-    public WorldHologramStorage(PeriodicHolographicDisplays plugin, World world, Storage storage) {
+    public WorldHologramStorage(IPeriodicHolographicDisplays plugin, World world, Storage storage) {
         super(plugin, world);
         this.plugin = plugin;
         this.storage = storage;
