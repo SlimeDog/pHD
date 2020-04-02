@@ -15,4 +15,6 @@ public interface IPeriodicHolographicDisplays {
 
     public InputStream getResource(String name);
 
+    public void saveResource(String resourcePath, boolean replace);
+
 }
