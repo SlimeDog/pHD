@@ -52,7 +52,7 @@ public abstract class ParentCommand implements TabExecutor {
         }
     }
 
-    private UsageInfo getUsage(CommandSender sender, int page) {
+    UsageInfo getUsage(CommandSender sender, int page) {
         boolean doPages = sender instanceof Player;
         if (!doPages) page = 1;
         List<String> msgs = new ArrayList<>();
@@ -138,9 +138,9 @@ public abstract class ParentCommand implements TabExecutor {
 
     protected abstract String getUsage();
 
-    private class UsageInfo {
-        private final String usage;
-        private final int maxPage;
+    class UsageInfo {
+        final String usage;
+        final int maxPage;
 
         private UsageInfo(String usage, int maxPage) {
             this.usage = usage;
