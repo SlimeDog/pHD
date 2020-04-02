@@ -120,6 +120,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin implements IPeriodic
         }, 20L);
     }
 
+    @Override
     public UserStorage getUserStorage() {
         return userStorage;
     }
