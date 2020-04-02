@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.ReloadIssue;
 import me.ford.periodicholographicdisplays.Settings.SettingIssue;
+import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
 import me.ford.periodicholographicdisplays.hooks.NPCHook;
 import me.ford.periodicholographicdisplays.users.UserStorage;
@@ -34,5 +35,13 @@ public interface IPeriodicHolographicDisplays {
     public List<ReloadIssue> reload();
 
     public Map<SettingIssue, String> reloadMyConfig();
+
+    public HologramStorage getHolograms();
+
+    public Settings getSettings();
+
+    public Messages getMessages();
+
+    public void debug(String message);
 
 }

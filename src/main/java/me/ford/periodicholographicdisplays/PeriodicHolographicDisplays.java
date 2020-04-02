@@ -226,18 +226,22 @@ public class PeriodicHolographicDisplays extends JavaPlugin implements IPeriodic
         userStorage.save(true);
     }
 
+    @Override
     public HologramStorage getHolograms() {
         return holograms;
     }
 
+    @Override
     public Settings getSettings() {
         return settings;
     }
 
+    @Override
     public Messages getMessages() {
         return messages;
     }
 
+    @Override
     public void debug(String message) {
         if (settings.onDebug()) {
             getLogger().info("[DEBUG] " + message);
