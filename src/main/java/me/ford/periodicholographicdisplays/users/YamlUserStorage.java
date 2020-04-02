@@ -6,7 +6,7 @@ import java.util.logging.Level;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
+import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.storage.yaml.CustomConfigHandler;
 
 /**
@@ -14,11 +14,11 @@ import me.ford.periodicholographicdisplays.storage.yaml.CustomConfigHandler;
  */
 public class YamlUserStorage implements UserStorage {
     private static final String NAME = "playerUUID.yml";
-    private final PeriodicHolographicDisplays phd;
+    private final IPeriodicHolographicDisplays phd;
     private final SimpleUserCache cache;
     private final CustomConfigHandler configHandler;
 
-    public YamlUserStorage(PeriodicHolographicDisplays phd) {
+    public YamlUserStorage(IPeriodicHolographicDisplays phd) {
         this.phd = phd;
         this.cache = new SimpleUserCache();
         this.configHandler = new CustomConfigHandler(this.phd, NAME);
