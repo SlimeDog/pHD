@@ -7,7 +7,7 @@ import java.util.Map;
  * Settings
  */
 public class Settings {
-    private final PeriodicHolographicDisplays phd;
+    private final IPeriodicHolographicDisplays phd;
     private boolean useDatabase;
     private double defaultActivationDistance;
     private int defaultShowTime;
@@ -16,7 +16,7 @@ public class Settings {
     private boolean checkForUpdates;
     private boolean onDebug;
 
-    public Settings(PeriodicHolographicDisplays plugin) {
+    public Settings(IPeriodicHolographicDisplays plugin) {
         this.phd = plugin;
         reload();
     }
