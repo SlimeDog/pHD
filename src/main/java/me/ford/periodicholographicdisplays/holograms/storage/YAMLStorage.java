@@ -7,9 +7,10 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 
-import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
+import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
@@ -25,9 +26,9 @@ import me.ford.periodicholographicdisplays.storage.yaml.CustomConfigHandler;
  */
 public class YAMLStorage extends CustomConfigHandler implements Storage {
     private static final String FILE_NAME = "database.yml";
-    private final PeriodicHolographicDisplays phd;
+    private final IPeriodicHolographicDisplays phd;
 
-    public YAMLStorage(PeriodicHolographicDisplays phd) {
+    public YAMLStorage(IPeriodicHolographicDisplays phd) {
         super(phd, FILE_NAME);
         this.phd = phd;
     }
@@ -85,7 +86,7 @@ public class YAMLStorage extends CustomConfigHandler implements Storage {
         for (String name : getConfig().getKeys(false)) {
             loadHologram(name, consumer);
         }
-        phd.getServer().getPluginManager().callEvent(new HologramsLoadedEvent());
+        Bukkit.getPluginManager().callEvent(new HologramsLoadedEvent());
     }
 
     private void loadHologram(String name, Consumer<HDHologramInfo> consumer) {
