@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.logging.Logger;
 
+import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
+import me.ford.periodicholographicdisplays.hooks.NPCHook;
 import me.ford.periodicholographicdisplays.users.UserStorage;
 
 /**
@@ -20,5 +22,9 @@ public interface IPeriodicHolographicDisplays {
     public void saveResource(String resourcePath, boolean replace);
 
     public UserStorage getUserStorage();
+
+    public NPCHook getNPCHook();
+
+    public LuckPermsHook getLuckPermsHook();
 
 }

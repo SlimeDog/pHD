@@ -125,10 +125,12 @@ public class PeriodicHolographicDisplays extends JavaPlugin implements IPeriodic
         return userStorage;
     }
 
+    @Override
     public NPCHook getNPCHook() {
         return citizensHook;
     }
 
+    @Override
     public LuckPermsHook getLuckPermsHook() {
         return lpHook;
     }
