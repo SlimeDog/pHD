@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -34,9 +35,9 @@ import me.ford.periodicholographicdisplays.util.PageUtils.PageInfo;
  */
 public class Messages extends CustomConfigHandler {
     private final static String FILE_NAME = "messages.yml";
-    private final PeriodicHolographicDisplays phd;
+    private final IPeriodicHolographicDisplays phd;
 
-    public Messages(PeriodicHolographicDisplays phd) {
+    public Messages(IPeriodicHolographicDisplays phd) {
         super(phd, FILE_NAME);
         saveDefaultConfig();
         this.phd = phd;
@@ -573,7 +574,7 @@ public class Messages extends CustomConfigHandler {
                     i++;
                     continue;
                 }
-                OfflinePlayer player = phd.getServer().getOfflinePlayer(entry.getKey());
+                OfflinePlayer player = Bukkit.getOfflinePlayer(entry.getKey());
                 String playerName = (player == null || !player.hasPlayedBefore()) ? "UNKNOWNPLAYER" : player.getName();
                 playersAndTimes.add(playerName + ": " + entry.getValue());
                 i++;
