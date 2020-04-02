@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.logging.Level;
 
-import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
+import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.storage.sqlite.SQLStorageBase;
 
 /**
@@ -16,10 +16,10 @@ import me.ford.periodicholographicdisplays.storage.sqlite.SQLStorageBase;
  */
 public class SQLUserStorage extends SQLStorageBase implements UserStorage {
     private static final String TABLE_NAME = "phd_playerUUID";
-    private final PeriodicHolographicDisplays phd;
+    private final IPeriodicHolographicDisplays phd;
     private final SimpleUserCache cache;
 
-    public SQLUserStorage(PeriodicHolographicDisplays phd) {
+    public SQLUserStorage(IPeriodicHolographicDisplays phd) {
         super(phd);
         this.phd = phd;
         this.cache = new SimpleUserCache();
@@ -34,7 +34,7 @@ public class SQLUserStorage extends SQLStorageBase implements UserStorage {
     // DATABASE handling down here
 
     private void load() {
-        phd.getServer().getScheduler().runTaskAsynchronously(phd, () -> loadInAsync());
+        phd.runTaskAsynchronously(() -> loadInAsync());
     }
 
     private void loadInAsync() {
@@ -60,7 +60,7 @@ public class SQLUserStorage extends SQLStorageBase implements UserStorage {
         } catch (SQLException e) {
             phd.getLogger().log(Level.SEVERE, "Issue while loading UUIDs and player names!", e);
         }
-        phd.getServer().getScheduler().runTask(phd, () -> {
+        phd.runTask(() -> {
             for (Entry<UUID, String> entry : map.entrySet()) {
                 cache.addOnStartup(entry.getKey(), entry.getValue());
             }
@@ -76,7 +76,7 @@ public class SQLUserStorage extends SQLStorageBase implements UserStorage {
         if (inSync) {
             saveInAsync(toSave);
         } else {
-            phd.getServer().getScheduler().runTaskAsynchronously(phd, () -> saveInAsync(toSave));
+            phd.runTaskAsynchronously(() -> saveInAsync(toSave));
         }
         cache.markSaved();
     }
