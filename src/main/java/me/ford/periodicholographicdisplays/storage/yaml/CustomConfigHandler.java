@@ -11,18 +11,18 @@ import java.util.logging.Level;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
+import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 
 /**
  * CustomConfig
  */
 public class CustomConfigHandler {
-    private final PeriodicHolographicDisplays phd;
+    private final IPeriodicHolographicDisplays phd;
     private final String fileName;
     private FileConfiguration customConfig = null;
     private File customConfigFile = null;
 
-    public CustomConfigHandler(PeriodicHolographicDisplays phd, String name) {
+    public CustomConfigHandler(IPeriodicHolographicDisplays phd, String name) {
         this.phd = phd;
         this.fileName = name;
     }
