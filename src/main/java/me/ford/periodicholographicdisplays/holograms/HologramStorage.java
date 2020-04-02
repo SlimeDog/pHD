@@ -15,8 +15,9 @@ import com.gmail.filoghost.holographicdisplays.object.NamedHologram;
 import org.apache.commons.lang.Validate;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
 
-import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
+import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.holograms.WorldHologramStorageBase.HologramSaveReason;
 import me.ford.periodicholographicdisplays.holograms.storage.HologramInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.SQLStorage;
@@ -31,18 +32,20 @@ import me.ford.periodicholographicdisplays.hooks.NPCHook;
  */
 public class HologramStorage {
     private Storage storage;
-    private final PeriodicHolographicDisplays plugin;
+    private final IPeriodicHolographicDisplays plugin;
+    private final PluginManager pm;
     private final NPCHook hook;
     private final Map<World, WorldHologramStorage> holograms = new HashMap<>();
     private final Set<HDHologramInfo> danglingInfos = new HashSet<>();
 
-    public HologramStorage(PeriodicHolographicDisplays plugin) {
+    public HologramStorage(IPeriodicHolographicDisplays plugin, PluginManager pm) {
         if (plugin.getSettings().useDatabase()) {
-            this.storage = new SQLStorage(plugin, plugin.getServer().getPluginManager());
+            this.storage = new SQLStorage(plugin, pm);
         } else {
-            this.storage = new YAMLStorage(plugin, plugin.getServer().getPluginManager());
+            this.storage = new YAMLStorage(plugin, pm);
         }
         this.plugin = plugin;
+        this.pm = pm;
         hook = plugin.getNPCHook();
         initWorldStorage();
         scheduleLoad();
@@ -56,18 +59,18 @@ public class HologramStorage {
             plugin.getLogger().warning(plugin.getMessages().getLowSaveDelayMessage(seconds));
         }
         long delay = seconds * 20L;
-        plugin.getServer().getScheduler().runTaskTimer(plugin, () -> save(HologramSaveReason.PERIODIC, false), delay,
+        plugin.runTaskTimer(() -> save(HologramSaveReason.PERIODIC, false), delay,
                 delay);
     }
 
     private void scheduleLoad() {
-        plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+        plugin.runTaskLater(() -> {
             storage.loadHolograms((info) -> loaded(info, false));
         }, 40L); // need to do this later so the holograms are loaded
     }
 
     private void scheduleDanglingCheck() {
-        plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+        plugin.runTaskLater(() -> {
             if (!danglingInfos.isEmpty()) {
                 plugin.getLogger().warning(
                         "Some pHD holograms were loaded such that they have not found their corresponding hologram:" + danglingInfos);
@@ -100,7 +103,7 @@ public class HologramStorage {
     }
 
     private void initWorldStorage() {
-        for (World world : plugin.getServer().getWorlds()) {
+        for (World world : plugin.getWorlds()) {
             newWorld(world);
         }
     }
@@ -137,9 +140,9 @@ public class HologramStorage {
         boolean db = plugin.getSettings().useDatabase();
         if (storage instanceof SQLStorage) ((SQLStorage) storage).close();
         if (db) {
-            storage = new SQLStorage(plugin, plugin.getServer().getPluginManager());
+            storage = new SQLStorage(plugin, pm);
         } else {
-            storage = new YAMLStorage(plugin, plugin.getServer().getPluginManager());
+            storage = new YAMLStorage(plugin, pm);
         }
         initWorldStorage();
         scheduleLoad();

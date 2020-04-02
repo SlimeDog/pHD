@@ -43,7 +43,7 @@ public class PeriodicHolographicDisplays extends SchedulingPeriodicHolographicDi
         saveDefaultConfig();
         messages = new Messages(this);
         settings = new Settings(this);
-        holograms = new HologramStorage(this);
+        holograms = new HologramStorage(this, getServer().getPluginManager());
 
         // user storage and cache
         if (settings.useDatabase()) {
