@@ -135,6 +135,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin implements IPeriodic
         return lpHook;
     }
 
+    @Override
     public List<ReloadIssue> reload() {
         List<ReloadIssue> issues = new ArrayList<>();
         File df = getDataFolder();
@@ -210,6 +211,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin implements IPeriodic
         return issues;
     }
 
+    @Override
     public Map<SettingIssue, String> reloadMyConfig() {
         super.reloadConfig();
         if (settings != null) {

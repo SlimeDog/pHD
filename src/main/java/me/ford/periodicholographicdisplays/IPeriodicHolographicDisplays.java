@@ -2,8 +2,12 @@ package me.ford.periodicholographicdisplays;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
+import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.ReloadIssue;
+import me.ford.periodicholographicdisplays.Settings.SettingIssue;
 import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
 import me.ford.periodicholographicdisplays.hooks.NPCHook;
 import me.ford.periodicholographicdisplays.users.UserStorage;
@@ -26,5 +30,9 @@ public interface IPeriodicHolographicDisplays {
     public NPCHook getNPCHook();
 
     public LuckPermsHook getLuckPermsHook();
+
+    public List<ReloadIssue> reload();
+
+    public Map<SettingIssue, String> reloadMyConfig();
 
 }
