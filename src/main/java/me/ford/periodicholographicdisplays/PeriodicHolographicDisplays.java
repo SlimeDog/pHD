@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bstats.bukkit.Metrics;
+import org.bukkit.World;
 
 import me.ford.periodicholographicdisplays.Settings.SettingIssue;
 import me.ford.periodicholographicdisplays.Settings.StorageTypeException;
@@ -108,6 +109,11 @@ public class PeriodicHolographicDisplays extends SchedulingPeriodicHolographicDi
         if (settings.checkForUpdates()) {
             // TODO - check for updates
         }
+    }
+
+    @Override
+    public List<World> getWorlds() {
+        return getServer().getWorlds();
     }
     
     private void scheduleCacheSizeCheck() {

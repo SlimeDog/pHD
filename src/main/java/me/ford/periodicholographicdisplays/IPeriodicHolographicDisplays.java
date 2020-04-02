@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -30,6 +31,8 @@ public interface IPeriodicHolographicDisplays {
     public void saveResource(String resourcePath, boolean replace);
 
     public FileConfiguration getConfig();
+
+    public List<World> getWorlds();
 
     public UserStorage getUserStorage();
 
