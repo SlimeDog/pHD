@@ -28,6 +28,11 @@ public abstract class SQLStorageBase {
     }
 
     private Connection connect() {
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         Connection conn = null;
         try {
             // db parameters
