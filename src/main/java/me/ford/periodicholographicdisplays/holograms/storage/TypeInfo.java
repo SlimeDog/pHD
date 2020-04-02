@@ -122,7 +122,9 @@ public interface TypeInfo {
             if (other == this) return true;
             if (!(other instanceof MCTimeTypeInfo)) return false;
             MCTimeTypeInfo oh = (MCTimeTypeInfo) other;
-            return atTime == oh.atTime;
+            // within a "minute" 20 * 60 * 20 = 24 000 ticks per day
+            // that's 1000 ticks per "hour", 1000/60 = 16.67 ticks per minue
+            return Math.abs(atTime - oh.atTime) < 17;
         }
 
         @Override
@@ -153,7 +155,7 @@ public interface TypeInfo {
             if (other == this) return true;
             if (!(other instanceof IRLTimeTypeInfo)) return false;
             IRLTimeTypeInfo oh = (IRLTimeTypeInfo) other;
-            return atTime == oh.atTime;
+            return Math.abs(atTime - oh.atTime) < 60; // within a minute
         }
 
         @Override
