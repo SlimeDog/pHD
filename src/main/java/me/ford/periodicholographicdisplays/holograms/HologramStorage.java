@@ -40,7 +40,7 @@ public class HologramStorage {
         if (plugin.getSettings().useDatabase()) {
             this.storage = new SQLStorage(plugin);
         } else {
-            this.storage = new YAMLStorage(plugin);
+            this.storage = new YAMLStorage(plugin, plugin.getServer().getPluginManager());
         }
         this.plugin = plugin;
         hook = plugin.getNPCHook();
@@ -139,7 +139,7 @@ public class HologramStorage {
         if (db) {
             storage = new SQLStorage(plugin);
         } else {
-            storage = new YAMLStorage(plugin);
+            storage = new YAMLStorage(plugin, plugin.getServer().getPluginManager());
         }
         initWorldStorage();
         scheduleLoad();
