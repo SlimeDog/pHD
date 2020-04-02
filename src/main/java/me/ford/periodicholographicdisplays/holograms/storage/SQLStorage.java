@@ -11,7 +11,7 @@ import java.util.Map.Entry;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 
-import org.bukkit.Bukkit;
+import org.bukkit.plugin.PluginManager;
 
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
@@ -29,12 +29,14 @@ import me.ford.periodicholographicdisplays.util.TimeUtils;
  */
 public class SQLStorage extends SQLStorageBase implements Storage {
     private final IPeriodicHolographicDisplays phd;
+    private final PluginManager pm;
     private final String hologramTableName = "phd_hologram";
     private final String playerTableName = "phd_player";
 
-    public SQLStorage(IPeriodicHolographicDisplays phd) {
+    public SQLStorage(IPeriodicHolographicDisplays phd, PluginManager pm) {
         super(phd);
         this.phd = phd;
+        this.pm = pm;
     }
 
     @Override
@@ -236,7 +238,7 @@ public class SQLStorage extends SQLStorageBase implements Storage {
             for (HDHologramInfo info : infos.values()) {
                 consumer.accept(info);
             }
-            Bukkit.getPluginManager().callEvent(new HologramsLoadedEvent());
+            pm.callEvent(new HologramsLoadedEvent());
         });
     }
 

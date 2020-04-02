@@ -74,7 +74,7 @@ public class ConvertSub extends SubCommand {
             yamlStorage = new YAMLStorage(phd, phd.getServer().getPluginManager());
         } else {
             if (sqlStorage == null)
-                sqlStorage = new SQLStorage(phd);
+                sqlStorage = new SQLStorage(phd, phd.getServer().getPluginManager());
             yamlStorage = (YAMLStorage) phd.getHolograms().getStorage();
         }
 

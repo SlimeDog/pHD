@@ -38,7 +38,7 @@ public class HologramStorage {
 
     public HologramStorage(PeriodicHolographicDisplays plugin) {
         if (plugin.getSettings().useDatabase()) {
-            this.storage = new SQLStorage(plugin);
+            this.storage = new SQLStorage(plugin, plugin.getServer().getPluginManager());
         } else {
             this.storage = new YAMLStorage(plugin, plugin.getServer().getPluginManager());
         }
@@ -137,7 +137,7 @@ public class HologramStorage {
         boolean db = plugin.getSettings().useDatabase();
         if (storage instanceof SQLStorage) ((SQLStorage) storage).close();
         if (db) {
-            storage = new SQLStorage(plugin);
+            storage = new SQLStorage(plugin, plugin.getServer().getPluginManager());
         } else {
             storage = new YAMLStorage(plugin, plugin.getServer().getPluginManager());
         }
