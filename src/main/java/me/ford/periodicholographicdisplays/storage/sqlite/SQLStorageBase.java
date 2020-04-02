@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 
-import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
+import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 
 /**
  * SQLStorageBase
@@ -15,9 +15,9 @@ import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 public abstract class SQLStorageBase {
     private static final String DATABSE_NAME = "database.db";
     protected static Connection conn; // shared connection
-    private final PeriodicHolographicDisplays phd;
+    private final IPeriodicHolographicDisplays phd;
 
-    public SQLStorageBase(PeriodicHolographicDisplays phd) {
+    public SQLStorageBase(IPeriodicHolographicDisplays phd) {
         this.phd = phd;
         try {
             if (conn == null || conn.isClosed())
