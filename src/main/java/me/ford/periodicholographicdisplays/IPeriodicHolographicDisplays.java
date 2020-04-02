@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.bukkit.configuration.file.FileConfiguration;
+
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.ReloadIssue;
 import me.ford.periodicholographicdisplays.Settings.SettingIssue;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
@@ -25,6 +27,8 @@ public interface IPeriodicHolographicDisplays {
     public InputStream getResource(String name);
 
     public void saveResource(String resourcePath, boolean replace);
+
+    public FileConfiguration getConfig();
 
     public UserStorage getUserStorage();
 
