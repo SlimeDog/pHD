@@ -125,6 +125,11 @@ public interface TypeInfo {
             return atTime == oh.atTime;
         }
 
+        @Override
+        public String toString() {
+            return String.format("[MCTI:%d]", atTime);
+        }
+
     }
 
     public class IRLTimeTypeInfo implements TypeInfo {
@@ -149,6 +154,11 @@ public interface TypeInfo {
             if (!(other instanceof IRLTimeTypeInfo)) return false;
             IRLTimeTypeInfo oh = (IRLTimeTypeInfo) other;
             return atTime == oh.atTime;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("[IRLTI:%d]", atTime);
         }
 
     }
