@@ -109,6 +109,7 @@ public class PeriodicHolographicDisplays extends SchedulingPeriodicHolographicDi
         if (settings.checkForUpdates()) {
             // TODO - check for updates
         }
+        getLogger().info(messages.getActiveStorageMessage(getSettings().useDatabase()));
     }
 
     @Override

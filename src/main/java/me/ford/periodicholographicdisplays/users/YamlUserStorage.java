@@ -22,6 +22,7 @@ public class YamlUserStorage implements UserStorage {
         this.phd = phd;
         this.cache = new SimpleUserCache();
         this.configHandler = new CustomConfigHandler(this.phd, NAME);
+        configHandler.getConfig(); // making sure empty one is saved
         load();
     }
 
