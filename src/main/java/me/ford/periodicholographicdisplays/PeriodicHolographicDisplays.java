@@ -95,7 +95,7 @@ public class PeriodicHolographicDisplays extends SchedulingPeriodicHolographicDi
         }
 
         // commands
-        getCommand("phd").setExecutor(new PHDCommand(this));
+        getCommand("phd").setExecutor(new PHDCommand(this, getServer().getPluginManager()));
 
         // settings check
         List<ReloadIssue> issues = getSettingIssues();
@@ -187,7 +187,7 @@ public class PeriodicHolographicDisplays extends SchedulingPeriodicHolographicDi
         }
         scheduleCacheSizeCheck();
         // commands (because userStorage instance might have changed)
-        getCommand("phd").setExecutor(new PHDCommand(this));
+        getCommand("phd").setExecutor(new PHDCommand(this, getServer().getPluginManager()));
         return issues;
     }
 

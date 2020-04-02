@@ -5,10 +5,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.util.StringUtil;
 
 import me.ford.periodicholographicdisplays.Messages;
-import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
+import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.commands.SubCommand;
 import me.ford.periodicholographicdisplays.holograms.storage.SQLStorage;
 import me.ford.periodicholographicdisplays.holograms.storage.Storage;
@@ -23,13 +24,15 @@ public class ConvertSub extends SubCommand {
     private static final String YAML = "YAML";
     private static final String PERMS = "phd.convert";
     private static final String USAGE = "/phd convert <sourceStorageType> <targetStorageType>";
-    private final PeriodicHolographicDisplays phd;
+    private final IPeriodicHolographicDisplays phd;
+    private final PluginManager pm;
     private final Messages messages;
     private SQLStorage sqlStorage = null; // to close the SQLite connection
     private final List<String> storageTypes = Arrays.asList(SQLITE, YAML);
 
-    public ConvertSub(PeriodicHolographicDisplays phd) {
+    public ConvertSub(IPeriodicHolographicDisplays phd, PluginManager pm) {
         this.phd = phd;
+        this.pm = pm;
         this.messages = phd.getMessages();
     }
 
@@ -71,10 +74,10 @@ public class ConvertSub extends SubCommand {
         if (phd.getSettings().useDatabase()) {
             if (sqlStorage == null)
                 sqlStorage = (SQLStorage) phd.getHolograms().getStorage();
-            yamlStorage = new YAMLStorage(phd, phd.getServer().getPluginManager());
+            yamlStorage = new YAMLStorage(phd, pm);
         } else {
             if (sqlStorage == null)
-                sqlStorage = new SQLStorage(phd, phd.getServer().getPluginManager());
+                sqlStorage = new SQLStorage(phd, pm);
             yamlStorage = (YAMLStorage) phd.getHolograms().getStorage();
         }
 
@@ -124,7 +127,7 @@ public class ConvertSub extends SubCommand {
             return;
         if (to.equals(SQLITE)) {
             // TODO - perhaps an event?
-            phd.getServer().getScheduler().runTaskLater(phd, () -> closeSqlite(from, "..."), 40L);
+            phd.runTaskLater(() -> closeSqlite(from, "..."), 40L);
             return; // not saved yet
         }
         if (sqlStorage == null) {
@@ -160,10 +163,10 @@ public class ConvertSub extends SubCommand {
 
         @Override
         public void run() {
-            phd.getServer().getScheduler().runTask(phd,
-                    () -> sender.sendMessage(messages.getDoneConvertingMessage(from, to))); // so it gets sent after the
-                                                                                            // start message (for YAML
-                                                                                            // mostly)
+            phd.runTask(() -> sender.sendMessage(messages.getDoneConvertingMessage(from, to))); // so it gets sent after
+                                                                                                // the
+                                                                                                // start message (for YAML
+                                                                                                // mostly)
             closeSqlite(from, to);
         }
 

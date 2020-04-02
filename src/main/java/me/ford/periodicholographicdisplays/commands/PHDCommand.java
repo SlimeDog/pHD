@@ -1,6 +1,8 @@
 package me.ford.periodicholographicdisplays.commands;
 
-import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
+import org.bukkit.plugin.PluginManager;
+
+import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.commands.subcommands.ConvertSub;
 import me.ford.periodicholographicdisplays.commands.subcommands.InfoSub;
 import me.ford.periodicholographicdisplays.commands.subcommands.ListSub;
@@ -17,10 +19,10 @@ import me.ford.periodicholographicdisplays.commands.subcommands.UnsetSub;
 public class PHDCommand extends ParentCommand {
     private static final String USAGE = "/phd subcommand parameters (page {page}/{maxpage}):";
     private static final String HELP_HINT = "/phd help {page}";
-    private final PeriodicHolographicDisplays plugin;
+    private final IPeriodicHolographicDisplays plugin;
     private final ConvertSub convertSub;
 
-    public PHDCommand(PeriodicHolographicDisplays plugin) {
+    public PHDCommand(IPeriodicHolographicDisplays plugin, PluginManager pm) {
         super(plugin.getMessages());
         this.plugin = plugin;
         addSubCommand("list", new ListSub(plugin.getHolograms(), this.plugin.getMessages()));
@@ -34,7 +36,7 @@ public class PHDCommand extends ParentCommand {
                 plugin.getUserStorage()));
         addSubCommand("unmanage", new UnmanageSub(plugin.getHolograms(), this.plugin.getMessages()));
         addSubCommand("reload", new ReloadSub(plugin));
-        convertSub = new ConvertSub(plugin);
+        convertSub = new ConvertSub(plugin, pm);
         addSubCommand("convert", convertSub);
     }
 

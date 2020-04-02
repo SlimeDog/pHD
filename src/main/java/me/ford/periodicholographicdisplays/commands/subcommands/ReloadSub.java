@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.ford.periodicholographicdisplays.Messages;
-import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
+import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.ReloadIssue;
 import me.ford.periodicholographicdisplays.commands.SubCommand;
 
@@ -17,10 +17,10 @@ import me.ford.periodicholographicdisplays.commands.SubCommand;
 public class ReloadSub extends SubCommand {
     private static final String PERMS = "phd.reload";
     private static final String USAGE = "/phd reload";
-    private final PeriodicHolographicDisplays phd;
+    private final IPeriodicHolographicDisplays phd;
     private final Messages messages;
 
-    public ReloadSub(PeriodicHolographicDisplays phd) {
+    public ReloadSub(IPeriodicHolographicDisplays phd) {
         this.phd = phd;
         this.messages = phd.getMessages();
     }
