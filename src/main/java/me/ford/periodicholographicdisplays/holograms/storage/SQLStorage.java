@@ -11,7 +11,9 @@ import java.util.Map.Entry;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 
-import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
+import org.bukkit.Bukkit;
+
+import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.holograms.events.HologramsLoadedEvent;
@@ -26,11 +28,11 @@ import me.ford.periodicholographicdisplays.util.TimeUtils;
  * SQLStorage
  */
 public class SQLStorage extends SQLStorageBase implements Storage {
-    private final PeriodicHolographicDisplays phd;
+    private final IPeriodicHolographicDisplays phd;
     private final String hologramTableName = "phd_hologram";
     private final String playerTableName = "phd_player";
 
-    public SQLStorage(PeriodicHolographicDisplays phd) {
+    public SQLStorage(IPeriodicHolographicDisplays phd) {
         super(phd);
         this.phd = phd;
     }
@@ -40,7 +42,7 @@ public class SQLStorage extends SQLStorageBase implements Storage {
         if (inSync) {
             saveHologramsAsync(holograms);
         } else {
-            phd.getServer().getScheduler().runTaskAsynchronously(phd, () -> saveHologramsAsync(holograms));
+            phd.runTaskAsynchronously(() -> saveHologramsAsync(holograms));
         }
     }
 
@@ -164,7 +166,7 @@ public class SQLStorage extends SQLStorageBase implements Storage {
 
     @Override
     public void loadHolograms(Consumer<HDHologramInfo> consumer) {
-        phd.getServer().getScheduler().runTaskAsynchronously(phd, () -> loadHologramsAsync(consumer));
+        phd.runTaskAsynchronously(() -> loadHologramsAsync(consumer));
     }
 
     // hologram_name, hologram_type, activation_distance, display_seconds,
@@ -230,11 +232,11 @@ public class SQLStorage extends SQLStorageBase implements Storage {
             }
         }
 
-        phd.getServer().getScheduler().runTask(phd, () -> {
+        phd.runTask(() -> {
             for (HDHologramInfo info : infos.values()) {
                 consumer.accept(info);
             }
-            phd.getServer().getPluginManager().callEvent(new HologramsLoadedEvent());
+            Bukkit.getPluginManager().callEvent(new HologramsLoadedEvent());
         });
     }
 
@@ -362,7 +364,7 @@ public class SQLStorage extends SQLStorageBase implements Storage {
 
     @Override
     public void clear() {
-        phd.getServer().getScheduler().runTaskAsynchronously(phd, () -> {
+        phd.runTaskAsynchronously(() -> {
             String delHologramTable = "DELETE FROM " + hologramTableName + ";";
             executeUpdate(delHologramTable);
             String delPlayerTable = "DELETE FROM " + playerTableName + ";";
