@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.scheduler.BukkitTask;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.ReloadIssue;
 import me.ford.periodicholographicdisplays.Settings.SettingIssue;
@@ -47,5 +48,17 @@ public interface IPeriodicHolographicDisplays {
     public Messages getMessages();
 
     public void debug(String message);
+
+    public BukkitTask runTask(Runnable runnable);
+
+    public BukkitTask runTaskLater(Runnable runnable, long delay);
+
+    public BukkitTask runTaskTimer(Runnable runnable, long delay, long period);
+
+    public BukkitTask runTaskAsynchronously(Runnable runnable);
+
+    public BukkitTask runTaskLaterAsynchronously(Runnable runnable, long delay);
+
+    public BukkitTask runTaskTimerAsynchronously(Runnable runnable, long delay, long period);
 
 }

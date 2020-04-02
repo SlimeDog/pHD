@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bstats.bukkit.Metrics;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import me.ford.periodicholographicdisplays.Settings.SettingIssue;
 import me.ford.periodicholographicdisplays.Settings.StorageTypeException;
@@ -30,7 +29,7 @@ import me.ford.periodicholographicdisplays.users.YamlUserStorage;
 /**
  * PeriodicHolographicDisplays
  */
-public class PeriodicHolographicDisplays extends JavaPlugin implements IPeriodicHolographicDisplays {
+public class PeriodicHolographicDisplays extends SchedulingPeriodicHolographicDisplays {
     private HologramStorage holograms;
     private Settings settings;
     private Messages messages;
