@@ -63,4 +63,16 @@ public class HologramInfo {
         return String.format("{%f;%d;%s;%s}", activationDistance, showTime, perms, getTypeInfo().toString());
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (other == this)
+            return true;
+        if (!(other instanceof HologramInfo))
+            return false;
+        HologramInfo info = (HologramInfo) other;
+        return name.equals(info.name) && type == info.type && activationDistance == info.activationDistance
+                && showTime == info.showTime && (perms == null ? info.perms == null : perms.equals(info.perms))
+                && typeInfo.equals(info.typeInfo) && flashOn == info.flashOn && flashOff == info.flashOff;
+    }
+
 }

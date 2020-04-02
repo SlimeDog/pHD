@@ -50,6 +50,14 @@ public interface Storage {
             return String.format("[HDHoloInfo:%s(%s)]", holoName, infos.toString());
         }
 
+        @Override
+        public boolean equals(Object other) {
+            if (other == this) return true;
+            if (!(other instanceof HDHologramInfo)) return false;
+            HDHologramInfo info = (HDHologramInfo) other;
+            return holoName.equals(info.holoName) && infos.equals(info.infos);
+        }
+
     }
 
 }

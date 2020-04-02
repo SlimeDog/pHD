@@ -47,6 +47,13 @@ public interface TypeInfo {
             return type;
         }
 
+        @Override
+        public boolean equals(Object other) {
+            if (other == this) return true;
+            if (!(other instanceof NullTypeInfo)) return false;
+            return getType() == ((NullTypeInfo) other).getType();
+        }
+
     }
 
     public class NTimesTypeInfo implements TypeInfo {
@@ -84,6 +91,14 @@ public interface TypeInfo {
             return String.format("<%s(%d):%s>", getType().name(), showTimes, shownToTimes.toString());
         }
 
+        @Override
+        public boolean equals(Object other) {
+            if (other == this) return true;
+            if (!(other instanceof NTimesTypeInfo)) return false;
+            NTimesTypeInfo oh = (NTimesTypeInfo) other;
+            return showTimes == oh.showTimes && shownToTimes.equals(oh.shownToTimes);
+        }
+
     }
 
     public class MCTimeTypeInfo implements TypeInfo {
@@ -102,6 +117,14 @@ public interface TypeInfo {
             return atTime;
         }
 
+        @Override
+        public boolean equals(Object other) {
+            if (other == this) return true;
+            if (!(other instanceof MCTimeTypeInfo)) return false;
+            MCTimeTypeInfo oh = (MCTimeTypeInfo) other;
+            return atTime == oh.atTime;
+        }
+
     }
 
     public class IRLTimeTypeInfo implements TypeInfo {
@@ -118,6 +141,14 @@ public interface TypeInfo {
 
         public long getAtTime() {
             return atTime;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (other == this) return true;
+            if (!(other instanceof IRLTimeTypeInfo)) return false;
+            IRLTimeTypeInfo oh = (IRLTimeTypeInfo) other;
+            return atTime == oh.atTime;
         }
 
     }
