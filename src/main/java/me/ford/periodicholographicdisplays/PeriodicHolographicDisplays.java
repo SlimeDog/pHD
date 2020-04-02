@@ -30,7 +30,7 @@ import me.ford.periodicholographicdisplays.users.YamlUserStorage;
 /**
  * PeriodicHolographicDisplays
  */
-public class PeriodicHolographicDisplays extends JavaPlugin {
+public class PeriodicHolographicDisplays extends JavaPlugin implements IPeriodicHolographicDisplays {
     private HologramStorage holograms;
     private Settings settings;
     private Messages messages;
