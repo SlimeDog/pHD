@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import me.ford.periodicholographicdisplays.commands.subcommands.SetSub;
 import me.ford.periodicholographicdisplays.holograms.AlwaysHologram;
+import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.mock.MockHologram;
 import me.ford.periodicholographicdisplays.mock.MockOPCommandSender;
@@ -114,20 +115,24 @@ public class CommandTests {
     }
 
     @Test
-    public void testSetLegal() {
+    public void testSetAlwaysLegal() {
         sender = new MockOPCommandSender(null);
 
         String holoName = "ALWAYSNAME";
         PeriodicType type = PeriodicType.ALWAYS;
         AlwaysHologram hologram = new AlwaysHologram(phd, new MockHologram(), holoName, 1.0, -1, true, null, -1, -1);
         phd.getHolograms().addHologram(hologram);
+        testSetForHologramType(hologram, holoName, type);
+    }
+
+    private void testSetForHologramType(FlashingHologram hologram, String holoName, PeriodicType type) {
         // /phd set <name> <type> distance 5
         Map<String, String> options = new HashMap<>();
         double distance = 5;
         String dist = String.valueOf(distance);
         options.put("distance", dist);
         String expected = phd.getMessages().getSetNewOptionsMessage(holoName, type, options);
-        testCommand(sender, null, "phd", new String[] { "set", holoName, PeriodicType.ALWAYS.name(), "distance", dist}, expected);
+        testCommand(sender, null, "phd", new String[] { "set", holoName, type.name(), "distance", dist}, expected);
         Assert.assertEquals(distance, hologram.getActivationDistance(), 0.01);
         // /phd set <name> <type> seconds <seconds>
         int seconds = 3;
@@ -135,7 +140,7 @@ public class CommandTests {
         options.clear();
         options.put("seconds", secs);
         expected = phd.getMessages().getSetNewOptionsMessage(holoName, type, options);
-        testCommand(sender, null, "phd", new String[] { "set", holoName, PeriodicType.ALWAYS.name(), "seconds", secs}, expected);
+        testCommand(sender, null, "phd", new String[] { "set", holoName, type.name(), "seconds", secs}, expected);
         Assert.assertEquals(seconds, hologram.getShowTime());
 
         // multiple
@@ -149,7 +154,7 @@ public class CommandTests {
         options.put("distance", dist);
         options.put("seconds", secs);
         expected = phd.getMessages().getSetNewOptionsMessage(holoName, type, options);
-        testCommand(sender, null, "phd", new String[] { "set", holoName, PeriodicType.ALWAYS.name(), "seconds", secs, "distance", dist}, expected);
+        testCommand(sender, null, "phd", new String[] { "set", holoName, type.name(), "seconds", secs, "distance", dist}, expected);
         Assert.assertEquals(seconds, hologram.getShowTime());
         Assert.assertEquals(seconds, hologram.getShowTime());
     }
