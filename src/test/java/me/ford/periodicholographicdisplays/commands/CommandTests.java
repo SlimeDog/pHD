@@ -87,9 +87,12 @@ public class CommandTests {
         expected = new SetSub(phd.getHolograms(), phd.getLuckPermsHook(), phd.getSettings(),
                     phd.getMessages()).getUsage(sender);
         testCommand(sender, null, "phd", new String[] { "set", holoName, PeriodicType.NTIMES.name()}, expected);
-        // /phd set <name> <wrongtype> <option> <value>
+        // /phd set <name> <type> <option> <value>
         expected = phd.getMessages().getHologramNotTrackedMessage(holoName, PeriodicType.NTIMES);
         testCommand(sender, null, "phd", new String[] { "set", holoName, PeriodicType.NTIMES.name(), "option", "value"}, expected);
+        // /phd set <name> <type> <option> <value> <option2> # no value
+        expected = phd.getMessages().getNeedPairedOptionsMessage();
+        testCommand(sender, null, "phd", new String[] {"set", holoName, PeriodicType.NTIMES.name(), "option", "value", "option2"}, expected);
     }
 
 }
