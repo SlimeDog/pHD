@@ -11,9 +11,13 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 
 public class MockOPCommandSender implements CommandSender {
-    public final Consumer<String> messageConsumer;
+    public Consumer<String> messageConsumer;
 
     public MockOPCommandSender(Consumer<String> messageConsumer) {
+        this.messageConsumer = messageConsumer;
+    }
+
+    public void setMessageConsumer(Consumer<String> messageConsumer) {
         this.messageConsumer = messageConsumer;
     }
 
