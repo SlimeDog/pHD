@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.gmail.filoghost.holographicdisplays.commands.CommandValidator;
+import com.gmail.filoghost.holographicdisplays.exception.CommandException;
+import com.gmail.filoghost.holographicdisplays.object.NamedHologram;
+
 import org.bstats.bukkit.Metrics;
 
 import me.ford.periodicholographicdisplays.Settings.SettingIssue;
@@ -303,6 +307,15 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
 
         public String getExtra();
 
+    }
+
+    @Override
+    public NamedHologram getHologram(String name) {
+        try {
+            return CommandValidator.getNamedHologram(name);
+        } catch (CommandException e) {
+            return null;
+        }
     }
 
 }

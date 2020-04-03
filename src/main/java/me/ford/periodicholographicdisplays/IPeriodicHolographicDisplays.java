@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
 
+import com.gmail.filoghost.holographicdisplays.object.NamedHologram;
+
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -43,6 +45,8 @@ public interface IPeriodicHolographicDisplays {
     public OfflinePlayer getOfflinePlayer(UUID id);
 
     public JavaPlugin asPlugin();
+
+    public NamedHologram getHologram(String name);
 
     public UserStorage getUserStorage();
 

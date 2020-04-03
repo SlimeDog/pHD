@@ -10,6 +10,8 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.gmail.filoghost.holographicdisplays.object.NamedHologram;
+
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -207,6 +209,11 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
     @Override
     public List<World> getWorlds() {
         return new ArrayList<>();
+    }
+
+    @Override
+    public NamedHologram getHologram(String name) {
+        return null;
     }
     
 }
