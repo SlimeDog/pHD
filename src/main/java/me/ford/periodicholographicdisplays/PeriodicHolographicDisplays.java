@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bstats.bukkit.Metrics;
-import org.bukkit.World;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import me.ford.periodicholographicdisplays.Settings.SettingIssue;
 import me.ford.periodicholographicdisplays.Settings.StorageTypeException;
@@ -31,7 +29,7 @@ import me.ford.periodicholographicdisplays.users.YamlUserStorage;
 /**
  * PeriodicHolographicDisplays
  */
-public class PeriodicHolographicDisplays extends SchedulingPeriodicHolographicDisplays {
+public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisplays {
     private HologramStorage holograms;
     private Settings settings;
     private Messages messages;
@@ -111,11 +109,6 @@ public class PeriodicHolographicDisplays extends SchedulingPeriodicHolographicDi
             // TODO - check for updates
         }
         getLogger().info(messages.getActiveStorageMessage(getSettings().useDatabase()));
-    }
-
-    @Override
-    public List<World> getWorlds() {
-        return getServer().getWorlds();
     }
 
     private void scheduleCacheSizeCheck() {
@@ -253,11 +246,6 @@ public class PeriodicHolographicDisplays extends SchedulingPeriodicHolographicDi
         if (settings.onDebug()) {
             getLogger().info("[DEBUG] " + message);
         }
-    }
-
-    @Override
-    public JavaPlugin asPlugin() {
-        return this;
     }
 
     public static enum DefaultReloadIssue implements ReloadIssue {
