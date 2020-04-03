@@ -124,4 +124,30 @@ public abstract class SQLStorageBase {
         }
     }
 
+    public class SQLResponse {
+        private final ResultSet rs;
+        private final PreparedStatement statement;
+
+        public SQLResponse(ResultSet rs, PreparedStatement statement) {
+            this.rs = rs;
+            this.statement = statement;
+        }
+
+        public ResultSet getResultSet() {
+            return rs;
+        }
+
+        public boolean close() {
+            try {
+                rs.close();
+                statement.close();
+            } catch (SQLException e) {
+                phd.getLogger().log(Level.WARNING, "Issue while closing result set and/or statement", e);
+                return false;
+            }
+            return true;
+        }
+
+    }
+
 }
