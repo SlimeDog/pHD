@@ -193,7 +193,7 @@ public class CommandTests {
     }
 
     @Test
-    public void testSetIRLMTimeIllegal() {
+    public void testSetIRLTimeIllegal() {
         String holoName = "iRl";
         IRLTimeHologram hologram = new IRLTimeHologram(phd, new MockHologram(), holoName, 3.0, 10, 1250, true, null, 1.2, 1.3);
         phd.getHolograms().addHologram(hologram);
@@ -201,7 +201,7 @@ public class CommandTests {
     }
 
     @Test
-    public void testSetRLMTimeLegal() {
+    public void testSetIRLTimeLegal() {
 
         String holoName = "inRealLife";
         PeriodicType type = PeriodicType.IRLTIME;
