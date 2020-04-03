@@ -310,7 +310,7 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
     }
 
     @Override
-    public NamedHologram getHologram(String name) {
+    public NamedHologram getHDHologram(String name) {
         try {
             return CommandValidator.getNamedHologram(name);
         } catch (CommandException e) {

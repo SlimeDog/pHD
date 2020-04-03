@@ -212,7 +212,7 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
     }
 
     @Override
-    public NamedHologram getHologram(String name) {
+    public NamedHologram getHDHologram(String name) {
         return null;
     }
     

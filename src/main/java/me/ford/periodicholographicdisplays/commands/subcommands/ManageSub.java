@@ -129,7 +129,7 @@ public class ManageSub extends OptionPairSetSub {
         if (args.length < 1) {
             return false;
         }
-        NamedHologram holo = phd.getHologram(args[0]);
+        NamedHologram holo = phd.getHDHologram(args[0]);
         if(holo == null) {
             sender.sendMessage(messages.getHDHologramNotFoundMessage(args[0]));
             return true;

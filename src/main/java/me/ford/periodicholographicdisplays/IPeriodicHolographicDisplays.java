@@ -46,7 +46,7 @@ public interface IPeriodicHolographicDisplays {
 
     public JavaPlugin asPlugin();
 
-    public NamedHologram getHologram(String name);
+    public NamedHologram getHDHologram(String name);
 
     public UserStorage getUserStorage();
 
