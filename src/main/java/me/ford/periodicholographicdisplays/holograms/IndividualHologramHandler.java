@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
-import com.gmail.filoghost.holographicdisplays.object.NamedHologram;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -25,10 +24,10 @@ public class IndividualHologramHandler {
     private final Map<PeriodicType, FlashingHologram> holograms = new HashMap<>();
     private final Map<PeriodicType, FlashingHologram> toSave = new HashMap<>();
 
-    public IndividualHologramHandler(NamedHologram hologram) {
+    public IndividualHologramHandler(Hologram hologram, String name) {
         Validate.notNull(hologram, "Periodic hologram cannot be null");
         this.hologram = hologram;
-        this.name = hologram.getName();
+        this.name = name;
     }
 
     void addHologram(PeriodicType type, FlashingHologram holo) {
