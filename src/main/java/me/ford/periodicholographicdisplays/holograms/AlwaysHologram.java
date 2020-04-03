@@ -39,7 +39,7 @@ public class AlwaysHologram extends NTimesHologram {
         for (Player player : getHologram().getWorld().getEntitiesByClass(Player.class)) {
             if (hook != null && hook.isNPC(player))
                 continue;
-            if (!canSee(player)) {
+            if (!canSee(player) && isBeingShownTo(player)) {
                 hideFrom(player);
             } else {
                 attemptToShow(player);
