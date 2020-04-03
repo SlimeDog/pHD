@@ -1,10 +1,16 @@
 package me.ford.periodicholographicdisplays.mock;
 
-import com.gmail.filoghost.holographicdisplays.api.VisibilityManager;
+import com.gmail.filoghost.holographicdisplays.object.CraftHologram;
+import com.gmail.filoghost.holographicdisplays.object.CraftVisibilityManager;
 
 import org.bukkit.entity.Player;
 
-public class MockVisibilityManager implements VisibilityManager {
+public class MockVisibilityManager extends CraftVisibilityManager {
+
+    public MockVisibilityManager(CraftHologram hologram) {
+        super(hologram);
+        // TODO Auto-generated constructor stub
+    }
 
     @Override
     public void hideTo(Player player) {
