@@ -3,6 +3,7 @@ package me.ford.periodicholographicdisplays.commands;
 import org.junit.Test;
 
 import me.ford.periodicholographicdisplays.commands.subcommands.ManageSub;
+import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.mock.MockNamedHologram;
 
@@ -36,6 +37,12 @@ public class CommandManageTests extends BaseCommandTests {
         // phd manage existing <type> <option> <value> <option_with_no_value> # not ALWAYS
         expectedMessage = phd.getMessages().getNeedPairedOptionsMessage();
         testCommand(sender, null, "phd", new String[] {"manage", name, type.name(), "opt", "val", "opt2"}, expectedMessage);
+
+        // phd manage existing <type> <option> <value> # hologram already managed
+        NTimesHologram hologram = new NTimesHologram(phd, phd.getHDHologram(name), name, 2, 4, 5, true, null, -1, -1);
+        phd.getHolograms().addHologram(hologram);
+        expectedMessage = phd.getMessages().getHologramAlreadyManagedMessage(name, type);
+        testCommand(sender, null, "phd", new String[] {"manage", name, type.name(), "opt", "val"}, expectedMessage);
 
     }
 
