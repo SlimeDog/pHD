@@ -57,6 +57,7 @@ public class SQLUserStorage extends SQLStorageBase implements UserStorage {
                 String name = rs.getString("player_name");
                 map.put(uuid, name);
             }
+            rs.close();
         } catch (SQLException e) {
             phd.getLogger().log(Level.SEVERE, "Issue while loading UUIDs and player names!", e);
         }
