@@ -12,6 +12,7 @@ import org.junit.Test;
 import me.ford.periodicholographicdisplays.commands.subcommands.SetSub;
 import me.ford.periodicholographicdisplays.holograms.AlwaysHologram;
 import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
+import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.mock.MockHologram;
 import me.ford.periodicholographicdisplays.mock.MockOPCommandSender;
@@ -157,6 +158,28 @@ public class CommandTests {
         testCommand(sender, null, "phd", new String[] { "set", holoName, type.name(), "seconds", secs, "distance", dist}, expected);
         Assert.assertEquals(seconds, hologram.getShowTime());
         Assert.assertEquals(seconds, hologram.getShowTime());
+    }
+
+    @Test
+    public void testSetNtimesLegal() {
+        sender = new MockOPCommandSender(null);
+
+        String holoName = "NtimeSName";
+        PeriodicType type = PeriodicType.NTIMES;
+        NTimesHologram hologram = new NTimesHologram(phd, new MockHologram(), holoName, 3.0, 10, 5, true, null, 1.2, 1.3);
+        phd.getHolograms().addHologram(hologram);
+        testSetForHologramType(hologram, holoName, type);
+
+        // specific
+        // /phd set <name> <type> times 9
+        int times = 3;
+        String tms = String.valueOf(times);
+        Map<String, String> options = new HashMap<>();
+        options.clear();
+        options.put("times", tms);
+        String expected = phd.getMessages().getSetNewOptionsMessage(holoName, type, options);
+        testCommand(sender, null, "phd", new String[] { "set", holoName, type.name(), "times", tms}, expected);
+        Assert.assertEquals(times, hologram.getTimesToShow());
     }
 
 }
