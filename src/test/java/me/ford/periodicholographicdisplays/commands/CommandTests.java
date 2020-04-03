@@ -13,6 +13,7 @@ import me.ford.periodicholographicdisplays.commands.subcommands.SetSub;
 import me.ford.periodicholographicdisplays.holograms.AlwaysHologram;
 import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
 import me.ford.periodicholographicdisplays.holograms.IRLTimeHologram;
+import me.ford.periodicholographicdisplays.holograms.MCTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.mock.MockHologram;
@@ -218,6 +219,34 @@ public class CommandTests {
         String expected = phd.getMessages().getSetNewOptionsMessage(holoName, type, options);
         testCommand(sender, null, "phd", new String[] { "set", holoName, type.name(), "time", time}, expected);
         Assert.assertEquals(TimeUtils.parseHoursAndMinutesToSeconds(time), hologram.getTime());
+    }
+
+    @Test
+    public void testSetMCTimeIllegal() {
+        String holoName = "m2theC";
+        MCTimeHologram hologram = new MCTimeHologram(phd, new MockHologram(), holoName, 3.0, 10, 22000, true, null, 1.2, 1.3);
+        phd.getHolograms().addHologram(hologram);
+        testSetCommonIllegals(hologram, holoName, PeriodicType.ALWAYS);
+    }
+
+    @Test
+    public void testSetMCTimeLegal() {
+
+        String holoName = "mc4life";
+        PeriodicType type = PeriodicType.MCTIME;
+        MCTimeHologram hologram = new MCTimeHologram(phd, new MockHologram(), holoName, 3.0, 4, 2700, true, null, 1.2, 1.3);
+        phd.getHolograms().addHologram(hologram);
+        testSetForHologramType(hologram, holoName, type);
+
+        // specific
+        // /phd set <name> <type> time 15:40
+        String time = "15:40";
+        Map<String, String> options = new HashMap<>();
+        options.clear();
+        options.put("time", time);
+        String expected = phd.getMessages().getSetNewOptionsMessage(holoName, type, options);
+        testCommand(sender, null, "phd", new String[] { "set", holoName, type.name(), "time", time}, expected);
+        Assert.assertEquals(TimeUtils.parseMCTime(time), hologram.getTime());
     }
 
 }
