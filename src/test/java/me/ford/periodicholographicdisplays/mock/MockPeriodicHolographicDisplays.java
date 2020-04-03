@@ -6,12 +6,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -78,6 +80,11 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
 
     @Override
     public JavaPlugin asPlugin() {
+        return null;
+    }
+
+    @Override
+    public Player getPlayer(UUID id) {
         return null;
     }
 

@@ -4,10 +4,12 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -34,6 +36,8 @@ public interface IPeriodicHolographicDisplays {
     public FileConfiguration getConfig();
 
     public List<World> getWorlds();
+
+    public Player getPlayer(UUID id);
 
     public JavaPlugin asPlugin();
 
