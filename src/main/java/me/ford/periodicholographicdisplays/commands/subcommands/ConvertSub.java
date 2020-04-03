@@ -1,5 +1,6 @@
 package me.ford.periodicholographicdisplays.commands.subcommands;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -14,6 +15,7 @@ import me.ford.periodicholographicdisplays.holograms.storage.SQLStorage;
 import me.ford.periodicholographicdisplays.holograms.storage.Storage;
 import me.ford.periodicholographicdisplays.holograms.storage.YAMLStorage;
 import me.ford.periodicholographicdisplays.holograms.storage.storageimport.StorageConverter;
+import me.ford.periodicholographicdisplays.storage.sqlite.SQLStorageBase;
 
 /**
  * ImportSub
@@ -67,6 +69,13 @@ public class ConvertSub extends SubCommand {
             return true;
         }
 
+        // find out if the source file exists
+        File sourceFile = new File(phd.getDataFolder(), type == ConvertTypes.SQLITE_TO_YAML ? SQLStorageBase.DATABSE_NAME : YAMLStorage.FILE_NAME);
+        if (!sourceFile.exists()) {
+            sender.sendMessage(messages.getStorageTypeDoesNotExistMessage(from));
+            return true;
+        }
+
         YAMLStorage yamlStorage;
         if (phd.getSettings().useDatabase()) {
             if (sqlStorage == null)
@@ -93,13 +102,6 @@ public class ConvertSub extends SubCommand {
             default:
                 sender.sendMessage(messages.getUnrecognizedStorageTypeMessage(from, to));
                 return true;
-        }
-
-        // find out if there is an instance of SOURCE storage type
-        boolean sourceHasData = sourceStorage.hasData();
-        if (!sourceHasData) {
-            sender.sendMessage(messages.getStorageTypeDoesNotExistMessage(from));
-            return true;
         }
 
         // find out if there is a previous instance of target storage type

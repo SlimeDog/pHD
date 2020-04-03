@@ -13,7 +13,7 @@ import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
  * SQLStorageBase
  */
 public abstract class SQLStorageBase {
-    private static final String DATABSE_NAME = "database.db";
+    public static final String DATABSE_NAME = "database.db";
     protected static Connection conn; // shared connection
     private final PeriodicHolographicDisplays phd;
 

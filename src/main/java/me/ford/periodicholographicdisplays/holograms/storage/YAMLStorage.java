@@ -24,7 +24,7 @@ import me.ford.periodicholographicdisplays.storage.yaml.CustomConfigHandler;
  * YAMLStorage
  */
 public class YAMLStorage extends CustomConfigHandler implements Storage {
-    private static final String FILE_NAME = "database.yml";
+    public static final String FILE_NAME = "database.yml";
     private final PeriodicHolographicDisplays phd;
 
     public YAMLStorage(PeriodicHolographicDisplays phd) {
