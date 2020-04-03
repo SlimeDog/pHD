@@ -147,57 +147,52 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
     public BukkitTask runTask(Runnable runnable) {
         // TODO Auto-generated method stub
         debug("Usually would run this a tick later, but just running now ...");
-        runNow(runnable);
-        return null;
+        return runNow(runnable);
     }
 
     @Override
     public BukkitTask runTaskLater(Runnable runnable, long delay) {
         // TODO Auto-generated method stub
         debug("Was supposed to run task later, but just running now ...");
-        runNow(runnable);
-        return null;
+        return runNow(runnable);
     }
 
     @Override
     public BukkitTask runTaskTimer(Runnable runnable, long delay, long period) {
         // TODO Auto-generated method stub
         debug("Was supposed to run task timer, but just running now ...");
-        runNow(runnable);
-        return null;
+        return runNow(runnable);
     }
 
     @Override
     public BukkitTask runTaskAsynchronously(Runnable runnable) {
         // TODO Auto-generated method stub
         debug("Was supposed to run task async, but just running in sync ...");
-        runNow(runnable);
-        return null;
+        return runNow(runnable);
     }
 
     @Override
     public BukkitTask runTaskLaterAsynchronously(Runnable runnable, long delay) {
         // TODO Auto-generated method stub
         debug("Was supposed to run task later async, but just running now ...");
-        runNow(runnable);
-        return null;
+        return runNow(runnable);
     }
 
     @Override
     public BukkitTask runTaskTimerAsynchronously(Runnable runnable, long delay, long period) {
         // TODO Auto-generated method stub
         debug("Was supposed to run task timer async, but just running now ...");
-        runNow(runnable);
-        return null;
+        return runNow(runnable);
     }
 
-    private void runNow(Runnable runnable) {
+    private MockBukkitTask runNow(Runnable runnable) {
         try {
             runnable.run();
         } catch (Throwable e) {
             if (e instanceof AssertionError) throw e;
             getLogger().log(Level.SEVERE, "Unexpected error while running task:", e);
         }
+        return new MockBukkitTask();
     }
 
     public void clear() {
