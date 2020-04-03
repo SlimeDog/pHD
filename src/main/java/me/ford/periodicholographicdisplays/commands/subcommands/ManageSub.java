@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.gmail.filoghost.holographicdisplays.commands.CommandValidator;
-import com.gmail.filoghost.holographicdisplays.exception.CommandException;
 import com.gmail.filoghost.holographicdisplays.object.NamedHologram;
 
 import org.bukkit.command.CommandSender;
@@ -131,10 +129,8 @@ public class ManageSub extends OptionPairSetSub {
         if (args.length < 1) {
             return false;
         }
-        NamedHologram holo;
-        try {
-            holo = CommandValidator.getNamedHologram(args[0]);
-        } catch (CommandException e) {
+        NamedHologram holo = phd.getHologram(args[0]);
+        if(holo == null) {
             sender.sendMessage(messages.getHDHologramNotFoundMessage(args[0]));
             return true;
         }
