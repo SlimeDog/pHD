@@ -61,8 +61,9 @@ public abstract class SQLStorageBase {
     protected boolean tableExists(String table) {
         checkConnection();
         ResultSet rs;
+        PreparedStatement statement;
         try {
-            PreparedStatement statement = conn.prepareStatement("SHOW TABLES LIKE '" + table + "';");
+            statement = conn.prepareStatement("SHOW TABLES LIKE '" + table + "';");
             rs = statement.executeQuery();
         } catch (SQLException e) {
             phd.getLogger().log(Level.WARNING, "Unable to check if table exists: " + table, e);
@@ -71,6 +72,7 @@ public abstract class SQLStorageBase {
         try {
             boolean can = rs.next();
             rs.close();
+            statement.close();
             return can;
         } catch (SQLException e) {
             phd.getLogger().log(Level.WARNING, "Unable to check if table exists(next): " + table, e);
@@ -100,6 +102,7 @@ public abstract class SQLStorageBase {
                 i++;
             }
             statement.executeUpdate();
+            statement.close();
             return true;
         } catch (SQLException e) {
             phd.getLogger().log(Level.WARNING, "Unable to update QUERY: " + query, e);
