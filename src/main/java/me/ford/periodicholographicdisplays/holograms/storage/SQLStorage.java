@@ -244,7 +244,7 @@ public class SQLStorage extends SQLStorageBase implements Storage {
     // player_UUID, hologram_name, hologram_type, views
     private void addShownTo(String name, NTimesTypeInfo info) {
         String query = "SELECT * FROM " + playerTableName + " WHERE hologram_name=?;";
-        SQLResponse sr = executeQuery(query);
+        SQLResponse sr = executeQuery(query, name);
         if (sr == null)
             return;
         ResultSet rs = sr.getResultSet();
