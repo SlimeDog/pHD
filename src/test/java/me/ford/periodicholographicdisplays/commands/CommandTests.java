@@ -78,18 +78,18 @@ public class CommandTests {
         phd.getHolograms().addHologram(hologram);
         // /phd set <name>
         sender = new MockOPCommandSender(null);
-        String expected1 = new SetSub(phd.getHolograms(), null, phd.getSettings(), phd.getMessages()).getUsage(sender);
-        testCommand(sender, null, "phd", new String[] { "set", holoName}, expected1);
+        String expected = new SetSub(phd.getHolograms(), null, phd.getSettings(), phd.getMessages()).getUsage(sender);
+        testCommand(sender, null, "phd", new String[] { "set", holoName}, expected);
         // /phd set <name> 1
-        expected1 = phd.getMessages().getTypeNotRecognizedMessage("1");
-        testCommand(sender, null, "phd", new String[] { "set", holoName, "1"}, expected1);
+        expected = phd.getMessages().getTypeNotRecognizedMessage("1");
+        testCommand(sender, null, "phd", new String[] { "set", holoName, "1"}, expected);
         // /phd set <name> <wrongtype>
-        expected1 = new SetSub(phd.getHolograms(), phd.getLuckPermsHook(), phd.getSettings(),
+        expected = new SetSub(phd.getHolograms(), phd.getLuckPermsHook(), phd.getSettings(),
                     phd.getMessages()).getUsage(sender);
-        testCommand(sender, null, "phd", new String[] { "set", holoName, PeriodicType.NTIMES.name()}, expected1);
+        testCommand(sender, null, "phd", new String[] { "set", holoName, PeriodicType.NTIMES.name()}, expected);
         // /phd set <name> <wrongtype> <option> <value>
-        expected1 = phd.getMessages().getHologramNotTrackedMessage(holoName, PeriodicType.NTIMES);
-        testCommand(sender, null, "phd", new String[] { "set", holoName, PeriodicType.NTIMES.name(), "option", "value"}, expected1);
+        expected = phd.getMessages().getHologramNotTrackedMessage(holoName, PeriodicType.NTIMES);
+        testCommand(sender, null, "phd", new String[] { "set", holoName, PeriodicType.NTIMES.name(), "option", "value"}, expected);
     }
 
 }
