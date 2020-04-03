@@ -10,7 +10,7 @@ import java.util.Set;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 
 import org.apache.commons.lang.Validate;
-import org.bukkit.Bukkit;
+import org.bukkit.plugin.PluginManager;
 
 import me.ford.periodicholographicdisplays.holograms.events.StartedManagingHologramEvent;
 import me.ford.periodicholographicdisplays.holograms.events.StoppedManagingHologramEvent;
@@ -19,13 +19,15 @@ import me.ford.periodicholographicdisplays.holograms.events.StoppedManagingHolog
  * IndividualHologramHandler
  */
 public class IndividualHologramHandler {
+    private final PluginManager pm;
     private final Hologram hologram;
     private final String name;
     private final Map<PeriodicType, FlashingHologram> holograms = new HashMap<>();
     private final Map<PeriodicType, FlashingHologram> toSave = new HashMap<>();
 
-    public IndividualHologramHandler(Hologram hologram, String name) {
+    public IndividualHologramHandler(PluginManager pm, Hologram hologram, String name) {
         Validate.notNull(hologram, "Periodic hologram cannot be null");
+        this.pm = pm;
         this.hologram = hologram;
         this.name = name;
     }
@@ -40,7 +42,7 @@ public class IndividualHologramHandler {
         Validate.isTrue(holo.getType() == type,
                 "Wrong type of hologram. Expected " + type.name() + " got " + holo.getType().name());
         Validate.isTrue(holo.getName().equals(name), "Can only handle pHD holograms of the same HD hologram");
-        Bukkit.getPluginManager().callEvent(new StartedManagingHologramEvent(holo));
+        pm.callEvent(new StartedManagingHologramEvent(holo));
         holograms.put(type, holo);
         if (!wasLoaded)
             toSave.put(type, holo);
@@ -50,7 +52,7 @@ public class IndividualHologramHandler {
         Validate.notNull(hologram, "Cannot remove null hologram");
         Validate.isTrue(this.hologram == hologram.getHologram(),
                 "Can only add pHD holograms that affect the same HD hologram");
-        Bukkit.getPluginManager().callEvent(new StoppedManagingHologramEvent(hologram));
+        pm.callEvent(new StoppedManagingHologramEvent(hologram));
         holograms.remove(hologram.getType());
         hologram.resetVisibility();
         if (holograms.isEmpty())

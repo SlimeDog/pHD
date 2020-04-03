@@ -101,7 +101,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
                     throw new IllegalArgumentException("Unexpected pHD type " + hInfo.getType());
             }
             if (handler == null) {
-                handler = new IndividualHologramHandler(holo, hologram.getName());
+                handler = new IndividualHologramHandler(getPluginManager(), holo, hologram.getName());
             }
             handler.addHologram(hInfo.getType(), hologram, !imported);
 
@@ -185,7 +185,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         Validate.isTrue(hologram.getLocation().getWorld() == getWorld(), "Cannot add holograms in a different world!");
         IndividualHologramHandler handler = getHandler(hologram.getName());
         if (handler == null) {
-            handler = new IndividualHologramHandler(hologram.getHologram(), hologram.getName());
+            handler = new IndividualHologramHandler(getPluginManager(), hologram.getHologram(), hologram.getName());
             addHandler(hologram.getName(), handler);
         }
         handler.addHologram(hologram.getType(), hologram, wasLoaded);
