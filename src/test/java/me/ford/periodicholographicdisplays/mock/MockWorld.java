@@ -1,6 +1,7 @@
 package me.ford.periodicholographicdisplays.mock;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -278,8 +279,7 @@ public class MockWorld implements World {
 
     @Override
     public <T extends Entity> Collection<T> getEntitiesByClass(Class<T> cls) {
-        // TODO Auto-generated method stub
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
