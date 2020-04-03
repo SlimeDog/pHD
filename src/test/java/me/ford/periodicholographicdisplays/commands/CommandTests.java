@@ -1,5 +1,6 @@
 package me.ford.periodicholographicdisplays.commands;
 
+import org.bukkit.command.Command;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -63,35 +64,32 @@ public class CommandTests {
         command.onCommand(sender, null, "phd", new String[] { "set", "1" });
     }
 
+    private void testCommand(MockOPCommandSender sender, Command command, String label, String args[], String expectedMessage) {
+        sender.setMessageConsumer((msg) -> {
+            Assert.assertEquals(expectedMessage, msg);
+        });
+        this.command.onCommand(sender, command, label, args);
+    }
+
     @Test
     public void testSetCommand2() {
         String holoName = "ALWAYSNAME";
         AlwaysHologram hologram = new AlwaysHologram(phd, new MockHologram(), holoName, 1.0, -1, true, null, -1, -1);
         phd.getHolograms().addHologram(hologram);
         // /phd set <name>
-        sender = new MockOPCommandSender((msg) -> {
-            Assert.assertEquals(
-                    new SetSub(phd.getHolograms(), null, phd.getSettings(), phd.getMessages()).getUsage(sender), msg);
-        });
-        command.onCommand(sender, null, "phd", new String[] { "set", holoName });
-        // /phd set 1
-        sender = new MockOPCommandSender((msg) -> {
-            Assert.assertEquals(phd.getMessages().getTypeNotRecognizedMessage("1"), msg);
-        });
-        command.onCommand(sender, null, "phd", new String[] { "set", holoName, "1" });
+        sender = new MockOPCommandSender(null);
+        String expected1 = new SetSub(phd.getHolograms(), null, phd.getSettings(), phd.getMessages()).getUsage(sender);
+        testCommand(sender, null, "phd", new String[] { "set", holoName}, expected1);
+        // /phd set <name> 1
+        expected1 = phd.getMessages().getTypeNotRecognizedMessage("1");
+        testCommand(sender, null, "phd", new String[] { "set", holoName, "1"}, expected1);
         // /phd set <name> <wrongtype>
-        PeriodicType type = PeriodicType.NTIMES;
-        sender = new MockOPCommandSender((msg) -> {
-            String expected = new SetSub(phd.getHolograms(), phd.getLuckPermsHook(), phd.getSettings(),
+        expected1 = new SetSub(phd.getHolograms(), phd.getLuckPermsHook(), phd.getSettings(),
                     phd.getMessages()).getUsage(sender);
-            Assert.assertEquals(expected, msg);
-        });
-        command.onCommand(sender, null, "phd", new String[] { "set", holoName, type.name() });
+        testCommand(sender, null, "phd", new String[] { "set", holoName, PeriodicType.NTIMES.name()}, expected1);
         // /phd set <name> <wrongtype> <option> <value>
-        sender = new MockOPCommandSender((msg) -> {
-            Assert.assertEquals(phd.getMessages().getHologramNotTrackedMessage(holoName, type), msg);
-        });
-        command.onCommand(sender, null, "phd", new String[] { "set", holoName, type.name(), "option", "value" });
+        expected1 = phd.getMessages().getHologramNotTrackedMessage(holoName, PeriodicType.NTIMES);
+        testCommand(sender, null, "phd", new String[] { "set", holoName, PeriodicType.NTIMES.name(), "option", "value"}, expected1);
     }
 
 }
