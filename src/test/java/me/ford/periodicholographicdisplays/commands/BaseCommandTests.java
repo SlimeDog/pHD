@@ -1,5 +1,6 @@
 package me.ford.periodicholographicdisplays.commands;
 
+
 import org.bukkit.command.Command;
 import org.junit.After;
 import org.junit.Assert;
@@ -46,6 +47,9 @@ public abstract class BaseCommandTests {
         testCommand(sender, null, "phd", new String[] {commandName, holoName, "1"}, expected);
         // /phd set <name> <wrongtype>
         expected = usageMessage;
+        if (!isSet && testType == PeriodicType.ALWAYS) {
+            expected = phd.getMessages().getHologramAlreadyManagedMessage(holoName, testType);
+        }
         testCommand(sender, null, "phd", new String[] {commandName, holoName, testType.name()}, expected);
         // /phd set <name> <type> <option> <value>
         if (isSet) {

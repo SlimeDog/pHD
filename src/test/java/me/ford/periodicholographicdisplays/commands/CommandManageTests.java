@@ -3,6 +3,7 @@ package me.ford.periodicholographicdisplays.commands;
 import org.junit.Test;
 
 import me.ford.periodicholographicdisplays.commands.subcommands.ManageSub;
+import me.ford.periodicholographicdisplays.holograms.AlwaysHologram;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.mock.MockNamedHologram;
@@ -46,13 +47,23 @@ public class CommandManageTests extends BaseCommandTests {
     }
 
     @Test
-    public void testManageIllegalGeneral() {
+    public void testManageIllegalNtimes() {
         String name = "hdHol0gram";
         MockNamedHologram mnh = new MockNamedHologram(name);
         phd.putHDHologram(name, mnh);
         NTimesHologram hologram = new NTimesHologram(phd, mnh, name, 2.2, 6, 4, true, "super.perms", 4, 2);
         phd.getHolograms().addHologram(hologram);
         this.testSetManageCommonIllegals(hologram, name, PeriodicType.NTIMES, false);
+    }
+
+    @Test
+    public void testManageIllegalAlways() {
+        String name = "ALW4YS";
+        MockNamedHologram mnh = new MockNamedHologram(name);
+        phd.putHDHologram(name, mnh);
+        AlwaysHologram hologram = new AlwaysHologram(phd, mnh, name, 2.2, 6, true, null, 4, 2);
+        phd.getHolograms().addHologram(hologram);
+        this.testSetManageCommonIllegals(hologram, name, PeriodicType.ALWAYS, false);
     }
 
 }
