@@ -28,6 +28,7 @@ public class CommandTests {
     public void setup() {
         phd = new MockPeriodicHolographicDisplays();
         command = new PHDCommand(phd, new MockPluginManager());
+        sender = new MockOPCommandSender(null);
     }
 
     @After
@@ -76,7 +77,8 @@ public class CommandTests {
         this.command.onCommand(sender, command, label, args);
     }
 
-    private void testSetCommonIllegals(FlashingHologram hologram, String holoName) {
+    private void testSetCommonIllegals(FlashingHologram hologram, String holoName, PeriodicType wrongType) {
+        // /phd set <name>
         String expected = new SetSub(phd.getHolograms(), null, phd.getSettings(), phd.getMessages()).getUsage(sender);
         testCommand(sender, null, "phd", new String[] { "set", holoName}, expected);
         // /phd set <name> 1
@@ -85,13 +87,13 @@ public class CommandTests {
         // /phd set <name> <wrongtype>
         expected = new SetSub(phd.getHolograms(), phd.getLuckPermsHook(), phd.getSettings(),
                     phd.getMessages()).getUsage(sender);
-        testCommand(sender, null, "phd", new String[] { "set", holoName, PeriodicType.NTIMES.name()}, expected);
+        testCommand(sender, null, "phd", new String[] { "set", holoName, wrongType.name()}, expected);
         // /phd set <name> <type> <option> <value>
-        expected = phd.getMessages().getHologramNotTrackedMessage(holoName, PeriodicType.NTIMES);
-        testCommand(sender, null, "phd", new String[] { "set", holoName, PeriodicType.NTIMES.name(), "option", "value"}, expected);
+        expected = phd.getMessages().getHologramNotTrackedMessage(holoName, wrongType);
+        testCommand(sender, null, "phd", new String[] { "set", holoName, wrongType.name(), "option", "value"}, expected);
         // /phd set <name> <type> <option> <value> <option2> # no value
         expected = phd.getMessages().getNeedPairedOptionsMessage();
-        testCommand(sender, null, "phd", new String[] {"set", holoName, PeriodicType.NTIMES.name(), "option", "value", "option2"}, expected);
+        testCommand(sender, null, "phd", new String[] {"set", holoName, wrongType.name(), "option", "value", "option2"}, expected);
     }
 
     @Test
@@ -99,15 +101,11 @@ public class CommandTests {
         String holoName = "ALWAYSNAME";
         AlwaysHologram hologram = new AlwaysHologram(phd, new MockHologram(), holoName, 1.0, -1, true, null, -1, -1);
         phd.getHolograms().addHologram(hologram);
-        // /phd set <name>
-        sender = new MockOPCommandSender(null);
-        testSetCommonIllegals(hologram, holoName);
+        testSetCommonIllegals(hologram, holoName, PeriodicType.NTIMES);
     }
 
     @Test
     public void testSetIllegal() {
-        sender = new MockOPCommandSender(null);
-
         String holoName = "ALWAYSNAME";
         AlwaysHologram hologram = new AlwaysHologram(phd, new MockHologram(), holoName, 1.0, -1, true, null, -1, -1);
         phd.getHolograms().addHologram(hologram);
@@ -121,7 +119,6 @@ public class CommandTests {
 
     @Test
     public void testSetAlwaysLegal() {
-        sender = new MockOPCommandSender(null);
 
         String holoName = "ALWAYSNAME";
         PeriodicType type = PeriodicType.ALWAYS;
@@ -166,7 +163,6 @@ public class CommandTests {
 
     @Test
     public void testSetNtimesLegal() {
-        sender = new MockOPCommandSender(null);
 
         String holoName = "NtimeSName";
         PeriodicType type = PeriodicType.NTIMES;
