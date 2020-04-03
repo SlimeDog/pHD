@@ -14,6 +14,10 @@ import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 
 public class MockHologram implements Hologram {
+    private final VisibilityManager vm = new MockVisibilityManager();
+    private final World world = new MockWorld("mockery");
+    private final Random rnd = ThreadLocalRandom.current();
+    private final Location loc = new Location(world, rnd.nextDouble(), rnd.nextDouble(), rnd.nextDouble());
 
     @Override
     public ItemLine appendItemLine(ItemStack arg0) {
@@ -59,20 +63,17 @@ public class MockHologram implements Hologram {
 
     @Override
     public Location getLocation() {
-        Random rnd = ThreadLocalRandom.current();
-        return new Location(new MockWorld("mockery"), rnd.nextDouble(), rnd.nextDouble(), rnd.nextDouble());
+        return loc;
     }
 
     @Override
     public VisibilityManager getVisibilityManager() {
-        // TODO Auto-generated method stub
-        return null;
+        return vm;
     }
 
     @Override
     public World getWorld() {
-        // TODO Auto-generated method stub
-        return null;
+        return world;
     }
 
     @Override
