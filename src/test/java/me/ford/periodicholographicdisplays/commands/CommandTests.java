@@ -12,12 +12,14 @@ import org.junit.Test;
 import me.ford.periodicholographicdisplays.commands.subcommands.SetSub;
 import me.ford.periodicholographicdisplays.holograms.AlwaysHologram;
 import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
+import me.ford.periodicholographicdisplays.holograms.IRLTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.mock.MockHologram;
 import me.ford.periodicholographicdisplays.mock.MockOPCommandSender;
 import me.ford.periodicholographicdisplays.mock.MockPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.mock.MockPluginManager;
+import me.ford.periodicholographicdisplays.util.TimeUtils;
 
 public class CommandTests {
     private MockPeriodicHolographicDisplays phd;
@@ -188,6 +190,34 @@ public class CommandTests {
         String expected = phd.getMessages().getSetNewOptionsMessage(holoName, type, options);
         testCommand(sender, null, "phd", new String[] { "set", holoName, type.name(), "times", tms}, expected);
         Assert.assertEquals(times, hologram.getTimesToShow());
+    }
+
+    @Test
+    public void testSetIRLMTimeIllegal() {
+        String holoName = "iRl";
+        IRLTimeHologram hologram = new IRLTimeHologram(phd, new MockHologram(), holoName, 3.0, 10, 1250, true, null, 1.2, 1.3);
+        phd.getHolograms().addHologram(hologram);
+        testSetCommonIllegals(hologram, holoName, PeriodicType.ALWAYS);
+    }
+
+    @Test
+    public void testSetRLMTimeLegal() {
+
+        String holoName = "inRealLife";
+        PeriodicType type = PeriodicType.IRLTIME;
+        IRLTimeHologram hologram = new IRLTimeHologram(phd, new MockHologram(), holoName, 3.0, 4, 2400, true, null, 1.2, 1.3);
+        phd.getHolograms().addHologram(hologram);
+        testSetForHologramType(hologram, holoName, type);
+
+        // specific
+        // /phd set <name> <type> time 15:40
+        String time = "15:40";
+        Map<String, String> options = new HashMap<>();
+        options.clear();
+        options.put("time", time);
+        String expected = phd.getMessages().getSetNewOptionsMessage(holoName, type, options);
+        testCommand(sender, null, "phd", new String[] { "set", holoName, type.name(), "time", time}, expected);
+        Assert.assertEquals(TimeUtils.parseHoursAndMinutesToSeconds(time), hologram.getTime());
     }
 
 }
