@@ -11,6 +11,7 @@ import com.gmail.filoghost.holographicdisplays.object.NamedHologram;
 import org.apache.commons.lang.Validate;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
 
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.holograms.storage.HologramInfo;
@@ -31,8 +32,8 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
     private final Storage storage;
     private final NPCHook hook;
 
-    public WorldHologramStorage(IPeriodicHolographicDisplays plugin, World world, Storage storage) {
-        super(plugin, world);
+    public WorldHologramStorage(IPeriodicHolographicDisplays plugin, PluginManager pm, World world, Storage storage) {
+        super(plugin, pm, world);
         this.plugin = plugin;
         this.storage = storage;
         this.hook = plugin.getNPCHook();

@@ -109,7 +109,7 @@ public class HologramStorage {
     }
 
     public void newWorld(World world) {
-        holograms.put(world, new WorldHologramStorage(plugin, world, storage));
+        holograms.put(world, new WorldHologramStorage(plugin, pm, world, storage));
         for (HDHologramInfo info : danglingInfos) {
             loaded(info, false); // it'll be removed if it fits
         }
@@ -123,7 +123,7 @@ public class HologramStorage {
         Validate.notNull(world, "Cannot get holograms of a null world!");
         WorldHologramStorage storage = holograms.get(world);
         if (storage == null) {
-            storage = new WorldHologramStorage(plugin, world, this.storage);
+            storage = new WorldHologramStorage(plugin, pm, world, this.storage);
             holograms.put(world, storage);
         }
         return storage;

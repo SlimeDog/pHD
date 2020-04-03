@@ -11,6 +11,7 @@ import java.util.Set;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.plugin.PluginManager;
 
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.holograms.perchunk.PerChunkHologramHandler;
@@ -26,11 +27,11 @@ public abstract class WorldHologramStorageBase {
     private final Set<IndividualHologramHandler> loadedHandlers = new HashSet<>();
     private final PerChunkHologramHandler perChunkHandler;
 
-    WorldHologramStorageBase(IPeriodicHolographicDisplays phd, World world) {
+    WorldHologramStorageBase(IPeriodicHolographicDisplays phd, PluginManager pm, World world) {
         this.phd = phd;
         this.world = world;
         perChunkHandler = new PerChunkHologramHandler();
-        new PerChunkListener(world, (chunk) -> chunkLoaded(chunk), (chunk) -> chunkUnloaded(chunk));
+        new PerChunkListener(phd, pm, world, (chunk) -> chunkLoaded(chunk), (chunk) -> chunkUnloaded(chunk));
     }
 
     private void chunkLoaded(Chunk chunk) {
