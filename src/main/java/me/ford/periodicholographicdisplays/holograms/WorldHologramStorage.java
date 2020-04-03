@@ -28,13 +28,11 @@ import me.ford.periodicholographicdisplays.holograms.storage.Storage.HDHologramI
  * Storage
  */
 public class WorldHologramStorage extends WorldHologramStorageBase {
-    private final IPeriodicHolographicDisplays plugin;
     private final Storage storage;
     private final NPCHook hook;
 
     public WorldHologramStorage(IPeriodicHolographicDisplays plugin, PluginManager pm, World world, Storage storage) {
         super(plugin, pm, world);
-        this.plugin = plugin;
         this.storage = storage;
         this.hook = plugin.getNPCHook();
     }
@@ -79,22 +77,22 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
             double flashOff = hInfo.getFlashOff();
             switch (hInfo.getType()) {
                 case MCTIME:
-                    hologram = new MCTimeHologram(plugin, holo, info.getHoloName(), distance, seconds,
+                    hologram = new MCTimeHologram(getPlugin(), holo, info.getHoloName(), distance, seconds,
                             ((MCTimeTypeInfo) typeInfo).getAtTime(), false, hInfo.getPermissions(), flashOn, flashOff);
                     break;
                 case IRLTIME:
-                    hologram = new IRLTimeHologram(plugin, holo, info.getHoloName(), distance, seconds,
+                    hologram = new IRLTimeHologram(getPlugin(), holo, info.getHoloName(), distance, seconds,
                             ((IRLTimeTypeInfo) typeInfo).getAtTime(), false, hInfo.getPermissions(), flashOn, flashOff);
                     break;
                 case NTIMES:
                     NTimesTypeInfo ntimesInfo = (NTimesTypeInfo) typeInfo;
-                    NTimesHologram ntimes = new NTimesHologram(plugin, holo, info.getHoloName(), distance, seconds,
+                    NTimesHologram ntimes = new NTimesHologram(getPlugin(), holo, info.getHoloName(), distance, seconds,
                             ntimesInfo.getShowTimes(), false, hInfo.getPermissions(), flashOn, flashOff);
                     ntimes.addAllShownTo(ntimesInfo.getShownToTimes());
                     hologram = ntimes;
                     break;
                 case ALWAYS:
-                    hologram = new AlwaysHologram(plugin, holo, info.getHoloName(), distance, seconds, false,
+                    hologram = new AlwaysHologram(getPlugin(), holo, info.getHoloName(), distance, seconds, false,
                             hInfo.getPermissions(), flashOn, flashOff);
                     break;
                 default:
@@ -106,7 +104,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
             handler.addHologram(hInfo.getType(), hologram, !imported);
 
         }
-        plugin.debug("Loaded pHD " + handler.getName() + " with types " + handler.getTypes() + " in "
+        getPlugin().debug("Loaded pHD " + handler.getName() + " with types " + handler.getTypes() + " in "
                 + getWorld().getName());
         if (handler != null) {
             addHandler(handler.getName(), handler);
@@ -141,10 +139,10 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         }
         if (infos.isEmpty())
             return false;
-        if (plugin.getSettings().onDebug()) {
-            plugin.debug("in world " + getWorld().getName() + " for reason " + reason.name() + " saving:");
+        if (getPlugin().getSettings().onDebug()) {
+            getPlugin().debug("in world " + getWorld().getName() + " for reason " + reason.name() + " saving:");
             for (HDHologramInfo info : infos) {
-                plugin.debug("" + info);
+                getPlugin().debug("" + info);
             }
         }
         storage.saveHolograms(infos, inSync);
