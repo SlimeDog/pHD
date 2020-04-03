@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
@@ -73,6 +74,11 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
     @Override
     public FileConfiguration getConfig() {
         return config;
+    }
+
+    @Override
+    public JavaPlugin asPlugin() {
+        return null;
     }
 
     @Override

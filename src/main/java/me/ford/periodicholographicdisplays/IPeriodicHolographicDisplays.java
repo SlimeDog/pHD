@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.ReloadIssue;
@@ -33,6 +34,8 @@ public interface IPeriodicHolographicDisplays {
     public FileConfiguration getConfig();
 
     public List<World> getWorlds();
+
+    public JavaPlugin asPlugin();
 
     public UserStorage getUserStorage();
 
