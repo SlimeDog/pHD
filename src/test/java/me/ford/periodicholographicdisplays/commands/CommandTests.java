@@ -162,6 +162,14 @@ public class CommandTests {
     }
 
     @Test
+    public void testSetNtimesIllegal() {
+        String holoName = "Nt0imeSName";
+        NTimesHologram hologram = new NTimesHologram(phd, new MockHologram(), holoName, 3.0, 10, 5, true, null, 1.2, 1.3);
+        phd.getHolograms().addHologram(hologram);
+        testSetCommonIllegals(hologram, holoName, PeriodicType.ALWAYS);
+    }
+
+    @Test
     public void testSetNtimesLegal() {
 
         String holoName = "NtimeSName";
