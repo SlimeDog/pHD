@@ -23,12 +23,14 @@ import me.ford.periodicholographicdisplays.listeners.PerChunkListener;
 public abstract class WorldHologramStorageBase {
     private final World world;
     private final IPeriodicHolographicDisplays phd;
+    private final PluginManager pm;
     private final Map<String, IndividualHologramHandler> holograms = new HashMap<>();
     private final Set<IndividualHologramHandler> loadedHandlers = new HashSet<>();
     private final PerChunkHologramHandler perChunkHandler;
 
     WorldHologramStorageBase(IPeriodicHolographicDisplays phd, PluginManager pm, World world) {
         this.phd = phd;
+        this.pm = pm;
         this.world = world;
         perChunkHandler = new PerChunkHologramHandler();
         new PerChunkListener(phd, pm, world, (chunk) -> chunkLoaded(chunk), (chunk) -> chunkUnloaded(chunk));
@@ -44,6 +46,10 @@ public abstract class WorldHologramStorageBase {
 
     public IPeriodicHolographicDisplays getPlugin() {
         return phd;
+    }
+
+    public PluginManager getPluginManager() {
+        return pm;
     }
 
     public World getWorld() {
