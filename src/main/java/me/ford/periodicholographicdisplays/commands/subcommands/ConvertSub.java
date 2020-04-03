@@ -107,8 +107,6 @@ public class ConvertSub extends SubCommand {
         if (hasData) {
             sender.sendMessage(messages.getAlreadyHasDataMessage(to, targetStorage instanceof SQLStorage));
             return true;
-        } else if (hasData) {
-            targetStorage.clear();
         }
 
         WhenDone whenDone = new WhenDone(sender, from, to);
