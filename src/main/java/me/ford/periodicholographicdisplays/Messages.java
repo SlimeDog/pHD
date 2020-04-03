@@ -574,7 +574,7 @@ public class Messages extends CustomConfigHandler {
                     continue;
                 }
                 OfflinePlayer player = phd.getServer().getOfflinePlayer(entry.getKey());
-                String playerName = (player == null || !player.hasPlayedBefore()) ? "UNKNOWNPLAYER" : player.getName();
+                String playerName = (player == null || (!player.hasPlayedBefore() && !player.isOnline())) ? "UNKNOWNPLAYER" : player.getName();
                 playersAndTimes.add(playerName + ": " + entry.getValue());
                 i++;
             }
