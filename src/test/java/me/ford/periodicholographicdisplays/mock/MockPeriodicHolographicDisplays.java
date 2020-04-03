@@ -44,6 +44,7 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
     private final Settings settings;
     private final HologramStorage holograms;
     private final UserStorage userStorage;
+    private final Map<String, NamedHologram> namedHDHolograms = new HashMap<>();
     private boolean debug = false;
 
     public MockPeriodicHolographicDisplays() {
@@ -213,7 +214,11 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
 
     @Override
     public NamedHologram getHDHologram(String name) {
-        return null;
+        return namedHDHolograms.get(name);
+    }
+
+    public void putHDHologram(String name, NamedHologram hologram) {
+        namedHDHolograms.put(name, hologram);
     }
     
 }
