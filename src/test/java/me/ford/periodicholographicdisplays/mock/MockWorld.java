@@ -296,27 +296,23 @@ public class MockWorld implements World {
 
     @Override
     public Collection<Entity> getNearbyEntities(Location location, double x, double y, double z) {
-        // TODO Auto-generated method stub
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
     public Collection<Entity> getNearbyEntities(Location location, double x, double y, double z,
             Predicate<Entity> filter) {
-        // TODO Auto-generated method stub
-        return null;
+                return new ArrayList<>();
     }
 
     @Override
     public Collection<Entity> getNearbyEntities(BoundingBox boundingBox) {
-        // TODO Auto-generated method stub
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
     public Collection<Entity> getNearbyEntities(BoundingBox boundingBox, Predicate<Entity> filter) {
-        // TODO Auto-generated method stub
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
