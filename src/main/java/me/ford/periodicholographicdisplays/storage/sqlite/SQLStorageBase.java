@@ -41,7 +41,7 @@ public abstract class SQLStorageBase {
         return conn;
     }
 
-    protected ResultSet executeQuery(String query, String... args) {
+    protected SQLResponse executeQuery(String query, String... args) {
         checkConnection();
         try {
             PreparedStatement statement = conn.prepareStatement(query);
@@ -50,7 +50,7 @@ public abstract class SQLStorageBase {
                 statement.setString(i, arg);
                 i++;
             }
-            return statement.executeQuery();
+            return new SQLResponse(statement.executeQuery(), statement);
         } catch (SQLException e) {
             phd.getLogger().warning("Unable to execute QUERY:" + query);
             e.printStackTrace();

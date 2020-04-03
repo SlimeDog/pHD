@@ -40,9 +40,10 @@ public class SQLUserStorage extends SQLStorageBase implements UserStorage {
     private void loadInAsync() {
         createTableIfNotExists();
         String query = "SELECT * FROM " + TABLE_NAME + ";";
-        ResultSet rs = executeQuery(query);
-        if (rs == null)
+        SQLResponse sr = executeQuery(query);
+        if (sr == null)
             return;
+        ResultSet rs = sr.getResultSet();
         Map<UUID, String> map = new HashMap<>();
         try {
             while (rs.next()) {
@@ -57,10 +58,10 @@ public class SQLUserStorage extends SQLStorageBase implements UserStorage {
                 String name = rs.getString("player_name");
                 map.put(uuid, name);
             }
-            rs.close();
         } catch (SQLException e) {
             phd.getLogger().log(Level.SEVERE, "Issue while loading UUIDs and player names!", e);
         }
+        sr.close();
         phd.getServer().getScheduler().runTask(phd, () -> {
             for (Entry<UUID, String> entry : map.entrySet()) {
                 cache.addOnStartup(entry.getKey(), entry.getValue());
