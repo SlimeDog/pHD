@@ -13,6 +13,7 @@ import com.gmail.filoghost.holographicdisplays.object.NamedHologram;
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
 
+import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.holograms.AlwaysHologram;
 import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
@@ -55,16 +56,18 @@ public class ManageSub extends OptionPairSetSub {
         }
         USAGE = String.join("\n", lines);
     }
+    private final IPeriodicHolographicDisplays phd;
     private final HologramStorage storage;
     private final LuckPermsHook hook;
     private final Messages messages;
     private final List<String> settables = Arrays.asList("times", "time", "seconds", "distance", "permission", "flash",
             "flashOn", "flashOff");
 
-    public ManageSub(HologramStorage storage, LuckPermsHook hook, Messages messages) {
-        this.storage = storage;
-        this.hook = hook;
-        this.messages = messages;
+    public ManageSub(IPeriodicHolographicDisplays phd) {
+        this.phd = phd;
+        this.storage = phd.getHolograms();
+        this.hook = phd.getLuckPermsHook();
+        this.messages = phd.getMessages();
     }
 
     @Override
@@ -260,7 +263,7 @@ public class ManageSub extends OptionPairSetSub {
                     sender.sendMessage(messages.getIncorrectTimeMessage(tResult));
                     return null;
                 }
-                existing = new IRLTimeHologram(holo, holo.getName(), defaultDistance, showTime, time, true, perms,
+                existing = new IRLTimeHologram(phd, holo, holo.getName(), defaultDistance, showTime, time, true, perms,
                         flashOn, flashOff);
                 break;
             case MCTIME:
@@ -276,11 +279,11 @@ public class ManageSub extends OptionPairSetSub {
                     sender.sendMessage(messages.getIncorrectTimeMessage(timeResult));
                     return null;
                 }
-                existing = new MCTimeHologram(holo, holo.getName(), defaultDistance, showTime, timeAt, true, perms,
+                existing = new MCTimeHologram(phd, holo, holo.getName(), defaultDistance, showTime, timeAt, true, perms,
                         flashOn, flashOff);
                 break;
             case ALWAYS:
-                existing = new AlwaysHologram(holo, holo.getName(), defaultDistance, showTime, true, perms, flashOn,
+                existing = new AlwaysHologram(phd, holo, holo.getName(), defaultDistance, showTime, true, perms, flashOn,
                         flashOff);
                 break;
             case NTIMES:
@@ -298,7 +301,7 @@ public class ManageSub extends OptionPairSetSub {
                     sender.sendMessage(messages.getOptionMissingMessage(type, "times"));
                     return null;
                 }
-                existing = new NTimesHologram(holo, holo.getName(), defaultDistance, showTime, timesToShow, true, perms,
+                existing = new NTimesHologram(phd, holo, holo.getName(), defaultDistance, showTime, timesToShow, true, perms,
                         flashOn, flashOff);
                 break;
         }
