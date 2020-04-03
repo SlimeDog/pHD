@@ -5,6 +5,7 @@ import org.junit.Test;
 import me.ford.periodicholographicdisplays.commands.subcommands.ManageSub;
 import me.ford.periodicholographicdisplays.holograms.AlwaysHologram;
 import me.ford.periodicholographicdisplays.holograms.IRLTimeHologram;
+import me.ford.periodicholographicdisplays.holograms.MCTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.mock.MockNamedHologram;
@@ -75,6 +76,16 @@ public class CommandManageTests extends BaseCommandTests {
         IRLTimeHologram hologram = new IRLTimeHologram(phd, mnh, name, 5.1, 3, 26440, true, null, -1, -1);
         phd.getHolograms().addHologram(hologram);
         this.testSetManageCommonIllegals(hologram, name, PeriodicType.IRLTIME, false);
+    }
+
+    @Test
+    public void testManageIllegalMCTime() {
+        String name = "mcTimeWeHave";
+        MockNamedHologram mnh = new MockNamedHologram(name);
+        phd.putHDHologram(name, mnh);
+        MCTimeHologram hologram = new MCTimeHologram(phd, mnh, name, 5.1, 3, 15000, true, null, -1, -1);
+        phd.getHolograms().addHologram(hologram);
+        this.testSetManageCommonIllegals(hologram, name, PeriodicType.MCTIME, false);
     }
 
 }
