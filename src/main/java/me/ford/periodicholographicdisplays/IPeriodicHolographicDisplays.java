@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -38,6 +39,8 @@ public interface IPeriodicHolographicDisplays {
     public List<World> getWorlds();
 
     public Player getPlayer(UUID id);
+
+    public OfflinePlayer getOfflinePlayer(UUID id);
 
     public JavaPlugin asPlugin();
 

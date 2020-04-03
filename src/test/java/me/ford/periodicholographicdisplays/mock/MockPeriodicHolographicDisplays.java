@@ -10,6 +10,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -85,6 +86,11 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
 
     @Override
     public Player getPlayer(UUID id) {
+        return null;
+    }
+
+    @Override
+    public OfflinePlayer getOfflinePlayer(UUID id) {
         return null;
     }
 

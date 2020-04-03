@@ -110,6 +110,7 @@ public class SQLStorage extends SQLStorageBase implements Storage {
                 }
                 try {
                     statement.executeUpdate();
+                    statement.close();
                 } catch (SQLException e) {
                     phd.getLogger().log(Level.WARNING, "Problem while executing update", e);
                 }
@@ -153,6 +154,7 @@ public class SQLStorage extends SQLStorageBase implements Storage {
                     }
                     try {
                         statement.executeUpdate();
+                        statement.close();
                     } catch (SQLException e) {
                         phd.getLogger().log(Level.WARNING, "Problem while executing update", e);
                     }
@@ -178,9 +180,10 @@ public class SQLStorage extends SQLStorageBase implements Storage {
         createPlayerTableIfNotExists();
         Map<String, HDHologramInfo> infos = new HashMap<>();
         String query = "SELECT * FROM " + hologramTableName + ";";
-        ResultSet rs = executeQuery(query);
-        if (rs == null)
+        SQLResponse sr = executeQuery(query);
+        if (sr == null)
             return;
+        ResultSet rs = sr.getResultSet();
 
         try {
             while (rs.next()) {
@@ -221,10 +224,10 @@ public class SQLStorage extends SQLStorageBase implements Storage {
                         flashOff);
                 info.addInfo(holo);
             }
-            rs.close();
         } catch (SQLException e) {
             phd.getLogger().log(Level.WARNING, "Issue while loading holograms from database!", e);
         }
+        sr.close();
 
         for (HDHologramInfo info : infos.values()) {
             for (HologramInfo hinfo : info.getInfos()) {
@@ -245,9 +248,10 @@ public class SQLStorage extends SQLStorageBase implements Storage {
     // player_UUID, hologram_name, hologram_type, views
     private void addShownTo(String name, NTimesTypeInfo info) {
         String query = "SELECT * FROM " + playerTableName + " WHERE hologram_name=?;";
-        ResultSet rs = executeQuery(query, name);
-        if (rs == null)
+        SQLResponse sr = executeQuery(query, name);
+        if (sr == null)
             return;
+        ResultSet rs = sr.getResultSet();
 
         try {
             while (rs.next()) {
@@ -262,10 +266,10 @@ public class SQLStorage extends SQLStorageBase implements Storage {
                 int ntimes = rs.getInt("views");
                 info.addShownTo(uuid, ntimes);
             }
-            rs.close();
         } catch (SQLException e) {
             phd.getLogger().log(Level.WARNING, "Issue while loading user shown times from database!", e);
         }
+        sr.close();
     }
 
     private TypeInfo getTypeInfo(PeriodicType type, String time, String activationTimes) {
@@ -333,34 +337,28 @@ public class SQLStorage extends SQLStorageBase implements Storage {
     public boolean hasData() { // TODO - this is run IN SYNC
         String holgorams = "SELECT name FROM sqlite_master WHERE type='table' AND name='" + hologramTableName + "';";
         String players = "SELECT name FROM sqlite_master WHERE type='table' AND name='" + playerTableName + "';";
-        ResultSet rs = executeQuery(holgorams);
-        if (rs == null)
+        SQLResponse sr = executeQuery(holgorams);
+        if (sr == null)
             return false;
+        ResultSet rs = sr.getResultSet();
         try {
             if (!rs.next())
                 return false;
         } catch (SQLException e) {
             phd.getLogger().log(Level.WARNING, "Problem checking for existance of table (hologram table)", e);
         }
-        try {
-            rs.close();
-        } catch (SQLException e) {
-            phd.getLogger().log(Level.WARNING, "Problem releasing resultset (hologram table)", e);
-        }
-        rs = executeQuery(players);
-        if (rs == null)
+        sr.close();
+        sr = executeQuery(players);
+        if (sr == null)
             return false;
+        rs = sr.getResultSet();
         try {
             if (!rs.next())
                 return false;
         } catch (SQLException e) {
             phd.getLogger().log(Level.WARNING, "Problem checking for existance of table (player table)", e);
         }
-        try {
-            rs.close();
-        } catch (SQLException e) {
-            phd.getLogger().log(Level.WARNING, "Problem releasing resultset (player table)", e);
-        }
+        sr.close();
         return true;
     }
 
@@ -370,7 +368,6 @@ public class SQLStorage extends SQLStorageBase implements Storage {
             String delHologramTable = "DELETE FROM " + hologramTableName + ";";
             executeUpdate(delHologramTable);
             String delPlayerTable = "DELETE FROM " + playerTableName + ";";
-            ;
             executeUpdate(delPlayerTable);
         });
     }

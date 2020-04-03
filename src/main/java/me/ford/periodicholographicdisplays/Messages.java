@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.Map.Entry;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -574,8 +573,8 @@ public class Messages extends CustomConfigHandler {
                     i++;
                     continue;
                 }
-                OfflinePlayer player = Bukkit.getOfflinePlayer(entry.getKey());
-                String playerName = (player == null || !player.hasPlayedBefore()) ? "UNKNOWNPLAYER" : player.getName();
+                OfflinePlayer player = phd.getOfflinePlayer(entry.getKey());
+                String playerName = (player == null || (!player.hasPlayedBefore() && !player.isOnline())) ? "UNKNOWNPLAYER" : player.getName();
                 playersAndTimes.add(playerName + ": " + entry.getValue());
                 i++;
             }

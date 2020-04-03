@@ -13,7 +13,7 @@ import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
  * SQLStorageBase
  */
 public abstract class SQLStorageBase {
-    private static final String DATABSE_NAME = "database.db";
+    public static final String DATABSE_NAME = "database.db";
     protected static Connection conn; // shared connection
     private final IPeriodicHolographicDisplays phd;
 
@@ -46,7 +46,7 @@ public abstract class SQLStorageBase {
         return conn;
     }
 
-    protected ResultSet executeQuery(String query, String... args) {
+    protected SQLResponse executeQuery(String query, String... args) {
         checkConnection();
         try {
             PreparedStatement statement = conn.prepareStatement(query);
@@ -55,7 +55,7 @@ public abstract class SQLStorageBase {
                 statement.setString(i, arg);
                 i++;
             }
-            return statement.executeQuery();
+            return new SQLResponse(statement.executeQuery(), statement);
         } catch (SQLException e) {
             phd.getLogger().warning("Unable to execute QUERY:" + query);
             e.printStackTrace();
@@ -66,8 +66,9 @@ public abstract class SQLStorageBase {
     protected boolean tableExists(String table) {
         checkConnection();
         ResultSet rs;
+        PreparedStatement statement;
         try {
-            PreparedStatement statement = conn.prepareStatement("SHOW TABLES LIKE '" + table + "';");
+            statement = conn.prepareStatement("SHOW TABLES LIKE '" + table + "';");
             rs = statement.executeQuery();
         } catch (SQLException e) {
             phd.getLogger().log(Level.WARNING, "Unable to check if table exists: " + table, e);
@@ -76,6 +77,7 @@ public abstract class SQLStorageBase {
         try {
             boolean can = rs.next();
             rs.close();
+            statement.close();
             return can;
         } catch (SQLException e) {
             phd.getLogger().log(Level.WARNING, "Unable to check if table exists(next): " + table, e);
@@ -105,6 +107,7 @@ public abstract class SQLStorageBase {
                 i++;
             }
             statement.executeUpdate();
+            statement.close();
             return true;
         } catch (SQLException e) {
             phd.getLogger().log(Level.WARNING, "Unable to update QUERY: " + query, e);
@@ -127,6 +130,32 @@ public abstract class SQLStorageBase {
         } catch (SQLException e) {
             phd.getLogger().log(Level.WARNING, "Issue while closing connection:", e);
         }
+    }
+
+    public class SQLResponse {
+        private final ResultSet rs;
+        private final PreparedStatement statement;
+
+        public SQLResponse(ResultSet rs, PreparedStatement statement) {
+            this.rs = rs;
+            this.statement = statement;
+        }
+
+        public ResultSet getResultSet() {
+            return rs;
+        }
+
+        public boolean close() {
+            try {
+                rs.close();
+                statement.close();
+            } catch (SQLException e) {
+                phd.getLogger().log(Level.WARNING, "Issue while closing result set and/or statement", e);
+                return false;
+            }
+            return true;
+        }
+
     }
 
 }
