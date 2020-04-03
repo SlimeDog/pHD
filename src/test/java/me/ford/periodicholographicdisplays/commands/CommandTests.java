@@ -32,8 +32,8 @@ public class CommandTests {
             Assert.assertEquals(command.getUsage(sender, 1).usage, msg);
         });
         command.onCommand(sender, null, "phd", new String[] {});
-        command.onCommand(sender, null, "phd", new String[] {"1"});
-        command.onCommand(sender, null, "phd", new String[] {"help", "1"});
+        command.onCommand(sender, null, "phd", new String[] { "1" });
+        command.onCommand(sender, null, "phd", new String[] { "help", "1" });
     }
 
     @Test
@@ -41,22 +41,23 @@ public class CommandTests {
         sender = new MockOPCommandSender((msg) -> {
             Assert.assertEquals(command.getUsage(sender, 2).usage, msg);
         });
-        command.onCommand(sender, null, "phd", new String[] {"2"});
-        command.onCommand(sender, null, "phd", new String[] {"help", "2"});
+        command.onCommand(sender, null, "phd", new String[] { "2" });
+        command.onCommand(sender, null, "phd", new String[] { "help", "2" });
     }
 
     @Test
     public void testSetCommand() {
         // /phd set
         sender = new MockOPCommandSender((msg) -> {
-            Assert.assertEquals(new SetSub(phd.getHolograms(), null, phd.getSettings(), phd.getMessages()).getUsage(sender), msg);
+            Assert.assertEquals(
+                    new SetSub(phd.getHolograms(), null, phd.getSettings(), phd.getMessages()).getUsage(sender), msg);
         });
-        command.onCommand(sender, null, "phd", new String[] {"set"});
+        command.onCommand(sender, null, "phd", new String[] { "set" });
         // /phd set 1
         sender = new MockOPCommandSender((msg) -> {
             Assert.assertEquals(phd.getMessages().getHologramNotManagedMessage("1"), msg);
         });
-        command.onCommand(sender, null, "phd", new String[] {"set", "1"});
+        command.onCommand(sender, null, "phd", new String[] { "set", "1" });
     }
 
 }
