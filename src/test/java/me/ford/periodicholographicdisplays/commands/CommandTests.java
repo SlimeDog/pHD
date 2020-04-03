@@ -95,4 +95,19 @@ public class CommandTests {
         testCommand(sender, null, "phd", new String[] {"set", holoName, PeriodicType.NTIMES.name(), "option", "value", "option2"}, expected);
     }
 
+    @Test
+    public void testSetIllegal() {
+        sender = new MockOPCommandSender(null);
+
+        String holoName = "ALWAYSNAME";
+        AlwaysHologram hologram = new AlwaysHologram(phd, new MockHologram(), holoName, 1.0, -1, true, null, -1, -1);
+        phd.getHolograms().addHologram(hologram);
+        // /phd set <name> <type> times <times>
+        String expected = phd.getMessages().getNoSuchOptionMessage(PeriodicType.ALWAYS, "times");
+        testCommand(sender, null, "phd", new String[] { "set", holoName, PeriodicType.ALWAYS.name(), "times", "4"}, expected);
+        // /phd set <name> <type> times <times>
+        expected = phd.getMessages().getNoSuchOptionMessage(PeriodicType.ALWAYS, "time");
+        testCommand(sender, null, "phd", new String[] { "set", holoName, PeriodicType.ALWAYS.name(), "time", "14:14"}, expected);
+    }
+
 }
