@@ -9,9 +9,8 @@ import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
+import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.Settings;
 
 /**
@@ -20,7 +19,7 @@ import me.ford.periodicholographicdisplays.Settings;
 public abstract class PeriodicHologramBase {
     public static final int NO_SECONDS = -1;
     public static final double NO_DISTANCE = -1.0D;
-    private final PeriodicHolographicDisplays plugin = JavaPlugin.getPlugin(PeriodicHolographicDisplays.class);
+    private final IPeriodicHolographicDisplays plugin;
     private final Set<UUID> beingShownTo = new HashSet<>();
     private final String name;
     private double activationDistance; // internal
@@ -32,16 +31,17 @@ public abstract class PeriodicHologramBase {
     private final Hologram hologram;
     private String perms;
 
-    public PeriodicHologramBase(Hologram hologram, String name, double activationDistance, long showTime,
+    public PeriodicHologramBase(IPeriodicHolographicDisplays phd, Hologram hologram, String name, double activationDistance, long showTime,
             PeriodicType type, boolean isNew) {
-        this(hologram, name, activationDistance, showTime, type, isNew, null);
+        this(phd, hologram, name, activationDistance, showTime, type, isNew, null);
     }
 
-    public PeriodicHologramBase(Hologram hologram, String name, double activationDistance, long showTime,
+    public PeriodicHologramBase(IPeriodicHolographicDisplays phd, Hologram hologram, String name, double activationDistance, long showTime,
             PeriodicType type, boolean isNew, String perms) {
         Validate.notNull(hologram, "Hologram cannot be null!");
         this.hologram = hologram;
         this.name = name;
+        this.plugin = phd;
         if (activationDistance == NO_DISTANCE) {
             defaultDistance(plugin.getSettings());
         } else {
@@ -180,7 +180,7 @@ public abstract class PeriodicHologramBase {
         beingShownTo.add(id);
         boolean scheduleHide = !specialDisable();
         if (scheduleHide) {
-            plugin.getServer().getScheduler().runTaskLater(plugin, () -> hideFrom(player), showTimeTicks);
+            plugin.runTaskLater(() -> hideFrom(player), showTimeTicks);
         }
         return true;
     }
@@ -199,13 +199,13 @@ public abstract class PeriodicHologramBase {
         setShowTime(NO_SECONDS, time * 20L);
     }
 
-    protected PeriodicHolographicDisplays getPlugin() {
+    protected IPeriodicHolographicDisplays getPlugin() {
         return plugin;
     }
 
     public void resetVisibility() {
         for (UUID id : beingShownTo) {
-            Player player = plugin.getServer().getPlayer(id);
+            Player player = plugin.getPlayer(id);
             if (player != null)
                 hideFrom(player);
         }

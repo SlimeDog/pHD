@@ -6,26 +6,27 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
-import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
+import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 
 /**
  * MCTimeHologram
  */
 public class MCTimeHologram extends FlashingHologram {
     private static final long DELAY = 20 * 60 * 20; // 20 minutes, 60 seconds, 20 ticks
-    private final PeriodicHolographicDisplays plugin;
+    private final IPeriodicHolographicDisplays plugin;
     private final MCTimeHologramDisplayer displayer;
     private BukkitTask task;
     private long atTime; // between 0 and 23999
 
-    public MCTimeHologram(Hologram hologram, String name, double activationDistance, long showTime, long atTime,
-            boolean isNew, String perms, double flashOn, double flashOff) {
-        super(hologram, name, activationDistance, showTime, PeriodicType.MCTIME, isNew, perms, flashOn, flashOff);
+    public MCTimeHologram(IPeriodicHolographicDisplays phd, Hologram hologram, String name,
+            double activationDistance, long showTime, long atTime, boolean isNew, String perms, double flashOn,
+            double flashOff) {
+        super(phd, hologram, name, activationDistance, showTime, PeriodicType.MCTIME, isNew, perms, flashOn,
+                flashOff);
         this.atTime = atTime;
-        plugin = JavaPlugin.getPlugin(PeriodicHolographicDisplays.class);
+        plugin = phd;
         displayer = new MCTimeHologramDisplayer();
         schedule();
     }
@@ -51,7 +52,7 @@ public class MCTimeHologram extends FlashingHologram {
             task.cancel();
         long newTime = (getLocation().getWorld().getTime() + amount + TIME_FIX) % 24000;
         long curDelay = (atTime - newTime) % 24000;// in MC time = ticks
-        task = plugin.getServer().getScheduler().runTaskTimer(plugin, displayer, curDelay, DELAY);
+        task = plugin.runTaskTimer(displayer, curDelay, DELAY);
     }
 
     public void setTime(long time) {

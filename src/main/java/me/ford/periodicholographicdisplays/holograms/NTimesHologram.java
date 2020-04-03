@@ -9,6 +9,8 @@ import com.gmail.filoghost.holographicdisplays.api.Hologram;
 
 import org.bukkit.entity.Player;
 
+import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
+
 /**
  * NTimesHologram
  */
@@ -17,15 +19,17 @@ public class NTimesHologram extends FlashingHologram {
     private final Map<UUID, Integer> shownTo = new HashMap<>();
     private final Map<UUID, Integer> toSave = new HashMap<>();
 
-    public NTimesHologram(Hologram hologram, String name, double activationDistance, long showTime, int timesToShow,
-            boolean isNew, String perms, double flashOn, double flashOff) {
-        this(hologram, name, activationDistance, showTime, PeriodicType.NTIMES, timesToShow, isNew, perms, flashOn,
-                flashOff);
+    public NTimesHologram(IPeriodicHolographicDisplays phd, Hologram hologram, String name,
+            double activationDistance, long showTime, int timesToShow, boolean isNew, String perms, double flashOn,
+            double flashOff) {
+        this(phd, hologram, name, activationDistance, showTime, PeriodicType.NTIMES, timesToShow, isNew, perms,
+                flashOn, flashOff);
     }
 
-    NTimesHologram(Hologram hologram, String name, double activationDistance, long showTime, PeriodicType type,
-            int timesToShow, boolean isNew, String perms, double flashOn, double flashOff) {
-        super(hologram, name, activationDistance, showTime, type, isNew, perms, flashOn, flashOff);
+    NTimesHologram(IPeriodicHolographicDisplays phd,  Hologram hologram, String name,
+            double activationDistance, long showTime, PeriodicType type, int timesToShow, boolean isNew, String perms,
+            double flashOn, double flashOff) {
+        super(phd, hologram, name, activationDistance, showTime, type, isNew, perms, flashOn, flashOff);
         this.timesToShow = timesToShow;
     }
 

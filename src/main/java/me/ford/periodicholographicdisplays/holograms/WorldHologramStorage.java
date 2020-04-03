@@ -78,22 +78,22 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
             double flashOff = hInfo.getFlashOff();
             switch (hInfo.getType()) {
                 case MCTIME:
-                    hologram = new MCTimeHologram(holo, info.getHoloName(), distance, seconds,
+                    hologram = new MCTimeHologram(plugin, holo, info.getHoloName(), distance, seconds,
                             ((MCTimeTypeInfo) typeInfo).getAtTime(), false, hInfo.getPermissions(), flashOn, flashOff);
                     break;
                 case IRLTIME:
-                    hologram = new IRLTimeHologram(holo, info.getHoloName(), distance, seconds,
+                    hologram = new IRLTimeHologram(plugin, holo, info.getHoloName(), distance, seconds,
                             ((IRLTimeTypeInfo) typeInfo).getAtTime(), false, hInfo.getPermissions(), flashOn, flashOff);
                     break;
                 case NTIMES:
                     NTimesTypeInfo ntimesInfo = (NTimesTypeInfo) typeInfo;
-                    NTimesHologram ntimes = new NTimesHologram(holo, info.getHoloName(), distance, seconds,
+                    NTimesHologram ntimes = new NTimesHologram(plugin, holo, info.getHoloName(), distance, seconds,
                             ntimesInfo.getShowTimes(), false, hInfo.getPermissions(), flashOn, flashOff);
                     ntimes.addAllShownTo(ntimesInfo.getShownToTimes());
                     hologram = ntimes;
                     break;
                 case ALWAYS:
-                    hologram = new AlwaysHologram(holo, info.getHoloName(), distance, seconds, false,
+                    hologram = new AlwaysHologram(plugin, holo, info.getHoloName(), distance, seconds, false,
                             hInfo.getPermissions(), flashOn, flashOff);
                     break;
                 default:

@@ -3,11 +3,10 @@ package me.ford.periodicholographicdisplays.holograms;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
+import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 
 /**
  * FlashingHologram
@@ -15,17 +14,17 @@ import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 public abstract class FlashingHologram extends PeriodicHologramBase {
     public static final double NO_FLASH = -1.0D;
     public static final double MIN_FLASH = 1.0D;
-    private final PeriodicHolographicDisplays phd;
+    private final IPeriodicHolographicDisplays phd;
     private boolean flashes = false;
     private double flashOn = NO_FLASH;
     private double flashOff = NO_FLASH;
     private BukkitTask on = null;
     private BukkitTask off = null;
 
-    public FlashingHologram(Hologram hologram, String name, double activationDistance, long showTime, PeriodicType type,
+    public FlashingHologram(IPeriodicHolographicDisplays phd, Hologram hologram, String name, double activationDistance, long showTime, PeriodicType type,
             boolean isNew, String perms, double flashOn, double flashOff) {
-        super(hologram, name, activationDistance, showTime, type, isNew, perms);
-        phd = JavaPlugin.getPlugin(PeriodicHolographicDisplays.class);
+        super(phd, hologram, name, activationDistance, showTime, type, isNew, perms);
+        this.phd = phd;
         if (flashOn != NO_FLASH && flashOff != NO_FLASH) {
             setFlashOnOff(flashOn, flashOff, true);
         }
@@ -104,8 +103,8 @@ public abstract class FlashingHologram extends PeriodicHologramBase {
             return false;
         long cycleTicks = (int) ((flashOn + flashOff) * 20L);
         long offDelay = (int) (flashOn * 20L);
-        on = new Flasher(player, true).runTaskTimer(phd, 0L, cycleTicks);
-        off = new Flasher(player, false).runTaskTimer(phd, offDelay, cycleTicks);
+        on = new Flasher(player, true).runTaskTimer(phd.asPlugin(), 0L, cycleTicks);
+        off = new Flasher(player, false).runTaskTimer(phd.asPlugin(), offDelay, cycleTicks);
         return true;
     }
 

@@ -4,6 +4,7 @@ import com.gmail.filoghost.holographicdisplays.api.Hologram;
 
 import org.bukkit.entity.Player;
 
+import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.hooks.NPCHook;
 
 /**
@@ -11,9 +12,9 @@ import me.ford.periodicholographicdisplays.hooks.NPCHook;
  */
 public class AlwaysHologram extends NTimesHologram {
 
-    public AlwaysHologram(Hologram hologram, String name, double activationDistance, long showTime, boolean isNew,
+    public AlwaysHologram(IPeriodicHolographicDisplays phd, Hologram hologram, String name, double activationDistance, long showTime, boolean isNew,
             String perms, double flashOn, double flashOff) {
-        super(hologram, name, activationDistance, showTime, PeriodicType.ALWAYS, -1, isNew, perms, flashOn, flashOff);
+        super(phd, hologram, name, activationDistance, showTime, PeriodicType.ALWAYS, -1, isNew, perms, flashOn, flashOff);
         checkWorldPlayers();
     }
 

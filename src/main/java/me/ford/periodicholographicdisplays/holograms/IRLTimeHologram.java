@@ -8,26 +8,27 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
-import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
+import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 
 /**
  * IRLTimeHologram
  */
 public class IRLTimeHologram extends FlashingHologram {
     private static final long DELAY = 24 * 60 * 60 * 20; // 24 hours, 60 minutes, 60 seconds, 20 ticks
-    private final PeriodicHolographicDisplays plugin;
+    private final IPeriodicHolographicDisplays plugin;
     private final IRLTimeHologramDisplayer displayer;
     private BukkitTask task;
     private long atTime; // in day in seconds
 
-    public IRLTimeHologram(Hologram hologram, String name, double activationDistance, long showTime, long atTime,
-            boolean isNew, String perms, double flashOn, double flashOff) {
-        super(hologram, name, activationDistance, showTime, PeriodicType.IRLTIME, isNew, perms, flashOn, flashOff);
+    public IRLTimeHologram(IPeriodicHolographicDisplays phd, Hologram hologram, String name,
+            double activationDistance, long showTime, long atTime, boolean isNew, String perms, double flashOn,
+            double flashOff) {
+        super(phd, hologram, name, activationDistance, showTime, PeriodicType.IRLTIME, isNew, perms, flashOn,
+                flashOff);
         this.atTime = atTime;
-        plugin = JavaPlugin.getPlugin(PeriodicHolographicDisplays.class);
+        plugin = phd;
         displayer = new IRLTimeHologramDisplayer();
         initTask();
     }
@@ -37,7 +38,7 @@ public class IRLTimeHologram extends FlashingHologram {
         long curTimeSeconds = calendar.get(Calendar.HOUR_OF_DAY) * 3600 + calendar.get(Calendar.MINUTE) * 60
                 + calendar.get(Calendar.SECOND);
         long curDelay = ((atTime - curTimeSeconds) * 20) % DELAY; // in ticks
-        task = plugin.getServer().getScheduler().runTaskTimer(plugin, displayer, curDelay, DELAY);
+        task = plugin.runTaskTimer(displayer, curDelay, DELAY);
     }
 
     public long getTime() {
