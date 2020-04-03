@@ -3,10 +3,7 @@ package me.ford.periodicholographicdisplays.commands;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.command.Command;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import me.ford.periodicholographicdisplays.commands.subcommands.SetSub;
@@ -18,45 +15,9 @@ import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.mock.MockHologram;
 import me.ford.periodicholographicdisplays.mock.MockOPCommandSender;
-import me.ford.periodicholographicdisplays.mock.MockPeriodicHolographicDisplays;
-import me.ford.periodicholographicdisplays.mock.MockPluginManager;
 import me.ford.periodicholographicdisplays.util.TimeUtils;
 
-public class CommandTests {
-    private MockPeriodicHolographicDisplays phd;
-    private PHDCommand command;
-    private MockOPCommandSender sender;
-
-    @Before
-    public void setup() {
-        phd = new MockPeriodicHolographicDisplays();
-        command = new PHDCommand(phd, new MockPluginManager());
-        sender = new MockOPCommandSender(null);
-    }
-
-    @After
-    public void tearDown() {
-        phd.clear();
-    }
-
-    @Test
-    public void testUsagePageOne() {
-        sender = new MockOPCommandSender((msg) -> {
-            Assert.assertEquals(command.getUsage(sender, 1).usage, msg);
-        });
-        command.onCommand(sender, null, "phd", new String[] {});
-        command.onCommand(sender, null, "phd", new String[] { "1" });
-        command.onCommand(sender, null, "phd", new String[] { "help", "1" });
-    }
-
-    @Test
-    public void testUsagePageTwo() {
-        sender = new MockOPCommandSender((msg) -> {
-            Assert.assertEquals(command.getUsage(sender, 2).usage, msg);
-        });
-        command.onCommand(sender, null, "phd", new String[] { "2" });
-        command.onCommand(sender, null, "phd", new String[] { "help", "2" });
-    }
+public class CommandSetTests extends BaseCommandTests {
 
     @Test
     public void testSetCommand() {
@@ -71,13 +32,6 @@ public class CommandTests {
             Assert.assertEquals(phd.getMessages().getHologramNotManagedMessage("1"), msg);
         });
         command.onCommand(sender, null, "phd", new String[] { "set", "1" });
-    }
-
-    private void testCommand(MockOPCommandSender sender, Command command, String label, String args[], String expectedMessage) {
-        sender.setMessageConsumer((msg) -> {
-            Assert.assertEquals(expectedMessage, msg);
-        });
-        this.command.onCommand(sender, command, label, args);
     }
 
     private void testSetCommonIllegals(FlashingHologram hologram, String holoName, PeriodicType wrongType) {
