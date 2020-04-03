@@ -76,13 +76,7 @@ public class CommandTests {
         this.command.onCommand(sender, command, label, args);
     }
 
-    @Test
-    public void testSetCommand2() {
-        String holoName = "ALWAYSNAME";
-        AlwaysHologram hologram = new AlwaysHologram(phd, new MockHologram(), holoName, 1.0, -1, true, null, -1, -1);
-        phd.getHolograms().addHologram(hologram);
-        // /phd set <name>
-        sender = new MockOPCommandSender(null);
+    private void testSetCommonIllegals(FlashingHologram hologram, String holoName) {
         String expected = new SetSub(phd.getHolograms(), null, phd.getSettings(), phd.getMessages()).getUsage(sender);
         testCommand(sender, null, "phd", new String[] { "set", holoName}, expected);
         // /phd set <name> 1
@@ -98,6 +92,16 @@ public class CommandTests {
         // /phd set <name> <type> <option> <value> <option2> # no value
         expected = phd.getMessages().getNeedPairedOptionsMessage();
         testCommand(sender, null, "phd", new String[] {"set", holoName, PeriodicType.NTIMES.name(), "option", "value", "option2"}, expected);
+    }
+
+    @Test
+    public void testSetCommand2() {
+        String holoName = "ALWAYSNAME";
+        AlwaysHologram hologram = new AlwaysHologram(phd, new MockHologram(), holoName, 1.0, -1, true, null, -1, -1);
+        phd.getHolograms().addHologram(hologram);
+        // /phd set <name>
+        sender = new MockOPCommandSender(null);
+        testSetCommonIllegals(hologram, holoName);
     }
 
     @Test
