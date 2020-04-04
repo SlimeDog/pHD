@@ -43,6 +43,7 @@ public class YamlUserStorage implements UserStorage {
     @Override
     public void save(boolean inSync) {
         ConfigurationSection section = configHandler.getConfig();
+        phd.debug("Saving to UUID cache:" + cache.getToSave());
         for (Entry<UUID, String> entry : cache.getToSave().entrySet()) {
             section.set(entry.getKey().toString(), entry.getValue());
         }
