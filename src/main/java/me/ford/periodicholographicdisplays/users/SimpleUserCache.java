@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.StringUtil;
+
+import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 
 /**
  * UserCache
@@ -15,6 +18,7 @@ public class SimpleUserCache implements UserCache {
     private final Map<UUID, String> idToName = new HashMap<>();
     private final Map<String, UUID> nameToId = new HashMap<>(); // lower case here
     private final Map<UUID, String> toSave = new HashMap<>();
+    PeriodicHolographicDisplays phd = JavaPlugin.getPlugin(PeriodicHolographicDisplays.class);
 
     void addOnStartup(UUID id, String name) {
         put(id, name, true);
@@ -23,6 +27,7 @@ public class SimpleUserCache implements UserCache {
     private void put(UUID id, String name, boolean atStartup) {
         idToName.put(id, name);
         nameToId.put(name.toLowerCase(), id);
+        phd.debug(String.format("Putting to cache: %s -> %s %s", id.toString(), name, atStartup ? ":" : "(and marking this as needing saved)"));
         if (!atStartup) {
             toSave.put(id, name);
         }
@@ -63,6 +68,7 @@ public class SimpleUserCache implements UserCache {
 
     @Override
     public void markSaved() {
+        phd.debug("Marking UserCache as saved (i.e clearing the ones that previously needed saving). Had:" + toSave);
         toSave.clear();
     }
 
