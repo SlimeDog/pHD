@@ -24,4 +24,6 @@ public interface UserCache {
 
     public void markSaved();
 
+    public Map<UUID, String> getEntireCache();
+
 }
