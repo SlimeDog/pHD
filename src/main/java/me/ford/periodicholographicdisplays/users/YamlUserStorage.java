@@ -1,5 +1,6 @@
 package me.ford.periodicholographicdisplays.users;
 
+import java.util.Map;
 import java.util.UUID;
 import java.util.Map.Entry;
 import java.util.logging.Level;
@@ -43,8 +44,11 @@ public class YamlUserStorage implements UserStorage {
     @Override
     public void save(boolean inSync) {
         ConfigurationSection section = configHandler.getConfig();
-        phd.debug("Saving to UUID cache:" + cache.getToSave());
-        for (Entry<UUID, String> entry : cache.getToSave().entrySet()) {
+        Map<UUID, String> toSave = cache.getToSave();
+        if (toSave.isEmpty())
+            return;
+        phd.debug("Saving to UUID cache:" + toSave);
+        for (Entry<UUID, String> entry : toSave.entrySet()) {
             section.set(entry.getKey().toString(), entry.getValue());
         }
         cache.markSaved();
