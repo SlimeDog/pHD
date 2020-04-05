@@ -72,7 +72,6 @@ public class SQLUserStorage extends SQLStorageBase implements UserStorage {
     @Override
     public void save(boolean inSync) {
         Map<UUID, String> toSave = cache.getToSave();
-        phd.debug("Periodically attempting to save UUID cache of " + toSave.size() + " new UUID-name pairs" + (toSave.size() == 0 ? " (0 means not saving!)" : ""));
         if (toSave.isEmpty())
             return;
         phd.debug("Saving to UUID cache:" + toSave);
