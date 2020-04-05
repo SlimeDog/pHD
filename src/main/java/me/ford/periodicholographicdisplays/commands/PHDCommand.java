@@ -37,7 +37,7 @@ public class PHDCommand extends ParentCommand {
         addSubCommand("reload", new ReloadSub(plugin));
         convertSub = new ConvertSub(plugin);
         addSubCommand("convert", convertSub);
-        addSubCommand("printcache", new PrintCacheSub(plugin));
+        if(plugin.getSettings().onDebug()) addSubCommand("printcache", new PrintCacheSub(plugin));
     }
 
     public ConvertSub getConvertSub() {
