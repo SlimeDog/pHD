@@ -1,9 +1,9 @@
 ---
-name: Custom issue template
-about: Describe this issue template's purpose here.
+name: Help request
+about: Ask a question.
 title: ''
 labels: ''
-assignees: ''
+assignees: 'SlimeDog'
 
 ---
 
