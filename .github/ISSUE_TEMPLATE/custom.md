@@ -1,6 +1,6 @@
 ---
 name: Help request
-about: Ask a question.
+about: Ask a question
 title: ''
 labels: ''
 assignees: 'SlimeDog'
