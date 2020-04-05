@@ -16,16 +16,15 @@ import me.ford.periodicholographicdisplays.users.UserStorage;
 public class JoinLeaveListener implements Listener {
     private final PeriodicHolographicDisplays phd;
     private final HologramStorage storage;
-    private final UserStorage userStorage;
 
     public JoinLeaveListener(PeriodicHolographicDisplays phd, HologramStorage storage, UserStorage userStorage) {
         this.phd = phd;
         this.storage = storage;
-        this.userStorage = userStorage;
     }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
+        UserStorage userStorage = phd.getUserStorage();
         Player player = event.getPlayer();
         storage.joined(player);
         String prevName = userStorage.getCache().getName(player.getUniqueId());
