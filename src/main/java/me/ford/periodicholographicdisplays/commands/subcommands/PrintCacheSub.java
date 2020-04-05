@@ -5,13 +5,13 @@ import java.util.List;
 
 import org.bukkit.command.CommandSender;
 
-import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
+import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.commands.SubCommand;
 
 public class PrintCacheSub extends SubCommand {
-    private final PeriodicHolographicDisplays phd;
+    private final IPeriodicHolographicDisplays phd;
 
-    public PrintCacheSub(PeriodicHolographicDisplays phd) {
+    public PrintCacheSub(IPeriodicHolographicDisplays phd) {
         this.phd = phd;
     }
 
