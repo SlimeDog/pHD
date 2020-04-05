@@ -79,6 +79,10 @@ public class InfoSub extends SubCommand {
                 return true;
             }
         }
+        if (storage.getAvailableTypes(args[0]).isEmpty()) {
+            sender.sendMessage(messages.getHDHologramNotFoundMessage(args[0]));
+            return true;
+        }
         FlashingHologram hologram = storage.getHologram(args[0], type);
         if (hologram == null) {
             sender.sendMessage(messages.getHologramNotFoundMessage(args[0], type));
