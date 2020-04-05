@@ -3,6 +3,9 @@ package me.ford.periodicholographicdisplays.commands.subcommands;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gmail.filoghost.holographicdisplays.commands.CommandValidator;
+import com.gmail.filoghost.holographicdisplays.exception.CommandException;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
@@ -79,7 +82,9 @@ public class InfoSub extends SubCommand {
                 return true;
             }
         }
-        if (storage.getAvailableTypes(args[0]).isEmpty()) {
+        try {
+            CommandValidator.getNamedHologram(args[0]);
+        } catch (CommandException e) {
             sender.sendMessage(messages.getHDHologramNotFoundMessage(args[0]));
             return true;
         }
