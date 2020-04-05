@@ -124,7 +124,7 @@ public abstract class ParentCommand implements TabExecutor {
     private void showUsage(CommandSender sender, int page) {
         UsageInfo info = getUsage(sender, page);
         sender.sendMessage(info.usage);
-        if (page < info.maxPage && sender instanceof Player) {
+        if (page > 0 && page < info.maxPage && sender instanceof Player) {
             HintUtil.sendHint(sender, messages.getNextPageHint("{command}"), "{command}", getHintCommand(page + 1));
         }
     }
