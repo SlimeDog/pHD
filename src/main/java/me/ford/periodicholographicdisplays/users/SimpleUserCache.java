@@ -66,4 +66,9 @@ public class SimpleUserCache implements UserCache {
         toSave.clear();
     }
 
+    @Override
+    public Map<UUID, String> getEntireCache() {
+        return new HashMap<>(idToName);
+    }
+
 }

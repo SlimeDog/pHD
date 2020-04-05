@@ -81,7 +81,7 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
 
         // listeners
         this.getServer().getPluginManager().registerEvents(new HologramListener(holograms, citizensHook), this);
-        this.getServer().getPluginManager().registerEvents(new JoinLeaveListener(holograms, userStorage), this);
+        this.getServer().getPluginManager().registerEvents(new JoinLeaveListener(this, holograms, userStorage), this);
         this.getServer().getPluginManager().registerEvents(new WorldListener(holograms), this);
         WorldTimeListener worldTimeListener;
         if (getServer().getBukkitVersion().contains("1.15")) {

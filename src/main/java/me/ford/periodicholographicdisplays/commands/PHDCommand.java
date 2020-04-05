@@ -7,6 +7,7 @@ import me.ford.periodicholographicdisplays.commands.subcommands.ConvertSub;
 import me.ford.periodicholographicdisplays.commands.subcommands.InfoSub;
 import me.ford.periodicholographicdisplays.commands.subcommands.ListSub;
 import me.ford.periodicholographicdisplays.commands.subcommands.ManageSub;
+import me.ford.periodicholographicdisplays.commands.subcommands.PrintCacheSub;
 import me.ford.periodicholographicdisplays.commands.subcommands.ReloadSub;
 import me.ford.periodicholographicdisplays.commands.subcommands.ReportSub;
 import me.ford.periodicholographicdisplays.commands.subcommands.SetSub;
@@ -37,6 +38,7 @@ public class PHDCommand extends ParentCommand {
         addSubCommand("reload", new ReloadSub(plugin));
         convertSub = new ConvertSub(plugin, pm);
         addSubCommand("convert", convertSub);
+        if(plugin.getSettings().onDebug()) addSubCommand("printcache", new PrintCacheSub(plugin));
     }
 
     public ConvertSub getConvertSub() {
