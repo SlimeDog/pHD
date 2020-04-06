@@ -135,8 +135,8 @@ public class Messages extends CustomConfigHandler {
                 .replace("{type}", type);
     }
 
-    public String getNegativeSecondsMessage(String given) {
-        return getMessage("seconds-cannot-be-negative", "Seconds cannot be negative: {seconds}").replace("{seconds}",
+    public String getSecondsTooSmallMessage(String given) {
+        return getMessage("seconds-too-small", "Minimum seconds value is 1, got {seconds}").replace("{seconds}",
                 given);
     }
 

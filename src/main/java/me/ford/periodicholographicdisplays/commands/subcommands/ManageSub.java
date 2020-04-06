@@ -191,7 +191,7 @@ public class ManageSub extends OptionPairSetSub {
                         sender.sendMessage(messages.getNegativeDistanceMessage(e.getExtra()));
                         break;
                     case SECONDS_NEGATIVE:
-                        sender.sendMessage(messages.getNegativeSecondsMessage(e.getExtra()));
+                        sender.sendMessage(messages.getSecondsTooSmallMessage(e.getExtra()));
                         break;
                     case FLASH_ONLY_ONE:
                         sender.sendMessage(messages.getFlashMustHaveBothMessage(e.getExtra()));
