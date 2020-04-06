@@ -140,8 +140,8 @@ public class Messages extends CustomConfigHandler {
                 given);
     }
 
-    public String getNegativeDistanceMessage(String given) {
-        return getMessage("distance-cannot-be-negative", "Distance cannot be negative: {distance}")
+    public String getDistanceTooSmallMessage(String given) {
+        return getMessage("distance-too-small", "Minimum distance value is 1.0, got {distance}")
                 .replace("{distance}", given);
     }
 

@@ -188,7 +188,7 @@ public class ManageSub extends OptionPairSetSub {
                         sender.sendMessage(messages.getNoSuchOptionMessage(type, e.getExtra()));
                         break;
                     case DISTANCE_NEGATIVE:
-                        sender.sendMessage(messages.getNegativeDistanceMessage(e.getExtra()));
+                        sender.sendMessage(messages.getDistanceTooSmallMessage(e.getExtra()));
                         break;
                     case SECONDS_NEGATIVE:
                         sender.sendMessage(messages.getSecondsTooSmallMessage(e.getExtra()));
