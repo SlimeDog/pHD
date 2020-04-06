@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
+import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.DefaultReloadIssue;
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.ReloadIssue;
 import me.ford.periodicholographicdisplays.commands.SubCommand;
 
@@ -55,7 +56,17 @@ public class ReloadSub extends SubCommand {
             phd.getLogger().severe(msg);
             if (sender instanceof Player) {
                 sender.sendMessage(msg);
-                sender.sendMessage(messages.getDisablingMessage());
+                boolean isBeingDisabled = false;
+                for (ReloadIssue issue : issues) {
+                    // in these cases, not disabling the plugin, just recreating
+                    if (issue != DefaultReloadIssue.NO_CONFIG && issue != DefaultReloadIssue.NO_FOLDER && issue != DefaultReloadIssue.NO_MESSAGES) {
+                        isBeingDisabled = true;
+                        break;
+                    }
+                }
+                if (isBeingDisabled) {
+                    sender.sendMessage(messages.getDisablingMessage());
+                }
             }
         }
         return true;
