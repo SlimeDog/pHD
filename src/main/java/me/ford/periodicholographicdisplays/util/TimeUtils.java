@@ -17,7 +17,7 @@ public final class TimeUtils {
             + "(?:([0-9]+)\\s*h[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*m[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*(?:s[a-z]*)?)?",
             Pattern.CASE_INSENSITIVE);
 
-    private static final Pattern mcTimePattern = Pattern.compile("(\\d?0\\d):(\\d\\d)");
+    private static final Pattern mcTimePattern = Pattern.compile("(\\d\\d):(\\d\\d)");
 
     public static long parseDateDiff(String time) throws IllegalArgumentException {
         Matcher m = timePattern.matcher(time);
@@ -147,7 +147,7 @@ public final class TimeUtils {
     public static String toMCTime(long time) {
         long hours = time / 1000;
         long minutes = ((time % 1000) * 60) / 1000;
-        return String.format("%d:%02d", hours, minutes);
+        return String.format("%02d:%02d", hours, minutes);
     }
 
     public static long parseHoursAndMinutesToSeconds(String time) {
@@ -163,7 +163,7 @@ public final class TimeUtils {
     public static String toIRLTime(long time) {
         long hours = time / 3600;
         long minutes = (time % 3600) / 60;
-        return String.format("%d:%02d", hours, minutes);
+        return String.format("%02d:%02d", hours, minutes);
     }
 
 }
