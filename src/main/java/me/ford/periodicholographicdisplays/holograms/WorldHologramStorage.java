@@ -103,7 +103,10 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
                 handler = new IndividualHologramHandler(holo);
             }
             handler.addHologram(hInfo.getType(), hologram, !imported);
-
+        }
+        if (handler == null) {
+            plugin.getLogger().warning("Loaded hologram with no pHD types:" + info);
+            return;
         }
         plugin.debug("Loaded pHD " + handler.getName() + " with types " + handler.getTypes() + " in "
                 + getWorld().getName());
