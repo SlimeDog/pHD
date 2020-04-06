@@ -67,6 +67,7 @@ cannot-unset-required-option: "Cannot unset required option {option} for type {t
 nothing-to-unset: "Did not find a suitable option, nothing was unset"
 need-player-after-playercount: "Need to specify a player after 'playercount'"
 player-not-found: "Player not found: {player}"
+option-not-set: "No change, {option} was not set"
 
 # Messages produced by /phd unmanage
 #

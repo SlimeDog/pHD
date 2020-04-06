@@ -42,6 +42,10 @@ public class Messages extends CustomConfigHandler {
         this.phd = phd;
     }
 
+    public String getOptionNotSetMessage(String option) {
+        return getMessage("option-not-set", "No change, {option} was not set").replace("{option}", option);
+    }
+
     public String getNegativeTimesMessage(String cur) {
         return getMessage("times-too-small", "Minimum times value is 1, got {times}").replace("{times}", cur);
     }
