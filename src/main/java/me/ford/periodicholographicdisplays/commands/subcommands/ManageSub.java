@@ -315,6 +315,15 @@ public class ManageSub extends OptionPairSetSub {
 
     @Override
     public String getUsage(CommandSender sender, String[] args) {
+        if (args.length > 1) {
+            PeriodicType type;
+            try {
+                type = PeriodicType.valueOf(args[1].toUpperCase());
+            } catch (IllegalArgumentException e) {
+                return USAGE;
+            }
+            return getUsage(type);
+        }
         return USAGE;
     }
 
