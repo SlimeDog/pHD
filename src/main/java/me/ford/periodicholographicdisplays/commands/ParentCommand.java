@@ -59,7 +59,7 @@ public abstract class ParentCommand implements TabExecutor {
         String header = getUsage().replace("{page}", String.valueOf(page));
         for (SubCommand cmd : subCommands.values()) {
             if (cmd.hasPermission(sender)) {
-                for (String part : cmd.getUsage(sender).split("\n")) {
+                for (String part : cmd.getUsage(sender, new String[] {}).split("\n")) {
                     msgs.add(part);
                 }
             }
@@ -116,7 +116,7 @@ public abstract class ParentCommand implements TabExecutor {
         }
 
         if (!cmd.onCommand(sender, command, label, args)) {
-            sender.sendMessage(cmd.getUsage(sender));
+            sender.sendMessage(cmd.getUsage(sender, args));
         }
         return true;
     }

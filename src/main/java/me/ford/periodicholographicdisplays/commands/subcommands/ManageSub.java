@@ -314,7 +314,7 @@ public class ManageSub extends OptionPairSetSub {
     }
 
     @Override
-    public String getUsage(CommandSender sender) {
+    public String getUsage(CommandSender sender, String[] args) {
         return USAGE;
     }
 
