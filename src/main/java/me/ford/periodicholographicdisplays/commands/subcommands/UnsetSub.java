@@ -123,6 +123,7 @@ public class UnsetSub extends SubCommand {
                 case "distance":
                     if (hologram.getActivationDistance() == PeriodicHologramBase.NO_DISTANCE) {
                         sender.sendMessage(messages.getOptionNotSetMessage(opt));
+                        usedOptions.remove(opt);
                     } else {
                         hologram.defaultDistance(settings);
                     }
@@ -130,6 +131,7 @@ public class UnsetSub extends SubCommand {
                 case "seconds":
                     if (hologram.getShowTime() == PeriodicHologramBase.NO_SECONDS) {
                         sender.sendMessage(messages.getOptionNotSetMessage(opt));
+                        usedOptions.remove(opt);
                     } else {
                         hologram.defaultShowtime(settings);
                     }
@@ -137,6 +139,7 @@ public class UnsetSub extends SubCommand {
                 case "permission":
                     if (hologram.getPermissions() == null) {
                         sender.sendMessage(messages.getOptionNotSetMessage(opt));
+                        usedOptions.remove(opt);
                     } else {
                         hologram.setPermissions(null);
                     }
@@ -144,6 +147,7 @@ public class UnsetSub extends SubCommand {
                 case "flash":
                     if(!hologram.flashes()) {
                         sender.sendMessage(messages.getOptionNotSetMessage(opt));
+                        usedOptions.remove(opt);
                         break;
                     }
                     hologram.setNoFlash();
@@ -181,6 +185,7 @@ public class UnsetSub extends SubCommand {
                     }
                     if (ntimes.getShownTo().get(player.getUniqueId()) == null) {
                         sender.sendMessage(messages.getOptionNotSetMessage(String.format("%s (for %s)", opt, player.getName())));
+                        usedOptions.remove(opt);
                         break;
                     }
                     ntimes.resetShownTo(player.getUniqueId());
