@@ -37,23 +37,26 @@ public class ManageSub extends OptionPairSetSub {
     static {
         List<String> lines = new ArrayList<>();
         for (PeriodicType type : PeriodicType.values()) {
-            String msg = USAGE_1.replace("<type>", type.name());
-            switch (type) {
-                case ALWAYS:
-                    msg = msg.replace("time <hh:mm> ", "");
-                case IRLTIME:
-                case MCTIME:
-                    msg = msg.replace("times <integer> ", "");
-                    break;
-                case NTIMES:
-                    msg = msg.replace("time <hh:mm> ", "");
-                    break;
-                default:
-                    break; // do nothing
-            }
-            lines.add(msg);
+            lines.add(getUsage(type));
         }
         USAGE = String.join("\n", lines);
+    }
+    public static String getUsage(PeriodicType type) {
+        String msg = USAGE_1.replace("<type>", type.name());
+        switch (type) {
+            case ALWAYS:
+                msg = msg.replace("time <hh:mm> ", "");
+            case IRLTIME:
+            case MCTIME:
+                msg = msg.replace("times <integer> ", "");
+                break;
+            case NTIMES:
+                msg = msg.replace("time <hh:mm> ", "");
+                break;
+            default:
+                break; // do nothing
+        }
+        return msg;
     }
     private final HologramStorage storage;
     private final LuckPermsHook hook;
