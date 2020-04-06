@@ -49,7 +49,7 @@ flash-must-have-both: "Need to specify both 'flashOn' and 'flashOff'; alternativ
 hologram-not-managed: "Hologram {name} of type {type} is not managed by pHD"
 set-new-values: "Set new values for hologram {name} of type {type}: {options}"
 incorrect-set-options: "Need a set of key-value pairs to set, got an odd number of arguments"
-incorrect-time: "Unable to parse time {time}"
+incorrect-time: "Time format is hh:mm (24-hour), got {time}"
 need-a-number: "Value must be a number, got {msg}"
 need-an-integer: "Value must be an integer, got {msg}"
 no-such-option: "{type} holograms have no {option} option"

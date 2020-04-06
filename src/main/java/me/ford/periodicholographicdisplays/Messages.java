@@ -325,7 +325,7 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getIncorrectTimeMessage(String msg) {
-        return getMessage("incorrect-time", "Unable to parse time {time}").replace("{time}", msg);
+        return getMessage("incorrect-time", "Time format is hh:mm (24-hour), got {time}").replace("{time}", msg);
     }
 
     public String getNeedCountAfterPlayercount() {
