@@ -212,7 +212,7 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getHologramNotManagedMessage(String name) {
-        return getMessage("hologram-not-managed", "Hologram not managed: {name}").replace("{name}", name);
+        return getMessage("hologram-not-tracked", "Hologram not managed: {name}").replace("{name}", name);
     }
 
     public String getHologramNotFoundMessage(String name, PeriodicType type) {
