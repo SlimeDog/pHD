@@ -140,7 +140,11 @@ public final class TimeUtils {
             throw new IllegalArgumentException("The time does not match the pattern 'hh:mm' : " + mcTime);
         int hours = Integer.parseInt(matcher.group(1)); // NumberFormatException should be avoided deu to the pattern
                                                         // matching
+        if (hours < 0 || hours > 23)
+            throw new IllegalArgumentException("Incorrect hours: " + hours);
         int minutes = Integer.parseInt(matcher.group(2));
+        if (minutes < 0 || minutes > 59)
+            throw new IllegalArgumentException("Incorrect minutes: " + minutes);
         return hours * 1000 + (minutes * 1000) / 60;
     }
 
@@ -156,7 +160,11 @@ public final class TimeUtils {
             throw new IllegalArgumentException("The time does not match the pattern 'hh:mm' : " + time);
         int hours = Integer.parseInt(matcher.group(1)); // NumberFormatException should be avoided due to the pattern
                                                         // matching
+        if (hours < 0 || hours > 23)
+        throw new IllegalArgumentException("Incorrect hours: " + hours);
         int minutes = Integer.parseInt(matcher.group(2));
+        if (minutes < 0 || minutes > 59)
+            throw new IllegalArgumentException("Incorrect minutes: " + minutes);
         return hours * 3600 + minutes * 60;
     }
 
