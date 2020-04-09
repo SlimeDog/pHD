@@ -45,6 +45,6 @@ public abstract class SubCommand implements TabExecutor {
 
     public abstract boolean hasPermission(CommandSender sender);
 
-    public abstract String getUsage(CommandSender sender);
+    public abstract String getUsage(CommandSender sender, String[] args);
 
 }

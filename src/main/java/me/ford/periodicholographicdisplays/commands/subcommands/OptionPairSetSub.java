@@ -89,7 +89,7 @@ public abstract class OptionPairSetSub extends SubCommand {
                     } catch (NumberFormatException e) {
                         throw new OptionPairException(OptionPairExceptionType.NEED_A_NUMBER, result);
                     }
-                    if (distance < 0) {
+                    if (distance < 1.0) {
                         throw new OptionPairException(OptionPairExceptionType.DISTANCE_NEGATIVE, result);
                     }
                     holo.setActivationDistance(distance);
@@ -101,7 +101,7 @@ public abstract class OptionPairSetSub extends SubCommand {
                     } catch (NumberFormatException e) {
                         throw new OptionPairException(OptionPairExceptionType.NEED_AN_INTEGER, result);
                     }
-                    if (time < 0) {
+                    if (time < 1) {
                         throw new OptionPairException(OptionPairExceptionType.SECONDS_NEGATIVE, result);
                     }
                     holo.setShowTime(time);

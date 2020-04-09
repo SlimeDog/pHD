@@ -134,7 +134,7 @@ public class ListSub extends SubCommand {
     }
 
     @Override
-    public String getUsage(CommandSender sender) {
+    public String getUsage(CommandSender sender, String[] args) {
         return USAGE;
     }
 

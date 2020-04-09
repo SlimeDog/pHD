@@ -35,18 +35,20 @@ public abstract class BaseCommandTests {
         String commandName = isSet ? "set" : "manage";
         // /phd set <name>
         String usageMessage;
+        SubCommand cmd;
         if (isSet) {
-            usageMessage = new SetSub(phd.getHolograms(), phd.getLuckPermsHook(), phd.getSettings(), phd.getMessages()).getUsage(sender);
+            cmd = new SetSub(phd.getHolograms(), phd.getLuckPermsHook(), phd.getSettings(), phd.getMessages());
         } else {
-            usageMessage = new ManageSub(phd).getUsage(sender);
+            cmd = new ManageSub(phd);
         }
+        usageMessage = cmd.getUsage(sender, new String[] {commandName, holoName});
         String expected = usageMessage;
         testCommand(sender, null, "phd", new String[] {commandName, holoName}, expected);
         // /phd set <name> 1
         expected = phd.getMessages().getTypeNotRecognizedMessage("1");
         testCommand(sender, null, "phd", new String[] {commandName, holoName, "1"}, expected);
         // /phd set <name> <wrongtype>
-        expected = usageMessage;
+        expected = cmd.getUsage(sender, new String[] {commandName, holoName, testType.name()});
         if (!isSet && testType == PeriodicType.ALWAYS) {
             expected = phd.getMessages().getHologramAlreadyManagedMessage(holoName, testType);
         }

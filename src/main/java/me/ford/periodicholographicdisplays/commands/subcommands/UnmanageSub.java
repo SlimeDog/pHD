@@ -91,7 +91,7 @@ public class UnmanageSub extends SubCommand {
     }
 
     @Override
-    public String getUsage(CommandSender sender) {
+    public String getUsage(CommandSender sender, String[] args) {
         return USAGE;
     }
 

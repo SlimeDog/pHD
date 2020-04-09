@@ -121,15 +121,35 @@ public class UnsetSub extends SubCommand {
         for (String opt : opts) {
             switch (opt) {
                 case "distance":
-                    hologram.defaultDistance(settings);
+                    if (hologram.getActivationDistance() == PeriodicHologramBase.NO_DISTANCE) {
+                        sender.sendMessage(messages.getOptionNotSetMessage(opt));
+                        usedOptions.remove(opt);
+                    } else {
+                        hologram.defaultDistance(settings);
+                    }
                     break;
                 case "seconds":
-                    hologram.defaultShowtime(settings);
+                    if (hologram.getShowTime() == PeriodicHologramBase.NO_SECONDS) {
+                        sender.sendMessage(messages.getOptionNotSetMessage(opt));
+                        usedOptions.remove(opt);
+                    } else {
+                        hologram.defaultShowtime(settings);
+                    }
                     break;
                 case "permission":
-                    hologram.setPermissions(null);
+                    if (hologram.getPermissions() == null) {
+                        sender.sendMessage(messages.getOptionNotSetMessage(opt));
+                        usedOptions.remove(opt);
+                    } else {
+                        hologram.setPermissions(null);
+                    }
                     break;
                 case "flash":
+                    if(!hologram.flashes()) {
+                        sender.sendMessage(messages.getOptionNotSetMessage(opt));
+                        usedOptions.remove(opt);
+                        break;
+                    }
                     hologram.setNoFlash();
                     usedOptions.remove(opt);
                     sender.sendMessage(messages.getUnsetFlashMessage());
@@ -162,6 +182,11 @@ public class UnsetSub extends SubCommand {
                             sender.sendMessage(messages.getPlayerNotFoundMessage(playerName));
                             return true;
                         }
+                    }
+                    if (ntimes.getShownTo().get(player.getUniqueId()) == null) {
+                        sender.sendMessage(messages.getOptionNotSetMessage(String.format("%s (for %s)", opt, player.getName())));
+                        usedOptions.remove(opt);
+                        break;
                     }
                     ntimes.resetShownTo(player.getUniqueId());
                     unsetPlayerCount = true;
@@ -210,7 +235,7 @@ public class UnsetSub extends SubCommand {
     }
 
     @Override
-    public String getUsage(CommandSender sender) {
+    public String getUsage(CommandSender sender, String[] args) {
         return USAGE;
     }
 

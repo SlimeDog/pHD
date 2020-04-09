@@ -36,25 +36,28 @@ public class ManageSub extends OptionPairSetSub {
     static {
         List<String> lines = new ArrayList<>();
         for (PeriodicType type : PeriodicType.values()) {
-            String msg = USAGE_1.replace("<type>", type.name());
-            switch (type) {
-                case ALWAYS:
-                    msg = msg.replace("time <hh:mm> ", "");
-                case IRLTIME:
-                case MCTIME:
-                    msg = msg.replace("times <integer> ", "");
-                    break;
-                case NTIMES:
-                    msg = msg.replace("time <hh:mm> ", "");
-                    break;
-                default:
-                    break; // do nothing
-            }
-            lines.add(msg);
+            lines.add(getUsage(type));
         }
         USAGE = String.join("\n", lines);
     }
     private final IPeriodicHolographicDisplays phd;
+    public static String getUsage(PeriodicType type) {
+        String msg = USAGE_1.replace("<type>", type.name());
+        switch (type) {
+            case ALWAYS:
+                msg = msg.replace("time <hh:mm> ", "");
+            case IRLTIME:
+            case MCTIME:
+                msg = msg.replace("times <integer> ", "");
+                break;
+            case NTIMES:
+                msg = msg.replace("time <hh:mm> ", "");
+                break;
+            default:
+                break; // do nothing
+        }
+        return msg;
+    }
     private final HologramStorage storage;
     private final LuckPermsHook hook;
     private final Messages messages;
@@ -187,10 +190,10 @@ public class ManageSub extends OptionPairSetSub {
                         sender.sendMessage(messages.getNoSuchOptionMessage(type, e.getExtra()));
                         break;
                     case DISTANCE_NEGATIVE:
-                        sender.sendMessage(messages.getNegativeDistanceMessage(e.getExtra()));
+                        sender.sendMessage(messages.getDistanceTooSmallMessage(e.getExtra()));
                         break;
                     case SECONDS_NEGATIVE:
-                        sender.sendMessage(messages.getNegativeSecondsMessage(e.getExtra()));
+                        sender.sendMessage(messages.getSecondsTooSmallMessage(e.getExtra()));
                         break;
                     case FLASH_ONLY_ONE:
                         sender.sendMessage(messages.getFlashMustHaveBothMessage(e.getExtra()));
@@ -310,7 +313,16 @@ public class ManageSub extends OptionPairSetSub {
     }
 
     @Override
-    public String getUsage(CommandSender sender) {
+    public String getUsage(CommandSender sender, String[] args) {
+        if (args.length > 2) {
+            PeriodicType type;
+            try {
+                type = PeriodicType.valueOf(args[2].toUpperCase());
+            } catch (IllegalArgumentException e) {
+                return USAGE;
+            }
+            return getUsage(type);
+        }
         return USAGE;
     }
 

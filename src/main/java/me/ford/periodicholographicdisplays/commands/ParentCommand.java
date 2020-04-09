@@ -59,7 +59,7 @@ public abstract class ParentCommand implements TabExecutor {
         String header = getUsage().replace("{page}", String.valueOf(page));
         for (SubCommand cmd : subCommands.values()) {
             if (cmd.hasPermission(sender)) {
-                for (String part : cmd.getUsage(sender).split("\n")) {
+                for (String part : cmd.getUsage(sender, new String[] {}).split("\n")) {
                     msgs.add(part);
                 }
             }
@@ -116,7 +116,7 @@ public abstract class ParentCommand implements TabExecutor {
         }
 
         if (!cmd.onCommand(sender, command, label, args)) {
-            sender.sendMessage(cmd.getUsage(sender));
+            sender.sendMessage(cmd.getUsage(sender, args));
         }
         return true;
     }
@@ -124,7 +124,7 @@ public abstract class ParentCommand implements TabExecutor {
     private void showUsage(CommandSender sender, int page) {
         UsageInfo info = getUsage(sender, page);
         sender.sendMessage(info.usage);
-        if (page < info.maxPage && sender instanceof Player) {
+        if (page > 0 && page < info.maxPage && sender instanceof Player) {
             HintUtil.sendHint(sender, messages.getNextPageHint("{command}"), "{command}", getHintCommand(page + 1));
         }
     }

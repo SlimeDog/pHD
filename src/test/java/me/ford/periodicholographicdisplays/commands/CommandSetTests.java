@@ -24,7 +24,7 @@ public class CommandSetTests extends BaseCommandTests {
         // /phd set
         sender = new MockOPCommandSender((msg) -> {
             Assert.assertEquals(
-                    new SetSub(phd.getHolograms(), null, phd.getSettings(), phd.getMessages()).getUsage(sender), msg);
+                    new SetSub(phd.getHolograms(), null, phd.getSettings(), phd.getMessages()).getUsage(sender, new String[] {}), msg);
         });
         command.onCommand(sender, null, "phd", new String[] { "set" });
         // /phd set 1

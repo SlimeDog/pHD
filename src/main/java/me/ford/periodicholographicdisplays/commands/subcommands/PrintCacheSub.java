@@ -10,6 +10,8 @@ import me.ford.periodicholographicdisplays.commands.SubCommand;
 
 public class PrintCacheSub extends SubCommand {
     private final IPeriodicHolographicDisplays phd;
+    private static final String USAGE = "/phd printcache";
+    private static final String PERMS = "phd.printcache";
 
     public PrintCacheSub(IPeriodicHolographicDisplays phd) {
         this.phd = phd;
@@ -28,12 +30,12 @@ public class PrintCacheSub extends SubCommand {
 
     @Override
     public boolean hasPermission(CommandSender sender) {
-        return true;
+        return sender.hasPermission(PERMS);
     }
 
     @Override
-    public String getUsage(CommandSender sender) {
-        return "/phd printcache";
+    public String getUsage(CommandSender sender, String[] args) {
+        return USAGE;
     }
 
 }

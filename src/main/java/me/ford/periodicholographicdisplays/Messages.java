@@ -42,6 +42,10 @@ public class Messages extends CustomConfigHandler {
         this.phd = phd;
     }
 
+    public String getOptionNotSetMessage(String option) {
+        return getMessage("option-not-set", "No change, {option} was not set").replace("{option}", option);
+    }
+
     public String getNegativeTimesMessage(String cur) {
         return getMessage("times-too-small", "Minimum times value is 1, got {times}").replace("{times}", cur);
     }
@@ -131,13 +135,13 @@ public class Messages extends CustomConfigHandler {
                 .replace("{type}", type);
     }
 
-    public String getNegativeSecondsMessage(String given) {
-        return getMessage("seconds-cannot-be-negative", "Seconds cannot be negative: {seconds}").replace("{seconds}",
+    public String getSecondsTooSmallMessage(String given) {
+        return getMessage("seconds-too-small", "Minimum seconds value is 1, got {seconds}").replace("{seconds}",
                 given);
     }
 
-    public String getNegativeDistanceMessage(String given) {
-        return getMessage("distance-cannot-be-negative", "Distance cannot be negative: {distance}")
+    public String getDistanceTooSmallMessage(String given) {
+        return getMessage("distance-too-small", "Minimum distance value is 1.0, got {distance}")
                 .replace("{distance}", given);
     }
 
@@ -208,7 +212,7 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getHologramNotManagedMessage(String name) {
-        return getMessage("hologram-not-managed", "Hologram not managed: {name}").replace("{name}", name);
+        return getMessage("hologram-not-tracked", "Hologram not managed: {name}").replace("{name}", name);
     }
 
     public String getHologramNotFoundMessage(String name, PeriodicType type) {
@@ -321,7 +325,7 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getIncorrectTimeMessage(String msg) {
-        return getMessage("incorrect-time", "Unable to parse time {time}").replace("{time}", msg);
+        return getMessage("incorrect-time", "Time format is hh:mm (24-hour), got {time}").replace("{time}", msg);
     }
 
     public String getNeedCountAfterPlayercount() {

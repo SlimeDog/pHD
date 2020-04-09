@@ -144,10 +144,10 @@ public class SetSub extends OptionPairSetSub {
                     sender.sendMessage(messages.getNoSuchOptionMessage(type, e.getExtra()));
                     break;
                 case DISTANCE_NEGATIVE:
-                    sender.sendMessage(messages.getNegativeDistanceMessage(e.getExtra()));
+                    sender.sendMessage(messages.getDistanceTooSmallMessage(e.getExtra()));
                     break;
                 case SECONDS_NEGATIVE:
-                    sender.sendMessage(messages.getNegativeSecondsMessage(e.getExtra()));
+                    sender.sendMessage(messages.getSecondsTooSmallMessage(e.getExtra()));
                     break;
                 case FLASH_ONLY_ONE:
                     sender.sendMessage(messages.getFlashMustHaveBothMessage(e.getExtra()));
@@ -175,7 +175,7 @@ public class SetSub extends OptionPairSetSub {
     }
 
     @Override
-    public String getUsage(CommandSender sender) {
+    public String getUsage(CommandSender sender, String[] args) {
         return USAGE;
     }
 
