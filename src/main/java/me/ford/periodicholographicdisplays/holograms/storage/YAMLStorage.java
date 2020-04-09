@@ -39,7 +39,14 @@ public class YAMLStorage extends CustomConfigHandler implements Storage {
             if (nameSection == null)
                 nameSection = getConfig().createSection(hdHoloInfo.getHoloName());
             for (HologramInfo info : hdHoloInfo.getInfos()) {
+                if (info.getTypeInfo() instanceof NullTypeInfo) {
+                    nameSection.set(info.getType().name(), null);
+                    continue;
+                }
                 saveInfo(nameSection.createSection(info.getType().name()), info);
+            }
+            if (nameSection.getKeys(false).isEmpty()) {
+                getConfig().set(hdHoloInfo.getHoloName(), null);
             }
         }
         saveConfig();
@@ -47,9 +54,6 @@ public class YAMLStorage extends CustomConfigHandler implements Storage {
 
     private void saveInfo(ConfigurationSection section, HologramInfo info) {
         TypeInfo typeInfo = info.getTypeInfo();
-        if (typeInfo instanceof NullTypeInfo) { // just created the section - therefore I can just return
-            return;
-        }
         section.set("type", info.getType().name());
         if (info.getActivationDistance() != PeriodicHologramBase.NO_DISTANCE) {
             section.set("activation-distance", info.getActivationDistance());
