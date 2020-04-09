@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Map.Entry;
 
 import org.bukkit.util.StringUtil;
 
@@ -41,6 +42,13 @@ public class SimpleUserCache implements UserCache {
     @Override
     public String getName(UUID id) {
         return idToName.get(id);
+    }
+
+    @Override
+    public void setAll(Map<UUID, String> map) {
+        for (Entry<UUID, String> entry : map.entrySet()) {
+            set(entry.getKey(), entry.getValue());
+        }
     }
 
     @Override

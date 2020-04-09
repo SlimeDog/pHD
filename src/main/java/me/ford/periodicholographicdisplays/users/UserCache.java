@@ -18,6 +18,8 @@ public interface UserCache {
 
     public void set(UUID id, String name);
 
+    public void setAll(Map<UUID, String> map);
+
     public List<String> getNamesStartingWith(String start);
 
     public Map<UUID, String> getToSave();
