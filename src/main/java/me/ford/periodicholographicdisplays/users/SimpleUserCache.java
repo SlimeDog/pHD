@@ -1,21 +1,64 @@
 package me.ford.periodicholographicdisplays.users;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.Map.Entry;
+import java.util.stream.Stream;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
 import org.bukkit.util.StringUtil;
+
+import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 
 /**
  * UserCache
  */
 public class SimpleUserCache implements UserCache {
+    private static final String USER_CACHE_NAME = "usercache.json";
+    private final PeriodicHolographicDisplays phd;
     private final Map<UUID, String> idToName = new HashMap<>();
     private final Map<String, UUID> nameToId = new HashMap<>(); // lower case here
-    private final Map<UUID, String> toSave = new HashMap<>();
+
+    public SimpleUserCache(PeriodicHolographicDisplays phd) {
+        populateUserCache(new JsonParser().parse(readUserCache()));
+        this.phd = phd;
+    }
+
+    private String readUserCache() {
+        StringBuilder contentBuilder = new StringBuilder();
+        try (Stream<String> stream = Files.lines(Paths.get(USER_CACHE_NAME), StandardCharsets.UTF_8)) {
+            stream.forEach(s -> contentBuilder.append(s).append("\n"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return contentBuilder.toString();
+    }
+
+    private void populateUserCache(JsonElement json) {
+        JsonArray arr = json.getAsJsonArray();
+        for (JsonElement el : arr) {
+            String name = el.getAsJsonObject().get("name").getAsString();
+            String uuid = el.getAsJsonObject().get("uuid").getAsString();
+            UUID id;
+            try {
+                id = UUID.fromString(uuid);
+            } catch (IllegalArgumentException e) {
+                phd.getLogger().severe("Unable to parse UUID from " + USER_CACHE_NAME + ": " + uuid);
+                continue;
+            }
+            addOnStartup(id, name);
+        }
+    }
 
     void addOnStartup(UUID id, String name) {
         put(id, name, true);
@@ -24,9 +67,6 @@ public class SimpleUserCache implements UserCache {
     private void put(UUID id, String name, boolean atStartup) {
         idToName.put(id, name);
         nameToId.put(name.toLowerCase(), id);
-        if (!atStartup) {
-            toSave.put(id, name);
-        }
     }
 
     @Override
@@ -62,16 +102,6 @@ public class SimpleUserCache implements UserCache {
         if (start.length() < MIN_NAME_MATCH)
             return list;
         return StringUtil.copyPartialMatches(start, idToName.values(), list);
-    }
-
-    @Override
-    public Map<UUID, String> getToSave() {
-        return new HashMap<>(toSave);
-    }
-
-    @Override
-    public void markSaved() {
-        toSave.clear();
     }
 
     @Override

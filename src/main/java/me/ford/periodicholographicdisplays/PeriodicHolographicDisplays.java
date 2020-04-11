@@ -23,9 +23,8 @@ import me.ford.periodicholographicdisplays.listeners.SimpleWorldTimeListener;
 import me.ford.periodicholographicdisplays.listeners.WorldListener;
 import me.ford.periodicholographicdisplays.listeners.WorldTimeListener;
 import me.ford.periodicholographicdisplays.listeners.legacy.LegacyWorldTimeListener;
-import me.ford.periodicholographicdisplays.users.SQLUserStorage;
-import me.ford.periodicholographicdisplays.users.UserStorage;
-import me.ford.periodicholographicdisplays.users.YamlUserStorage;
+import me.ford.periodicholographicdisplays.users.SimpleUserCache;
+import me.ford.periodicholographicdisplays.users.UserCache;
 
 /**
  * PeriodicHolographicDisplays
@@ -36,7 +35,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
     private Messages messages;
     private LuckPermsHook lpHook;
     private NPCHook citizensHook = null;
-    private UserStorage userStorage;
+    private UserCache userCache;
 
     @Override
     public void onEnable() {
@@ -45,14 +44,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         settings = new Settings(this);
         holograms = new HologramStorage(this);
 
-        // user storage and cache
-        if (settings.useDatabase()) {
-            userStorage = new SQLUserStorage(this);
-        } else {
-            userStorage = new YamlUserStorage(this);
-        }
-        // checking cache a few ticks later - if empty, then populate
-        scheduleCacheSizeCheck();
+        userCache = new SimpleUserCache(this);
 
         // check messages
         try {
@@ -78,7 +70,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
 
         // listeners
         this.getServer().getPluginManager().registerEvents(new HologramListener(holograms, citizensHook), this);
-        this.getServer().getPluginManager().registerEvents(new JoinLeaveListener(this, holograms, userStorage), this);
+        this.getServer().getPluginManager().registerEvents(new JoinLeaveListener(this, holograms), this);
         this.getServer().getPluginManager().registerEvents(new WorldListener(holograms), this);
         WorldTimeListener worldTimeListener;
         if (getServer().getBukkitVersion().contains("1.15")) {
@@ -111,18 +103,9 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         }
         getLogger().info(messages.getActiveStorageMessage(getSettings().useDatabase()));
     }
-    
-    private void scheduleCacheSizeCheck() {
-        getServer().getScheduler().runTaskLater(this, () -> {
-            if (userStorage.getCache().isEmpty()) {
-                getLogger().info("Populating UUID to name cache with all players");
-                userStorage.populate();
-            }
-        }, 20L);
-    }
 
-    public UserStorage getUserStorage() {
-        return userStorage;
+    public UserCache getUserCache() {
+        return userCache;
     }
 
     public NPCHook getNPCHook() {
@@ -170,15 +153,6 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         }
         issues.addAll(settingIssues);
         holograms.reload();
-        // reload UUID cache
-        if (settings.useDatabase()) { // since the connection is shared, the connection of the old one is closed
-            userStorage = new SQLUserStorage(this);
-        } else {
-            userStorage = new YamlUserStorage(this);
-        }
-        scheduleCacheSizeCheck();
-        // commands (because userStorage instance might have changed)
-        getCommand("phd").setExecutor(new PHDCommand(this));
         return issues;
     }
 
@@ -219,7 +193,6 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
     @Override
     public void onDisable() {
         holograms.save(true);
-        userStorage.save(true);
     }
 
     public HologramStorage getHolograms() {

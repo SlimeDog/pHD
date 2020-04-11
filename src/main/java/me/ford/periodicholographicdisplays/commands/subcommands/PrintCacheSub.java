@@ -24,7 +24,7 @@ public class PrintCacheSub extends SubCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
-        sender.sendMessage("CACHE:\n" + phd.getUserStorage().getCache().getEntireCache());
+        sender.sendMessage("CACHE:\n" + phd.getUserCache().getEntireCache());
         return true;
     }
 

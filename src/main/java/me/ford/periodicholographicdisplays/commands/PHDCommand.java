@@ -26,13 +26,13 @@ public class PHDCommand extends ParentCommand {
         this.plugin = plugin;
         addSubCommand("list", new ListSub(plugin.getHolograms(), this.plugin.getMessages()));
         addSubCommand("info", new InfoSub(plugin.getHolograms(), this.plugin.getMessages()));
-        addSubCommand("report", new ReportSub(plugin.getHolograms(), plugin.getMessages(), plugin.getUserStorage()));
+        addSubCommand("report", new ReportSub(plugin.getHolograms(), plugin.getMessages(), plugin.getUserCache()));
         addSubCommand("manage",
                 new ManageSub(plugin.getHolograms(), plugin.getLuckPermsHook(), this.plugin.getMessages()));
         addSubCommand("set", new SetSub(plugin.getHolograms(), plugin.getLuckPermsHook(), plugin.getSettings(),
                 this.plugin.getMessages()));
         addSubCommand("unset", new UnsetSub(plugin.getHolograms(), plugin.getSettings(), this.plugin.getMessages(),
-                plugin.getUserStorage()));
+                plugin.getUserCache()));
         addSubCommand("unmanage", new UnmanageSub(plugin.getHolograms(), this.plugin.getMessages()));
         addSubCommand("reload", new ReloadSub(plugin));
         convertSub = new ConvertSub(plugin);

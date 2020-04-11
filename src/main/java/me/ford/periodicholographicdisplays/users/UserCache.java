@@ -22,10 +22,6 @@ public interface UserCache {
 
     public List<String> getNamesStartingWith(String start);
 
-    public Map<UUID, String> getToSave();
-
-    public void markSaved();
-
     public Map<UUID, String> getEntireCache();
 
 }

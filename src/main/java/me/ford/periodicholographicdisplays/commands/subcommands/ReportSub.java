@@ -18,7 +18,6 @@ import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.users.UserCache;
-import me.ford.periodicholographicdisplays.users.UserStorage;
 import me.ford.periodicholographicdisplays.util.HintUtil;
 import me.ford.periodicholographicdisplays.util.PageUtils;
 
@@ -30,12 +29,12 @@ public class ReportSub extends SubCommand {
     private static final String USAGE = "/phd report NTIMES <player> [page]";
     private final HologramStorage storage;
     private final Messages messages;
-    private final UserStorage userStorage;
+    private final UserCache userCache;
 
-    public ReportSub(HologramStorage storage, Messages messages, UserStorage userStorage) {
+    public ReportSub(HologramStorage storage, Messages messages, UserCache userCache) {
         this.storage = storage;
         this.messages = messages;
-        this.userStorage = userStorage;
+        this.userCache = userCache;
     }
 
     @Override
@@ -49,7 +48,7 @@ public class ReportSub extends SubCommand {
                 if (args[1].length() < UserCache.MIN_NAME_MATCH) {
                     return null;
                 }
-                return userStorage.getCache().getNamesStartingWith(args[1]);
+                return userCache.getNamesStartingWith(args[1]);
         }
         return list;
     }
@@ -69,7 +68,7 @@ public class ReportSub extends SubCommand {
             return false;
         OfflinePlayer player = Bukkit.getPlayer(args[1]); // TODO - do I need offline players?
         if (player == null) {
-            UUID id = userStorage.getCache().getUuid(args[1]);
+            UUID id = userCache.getUuid(args[1]);
             if (id != null) {
                 player = Bukkit.getOfflinePlayer(id);
             }

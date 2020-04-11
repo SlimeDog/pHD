@@ -16,7 +16,6 @@ import me.ford.periodicholographicdisplays.holograms.storage.Storage;
 import me.ford.periodicholographicdisplays.holograms.storage.YAMLStorage;
 import me.ford.periodicholographicdisplays.holograms.storage.storageimport.StorageConverter;
 import me.ford.periodicholographicdisplays.storage.sqlite.SQLStorageBase;
-import me.ford.periodicholographicdisplays.users.YamlUserStorage;
 
 /**
  * ImportSub
@@ -115,9 +114,6 @@ public class ConvertSub extends SubCommand {
         WhenDone whenDone = new WhenDone(sender, from, to);
         StorageConverter<Storage, Storage> converter;
         converter = new StorageConverter<Storage, Storage>(sourceStorage, targetStorage, whenDone);
-        if (type == ConvertTypes.SQLITE_TO_YAML) { // create .yml
-            new YamlUserStorage(phd); // saves empty YAML file
-        }
         converter.startConvert();
         sender.sendMessage(messages.getStartedConvertingMessage(from, to));
         return true;
