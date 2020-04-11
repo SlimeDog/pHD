@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.DefaultReloadIssue;
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.ReloadIssue;
@@ -40,6 +41,11 @@ public class Messages extends CustomConfigHandler {
         super(phd, FILE_NAME);
         saveDefaultConfig();
         this.phd = phd;
+    }
+
+    public String getAddedToCacheMessage(Player player) {
+        return getMessage("added-to-cache", "Adding player {name} UUID {uuid} to cache")
+            .replace("{name}", player.getName()).replace("{uuid}", player.getUniqueId().toString());
     }
 
     public String getOptionNotSetMessage(String option) {

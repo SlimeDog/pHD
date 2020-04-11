@@ -30,6 +30,7 @@ public class JoinLeaveListener implements Listener {
         String prevName = userCache.getName(player.getUniqueId());
         if (prevName == null || !prevName.equalsIgnoreCase(player.getName())) {
             String reason = prevName == null ? "they didn't have a name cached": "they have a new name";
+            phd.getLogger().info(phd.getMessages().getAddedToCacheMessage(player));
             phd.debug("Adding name of joining player to cache: " + player.getName() + " because " + reason);
             userCache.set(player.getUniqueId(), player.getName());
         }
