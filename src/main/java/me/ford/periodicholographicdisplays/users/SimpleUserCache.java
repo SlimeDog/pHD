@@ -1,8 +1,10 @@
 package me.ford.periodicholographicdisplays.users;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,16 +32,28 @@ public class SimpleUserCache implements UserCache {
     private final Map<String, UUID> nameToId = new HashMap<>(); // lower case here
 
     public SimpleUserCache(PeriodicHolographicDisplays phd) {
-        populateUserCache(new JsonParser().parse(readUserCache()));
         this.phd = phd;
+        populateUserCache(new JsonParser().parse(readUserCache()));
     }
 
     private String readUserCache() {
         StringBuilder contentBuilder = new StringBuilder();
-        try (Stream<String> stream = Files.lines(Paths.get(USER_CACHE_NAME), StandardCharsets.UTF_8)) {
+        File wc = phd.getServer().getWorldContainer();
+        String folderPath;
+        if (wc != null) {
+            folderPath = wc.getAbsolutePath();
+        } else {
+            folderPath = ".";
+        }
+        Path path = Paths.get(folderPath, USER_CACHE_NAME);
+        if (!Files.exists(path)) {
+            phd.getLogger().warning("usercache.json not found!");
+            return "{}";
+        }
+        try (Stream<String> stream = Files.lines(path, StandardCharsets.UTF_8)) {
             stream.forEach(s -> contentBuilder.append(s).append("\n"));
         } catch (IOException e) {
-            e.printStackTrace();
+            phd.getLogger().warning("No user cache found!");
         }
         return contentBuilder.toString();
     }
