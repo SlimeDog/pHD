@@ -36,6 +36,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
     private LuckPermsHook lpHook;
     private NPCHook citizensHook = null;
     private UserCache userCache;
+    private PHDCommand command;
 
     @Override
     public void onEnable() {
@@ -87,7 +88,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         }
 
         // commands
-        getCommand("phd").setExecutor(new PHDCommand(this));
+        getCommand("phd").setExecutor(command = new PHDCommand(this));
 
         // settings check
         List<ReloadIssue> issues = getSettingIssues();
@@ -153,6 +154,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         }
         issues.addAll(settingIssues);
         holograms.reload();
+        command.reload();
         return issues;
     }
 

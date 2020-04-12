@@ -40,6 +40,11 @@ public class PHDCommand extends ParentCommand {
         if(plugin.getSettings().onDebug()) addSubCommand("printcache", new PrintCacheSub(plugin));
     }
 
+    public void reload() {
+        removeSubCommand("printcache");
+        if(plugin.getSettings().onDebug()) addSubCommand("printcache", new PrintCacheSub(plugin));
+    }
+
     public ConvertSub getConvertSub() {
         return convertSub;
     }
