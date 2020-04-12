@@ -1,6 +1,7 @@
 package me.ford.periodicholographicdisplays.storage.yaml;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -8,6 +9,9 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
 
+import org.apache.commons.lang.Validate;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -22,16 +26,17 @@ public class CustomConfigHandler {
     private FileConfiguration customConfig = null;
     private File customConfigFile = null;
 
-    public CustomConfigHandler(PeriodicHolographicDisplays phd, String name) {
+    public CustomConfigHandler(PeriodicHolographicDisplays phd, String name) throws InvalidConfigurationException {
         this.phd = phd;
         this.fileName = name;
+        reloadConfig();
     }
 
-    public boolean reloadConfig() {
+    public boolean reloadConfig() throws InvalidConfigurationException {
         if (customConfigFile == null) {
             customConfigFile = new File(phd.getDataFolder(), fileName);
         }
-        customConfig = YamlConfiguration.loadConfiguration(customConfigFile);
+        customConfig = loadConfiguration(customConfigFile);
 
         // Look for defaults in the jar
         Reader defConfigStream = null;
@@ -56,14 +61,10 @@ public class CustomConfigHandler {
     }
 
     public File getFile() {
-        getConfig();
         return customConfigFile;
     }
 
     public FileConfiguration getConfig() {
-        if (customConfig == null) {
-            reloadConfig();
-        }
         return customConfig;
     }
 
@@ -85,6 +86,21 @@ public class CustomConfigHandler {
         if (!customConfigFile.exists()) {
             phd.saveResource(fileName, false);
         }
+    }
+
+    public static YamlConfiguration loadConfiguration(File file) throws InvalidConfigurationException {
+        Validate.notNull(file, "File cannot be null");
+
+        YamlConfiguration config = new YamlConfiguration();
+
+        try {
+            config.load(file);
+        } catch (FileNotFoundException ex) {
+            // empty
+        } catch (IOException ex) {
+            Bukkit.getLogger().log(Level.SEVERE, "Cannot load " + file, ex);
+        }
+        return config;
     }
 
 }

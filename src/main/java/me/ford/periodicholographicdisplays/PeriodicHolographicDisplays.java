@@ -2,11 +2,14 @@ package me.ford.periodicholographicdisplays;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bstats.bukkit.Metrics;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.ford.periodicholographicdisplays.Settings.SettingIssue;
@@ -23,6 +26,7 @@ import me.ford.periodicholographicdisplays.listeners.SimpleWorldTimeListener;
 import me.ford.periodicholographicdisplays.listeners.WorldListener;
 import me.ford.periodicholographicdisplays.listeners.WorldTimeListener;
 import me.ford.periodicholographicdisplays.listeners.legacy.LegacyWorldTimeListener;
+import me.ford.periodicholographicdisplays.storage.yaml.CustomConfigHandler;
 import me.ford.periodicholographicdisplays.users.SimpleUserCache;
 import me.ford.periodicholographicdisplays.users.UserCache;
 
@@ -37,13 +41,40 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
     private NPCHook citizensHook = null;
     private UserCache userCache;
     private PHDCommand command;
+    private CustomConfigHandler config;
 
     @Override
     public void onEnable() {
-        saveDefaultConfig();
-        messages = new Messages(this);
+        List<ReloadIssue> issues = new ArrayList<>();
+        try {
+            config = new CustomConfigHandler(this, "config.yml");
+        } catch (InvalidConfigurationException e1) {
+            issues.add(DefaultReloadIssue.INVALID_CONFIGURATION);
+            disableMe(issues);
+            return;
+        }
+        try {
+            messages = new Messages(this);
+        } catch (InvalidConfigurationException e1) {
+            issues.add(DefaultReloadIssue.INVALID_MESSAGES);
+        }
         settings = new Settings(this);
-        holograms = new HologramStorage(this);
+
+        // settings check
+        issues.addAll(getSettingIssues());
+        if (!issues.isEmpty()) {
+            disableMe(issues);
+            return;
+        }
+
+        try {
+            holograms = new HologramStorage(this);
+        } catch (InvalidConfigurationException e1) {
+            issues.add(DefaultReloadIssue.INVALID_HOLOGRAMS);
+            disableMe(issues);
+            return;
+        }
+        saveDefaultConfig();
 
         userCache = new SimpleUserCache(this);
 
@@ -90,19 +121,29 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         // commands
         getCommand("phd").setExecutor(command = new PHDCommand(this));
 
-        // settings check
-        List<ReloadIssue> issues = getSettingIssues();
-        if (!issues.isEmpty()) {
-            getLogger().severe(messages.getProblemsReloadingConfigMessage(issues));
-            getLogger().severe(messages.getDisablingMessage());
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-
         if (settings.checkForUpdates()) {
             // TODO - check for updates
         }
         getLogger().info(messages.getActiveStorageMessage(getSettings().useDatabase()));
+    }
+
+    private void disableMe(List<ReloadIssue> issues) {
+        boolean canMessage = false;
+        if (messages == null) {
+            try {
+                messages = new Messages(this, true);
+                canMessage = true;
+            } catch (InvalidConfigurationException e) {
+                e.printStackTrace();
+            }
+        }
+        if (canMessage) {
+            getLogger().severe(messages.getProblemsReloadingConfigMessage(issues));
+            getLogger().severe(messages.getDisablingMessage());
+        } else {
+            getLogger().severe("Disabling plugins. Problems: " + issues);
+        }
+        getServer().getPluginManager().disablePlugin(this);
     }
 
     public UserCache getUserCache() {
@@ -138,36 +179,58 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
             messages.saveDefaultConfig();
             issues.add(DefaultReloadIssue.NO_MESSAGES);
         }
-        if (!messages.reloadConfig()) {
-            issues.add(new SimpleReloadIssue(messages.getIncorrectMessages(), null));
-            getServer().getScheduler().runTask(this, () -> {
-                getLogger().severe(messages.getDisablingMessage());
-                getServer().getPluginManager().disablePlugin(this);
-            });
+        boolean disablePlugin = false;
+        try {
+            if (!messages.reloadConfig()) {
+                issues.add(new SimpleReloadIssue(messages.getIncorrectMessages(), null));
+                disablePlugin = true;
+            }
+        } catch (InvalidConfigurationException e) {
+            issues.add(DefaultReloadIssue.INVALID_MESSAGES);
         }
         List<ReloadIssue> settingIssues = getSettingIssues();
+        issues.addAll(settingIssues);
         if (!settingIssues.isEmpty()) {
+            disablePlugin = true;
+        }
+        try {
+            holograms.reload();
+        } catch (InvalidConfigurationException e) {
+            issues.add(DefaultReloadIssue.INVALID_HOLOGRAMS);
+            disablePlugin = true;
+        }
+        if (disablePlugin) {
             getServer().getScheduler().runTask(this, () -> {
-                getLogger().severe(messages.getDisablingMessage());
-                getServer().getPluginManager().disablePlugin(this);
+                disableMe(issues);
             });
         }
-        issues.addAll(settingIssues);
-        holograms.reload();
         command.reload();
         return issues;
     }
 
     private List<ReloadIssue> getSettingIssues() {
         List<ReloadIssue> issues = new ArrayList<>();
-        Map<SettingIssue, String> settingIssues = null;
         try {
-            settingIssues = reloadMyConfig();
+            issues.addAll(reloadMyConfig());
         } catch (StorageTypeException e) {
             DefaultReloadIssue issue = DefaultReloadIssue.ILLEGA_STORAGE_TYPE;
             issue.setExtra(e.getType());
             issues.add(issue);
             settings.setDefaultDatabaseInternal();
+        }
+        return issues;
+    }
+
+    public List<ReloadIssue> reloadMyConfig() {
+        Map<SettingIssue, String> settingIssues = new HashMap<>();
+        List<ReloadIssue> issues = new ArrayList<>();
+        try {
+            config.reloadConfig();
+        } catch (InvalidConfigurationException e) {
+            issues.add(DefaultReloadIssue.INVALID_CONFIGURATION);
+        }
+        if (settings != null) {
+            settingIssues.putAll(settings.reload());
         }
         if (settingIssues != null && !settingIssues.isEmpty()) {
             for (Entry<SettingIssue, String> entry : settingIssues.entrySet()) {
@@ -184,17 +247,9 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         return issues;
     }
 
-    public Map<SettingIssue, String> reloadMyConfig() {
-        super.reloadConfig();
-        if (settings != null) {
-            return settings.reload();
-        }
-        return null;
-    }
-
     @Override
     public void onDisable() {
-        holograms.save(true);
+        if (holograms != null) holograms.save(true);
     }
 
     public HologramStorage getHolograms() {
@@ -215,10 +270,19 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         }
     }
 
+    // config
+
+    @Override
+    public FileConfiguration getConfig() {
+        return config.getConfig();
+    }
+
     public static enum DefaultReloadIssue implements ReloadIssue {
         NONE(null), NO_FOLDER("folder had to be recreated!"), NO_CONFIG("the config had to be recreated"),
-        NO_MESSAGES("the messages file had to be recreated"), ILLEGA_STORAGE_TYPE("storage type not understood");
-        ;
+        NO_MESSAGES("the messages file had to be recreated"), ILLEGA_STORAGE_TYPE("storage type not understood"),
+        INVALID_CONFIGURATION("config.yml was incorrectly formatted"),
+        INVALID_MESSAGES("messages.yml was incorrectly formatted"),
+        INVALID_HOLOGRAMS("database.yml was incorrectly formatted");
 
         private final String issue;
         private String extra = null;

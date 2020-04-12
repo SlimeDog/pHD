@@ -8,6 +8,7 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
@@ -27,7 +28,7 @@ public class YAMLStorage extends CustomConfigHandler implements Storage {
     public static final String FILE_NAME = "database.yml";
     private final PeriodicHolographicDisplays phd;
 
-    public YAMLStorage(PeriodicHolographicDisplays phd) {
+    public YAMLStorage(PeriodicHolographicDisplays phd) throws InvalidConfigurationException {
         super(phd, FILE_NAME);
         this.phd = phd;
     }
@@ -70,7 +71,8 @@ public class YAMLStorage extends CustomConfigHandler implements Storage {
             NTimesTypeInfo ntimes = (NTimesTypeInfo) typeInfo;
             section.set("times-to-show", ntimes.getShowTimes());
             ConfigurationSection shownToSection = section.getConfigurationSection("shown-to");
-            if (shownToSection == null) shownToSection = section.createSection("shown-to");
+            if (shownToSection == null)
+                shownToSection = section.createSection("shown-to");
             for (Map.Entry<UUID, Integer> entry : ntimes.getShownToTimes().entrySet()) {
                 int value = entry.getValue();
                 shownToSection.set(entry.getKey().toString(), value == 0 ? null : value);
@@ -172,7 +174,14 @@ public class YAMLStorage extends CustomConfigHandler implements Storage {
     }
 
     public void reload() {
-        reloadConfig();
+        try {
+            reloadConfig();
+        } catch (InvalidConfigurationException e) {
+            phd.getLogger()
+                    .severe("Problem reloading YAML storage! Incorrectly formatted. "
+                            + "All pHD information is lost until the formatting is fixed "
+                            + "(the reload command must be used again afterwards)");
+        }
     }
 
     @Override

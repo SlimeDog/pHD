@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.DefaultReloadIssue;
@@ -35,10 +36,17 @@ import me.ford.periodicholographicdisplays.util.PageUtils.PageInfo;
  */
 public class Messages extends CustomConfigHandler {
     private final static String FILE_NAME = "messages.yml";
+    private static final String DUMMY_FILE_NAME = "messages_dummy.yml";
     private final PeriodicHolographicDisplays phd;
 
-    public Messages(PeriodicHolographicDisplays phd) {
+    public Messages(PeriodicHolographicDisplays phd) throws InvalidConfigurationException {
         super(phd, FILE_NAME);
+        saveDefaultConfig();
+        this.phd = phd;
+    }
+
+    Messages(PeriodicHolographicDisplays phd, boolean dummy) throws InvalidConfigurationException {
+        super(phd, DUMMY_FILE_NAME);
         saveDefaultConfig();
         this.phd = phd;
     }

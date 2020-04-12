@@ -14,6 +14,7 @@ import com.gmail.filoghost.holographicdisplays.object.NamedHologram;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.World;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
@@ -36,7 +37,7 @@ public class HologramStorage {
     private final Map<World, WorldHologramStorage> holograms = new HashMap<>();
     private final Set<HDHologramInfo> danglingInfos = new HashSet<>();
 
-    public HologramStorage(PeriodicHolographicDisplays plugin) {
+    public HologramStorage(PeriodicHolographicDisplays plugin) throws InvalidConfigurationException {
         if (plugin.getSettings().useDatabase()) {
             this.storage = new SQLStorage(plugin);
         } else {
@@ -126,7 +127,7 @@ public class HologramStorage {
         return storage;
     }
 
-    public void reload() {
+    public void reload() throws InvalidConfigurationException {
         danglingInfos.clear();
         for (WorldHologramStorage storage : holograms.values()) {
             for (FlashingHologram hologram : storage.getHolograms()) {
