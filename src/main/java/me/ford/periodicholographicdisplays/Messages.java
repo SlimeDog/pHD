@@ -47,7 +47,6 @@ public class Messages extends CustomConfigHandler {
 
     Messages(PeriodicHolographicDisplays phd, boolean dummy) throws InvalidConfigurationException {
         super(phd, DUMMY_FILE_NAME);
-        saveDefaultConfig();
         this.phd = phd;
     }
 
