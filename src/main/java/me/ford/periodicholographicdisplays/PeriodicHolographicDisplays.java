@@ -57,6 +57,8 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
             messages = new Messages(this);
         } catch (InvalidConfigurationException e1) {
             issues.add(DefaultReloadIssue.INVALID_MESSAGES);
+            disableMe(issues);
+            return;
         }
         settings = new Settings(this);
 
@@ -187,6 +189,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
             }
         } catch (InvalidConfigurationException e) {
             issues.add(DefaultReloadIssue.INVALID_MESSAGES);
+            disablePlugin = true;
         }
         List<ReloadIssue> settingIssues = getSettingIssues();
         issues.addAll(settingIssues);
