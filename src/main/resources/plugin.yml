@@ -15,35 +15,39 @@ softdepend: [Citizens, LuckPerms, Multiverse-Core, MultiWorld]
 commands:
   phd:
     description: See plugin help
-    usage: /<command> <subcommand> <parameters>
+    usage: /<command>
     permission: phd.use
+  phd help:      
+    description: See plugin help
+    usage: /<command>
+    permission: phd.use
+  phd list:
+    description: List pHD holograms
+    usage: /<command> [<type>]
+    permission: phd.list
   phd info:
     description: See info about a pHD hologram
-    usage: /<command> <subcommand> <parameters>
+    usage: /<command> <hologram> <type>
     permission: phd.info
   phd report:
     description: See how many times a player has viewed holograms
-    usage: /<command> <subcommand> <parameters>
+    usage: /<command> NTIMES <player>
     permission: phd.report
-  phd list:
-    description: List pHD holograms
-    usage: /<command> <subcommand> <parameters>
-    permission: phd.list
   phd manage:
     description: Manage an HD hologram with pHD
-    usage: /<command> <subcommand> <parameters>
+    usage: /<command> <hologram> <type> <parameters>
     permission: phd.manage
   phd set:
     description: Set parameters of a pHD hologram
-    usage: /<command> <subcommand> <parameters>
+    usage: /<command> <hologram> <type> <parameters>
     permission: phd.set
   phd unset:
     description: Unset parameters of a pHD hologram
-    usage: /<command> <subcommand> <parameters>
+    usage: /<command> <hologram> <type> <parameters>
     permission: phd.unset
   phd unmanage:
     description: Unmanage an HD hologram with pHD
-    usage: /<command> <subcommand> <parameters>
+    usage: /<command> <hologram> <type>
     permission: phd.unmanage
   phd reload:
     description: Reload the configuration and data
@@ -51,7 +55,7 @@ commands:
     permission: phd.reload
   phd convert:
     description: Convert data between storage types
-    usage: /<command> <subcommand> <parameters>
+    usage: /<command> <sourceStorageType> <targetStorageType>
     permission: phd.convert
 
 permissions:
@@ -60,9 +64,9 @@ permissions:
     default: op
     children:
       phd.use: true
+      phd.list: true
       phd.info: true
       phd.report: true
-      phd.list: true
       phd.manage: true
       phd.set: true
       phd.unset: true
