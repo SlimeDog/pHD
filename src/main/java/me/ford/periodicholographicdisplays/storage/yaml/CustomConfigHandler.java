@@ -27,16 +27,14 @@ public class CustomConfigHandler {
     private FileConfiguration customConfig = null;
     private File customConfigFile = null;
 
-    public CustomConfigHandler(PeriodicHolographicDisplays phd, String name, boolean noSave) {
+    public CustomConfigHandler(PeriodicHolographicDisplays phd, String name) throws InvalidConfigurationException {
+        this(phd, name, false);
+    }
+
+    public CustomConfigHandler(PeriodicHolographicDisplays phd, String name, boolean noSave) throws InvalidConfigurationException {
         this.phd = phd;
         this.fileName = name;
         this.noSave = noSave;
-    }
-
-    public CustomConfigHandler(PeriodicHolographicDisplays phd, String name) throws InvalidConfigurationException {
-        this.phd = phd;
-        this.fileName = name;
-        this.noSave = false;
         reloadConfig();
     }
 
