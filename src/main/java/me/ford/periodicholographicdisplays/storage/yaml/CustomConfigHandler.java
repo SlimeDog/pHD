@@ -23,12 +23,20 @@ import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 public class CustomConfigHandler {
     private final PeriodicHolographicDisplays phd;
     private final String fileName;
+    private final boolean noSave;
     private FileConfiguration customConfig = null;
     private File customConfigFile = null;
+
+    public CustomConfigHandler(PeriodicHolographicDisplays phd, String name, boolean noSave) {
+        this.phd = phd;
+        this.fileName = name;
+        this.noSave = noSave;
+    }
 
     public CustomConfigHandler(PeriodicHolographicDisplays phd, String name) throws InvalidConfigurationException {
         this.phd = phd;
         this.fileName = name;
+        this.noSave = false;
         reloadConfig();
     }
 
@@ -53,7 +61,7 @@ public class CustomConfigHandler {
             customConfig.setDefaults(defConfig);
         }
         if (customConfig.getKeys(true).isEmpty()) {
-            saveConfig();
+            if (!noSave) saveConfig();
             return false;
         } else {
             return true;
