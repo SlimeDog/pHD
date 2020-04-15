@@ -35,6 +35,7 @@ public class CustomConfigHandler {
         this.phd = phd;
         this.fileName = name;
         this.noSave = noSave;
+        saveDefaultConfig();
         reloadConfig();
     }
 
