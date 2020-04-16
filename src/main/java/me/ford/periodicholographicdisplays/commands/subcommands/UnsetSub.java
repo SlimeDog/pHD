@@ -26,7 +26,7 @@ import me.ford.periodicholographicdisplays.users.UserCache;
  */
 public class UnsetSub extends SubCommand {
     private static final String PERMS = "phd.unset";
-    private static final String USAGE = "/phd unset <hologram> <type> [seconds] [distance] [permission] [flash] [playercount <player>]";
+    private static final String USAGE = "/phd unset <hologram> <type> <options>";
     private final HologramStorage storage;
     private final Settings settings;
     private final Messages messages;
