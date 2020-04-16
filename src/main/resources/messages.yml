@@ -11,12 +11,6 @@
 # PlaceholderAPI variables are not supported.
 #
 
-# Console/log prefix
-# Trailing space is required to conform with standard prefix format.
-# If no prefix is desired (not recommended), use "".
-#
-PHD_PREFIX: "[pHD] "
-
 # Messages produced by /phd list
 #
 hologram-list: "Holograms (holograms {numbers}, page {page}/{max-pages}): \n{holograms}"
