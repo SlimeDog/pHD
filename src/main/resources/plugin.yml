@@ -35,15 +35,15 @@ commands:
     permission: phd.report
   phd manage:
     description: Manage an HD hologram with pHD
-    usage: /<command> <hologram> <type> <parameters>
+    usage: /<command> <hologram> <type> <options>
     permission: phd.manage
   phd set:
-    description: Set parameters of a pHD hologram
-    usage: /<command> <hologram> <type> <parameters>
+    description: Set attributes of a pHD hologram
+    usage: /<command> <hologram> <type> <options>
     permission: phd.set
   phd unset:
-    description: Unset parameters of a pHD hologram
-    usage: /<command> <hologram> <type> <parameters>
+    description: Unset attributes of a pHD hologram
+    usage: /<command> <hologram> <type> <options>
     permission: phd.unset
   phd unmanage:
     description: Unmanage an HD hologram with pHD
@@ -74,32 +74,32 @@ permissions:
       phd.reload: true
       phd.convert: true
   phd.use:
-    description: Allows using the phd command
+    description: Allows use of the phd command
     default: op
   phd.list:
-    description: Allows listing of pHD holograms
+    description: Allows listing pHD holograms
     default: op
   phd.info:
-    description: Allows listing of attributes of specified hologram
+    description: Allows listing attributes of specified hologram
     default: op
   phd.report:
-    description: Allows listing of player seen times for NTIMES hologram
+    description: Allows listing number of times a player has seen an NTIMES hologram
     default: op
   phd.manage:
-    description: Allows managing a HolographicDisplays hologram
+    description: Allows pHD management of a HolographicDisplays hologram
     default: op
   phd.set:
-    description: Allows setting a parameter of a hologram
+    description: Allows setting attributes of a hologram
     default: op
   phd.unset:
-    description: Allows setting a parameter of a hologram to its default
+    description: Allows removing attributes of a hologram
     default: op
   phd.unmanage:
-    description: Allows dropping all pHD parameters of a hologram
+    description: Allows removing pHD management of a hologram
     default: op
   phd.reload:
-    description: Allows reloading the config
+    description: Allows reloading the configuration, messages, and data
     default: op
   phd.convert:
-    description: Allows converting from different types of storage
+    description: Allows converting between different storage types
     default: op
