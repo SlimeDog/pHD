@@ -90,7 +90,7 @@ public class CustomConfigHandler {
         if (customConfigFile == null) {
             customConfigFile = new File(phd.getDataFolder(), fileName);
         }
-        if (!customConfigFile.exists()) {
+        if (!customConfigFile.exists() && phd.getResource(fileName) != null) {
             phd.saveResource(fileName, false);
         }
     }
