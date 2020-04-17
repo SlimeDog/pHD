@@ -254,6 +254,16 @@ public class HologramStorage {
         }
     }
 
+    public List<String> getNames(boolean withZombies) {
+        List<String> names = getNames();
+        if (withZombies) {
+            for (HDHologramInfo info : danglingInfos) {
+                names.add(info.getHoloName());
+            }
+        }
+        return names;
+    }
+
     public List<String> getNames() {
         return getNames(null);
     }
