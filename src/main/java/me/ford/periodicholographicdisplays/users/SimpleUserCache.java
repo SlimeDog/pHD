@@ -47,8 +47,17 @@ public class SimpleUserCache implements UserCache {
         }
         Path path = Paths.get(folderPath, USER_CACHE_NAME);
         if (!Files.exists(path)) {
-            phd.getLogger().warning("usercache.json not found!");
-            return "{}";
+            if (!folderPath.equalsIgnoreCase(".")) { // fall back to usercache in root
+                folderPath = ".";
+                path = Paths.get(folderPath, USER_CACHE_NAME);
+                if (!Files.exists(path)) {
+                    phd.getLogger().warning("usercache.json not found!");
+                    return "{}";
+                }
+            } else {
+                phd.getLogger().warning("usercache.json not found!");
+                return "{}";
+            }
         }
         try (Stream<String> stream = Files.lines(path, StandardCharsets.UTF_8)) {
             stream.forEach(s -> contentBuilder.append(s).append("\n"));
