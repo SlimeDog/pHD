@@ -59,6 +59,7 @@ public class SimpleUserCache implements UserCache {
                 return "{}";
             }
         }
+        phd.getLogger().info("Usercache found: " + path.toString());
         try (Stream<String> stream = Files.lines(path, StandardCharsets.UTF_8)) {
             stream.forEach(s -> contentBuilder.append(s).append("\n"));
         } catch (IOException e) {
