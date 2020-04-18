@@ -185,6 +185,10 @@ public class HologramStorage {
     }
 
     public List<PeriodicType> getAvailableTypes(String name) {
+        return getAvailableTypes(name, false);
+    }
+
+    public List<PeriodicType> getAvailableTypes(String name, boolean includeZombies) {
         for (WorldHologramStorage storage : holograms.values()) {
             IndividualHologramHandler handler = storage.getHandler(name);
             if (handler != null) {
@@ -193,6 +197,17 @@ public class HologramStorage {
                     types.add(holo.getType());
                 }
                 return types;
+            }
+        }
+        if (includeZombies) {
+            for (HDHologramInfo info : danglingInfos) {
+                if (info.getHoloName().equalsIgnoreCase(name)) {
+                    List<PeriodicType> types = new ArrayList<>();
+                    for (HologramInfo i : info.getInfos()) {
+                        types.add(i.getType());
+                    }
+                    return types;
+                }
             }
         }
         return new ArrayList<>();
