@@ -41,7 +41,7 @@ public class SimpleUserCache implements UserCache {
         File wc = phd.getServer().getWorldContainer();
         String folderPath;
         if (wc != null) {
-            folderPath = wc.getAbsolutePath();
+            folderPath = wc.getPath();
         } else {
             folderPath = ".";
         }
