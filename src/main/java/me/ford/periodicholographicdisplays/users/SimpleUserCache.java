@@ -51,11 +51,11 @@ public class SimpleUserCache implements UserCache {
                 folderPath = ".";
                 path = Paths.get(folderPath, USER_CACHE_NAME);
                 if (!Files.exists(path)) {
-                    phd.getLogger().warning("usercache.json not found!");
+                    phd.getLogger().warning(USER_CACHE_NAME + " not found!");
                     return "{}";
                 }
             } else {
-                phd.getLogger().warning("usercache.json not found!");
+                phd.getLogger().warning(USER_CACHE_NAME + " not found!");
                 return "{}";
             }
         }
@@ -69,6 +69,10 @@ public class SimpleUserCache implements UserCache {
     }
 
     private void populateUserCache(JsonElement json) {
+        if (!json.isJsonArray()) {
+            phd.getLogger().info(USER_CACHE_NAME + " was either empty or misconfigured");
+            return;
+        }
         JsonArray arr = json.getAsJsonArray();
         for (JsonElement el : arr) {
             String name = el.getAsJsonObject().get("name").getAsString();
