@@ -123,7 +123,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
         // commands
         getCommand("phd").setExecutor(command = new PHDCommand(this));
 
-        int resourceId = -1;
+        int resourceId = 77631;
         if (settings.checkForUpdates() && resourceId != -1) {
             UpdateChecker.init(this, resourceId).requestUpdateCheck().whenComplete(
                     (result, e) -> getLogger().info(result.getReason() + ": " + result.getNewestVersion()));
