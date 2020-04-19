@@ -8,7 +8,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
-import me.ford.periodicholographicdisplays.users.UserStorage;
+import me.ford.periodicholographicdisplays.users.UserCache;
 
 /**
  * JoinLeaveListener
@@ -17,21 +17,22 @@ public class JoinLeaveListener implements Listener {
     private final PeriodicHolographicDisplays phd;
     private final HologramStorage storage;
 
-    public JoinLeaveListener(PeriodicHolographicDisplays phd, HologramStorage storage, UserStorage userStorage) {
+    public JoinLeaveListener(PeriodicHolographicDisplays phd, HologramStorage storage) {
         this.phd = phd;
         this.storage = storage;
     }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        UserStorage userStorage = phd.getUserStorage();
+        UserCache userCache = phd.getUserCache();
         Player player = event.getPlayer();
         storage.joined(player);
-        String prevName = userStorage.getCache().getName(player.getUniqueId());
+        String prevName = userCache.getName(player.getUniqueId());
         if (prevName == null || !prevName.equalsIgnoreCase(player.getName())) {
             String reason = prevName == null ? "they didn't have a name cached": "they have a new name";
+            phd.getLogger().info(phd.getMessages().getAddedToCacheMessage(player));
             phd.debug("Adding name of joining player to cache: " + player.getName() + " because " + reason);
-            userStorage.getCache().set(player.getUniqueId(), player.getName());
+            userCache.set(player.getUniqueId(), player.getName());
         }
     }
 

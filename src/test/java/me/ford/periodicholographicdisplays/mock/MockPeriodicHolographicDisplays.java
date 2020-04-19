@@ -14,6 +14,7 @@ import com.gmail.filoghost.holographicdisplays.object.NamedHologram;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -24,12 +25,11 @@ import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.ReloadIssue;
 import me.ford.periodicholographicdisplays.Settings;
-import me.ford.periodicholographicdisplays.Settings.SettingIssue;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
 import me.ford.periodicholographicdisplays.hooks.NPCHook;
-import me.ford.periodicholographicdisplays.users.SQLUserStorage;
-import me.ford.periodicholographicdisplays.users.UserStorage;
+import me.ford.periodicholographicdisplays.users.SimpleUserCache;
+import me.ford.periodicholographicdisplays.users.UserCache;
 
 /**
  * MockPeriodicHolographicDisplays
@@ -43,16 +43,25 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
     private final Messages messages;
     private final Settings settings;
     private final HologramStorage holograms;
-    private final UserStorage userStorage;
+    private final UserCache userCache;
     private final Map<String, NamedHologram> namedHDHolograms = new HashMap<>();
     private boolean debug = false;
 
     public MockPeriodicHolographicDisplays() {
+        logger.setLevel(Level.WARNING);
         config = YamlConfiguration.loadConfiguration(new File(dataFolder, "config.yml"));
-        messages = new Messages(this);
+        try {
+            messages = new Messages(this);
+        } catch (InvalidConfigurationException e) {
+            throw new RuntimeException(e);
+        }
         settings = new Settings(this);
-        userStorage = new SQLUserStorage(this);
-        holograms = new HologramStorage(this, new MockPluginManager());
+        userCache = new SimpleUserCache(this);
+        try {
+            holograms = new HologramStorage(this, new MockPluginManager());
+        } catch (InvalidConfigurationException e) {
+            throw new RuntimeException(e);
+        }
         debug("Starting MOCK pHD");
     }
 
@@ -98,8 +107,8 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
     }
 
     @Override
-    public UserStorage getUserStorage() {
-        return userStorage;
+    public UserCache getUserCache() {
+        return userCache;
     }
 
     @Override
@@ -121,9 +130,9 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
     }
 
     @Override
-    public Map<SettingIssue, String> reloadMyConfig() {
+    public List<ReloadIssue> reloadMyConfig() {
         // TODO Auto-generated method stub
-        return new HashMap<>();
+        return new ArrayList<>();
     }
 
     @Override
@@ -219,6 +228,11 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
 
     public void putHDHologram(String name, NamedHologram hologram) {
         namedHDHolograms.put(name, hologram);
+    }
+
+    @Override
+    public File getWorldContainer() {
+        return getDataFolder();
     }
     
 }

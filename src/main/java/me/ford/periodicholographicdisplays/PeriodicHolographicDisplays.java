@@ -2,6 +2,7 @@ package me.ford.periodicholographicdisplays;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -11,6 +12,8 @@ import com.gmail.filoghost.holographicdisplays.exception.CommandException;
 import com.gmail.filoghost.holographicdisplays.object.NamedHologram;
 
 import org.bstats.bukkit.Metrics;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import me.ford.periodicholographicdisplays.Settings.SettingIssue;
 import me.ford.periodicholographicdisplays.Settings.StorageTypeException;
@@ -26,9 +29,9 @@ import me.ford.periodicholographicdisplays.listeners.SimpleWorldTimeListener;
 import me.ford.periodicholographicdisplays.listeners.WorldListener;
 import me.ford.periodicholographicdisplays.listeners.WorldTimeListener;
 import me.ford.periodicholographicdisplays.listeners.legacy.LegacyWorldTimeListener;
-import me.ford.periodicholographicdisplays.users.SQLUserStorage;
-import me.ford.periodicholographicdisplays.users.UserStorage;
-import me.ford.periodicholographicdisplays.users.YamlUserStorage;
+import me.ford.periodicholographicdisplays.storage.yaml.CustomConfigHandler;
+import me.ford.periodicholographicdisplays.users.SimpleUserCache;
+import me.ford.periodicholographicdisplays.users.UserCache;
 
 /**
  * PeriodicHolographicDisplays
@@ -39,23 +42,46 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
     private Messages messages;
     private LuckPermsHook lpHook;
     private NPCHook citizensHook = null;
-    private UserStorage userStorage;
+    private UserCache userCache;
+    private PHDCommand command;
+    private CustomConfigHandler config;
 
     @Override
     public void onEnable() {
-        saveDefaultConfig();
-        messages = new Messages(this);
-        settings = new Settings(this);
-        holograms = new HologramStorage(this, getServer().getPluginManager());
-
-        // user storage and cache
-        if (settings.useDatabase()) {
-            userStorage = new SQLUserStorage(this);
-        } else {
-            userStorage = new YamlUserStorage(this);
+        List<ReloadIssue> issues = new ArrayList<>();
+        try {
+            config = new CustomConfigHandler(this, "config.yml");
+        } catch (InvalidConfigurationException e1) {
+            issues.add(DefaultReloadIssue.INVALID_CONFIGURATION);
+            disableMe(issues);
+            return;
         }
-        // checking cache a few ticks later - if empty, then populate
-        scheduleCacheSizeCheck();
+        try {
+            messages = new Messages(this);
+        } catch (InvalidConfigurationException e1) {
+            issues.add(DefaultReloadIssue.INVALID_MESSAGES);
+            disableMe(issues);
+            return;
+        }
+        settings = new Settings(this);
+
+        // settings check
+        issues.addAll(getSettingIssues());
+        if (!issues.isEmpty()) {
+            disableMe(issues);
+            return;
+        }
+
+        try {
+            holograms = new HologramStorage(this, getServer().getPluginManager());
+        } catch (InvalidConfigurationException e1) {
+            issues.add(DefaultReloadIssue.INVALID_HOLOGRAMS);
+            disableMe(issues);
+            return;
+        }
+        saveDefaultConfig();
+
+        userCache = new SimpleUserCache(this);
 
         // check messages
         try {
@@ -81,7 +107,7 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
 
         // listeners
         this.getServer().getPluginManager().registerEvents(new HologramListener(holograms, citizensHook), this);
-        this.getServer().getPluginManager().registerEvents(new JoinLeaveListener(this, holograms, userStorage), this);
+        this.getServer().getPluginManager().registerEvents(new JoinLeaveListener(this, holograms), this);
         this.getServer().getPluginManager().registerEvents(new WorldListener(holograms), this);
         WorldTimeListener worldTimeListener;
         if (getServer().getBukkitVersion().contains("1.15")) {
@@ -94,39 +120,47 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
 
         // metrics
         if (settings.enableMetrics()) {
-            new Metrics(this);
+            new Metrics(this, 7234);
         }
 
         // commands
         getCommand("phd").setExecutor(new PHDCommand(this, getServer().getPluginManager()));
 
-        // settings check
-        List<ReloadIssue> issues = getSettingIssues();
-        if (!issues.isEmpty()) {
-            getLogger().severe(messages.getProblemsReloadingConfigMessage(issues));
-            getLogger().severe(messages.getDisablingMessage());
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-
-        if (settings.checkForUpdates()) {
-            // TODO - check for updates
+        int resourceId = 77631;
+        if (settings.checkForUpdates() && resourceId != -1) {
+            UpdateChecker.init(this, resourceId).requestUpdateCheck().whenComplete(
+                    (result, e) -> getLogger().info(result.getReason() + ": " + result.getNewestVersion()));
         }
         getLogger().info(messages.getActiveStorageMessage(getSettings().useDatabase()));
     }
 
-    private void scheduleCacheSizeCheck() {
-        getServer().getScheduler().runTaskLater(this, () -> {
-            if (userStorage.getCache().isEmpty()) {
-                getLogger().info("Populating UUID to name cache with all players");
-                userStorage.populate();
+    private void disableMe(List<ReloadIssue> issues) {
+        boolean canMessage = false;
+        if (messages == null) {
+            try {
+                messages = new Messages(this, true);
+                canMessage = true;
+            } catch (InvalidConfigurationException e) {
+                e.printStackTrace();
             }
-        }, 20L);
+        }
+        if (canMessage) {
+            getLogger().severe(messages.getProblemsReloadingConfigMessage(issues));
+            getLogger().severe(messages.getDisablingMessage());
+        } else {
+            getLogger().severe("Disabling plugins. Problems: " + issues);
+        }
+        getServer().getPluginManager().disablePlugin(this);
     }
 
     @Override
-    public UserStorage getUserStorage() {
-        return userStorage;
+    public File getWorldContainer() {
+        return getServer().getWorldContainer();
+    }
+
+    @Override
+    public UserCache getUserCache() {
+        return userCache;
     }
 
     @Override
@@ -161,44 +195,59 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
             messages.saveDefaultConfig();
             issues.add(DefaultReloadIssue.NO_MESSAGES);
         }
-        if (!messages.reloadConfig()) {
-            issues.add(new SimpleReloadIssue(messages.getIncorrectMessages(), null));
-            getServer().getScheduler().runTask(this, () -> {
-                getLogger().severe(messages.getDisablingMessage());
-                getServer().getPluginManager().disablePlugin(this);
-            });
+        boolean disablePlugin = false;
+        try {
+            if (!messages.reloadConfig()) {
+                issues.add(new SimpleReloadIssue(messages.getIncorrectMessages(), null));
+                disablePlugin = true;
+            }
+        } catch (InvalidConfigurationException e) {
+            issues.add(DefaultReloadIssue.INVALID_MESSAGES);
+            disablePlugin = true;
         }
         List<ReloadIssue> settingIssues = getSettingIssues();
+        issues.addAll(settingIssues);
         if (!settingIssues.isEmpty()) {
+            disablePlugin = true;
+        }
+        try {
+            holograms.reload();
+        } catch (InvalidConfigurationException e) {
+            issues.add(DefaultReloadIssue.INVALID_HOLOGRAMS);
+            disablePlugin = true;
+        }
+        if (disablePlugin) {
             getServer().getScheduler().runTask(this, () -> {
-                getLogger().severe(messages.getDisablingMessage());
-                getServer().getPluginManager().disablePlugin(this);
+                disableMe(issues);
             });
         }
-        issues.addAll(settingIssues);
-        holograms.reload();
-        // reload UUID cache
-        if (settings.useDatabase()) { // since the connection is shared, the connection of the old one is closed
-            userStorage = new SQLUserStorage(this);
-        } else {
-            userStorage = new YamlUserStorage(this);
-        }
-        scheduleCacheSizeCheck();
-        // commands (because userStorage instance might have changed)
-        getCommand("phd").setExecutor(new PHDCommand(this, getServer().getPluginManager()));
+        command.reload();
         return issues;
     }
 
     private List<ReloadIssue> getSettingIssues() {
         List<ReloadIssue> issues = new ArrayList<>();
-        Map<SettingIssue, String> settingIssues = null;
         try {
-            settingIssues = reloadMyConfig();
+            issues.addAll(reloadMyConfig());
         } catch (StorageTypeException e) {
             DefaultReloadIssue issue = DefaultReloadIssue.ILLEGA_STORAGE_TYPE;
             issue.setExtra(e.getType());
             issues.add(issue);
             settings.setDefaultDatabaseInternal();
+        }
+        return issues;
+    }
+
+    public List<ReloadIssue> reloadMyConfig() {
+        Map<SettingIssue, String> settingIssues = new HashMap<>();
+        List<ReloadIssue> issues = new ArrayList<>();
+        try {
+            config.reloadConfig();
+        } catch (InvalidConfigurationException e) {
+            issues.add(DefaultReloadIssue.INVALID_CONFIGURATION);
+        }
+        if (settings != null) {
+            settingIssues.putAll(settings.reload());
         }
         if (settingIssues != null && !settingIssues.isEmpty()) {
             for (Entry<SettingIssue, String> entry : settingIssues.entrySet()) {
@@ -216,18 +265,9 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
     }
 
     @Override
-    public Map<SettingIssue, String> reloadMyConfig() {
-        super.reloadConfig();
-        if (settings != null) {
-            return settings.reload();
-        }
-        return null;
-    }
-
-    @Override
     public void onDisable() {
-        holograms.save(true);
-        userStorage.save(true);
+        if (holograms != null)
+            holograms.save(true);
     }
 
     @Override
@@ -252,10 +292,19 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
         }
     }
 
+    // config
+
+    @Override
+    public FileConfiguration getConfig() {
+        return config.getConfig();
+    }
+
     public static enum DefaultReloadIssue implements ReloadIssue {
         NONE(null), NO_FOLDER("folder had to be recreated!"), NO_CONFIG("the config had to be recreated"),
-        NO_MESSAGES("the messages file had to be recreated"), ILLEGA_STORAGE_TYPE("storage type not understood");
-        ;
+        NO_MESSAGES("the messages file had to be recreated"), ILLEGA_STORAGE_TYPE("storage type not understood"),
+        INVALID_CONFIGURATION("config.yml was incorrectly formatted"),
+        INVALID_MESSAGES("messages.yml was incorrectly formatted"),
+        INVALID_HOLOGRAMS("database.yml was incorrectly formatted");
 
         private final String issue;
         private String extra = null;

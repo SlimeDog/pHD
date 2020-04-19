@@ -3,7 +3,6 @@ package me.ford.periodicholographicdisplays;
 import java.io.File;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -17,11 +16,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.ReloadIssue;
-import me.ford.periodicholographicdisplays.Settings.SettingIssue;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
 import me.ford.periodicholographicdisplays.hooks.NPCHook;
-import me.ford.periodicholographicdisplays.users.UserStorage;
+import me.ford.periodicholographicdisplays.users.UserCache;
 
 /**
  * IPeriodicHolographicDisplays
@@ -29,6 +27,8 @@ import me.ford.periodicholographicdisplays.users.UserStorage;
 public interface IPeriodicHolographicDisplays {
 
     public File getDataFolder();
+
+    public File getWorldContainer();
 
     public Logger getLogger();
 
@@ -48,7 +48,7 @@ public interface IPeriodicHolographicDisplays {
 
     public NamedHologram getHDHologram(String name);
 
-    public UserStorage getUserStorage();
+    public UserCache getUserCache();
 
     public NPCHook getNPCHook();
 
@@ -56,7 +56,7 @@ public interface IPeriodicHolographicDisplays {
 
     public List<ReloadIssue> reload();
 
-    public Map<SettingIssue, String> reloadMyConfig();
+    public List<ReloadIssue> reloadMyConfig();
 
     public HologramStorage getHolograms();
 

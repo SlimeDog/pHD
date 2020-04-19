@@ -20,25 +20,24 @@ import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.holograms.WorldHologramStorageBase.HologramSaveReason;
 import me.ford.periodicholographicdisplays.users.UserCache;
-import me.ford.periodicholographicdisplays.users.UserStorage;
 
 /**
  * UnsetSub
  */
 public class UnsetSub extends SubCommand {
     private static final String PERMS = "phd.unset";
-    private static final String USAGE = "/phd unset <hologram> <type> [seconds] [distance] [permission] [flash] [playercount <player>]";
+    private static final String USAGE = "/phd unset <hologram> <type> <options>";
     private final HologramStorage storage;
     private final Settings settings;
     private final Messages messages;
-    private final UserStorage userStorage;
+    private final UserCache userCache;
     private final List<String> optionList = Arrays.asList("seconds", "distance", "permission", "playercount", "flash");
 
-    public UnsetSub(HologramStorage storage, Settings settings, Messages messages, UserStorage userStorage) {
+    public UnsetSub(HologramStorage storage, Settings settings, Messages messages, UserCache userCache) {
         this.storage = storage;
         this.settings = settings;
         this.messages = messages;
-        this.userStorage = userStorage;
+        this.userCache = userCache;
     }
 
     @Override
@@ -69,7 +68,7 @@ public class UnsetSub extends SubCommand {
                     if (args[args.length - 1].length() < UserCache.MIN_NAME_MATCH) {
                         return null;
                     }
-                    return userStorage.getCache().getNamesStartingWith(args[args.length - 1]);
+                    return userCache.getNamesStartingWith(args[args.length - 1]);
                 }
                 FlashingHologram hologram = storage.getHologram(args[0], type);
                 if (hologram == null)
@@ -174,7 +173,7 @@ public class UnsetSub extends SubCommand {
                     String playerName = opts[optAt + 1];
                     OfflinePlayer player = Bukkit.getPlayer(playerName);
                     if (player == null) {
-                        UUID id = userStorage.getCache().getUuid(playerName);
+                        UUID id = userCache.getUuid(playerName);
                         if (id != null) {
                             player = Bukkit.getOfflinePlayer(id);
                         }

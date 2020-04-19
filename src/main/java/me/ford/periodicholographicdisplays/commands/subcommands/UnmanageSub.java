@@ -33,10 +33,10 @@ public class UnmanageSub extends SubCommand {
         List<String> list = new ArrayList<>();
         switch (args.length) {
             case 1:
-                return StringUtil.copyPartialMatches(args[0], storage.getNames(), list);
+                return StringUtil.copyPartialMatches(args[0], storage.getNames(true), list);
             case 2:
                 List<String> typeNames = new ArrayList<>();
-                for (PeriodicType type : storage.getAvailableTypes(args[0])) {
+                for (PeriodicType type : storage.getAvailableTypes(args[0], true)) {
                     typeNames.add(type.name());
                 }
                 return StringUtil.copyPartialMatches(args[1], typeNames, list);

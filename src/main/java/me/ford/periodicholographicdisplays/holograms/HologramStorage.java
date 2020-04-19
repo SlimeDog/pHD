@@ -14,6 +14,7 @@ import com.gmail.filoghost.holographicdisplays.object.NamedHologram;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.World;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 
@@ -38,7 +39,7 @@ public class HologramStorage {
     private final Map<World, WorldHologramStorage> holograms = new HashMap<>();
     private final Set<HDHologramInfo> danglingInfos = new HashSet<>();
 
-    public HologramStorage(IPeriodicHolographicDisplays plugin, PluginManager pm) {
+    public HologramStorage(IPeriodicHolographicDisplays plugin, PluginManager pm) throws InvalidConfigurationException {
         if (plugin.getSettings().useDatabase()) {
             this.storage = new SQLStorage(plugin, pm);
         } else {
@@ -129,7 +130,7 @@ public class HologramStorage {
         return storage;
     }
 
-    public void reload() {
+    public void reload() throws InvalidConfigurationException {
         danglingInfos.clear();
         for (WorldHologramStorage storage : holograms.values()) {
             for (FlashingHologram hologram : storage.getHolograms()) {
@@ -184,12 +185,13 @@ public class HologramStorage {
         if (inSync && storage instanceof SQLStorage) {
             ((SQLStorage) storage).close();
         }
-        if (reason == HologramSaveReason.PERIODIC) {
-            plugin.getUserStorage().save(inSync);
-        }
     }
 
     public List<PeriodicType> getAvailableTypes(String name) {
+        return getAvailableTypes(name, false);
+    }
+
+    public List<PeriodicType> getAvailableTypes(String name, boolean includeZombies) {
         for (WorldHologramStorage storage : holograms.values()) {
             IndividualHologramHandler handler = storage.getHandler(name);
             if (handler != null) {
@@ -198,6 +200,17 @@ public class HologramStorage {
                     types.add(holo.getType());
                 }
                 return types;
+            }
+        }
+        if (includeZombies) {
+            for (HDHologramInfo info : danglingInfos) {
+                if (info.getHoloName().equalsIgnoreCase(name)) {
+                    List<PeriodicType> types = new ArrayList<>();
+                    for (HologramInfo i : info.getInfos()) {
+                        types.add(i.getType());
+                    }
+                    return types;
+                }
             }
         }
         return new ArrayList<>();
@@ -257,6 +270,16 @@ public class HologramStorage {
                 }
             }
         }
+    }
+
+    public List<String> getNames(boolean withZombies) {
+        List<String> names = getNames();
+        if (withZombies) {
+            for (HDHologramInfo info : danglingInfos) {
+                names.add(info.getHoloName());
+            }
+        }
+        return names;
     }
 
     public List<String> getNames() {

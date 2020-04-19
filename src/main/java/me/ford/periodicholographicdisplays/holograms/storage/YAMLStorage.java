@@ -9,6 +9,7 @@ import java.util.logging.Level;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.configuration.InvalidConfigurationException;
 
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
@@ -20,6 +21,7 @@ import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.MCTimeType
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.NTimesTypeInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.NullTypeInfo;
 import me.ford.periodicholographicdisplays.storage.yaml.CustomConfigHandler;
+import me.ford.periodicholographicdisplays.util.TimeUtils;
 
 /**
  * YAMLStorage
@@ -29,7 +31,7 @@ public class YAMLStorage extends CustomConfigHandler implements Storage {
     private final IPeriodicHolographicDisplays phd;
     private final PluginManager pm;
 
-    public YAMLStorage(IPeriodicHolographicDisplays phd, PluginManager pm) {
+    public YAMLStorage(IPeriodicHolographicDisplays phd, PluginManager pm) throws InvalidConfigurationException {
         super(phd, FILE_NAME);
         this.phd = phd;
         this.pm = pm;
@@ -73,17 +75,18 @@ public class YAMLStorage extends CustomConfigHandler implements Storage {
             NTimesTypeInfo ntimes = (NTimesTypeInfo) typeInfo;
             section.set("times-to-show", ntimes.getShowTimes());
             ConfigurationSection shownToSection = section.getConfigurationSection("shown-to");
-            if (shownToSection == null) shownToSection = section.createSection("shown-to");
+            if (shownToSection == null)
+                shownToSection = section.createSection("shown-to");
             for (Map.Entry<UUID, Integer> entry : ntimes.getShownToTimes().entrySet()) {
                 int value = entry.getValue();
                 shownToSection.set(entry.getKey().toString(), value == 0 ? null : value);
             }
         } else if (typeInfo instanceof MCTimeTypeInfo) {
             MCTimeTypeInfo mctime = (MCTimeTypeInfo) typeInfo;
-            section.set("show-at", mctime.getAtTime());
+            section.set("show-at", TimeUtils.toMCTime(mctime.getAtTime()));
         } else if (typeInfo instanceof IRLTimeTypeInfo) {
             IRLTimeTypeInfo irltime = (IRLTimeTypeInfo) typeInfo;
-            section.set("show-at", irltime.getAtTime());
+            section.set("show-at", TimeUtils.toIRLTime(irltime.getAtTime()));
         }
     }
 
@@ -131,11 +134,11 @@ public class YAMLStorage extends CustomConfigHandler implements Storage {
         final TypeInfo typeInfo;
         switch (type) {
             case IRLTIME:
-                long atTime = section.getLong("show-at", 0); // seconds from 00:00
+                long atTime = TimeUtils.parseHoursAndMinutesToSeconds(section.getString("show-at", "00:00")); // seconds from 00:00
                 typeInfo = new IRLTimeTypeInfo(atTime);
                 break;
             case MCTIME:
-                long time = section.getLong("show-at", 0);
+                long time = TimeUtils.parseMCTime(section.getString("show-at", "00:00"));
                 typeInfo = new MCTimeTypeInfo(time);
                 break;
             case ALWAYS:
@@ -175,7 +178,14 @@ public class YAMLStorage extends CustomConfigHandler implements Storage {
     }
 
     public void reload() {
-        reloadConfig();
+        try {
+            reloadConfig();
+        } catch (InvalidConfigurationException e) {
+            phd.getLogger()
+                    .severe("Problem reloading YAML storage! Incorrectly formatted. "
+                            + "All pHD information is lost until the formatting is fixed "
+                            + "(the reload command must be used again afterwards)");
+        }
     }
 
     @Override

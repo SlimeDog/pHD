@@ -32,6 +32,10 @@ public abstract class ParentCommand implements TabExecutor {
         subCommands.put(name.toLowerCase(), subCommand);
     }
 
+    protected boolean removeSubCommand(String name) {
+        return subCommands.remove(name) != null;
+    }
+
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> list = new ArrayList<>();

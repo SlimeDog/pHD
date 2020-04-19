@@ -18,10 +18,10 @@ All pHD messages may be localized. Message changes take effect on plugin reload 
 Supported data storage types include SQLITE (default) and YAML. Conversion between storage types is supported.
 
 ### Version Support
-pHD 1.0.x is certified for Spigot 1.13.2, 1.14.4, and 1.15.2; with HolographicDisplays 2.4.1.
+pHD 1.0.x is certified for Spigot 1.13.2, 1.14.4, and 1.15.2; with HolographicDisplays 2.4.1 and ProtocolLib 4.5.0.
 
 Based on _ad hoc_ usage,
-HolographicDisplays 2.4.2 development releases are also compatible, but they are not certified.
+HolographicDisplays 2.4.2 and ProtocolLib 4.5.1 development releases are also compatible, but they are not certified.
 
 pHD may or may not work on previous Spigot releases or non-Spigot variants.
 

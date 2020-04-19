@@ -11,12 +11,6 @@
 # PlaceholderAPI variables are not supported.
 #
 
-# Console/log prefix
-# Trailing space is required to conform with standard prefix format.
-# If no prefix is desired (not recommended), use "".
-#
-PHD_PREFIX: "[pHD] "
-
 # Messages produced by /phd list
 #
 hologram-list: "Holograms (holograms {numbers}, page {page}/{max-pages}): \n{holograms}"
@@ -110,3 +104,4 @@ no-luckperms: "LuckPerms not found - unable to readjust permissions on the fly o
 invalid-page: "Page needs to be between 1 and {max-page}"
 next-page-hint: "TIP: See the next page with &n{command}&r"
 unrecognized-command: "Unrecognized command; try /phd help"
+added-to-cache: "Adding player {name} UUID {uuid} to cache"

@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.util.StringUtil;
 
 import me.ford.periodicholographicdisplays.Messages;
@@ -17,7 +18,6 @@ import me.ford.periodicholographicdisplays.holograms.storage.Storage;
 import me.ford.periodicholographicdisplays.holograms.storage.YAMLStorage;
 import me.ford.periodicholographicdisplays.holograms.storage.storageimport.StorageConverter;
 import me.ford.periodicholographicdisplays.storage.sqlite.SQLStorageBase;
-import me.ford.periodicholographicdisplays.users.YamlUserStorage;
 
 /**
  * ImportSub
@@ -74,7 +74,8 @@ public class ConvertSub extends SubCommand {
         }
 
         // find out if the source file exists
-        File sourceFile = new File(phd.getDataFolder(), type == ConvertTypes.SQLITE_TO_YAML ? SQLStorageBase.DATABSE_NAME : YAMLStorage.FILE_NAME);
+        File sourceFile = new File(phd.getDataFolder(),
+                type == ConvertTypes.SQLITE_TO_YAML ? SQLStorageBase.DATABSE_NAME : YAMLStorage.FILE_NAME);
         if (!sourceFile.exists()) {
             sender.sendMessage(messages.getStorageTypeDoesNotExistMessage(from));
             return true;
@@ -84,7 +85,13 @@ public class ConvertSub extends SubCommand {
         if (phd.getSettings().useDatabase()) {
             if (sqlStorage == null)
                 sqlStorage = (SQLStorage) phd.getHolograms().getStorage();
-            yamlStorage = new YAMLStorage(phd, pm);
+            try {
+                yamlStorage = new YAMLStorage(phd, pm);
+            } catch (InvalidConfigurationException e) {
+                sender.sendMessage("Unable to create YAML storage");
+                e.printStackTrace();
+                return true;
+            }
         } else {
             if (sqlStorage == null)
                 sqlStorage = new SQLStorage(phd, pm);
@@ -118,9 +125,6 @@ public class ConvertSub extends SubCommand {
         WhenDone whenDone = new WhenDone(sender, from, to);
         StorageConverter<Storage, Storage> converter;
         converter = new StorageConverter<Storage, Storage>(sourceStorage, targetStorage, whenDone);
-        if (type == ConvertTypes.SQLITE_TO_YAML) { // create .yml
-            new YamlUserStorage(phd); // saves empty YAML file
-        }
         converter.startConvert();
         sender.sendMessage(messages.getStartedConvertingMessage(from, to));
         return true;

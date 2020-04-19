@@ -36,3 +36,8 @@ check-for-updates: true
 # By default, the plugins collects and transmits anonymous statistics to bstats.org.
 # Data collection may be disabled here, or generally in the bStats/config.yml.
 enable-metrics: true
+
+# ========== DEBUG MODE ============================================================================
+# This will print a large amount of debugging information to the console/log.
+# Recommendation: Leave this false unless specifically requested by the pHD support team.
+debug: false

@@ -11,6 +11,8 @@ import java.util.Map.Entry;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.entity.Player;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.DefaultReloadIssue;
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.ReloadIssue;
@@ -35,11 +37,22 @@ import me.ford.periodicholographicdisplays.util.PageUtils.PageInfo;
 public class Messages extends CustomConfigHandler {
     private final static String FILE_NAME = "messages.yml";
     private final IPeriodicHolographicDisplays phd;
+    private static final String DUMMY_FILE_NAME = "messages_dummy.yml";
 
-    public Messages(IPeriodicHolographicDisplays phd) {
+    public Messages(IPeriodicHolographicDisplays phd) throws InvalidConfigurationException {
         super(phd, FILE_NAME);
         saveDefaultConfig();
         this.phd = phd;
+    }
+
+    Messages(PeriodicHolographicDisplays phd, boolean dummy) throws InvalidConfigurationException {
+        super(phd, DUMMY_FILE_NAME, true);
+        this.phd = phd;
+    }
+
+    public String getAddedToCacheMessage(Player player) {
+        return getMessage("added-to-cache", "Adding player {name} UUID {uuid} to cache")
+            .replace("{name}", player.getName()).replace("{uuid}", player.getUniqueId().toString());
     }
 
     public String getOptionNotSetMessage(String option) {

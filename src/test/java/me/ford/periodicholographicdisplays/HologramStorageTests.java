@@ -38,7 +38,7 @@ public class HologramStorageTests {
     @Test
     public void testMethods() {
         Assert.assertNotNull("phd.getHolograms() is null!", phd.getHolograms());
-        Assert.assertNotNull("phd.getUserStorage() is null!", phd.getUserStorage());
+        Assert.assertNotNull("phd.getUserCache() is null!", phd.getUserCache());
         Assert.assertNotNull("phd.getConfig() is null!", phd.getConfig());
         Assert.assertNotNull("phd.getDataFolder() is null!", phd.getDataFolder());
         Assert.assertNotNull("phd.getLogger() is null!", phd.getLogger());
