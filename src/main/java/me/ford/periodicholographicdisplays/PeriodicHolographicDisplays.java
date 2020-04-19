@@ -117,14 +117,16 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
 
         // metrics
         if (settings.enableMetrics()) {
-            new Metrics(this, -1);
+            new Metrics(this, -1); // TODO - correct number
         }
 
         // commands
         getCommand("phd").setExecutor(command = new PHDCommand(this));
 
-        if (settings.checkForUpdates()) {
-            // TODO - check for updates
+        int resourceId = -1;
+        if (settings.checkForUpdates() && resourceId != -1) {
+            UpdateChecker.init(this, resourceId).requestUpdateCheck().whenComplete(
+                    (result, e) -> getLogger().info(result.getReason() + ": " + result.getNewestVersion()));
         }
         getLogger().info(messages.getActiveStorageMessage(getSettings().useDatabase()));
     }
@@ -252,7 +254,8 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        if (holograms != null) holograms.save(true);
+        if (holograms != null)
+            holograms.save(true);
     }
 
     public HologramStorage getHolograms() {
