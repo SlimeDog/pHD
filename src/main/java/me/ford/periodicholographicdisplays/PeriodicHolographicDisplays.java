@@ -117,7 +117,7 @@ public class PeriodicHolographicDisplays extends JavaPlugin {
 
         // metrics
         if (settings.enableMetrics()) {
-            new Metrics(this);
+            new Metrics(this, -1);
         }
 
         // commands
