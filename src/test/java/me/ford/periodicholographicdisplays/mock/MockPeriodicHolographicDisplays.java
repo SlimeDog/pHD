@@ -38,6 +38,7 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
     private final File sourceFolder = new File("src");
     private final File testFolder = new File(sourceFolder, "test");
     private final File dataFolder = new File(testFolder, "resources");
+    private final File configFile = new File(dataFolder, "config.yml");
     private final Logger logger = Logger.getLogger("Mock pHD");
     private final FileConfiguration config;
     private final Messages messages;
@@ -49,7 +50,7 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
 
     public MockPeriodicHolographicDisplays() {
         logger.setLevel(Level.WARNING);
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "config.yml"));
+        config = YamlConfiguration.loadConfiguration(configFile);
         try {
             messages = new Messages(this);
         } catch (InvalidConfigurationException e) {
@@ -210,6 +211,17 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
     public void clear() {
         debug = false;
         holograms.getStorage().clear();
+        if (configFile.exists()) {
+            configFile.delete();
+        }
+        File hologramsFile = new File(getDataFolder(), "database." + (settings.useDatabase() ? "db" : "yml"));
+        if (hologramsFile.exists()) {
+            hologramsFile.delete();
+        }
+        File messagesFile = new File(getDataFolder(), "messages.yml");
+        if (messagesFile.exists()) {
+            messagesFile.delete();
+        }
     }
 
     public void setDebug(boolean debug) {
