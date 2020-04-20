@@ -26,6 +26,8 @@ import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.ReloadIssue;
 import me.ford.periodicholographicdisplays.Settings;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
+import me.ford.periodicholographicdisplays.holograms.storage.SQLStorage;
+import me.ford.periodicholographicdisplays.holograms.storage.Storage;
 import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
 import me.ford.periodicholographicdisplays.hooks.NPCHook;
 import me.ford.periodicholographicdisplays.users.SimpleUserCache;
@@ -153,7 +155,8 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
 
     @Override
     public void debug(String message) {
-        if (debug) logger.info(String.format("[DEBUG] %s", message));
+        if (debug)
+            logger.info(String.format("[DEBUG] %s", message));
     }
 
     @Override
@@ -202,7 +205,8 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
         try {
             runnable.run();
         } catch (Throwable e) {
-            if (e instanceof AssertionError) throw e;
+            if (e instanceof AssertionError)
+                throw e;
             getLogger().log(Level.SEVERE, "Unexpected error while running task:", e);
         }
         return new MockBukkitTask();
@@ -213,6 +217,10 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
         holograms.getStorage().clear();
         if (configFile.exists()) {
             configFile.delete();
+        }
+        Storage storage = holograms.getStorage();
+        if (storage instanceof SQLStorage) {
+            ((SQLStorage) storage).close();
         }
         File hologramsFile = new File(getDataFolder(), "database." + (settings.useDatabase() ? "db" : "yml"));
         if (hologramsFile.exists()) {
