@@ -7,18 +7,14 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import me.ford.periodicholographicdisplays.mock.MockPeriodicHolographicDisplays;
-
 public class HologramYAMLStorageTests extends HologramSQLStorageTests {
-    private MockPeriodicHolographicDisplays phd;
 
     @Override
     @Before
     public void setUp() {
-        phd = new MockPeriodicHolographicDisplays();
+        super.setUp();
         phd.getConfig().set("storage-type", "YAML");
         phd.getSettings().reload();
-        super.setUp();
     }
 
     @Override
