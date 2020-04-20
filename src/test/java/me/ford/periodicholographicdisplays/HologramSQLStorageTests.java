@@ -22,7 +22,7 @@ import me.ford.periodicholographicdisplays.mock.MockPeriodicHolographicDisplays;
 /**
  * Test1
  */
-public class HologramStorageTests {
+public class HologramSQLStorageTests {
     private MockPeriodicHolographicDisplays phd;
 
     @Before
