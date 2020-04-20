@@ -45,7 +45,12 @@ public class Messages extends CustomConfigHandler {
         this.phd = phd;
     }
 
-    Messages(PeriodicHolographicDisplays phd, boolean dummy) throws InvalidConfigurationException {
+    Messages(IPeriodicHolographicDisplays phd, String name) throws InvalidConfigurationException {
+        super(phd, name);
+        this.phd = phd;
+    }
+
+    Messages(IPeriodicHolographicDisplays phd, boolean dummy) throws InvalidConfigurationException {
         super(phd, DUMMY_FILE_NAME, true);
         this.phd = phd;
     }
@@ -95,7 +100,7 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getNextPageHint(String command) {
-        return getMessage("next-page-hint", "TIP: See the next page with {command}").replace("{command}", command);
+        return getMessage("next-page-hint", "TIP: See the next page with &n{command}&r").replace("{command}", command);
     }
 
     public String getInvalidPageMessage(int maxPage) {
@@ -242,7 +247,7 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getNeedANumberMessage(String msg) {
-        return getMessage("need-a-number", "Expected a number, got {msg}").replace("{msg}", msg);
+        return getMessage("need-a-number", "Value must be a number, got {msg}").replace("{msg}", msg);
     }
 
     public String getIllegalTimeMessage(String msg) {
