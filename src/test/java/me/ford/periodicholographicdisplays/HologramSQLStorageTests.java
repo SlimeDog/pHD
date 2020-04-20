@@ -48,6 +48,11 @@ public class HologramSQLStorageTests {
     }
 
     @Test
+    public void correct_database() {
+        Assert.assertTrue(phd.getSettings().useDatabase());
+    }
+
+    @Test
     public void testAlways() {
         HologramStorage hs = phd.getHolograms();
         Assert.assertNotNull("Hologram storage is null!", hs);
