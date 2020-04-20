@@ -11,6 +11,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.ReloadIssue;
+import me.ford.periodicholographicdisplays.Settings.SettingIssue;
 import me.ford.periodicholographicdisplays.holograms.AlwaysHologram;
 import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
@@ -32,6 +34,11 @@ public class MessagesTests extends TestHelpers {
     @After
     public void tearDown() {
         phd.clear();
+    }
+
+    @Override
+    public IPeriodicHolographicDisplays getPhd() {
+        return phd;
     }
 
     @Test
@@ -417,6 +424,162 @@ public class MessagesTests extends TestHelpers {
         String notInt = getRandomName("msg");
         String msg = messages.getNeedAnIntegerMessage(notInt);
         assertContains(msg, notInt);
+        assertNoPlaceholder(msg);
+    }
+
+    @Test
+    public void needCountAfterPlayercound_no_placeholders() {
+        String msg = messages.getNeedCountAfterPlayercount();
+        assertNoPlaceholder(msg);
+    }
+
+    @Test
+    public void needPairedOptions_no_placeholders() {
+        String msg = messages.getNeedPairedOptionsMessage();
+        assertNoPlaceholder(msg);
+    }
+
+    @Test
+    public void needTypeOrPage_fills_placeholders() {
+        String spec = getRandomName("msg");
+        String msg = messages.getNeedTypeOrPageMessage(spec);
+        assertContains(msg, spec);
+        assertNoPlaceholder(msg);
+    }
+
+    @Test
+    public void negativeTimes_fills_placeholders() {
+        String times = getRandomName("msg");
+        String msg = messages.getNegativeTimesMessage(times);
+        assertContains(msg, times);
+        assertNoPlaceholder(msg);
+    }
+
+    @Test
+    public void nextPageHint_fills_placeholders() {
+        String command = getRandomName("msg");
+        String msg = messages.getNextPageHint(command);
+        assertContains(msg, command);
+        assertNoPlaceholder(msg);
+    }
+
+    @Test
+    public void noLP_no_placeholders() {
+        String msg = messages.getNoLPMessage();
+        assertNoPlaceholder(msg);
+    }
+
+    @Test
+    public void noPluginFolder_no_placeholders() {
+        String msg = messages.getNoPluginFolderMessage();
+        assertNoPlaceholder(msg);
+    }
+
+    @Test
+    public void nosuchOption_fills_placeholders() {
+        PeriodicType type = PeriodicType.ALWAYS;
+        String notInt = getRandomName("msg");
+        String msg = messages.getNoSuchOptionMessage(type, notInt);
+        assertContains(msg, notInt, type.name());
+        assertNoPlaceholder(msg);
+    }
+
+    @Test
+    public void nothingToUnset_no_placeholders() {
+        String msg = messages.getNothingToUnsetMessage();
+        assertNoPlaceholder(msg);
+    }
+
+    @Test
+    public void ntimesReport_fills_placeholders_no_pages() {
+        String name = getRandomName("name");
+        MockPlayer player = new MockPlayer(name);
+        List<NTimesHologram> holos = new ArrayList<>();
+        holos.add((NTimesHologram) getRandomHolgram(PeriodicType.NTIMES));
+        int page = 1;
+        int maxPage = 1;
+        int seen = 0;
+        String msg = messages.getNtimesReportMessage(player, holos, page, false);
+        assertContains(msg, name, holos.size(), page, maxPage, holos.get(0).getName(), seen,
+                holos.get(0).getTimesToShow());
+        assertNoPlaceholder(msg);
+    }
+
+    @Test
+    public void ntimesReport_fills_placeholders_no_pages_2() {
+        String name = getRandomName("name");
+        MockPlayer player = new MockPlayer(name);
+        List<NTimesHologram> holos = new ArrayList<>();
+        holos.add((NTimesHologram) getRandomHolgram(PeriodicType.NTIMES));
+        holos.add((NTimesHologram) getRandomHolgram(PeriodicType.NTIMES));
+        int page = 1;
+        int maxPage = 1;
+        int seen = 0;
+        String msg = messages.getNtimesReportMessage(player, holos, page, false);
+        assertContains(msg, name, holos.size(), page, maxPage, holos.get(0).getName(), holos.get(1).getName(), seen,
+                holos.get(0).getTimesToShow(), holos.get(1).getTimesToShow());
+        assertNoPlaceholder(msg);
+    }
+
+    @Test
+    public void optionMissing_fills_placeholders() {
+        PeriodicType type = PeriodicType.MCTIME;
+        String option = getRandomName("option");
+        String msg = messages.getOptionMissingMessage(type, option);
+        assertContains(msg, option, type.name());
+        assertNoPlaceholder(msg);
+    }
+
+    @Test
+    public void optionNotSet_fills_placeholders() {
+        String option = getRandomName("option");
+        String msg = messages.getOptionNotSetMessage(option);
+        assertContains(msg, option);
+        assertNoPlaceholder(msg);
+    }
+
+    @Test
+    public void playerNotFound_fills_placeholders() {
+        String player = getRandomName("player");
+        String msg = messages.getPlayerNotFoundMessage(player);
+        assertContains(msg, player);
+        assertNoPlaceholder(msg);
+    }
+
+    @Test
+    public void pluginFoldereRecreated_no_placeholders() {
+        String msg = messages.getPluginFolderRecreatedMessage();
+        assertNoPlaceholder(msg);
+    }
+
+    @Test
+    public void problemRecreatingPluginFolder_no_placeholders() {
+        String msg = messages.getProblemRecreatingPluginFolder();
+        assertNoPlaceholder(msg);
+    }
+
+    @Test
+    public void problemWithConfig_fills_placeholders() {
+        String value = getRandomName("msg");
+        SettingIssue issue = SettingIssue.ACTIVATION_DISTANCE;
+        String msg = messages.getProblemWithConfigMessage(issue, value);
+        assertContains(msg, value, issue.getPath(), issue.getType().getName());
+        assertNoPlaceholder(msg);
+    }
+
+    @Test // TODO - this is rather primitive now
+    public void problemsReloadingConfig_fills_placeholders() {
+        List<ReloadIssue> issues = new ArrayList<>();
+        String msg = messages.getProblemsReloadingConfigMessage(issues);
+        assertContains(msg, issues);
+        assertNoPlaceholder(msg);
+    }
+
+    @Test
+    public void secondsTooSmall_fills_placeholders() {
+        String times = getRandomName("msg");
+        String msg = messages.getSecondsTooSmallMessage(times);
+        assertContains(msg, times);
         assertNoPlaceholder(msg);
     }
 

@@ -6,7 +6,15 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.bukkit.Location;
 import org.junit.Assert;
 
-public class TestHelpers {
+import me.ford.periodicholographicdisplays.holograms.AlwaysHologram;
+import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
+import me.ford.periodicholographicdisplays.holograms.IRLTimeHologram;
+import me.ford.periodicholographicdisplays.holograms.MCTimeHologram;
+import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
+import me.ford.periodicholographicdisplays.holograms.PeriodicType;
+import me.ford.periodicholographicdisplays.mock.MockNamedHologram;
+
+public abstract class TestHelpers {
     private final ThreadLocalRandom random = ThreadLocalRandom.current();
     private final String[] randomWords = new String[] { "word", "world", "location", "random", "who", "end", "of",
             "the", "1337", "l33t", "working", "for", "test", "4test", "MC", "minecraft", "Spigot", "SpigotMC", "when",
@@ -51,5 +59,31 @@ public class TestHelpers {
         }
         return builder.toString();
     }
+
+    protected FlashingHologram getRandomHolgram(PeriodicType type) {
+        double activationDistance = random.nextDouble() * 10;
+        int showTime = random.nextInt(20);
+        double flashOn = random.nextDouble() * 5;
+        double flashOff = random.nextDouble() * 5;
+        String perms = getRandomName("perms.");
+        String name = getRandomName("name");
+        MockNamedHologram hologram = new MockNamedHologram(name);
+        switch(type) {
+            case ALWAYS:
+            return new AlwaysHologram(getPhd(), hologram, name, activationDistance, showTime, true, perms, flashOn, flashOff);
+            case NTIMES:
+            int timesToShow = random.nextInt(18);
+            return new NTimesHologram(getPhd(), hologram, name, activationDistance, showTime, timesToShow, true, perms, flashOn, flashOff);
+            case IRLTIME:
+            long atTime = random.nextLong(86400);
+            return new IRLTimeHologram(getPhd(), hologram, name, activationDistance, showTime, atTime, true, perms, flashOn, flashOff);
+            case MCTIME:
+            long time = random.nextLong(24000);
+            return new MCTimeHologram(getPhd(), hologram, name, activationDistance, showTime, time, true, perms, flashOn, flashOff);
+        }
+        throw new IllegalArgumentException("Expected PeriodicType, got " + type);
+    }
+
+    public abstract IPeriodicHolographicDisplays getPhd();
 
 }
