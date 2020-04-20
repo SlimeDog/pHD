@@ -1991,7 +1991,41 @@ public class MockPlayer extends MockOPCommandSender implements Player {
     @Override
     public org.bukkit.entity.Player.Spigot spigot() {
         // TODO Auto-generated method stub
-        return null;
+        return new MockSpigot();
+    }
+
+    public class MockSpigot extends Player.Spigot {
+
+        @Override
+        public void sendMessage(net.md_5.bungee.api.chat.BaseComponent component) {
+
+        }
+
+        @Override
+        public void sendMessage(net.md_5.bungee.api.chat.BaseComponent... components) {
+
+        }
+
+        /**
+         * Sends the component to the specified screen position of this player
+         *
+         * @param position the screen position
+         * @param component the components to send
+         */
+        public void sendMessage(net.md_5.bungee.api.ChatMessageType position, net.md_5.bungee.api.chat.BaseComponent component) {
+
+        }
+
+        /**
+         * Sends an array of components as a single message to the specified screen position of this player
+         *
+         * @param position the screen position
+         * @param components the components to send
+         */
+        public void sendMessage(net.md_5.bungee.api.ChatMessageType position, net.md_5.bungee.api.chat.BaseComponent... components) {
+
+        }
+
     }
 
 }
