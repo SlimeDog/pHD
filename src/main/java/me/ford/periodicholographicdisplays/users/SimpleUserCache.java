@@ -18,6 +18,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.StringUtil;
 
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
@@ -51,11 +52,13 @@ public class SimpleUserCache implements UserCache {
                 folderPath = ".";
                 path = Paths.get(folderPath, USER_CACHE_NAME);
                 if (!Files.exists(path)) {
-                    phd.getLogger().warning(USER_CACHE_NAME + " not found!");
+                    if (phd instanceof JavaPlugin)
+                        phd.getLogger().warning(USER_CACHE_NAME + " not found!");
                     return "{}";
                 }
             } else {
-                phd.getLogger().warning(USER_CACHE_NAME + " not found!");
+                if (phd instanceof JavaPlugin)
+                    phd.getLogger().warning(USER_CACHE_NAME + " not found!");
                 return "{}";
             }
         }
