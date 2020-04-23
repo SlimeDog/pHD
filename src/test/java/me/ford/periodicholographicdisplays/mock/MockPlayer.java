@@ -2028,4 +2028,10 @@ public class MockPlayer extends MockOPCommandSender implements Player {
 
     }
 
+    @Override
+    public float getAttackCooldown() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
 }
