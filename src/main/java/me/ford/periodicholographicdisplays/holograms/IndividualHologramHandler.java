@@ -77,6 +77,10 @@ public class IndividualHologramHandler {
         return holograms.get(type);
     }
 
+    void setAllNeedingSaved() {
+        toSave.putAll(holograms);
+    }
+
     Map<PeriodicType, FlashingHologram> getToSave() {
         return new HashMap<>(toSave);
     }

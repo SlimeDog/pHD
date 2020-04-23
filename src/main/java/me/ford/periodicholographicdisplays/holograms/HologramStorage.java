@@ -318,6 +318,7 @@ public class HologramStorage {
             }
         }
         for (IndividualHologramHandler handler : toZombie) {
+            handler.setAllNeedingSaved();
             WorldHologramStorage storage = getHolograms(handler.getHologram().getWorld());
             danglingInfos.add(storage.getInfo(handler));
             for (FlashingHologram hologram : handler.getHolograms()) {
