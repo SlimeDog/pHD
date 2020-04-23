@@ -43,7 +43,14 @@ public class Zombificator implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        boolean response = hologramCommandExecutor.onCommand(sender, command, label, args);
+        boolean response;
+        try {
+            response = hologramCommandExecutor.onCommand(sender, command, label, args);
+        } catch (Exception e) {
+            response = false;
+            phd.getLogger().severe("Problem while executing HD command");
+            e.printStackTrace();
+        }
         if (response && args.length > 0 && (args[0].equalsIgnoreCase("delete") || args[0].equalsIgnoreCase("remove"))) {
             phd.debug("HD Hologram might have been removed - checking for zombies");
             holograms.checkForZombies();
