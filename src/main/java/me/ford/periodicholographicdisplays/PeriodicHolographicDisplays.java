@@ -19,6 +19,7 @@ import me.ford.periodicholographicdisplays.Settings.SettingIssue;
 import me.ford.periodicholographicdisplays.Settings.StorageTypeException;
 import me.ford.periodicholographicdisplays.commands.PHDCommand;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
+import me.ford.periodicholographicdisplays.holograms.Zombificator;
 import me.ford.periodicholographicdisplays.hooks.DummyNPCHook;
 import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
 import me.ford.periodicholographicdisplays.hooks.NPCHook;
@@ -125,6 +126,8 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
 
         // commands
         getCommand("phd").setExecutor(new PHDCommand(this, getServer().getPluginManager()));
+        // listen to /holo delete/remove
+        new Zombificator(this);
 
         int resourceId = 77631;
         if (settings.checkForUpdates() && resourceId != -1) {

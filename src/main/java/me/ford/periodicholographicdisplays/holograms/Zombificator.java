@@ -38,6 +38,7 @@ public class Zombificator implements CommandExecutor {
             // previously present - which it's not at the time of writing)
             hologramCommand.setTabCompleter((TabCompleter) hologramCommandExecutor);
         }
+        hologramCommand.setExecutor(this);
     }
 
     @Override
