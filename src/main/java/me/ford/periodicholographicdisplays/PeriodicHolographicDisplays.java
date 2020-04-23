@@ -125,7 +125,8 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
         }
 
         // commands
-        getCommand("phd").setExecutor(new PHDCommand(this, getServer().getPluginManager()));
+        command = new PHDCommand(this, getServer().getPluginManager());
+        getCommand("phd").setExecutor(command);
         // listen to /holo delete/remove
         new Zombificator(this);
 
