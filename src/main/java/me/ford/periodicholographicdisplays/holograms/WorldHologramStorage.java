@@ -152,7 +152,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         return !infos.isEmpty();
     }
 
-    private HDHologramInfo getInfo(IndividualHologramHandler handler) {
+    HDHologramInfo getInfo(IndividualHologramHandler handler) {
         HDHologramInfo info = new HDHologramInfo(handler.getName());
         for (Entry<PeriodicType, FlashingHologram> entry : handler.getToSave().entrySet()) {
             double distance = PeriodicHologramBase.NO_DISTANCE;

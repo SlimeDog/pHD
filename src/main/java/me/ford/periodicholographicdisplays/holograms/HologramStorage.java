@@ -307,6 +307,25 @@ public class HologramStorage {
         return new HashSet<>(danglingInfos);
     }
 
+    public void checkForZombies() {
+        List<IndividualHologramHandler> toZombie = new ArrayList<>();
+        for (WorldHologramStorage storage : holograms.values()) {
+            for (IndividualHologramHandler handler : storage.getHandlers(false)) {
+                if (handler.getHologram().isDeleted()) {
+                    plugin.debug("The hologram '" + handler.getName() + "' has been detected as being deleted and thus all its pHD handlers will now be zombified");
+                    toZombie.add(handler);
+                }
+            }
+        }
+        for (IndividualHologramHandler handler : toZombie) {
+            WorldHologramStorage storage = getHolograms(handler.getHologram().getWorld());
+            danglingInfos.add(storage.getInfo(handler));
+            for (FlashingHologram hologram : handler.getHolograms()) {
+                removeHologram(hologram);
+            }
+        }
+    }
+
     public void removeZombie(HologramInfo info) {
         HDHologramInfo parent = null;
         for (HDHologramInfo hdInfo : danglingInfos) {
