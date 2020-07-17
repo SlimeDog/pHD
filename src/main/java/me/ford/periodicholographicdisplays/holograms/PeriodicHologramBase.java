@@ -204,7 +204,7 @@ public abstract class PeriodicHologramBase {
     }
 
     public void resetVisibility() {
-        for (UUID id : beingShownTo) {
+        for (UUID id : new HashSet<>(beingShownTo)) {
             Player player = plugin.getPlayer(id);
             if (player != null)
                 hideFrom(player);
