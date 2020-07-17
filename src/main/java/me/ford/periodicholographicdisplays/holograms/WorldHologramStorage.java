@@ -126,6 +126,15 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
                     } else {
                         always.hideFrom(player);
                     }
+                } else {
+                    if (always.isBeingShownTo(player) && !always.canSee(player)) {
+                        always.hideFrom(player);
+                    } else if (!always.isBeingShownTo(player) && always.canSee(player)) {
+                        double dist2 = always.getSquareDistance();
+                        if (player.getWorld() == getWorld() && player.getLocation().distanceSquared(always.getLocation()) <= dist2) {
+                            always.attemptToShow(player);
+                        }
+                    }
                 }
             }
         }

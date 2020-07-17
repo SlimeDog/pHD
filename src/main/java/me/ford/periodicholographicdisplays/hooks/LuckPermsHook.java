@@ -81,7 +81,7 @@ public class LuckPermsHook {
             return;
         }
         Player player = phd.getServer().getPlayer(id);
-        if (player == null) return; // don't worry about it - they're offline    
+        if (player == null) return; // don't worry about it - they're offline
         phd.getHolograms().getHolograms(player.getWorld()).resetAlwaysHologramPermissions(player);
     }
 
