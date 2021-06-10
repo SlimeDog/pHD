@@ -4,7 +4,7 @@
 
 name: ${project.name}
 version: ${project.version}
-api-version: 1.13
+api-version: 1.17
 main: ${project.groupId}.${project.artifactId}.PeriodicHolographicDisplays
 description: ${project.description}
 website: ${website}
