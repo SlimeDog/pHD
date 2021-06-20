@@ -54,12 +54,20 @@ public class LuckPermsHook {
             return;
         }
         Player player = phd.getServer().getPlayer(id);
-        if (player == null)
-            return; // don't worry about it - they're offline
-        resetHolograms(player);
+        if (player == null) return; // don't worry about it - they're offline
+        resetAlwaysHolgramPermissionsSafely(player);
     }
 
     private void resetHolograms(Player player) {
+        resetAlwaysHolgramPermissionsSafely(player);
+    }
+
+    // Make sure the holograms are shown in sync
+    private void resetAlwaysHolgramPermissionsSafely(Player player) {
+        if (!phd.getServer().isPrimaryThread()) {
+            phd.getServer().getScheduler().runTask(phd, () -> resetAlwaysHolgramPermissionsSafely(player));
+            return;
+        }
         phd.getHolograms().getHolograms(player.getWorld()).resetAlwaysHologramPermissions(player);
     }
 
@@ -82,19 +90,19 @@ public class LuckPermsHook {
         }
         Player player = phd.getServer().getPlayer(id);
         if (player == null) return; // don't worry about it - they're offline
-        phd.getHolograms().getHolograms(player.getWorld()).resetAlwaysHologramPermissions(player);
+        resetAlwaysHolgramPermissionsSafely(player);
     }
 
     private void userPromote(UserPromoteEvent event) {
         Player player = phd.getServer().getPlayer(event.getUser().getUniqueId());
         if (player == null) return; // don't worry about it - they're offline
-        phd.getHolograms().getHolograms(player.getWorld()).resetAlwaysHologramPermissions(player);
+        resetAlwaysHolgramPermissionsSafely(player);
     }
 
     private void userDemote(UserDemoteEvent event) {
         Player player = phd.getServer().getPlayer(event.getUser().getUniqueId());
         if (player == null) return; // don't worry about it - they're offline
-        phd.getHolograms().getHolograms(player.getWorld()).resetAlwaysHologramPermissions(player);        
+        resetAlwaysHolgramPermissionsSafely(player);
     }
 
     private final String lpCommand = "luckperms";
