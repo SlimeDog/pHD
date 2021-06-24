@@ -8,7 +8,7 @@ api-version: 1.17
 main: ${project.groupId}.${project.artifactId}.PeriodicHolographicDisplays
 description: ${project.description}
 website: ${website}
-authors: [SlimeDog, drives_a_ford]
+authors: [drives_a_ford, SlimeDog]
 depend: [HolographicDisplays, ProtocolLib]
 softdepend: [Citizens, LuckPerms, Multiverse-Core, MultiWorld]
 
