@@ -11,7 +11,7 @@
 # Minecraft version support:
 #   pHD 1.0.0     Spigot 1.13.2, 1.14.4, 1.15.2
 #   pHD 1.0.4     Spigot and Paper 1.16.5
-#   pHD 2.0.0     Spigot and Paper 1.17.x
+#   pHD 1.1.0     Spigot and Paper 1.17.x
 #
 
 # ========== DEFAULT PARAMETER VALUES ==============================================================
@@ -32,11 +32,11 @@ save-frequency: 60
 storage-type: SQLITE
 
 # ========== CHECK FOR UPDATES =====================================================================
-# If you do not want available updates announced in the console log, you may disable it here.
+# If you do not want notification of available updates in the console log, you may disable it here.
 check-for-updates: true
 
 # ========== BSTATS METRICS ========================================================================
-# By default, the plugins collects and transmits anonymous statistics to bstats.org.
+# By default, the plugin collects and transmits anonymous statistics to bstats.org.
 # Data collection may be disabled here, or generally in the bStats/config.yml.
 enable-metrics: true
 
