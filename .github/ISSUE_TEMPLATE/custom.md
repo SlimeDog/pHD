@@ -3,7 +3,7 @@ name: Help request
 about: Ask a question
 title: ''
 labels: 'type: question'
-assignees: 'SlimeDog'
+assignees: SlimeDog
 
 ---
 
