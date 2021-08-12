@@ -21,7 +21,8 @@ If applicable, add screenshots to help explain the problem
 
 **Server Environment**
  - OS [Linux, MacOS, Windows] version: 
- - Spigot version [/version]: 
+ - Server version [/version]: 
+ - Java version [java -version]
  - HolographicDisplays version [/version HolographicDisplays]: 
  - pHD version [/version pHD]: 
 
