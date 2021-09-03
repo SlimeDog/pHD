@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Suggest an new feature
+about: Suggest a new feature
 title: ''
 labels: 'type: feature request'
 assignees: SlimeDog
