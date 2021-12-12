@@ -111,8 +111,9 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
         this.getServer().getPluginManager().registerEvents(new JoinLeaveListener(this, holograms), this);
         this.getServer().getPluginManager().registerEvents(new WorldListener(holograms), this);
         WorldTimeListener worldTimeListener;
-        if (getServer().getBukkitVersion().contains("1.15") || getServer().getBukkitVersion().contains("1.16")
-                || getServer().getBukkitVersion().contains("1.17")) {
+        String version = getServer().getBukkitVersion();
+        if (version.contains("1.15") || version.contains("1.16")
+                || version.contains("1.17") || version.contains("1.18")) {
             worldTimeListener = new SimpleWorldTimeListener(holograms);
         } else {
             getLogger().warning(messages.getLegacyMessage());
