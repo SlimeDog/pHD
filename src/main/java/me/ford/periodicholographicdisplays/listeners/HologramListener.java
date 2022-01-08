@@ -28,17 +28,19 @@ public class HologramListener implements Listener {
         this.hook = hook;
     }
 
-    private void movedTo(Player player, Location location) {
+    private void movedTo(Player player, Location location, boolean forceUpdate) {
         if (hook != null && hook.isNPC(player))
             return; // ignore
         WorldHologramStorage wh = holograms.getHolograms(location.getWorld());
         for (PeriodicHologramBase base : wh.getHolograms(true)) {
             double dist2 = base.getLocation().distanceSquared(location);
+            boolean showing = false;
             if (dist2 < base.getSquareDistance()) {
                 if (base.getType() == PeriodicType.ALWAYS && ((AlwaysHologram) base).isShownOnWorldJoin()) {
                     continue; // ignore
                 }
                 base.attemptToShow(player);
+                showing = base.canSee(player);
             }
             // handle leaving ALWAYS holograms with activation distance and FOREVER settings
             if (base.getType() == PeriodicType.ALWAYS) {
@@ -49,6 +51,11 @@ public class HologramListener implements Listener {
                     always.leftArea(player);
                 }
             }
+            if (forceUpdate) {
+                if (!showing) {
+                    base.hideFrom(player);
+                }
+            }
         }
     }
 
@@ -56,22 +63,22 @@ public class HologramListener implements Listener {
     public void onMove(PlayerMoveEvent event) {
         if (event.getFrom().distanceSquared(event.getTo()) == 0)
             return;
-        movedTo(event.getPlayer(), event.getTo());
+        movedTo(event.getPlayer(), event.getTo(), false);
     }
 
     @EventHandler
     public void onTeleport(PlayerTeleportEvent event) {
-        movedTo(event.getPlayer(), event.getTo());
+        movedTo(event.getPlayer(), event.getTo(), event.getPlayer().getWorld() != event.getTo().getWorld());
     }
 
     @EventHandler
     public void onWorldChange(PlayerChangedWorldEvent event) {
-        movedTo(event.getPlayer(), event.getPlayer().getLocation());
+        movedTo(event.getPlayer(), event.getPlayer().getLocation(), true);
     }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        movedTo(event.getPlayer(), event.getPlayer().getLocation());
+        movedTo(event.getPlayer(), event.getPlayer().getLocation(), true);
     }
 
 }
