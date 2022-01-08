@@ -33,7 +33,7 @@ public class VisibilityAwareLineTrackerManager extends LineTrackerManager {
         Iterator<LineTracker<?>> iterator = lineTrackers.iterator();
         while (iterator.hasNext()) {
             LineTracker<?> lineTracker = iterator.next();
-            LineTrackerWrapper wrapper = VisibilityManager.REGISTRY.getWrapper(lineTracker);
+            LineVisibilityManager wrapper = VisibilityManager.REGISTRY.getWrapper(lineTracker);
             for (CachedPlayer p : onlinePlayers) {
                 if (wrapper.isHidingFor(p.getBukkitPlayer())) {
                     usedPlayers.remove(p);
