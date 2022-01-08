@@ -77,6 +77,14 @@ public class LineTrackerWrapper {
         }
     }
 
+    public LineTracker<?> getDelegate() {
+        return delegate;
+    }
+
+    public boolean isHidingFor(Player player) {
+        return removedViewers.containsKey(player);
+    }
+
     public void stopTracking(Player player) {
         Object viewer = delegateViewers.remove(player);
         removedViewers.put(player, viewer);
