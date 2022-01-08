@@ -20,6 +20,7 @@ import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologra
 import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramLine;
 
 public class VisibilityManager {
+    public static final VisibilityManagerRegistry REGISTRY = new VisibilityManagerRegistry();
     public static final Provider PROVIDER = new Provider();
     private final Collection<LineTrackerWrapper> lineTrackers; // only lines belonging to this hologram
 
@@ -27,6 +28,9 @@ public class VisibilityManager {
             InternalHologram hologram,
             Collection<LineTrackerWrapper> lineTrackers) {
         this.lineTrackers = lineTrackers;
+        for (LineTrackerWrapper wrapper : lineTrackers) {
+            REGISTRY.register(wrapper.getDelegate(), wrapper);
+        }
     }
 
     public void hideFrom(Player player) {
@@ -95,7 +99,7 @@ public class VisibilityManager {
         }
 
         @SuppressWarnings("unchecked")
-        private Collection<LineTracker<?>> getAllLineTrackers(LineTrackerManager manager) {
+        public Collection<LineTracker<?>> getAllLineTrackers(LineTrackerManager manager) {
             try {
                 return (Collection<LineTracker<?>>) LINE_TRACKERS_FIELD.get(manager); // unchecked cast
             } catch (IllegalArgumentException | IllegalAccessException e) {
