@@ -21,6 +21,7 @@ import me.ford.periodicholographicdisplays.Settings.StorageTypeException;
 import me.ford.periodicholographicdisplays.commands.PHDCommand;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.Zombificator;
+import me.ford.periodicholographicdisplays.holograms.visbility.VisibilityAwareLineTrackerManager;
 import me.ford.periodicholographicdisplays.hooks.DummyNPCHook;
 import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
 import me.ford.periodicholographicdisplays.hooks.NPCHook;
@@ -39,6 +40,7 @@ import me.ford.periodicholographicdisplays.users.UserCache;
  * PeriodicHolographicDisplays
  */
 public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisplays {
+    private HolographicDisplays hdPlugin;
     private InternalHologramManager holoManager;
     private HologramStorage holograms;
     private Settings settings;
@@ -75,8 +77,14 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
             return;
         }
 
+        // HD plugin
+        hdPlugin = JavaPlugin.getPlugin(HolographicDisplays.class);
+
+        // setup Visibility aware LineTrackerManager
+        injectLineTrackerManager();
+
         // setup HD hook
-        holoManager = getHoloManager(JavaPlugin.getPlugin(HolographicDisplays.class));
+        holoManager = getHoloManager(hdPlugin);
 
         try {
             holograms = new HologramStorage(this, getServer().getPluginManager());
@@ -143,6 +151,12 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
                     (result, e) -> getLogger().info(result.getReason() + ": " + result.getNewestVersion()));
         }
         getLogger().info(messages.getActiveStorageMessage(getSettings().useDatabase()));
+    }
+
+    private void injectLineTrackerManager() {
+        VisibilityAwareLineTrackerManager.exchangeLineTrackerManager(hdPlugin);
+        getLogger().warning("Replaced HolographicDisplays LineTrackerManager with one that is" +
+                "aware of the visibility managemetn of individual pHD holograms");
     }
 
     private void disableMe(List<ReloadIssue> issues) {
