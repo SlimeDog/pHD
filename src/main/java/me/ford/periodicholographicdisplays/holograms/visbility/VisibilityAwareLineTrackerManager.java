@@ -34,9 +34,11 @@ public class VisibilityAwareLineTrackerManager extends LineTrackerManager {
         while (iterator.hasNext()) {
             LineTracker<?> lineTracker = iterator.next();
             LineVisibilityManager wrapper = VisibilityManager.REGISTRY.getWrapper(lineTracker);
-            for (CachedPlayer p : onlinePlayers) {
-                if (wrapper.isHidingFor(p.getBukkitPlayer())) {
-                    usedPlayers.remove(p);
+            if (wrapper != null) {
+                for (CachedPlayer p : onlinePlayers) {
+                    if (wrapper.isHidingFor(p.getBukkitPlayer())) {
+                        usedPlayers.remove(p);
+                    }
                 }
             }
 
@@ -51,7 +53,7 @@ public class VisibilityAwareLineTrackerManager extends LineTrackerManager {
         }
     }
 
-    public static void exchangeLineTrackerManager(HolographicDisplays plugin) {
+    public static VisibilityAwareLineTrackerManager exchangeLineTrackerManager(HolographicDisplays plugin) {
         LineTrackerManager delegate = NMSProvider.getLineTrackerManager(plugin);
         VisibilityAwareLineTrackerManager ltm = new VisibilityAwareLineTrackerManager(delegate);
         NMSProvider.setLineTrackerManager(plugin, ltm);
@@ -60,6 +62,7 @@ public class VisibilityAwareLineTrackerManager extends LineTrackerManager {
                 NMSProvider.switchLineTrackerManager((TickingTask) NMSProvider.getBukkitTaskRunnable(task), ltm);
             }
         }
+        return ltm;
     }
 
     private static class NMSProvider {
