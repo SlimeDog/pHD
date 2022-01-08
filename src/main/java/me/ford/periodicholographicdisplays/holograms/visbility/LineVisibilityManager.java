@@ -11,19 +11,26 @@ import org.bukkit.entity.Player;
 
 import me.filoghost.holographicdisplays.plugin.hologram.tracking.LineTracker;
 import me.filoghost.holographicdisplays.plugin.hologram.tracking.MutableViewers;
+import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 
 public class LineVisibilityManager {
+    private final PeriodicHologramBase phdHolo;
     private final LineTracker<?> delegate;
     private final Map<Player, Object> delegateViewers; // not really Object
     private final Map<Player, Object> removedViewers = new HashMap<>();
 
-    public LineVisibilityManager(LineTracker<?> delegate) {
+    public LineVisibilityManager(LineTracker<?> delegate, PeriodicHologramBase phdHolo) {
+        this.phdHolo = phdHolo;
         this.delegate = delegate;
         delegateViewers = NMSPRovider.getViewers(delegate);
         // default behaviour to hide from everyone who isn't explicitly shown
         for (Player player : new ArrayList<>(delegateViewers.keySet())) {
             stopTracking(player);
         }
+    }
+
+    public PeriodicHologramBase getPhdHolo() {
+        return phdHolo;
     }
 
     public LineTracker<?> getDelegate() {

@@ -42,7 +42,7 @@ public abstract class PeriodicHologramBase {
             double activationDistance, long showTime,
             PeriodicType type, boolean isNew, String perms) {
         Validate.notNull(hologram, "Hologram cannot be null!");
-        this.visibilityManager = VisibilityManager.PROVIDER.provide(hologram);
+        this.visibilityManager = VisibilityManager.PROVIDER.provide(hologram, this);
         this.hologram = hologram;
         this.name = name;
         this.plugin = phd;

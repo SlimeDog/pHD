@@ -18,19 +18,25 @@ import me.filoghost.holographicdisplays.plugin.hologram.tracking.LineTracker;
 import me.filoghost.holographicdisplays.plugin.hologram.tracking.LineTrackerManager;
 import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
 import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramLine;
+import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 
 public class VisibilityManager {
     public static final VisibilityManagerRegistry REGISTRY = new VisibilityManagerRegistry();
     public static final Provider PROVIDER = new Provider();
+    private final PeriodicHologramBase phdHolo;
     private final Collection<LineVisibilityManager> lineTrackers; // only lines belonging to this hologram
 
-    public VisibilityManager(
-            InternalHologram hologram,
-            Collection<LineVisibilityManager> lineTrackers) {
+    public VisibilityManager(InternalHologram hologram, Collection<LineVisibilityManager> lineTrackers,
+            PeriodicHologramBase phdHolo) {
+        this.phdHolo = phdHolo;
         this.lineTrackers = lineTrackers;
         for (LineVisibilityManager wrapper : lineTrackers) {
             REGISTRY.register(wrapper.getDelegate(), wrapper);
         }
+    }
+
+    public PeriodicHologramBase getPhdHolo() {
+        return phdHolo;
     }
 
     public void hideFrom(Player player) {
@@ -116,7 +122,7 @@ public class VisibilityManager {
         }
 
         private Collection<LineVisibilityManager> getHologramLineTrackers(Collection<LineTracker<?>> allTrackers,
-                InternalHologram hologram) {
+                InternalHologram hologram, PeriodicHologramBase phdHolo) {
             Set<InternalHologramLine> hologramLines = new HashSet<>();
             Iterator<InternalHologramLine> iter = hologram.getLines().iterator();
             while (iter.hasNext()) {
@@ -126,17 +132,17 @@ public class VisibilityManager {
             for (LineTracker<?> tracker : allTrackers) {
                 BaseHologramLine line = getLine(tracker);
                 if (hologramLines.contains(line)) {
-                    list.add(new LineVisibilityManager(tracker));
+                    list.add(new LineVisibilityManager(tracker, phdHolo));
                 }
 
             }
             return list;
         }
 
-        public VisibilityManager provide(InternalHologram hologram) {
+        public VisibilityManager provide(InternalHologram hologram, PeriodicHologramBase phdHolo) {
             LineTrackerManager tracker = getTracker(hologram);
             Collection<LineTracker<?>> all = getAllLineTrackers(tracker);
-            return new VisibilityManager(hologram, getHologramLineTrackers(all, hologram));
+            return new VisibilityManager(hologram, getHologramLineTrackers(all, hologram, phdHolo), phdHolo);
         }
 
     }
