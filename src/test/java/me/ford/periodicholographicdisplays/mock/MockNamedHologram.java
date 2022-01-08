@@ -2,22 +2,16 @@ package me.ford.periodicholographicdisplays.mock;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import com.gmail.filoghost.holographicdisplays.object.CraftVisibilityManager;
-import com.gmail.filoghost.holographicdisplays.object.NamedHologram;
+import me.filoghost.holographicdisplays.plugin.hologram.base.ImmutablePosition;
+import me.filoghost.holographicdisplays.plugin.hologram.tracking.LineTrackerManager;
+import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
 
-import org.bukkit.Location;
-
-public class MockNamedHologram extends NamedHologram {
+public class MockNamedHologram extends InternalHologram {
     private static final ThreadLocalRandom rnd = ThreadLocalRandom.current();
-    private final CraftVisibilityManager vm = new MockVisibilityManager(this);
 
-    public MockNamedHologram(String name) {
-        super(new Location(new MockWorld("someMockWorld"), rnd.nextDouble(), rnd.nextDouble(), rnd.nextDouble()), name);
-    }
-
-    @Override
-    public CraftVisibilityManager getVisibilityManager() {
-        return vm;
+    public MockNamedHologram(String name, LineTrackerManager ltm) {
+        super(new ImmutablePosition("someMockWorld", rnd.nextDouble(), rnd.nextDouble(), rnd.nextDouble()),
+                name, ltm);
     }
 
 }

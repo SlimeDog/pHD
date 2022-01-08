@@ -12,6 +12,7 @@ import me.ford.periodicholographicdisplays.holograms.IRLTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.MCTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
+import me.ford.periodicholographicdisplays.mock.MockLineTrackerManager;
 import me.ford.periodicholographicdisplays.mock.MockNamedHologram;
 
 public abstract class TestHelpers {
@@ -60,26 +61,30 @@ public abstract class TestHelpers {
         return builder.toString();
     }
 
-    protected FlashingHologram getRandomHolgram(PeriodicType type) {
+    protected FlashingHologram getRandomHolgram(PeriodicType type, MockLineTrackerManager ltm) {
         double activationDistance = random.nextDouble() * 10;
         int showTime = random.nextInt(20);
         double flashOn = random.nextDouble() * 5;
         double flashOff = random.nextDouble() * 5;
         String perms = getRandomName("perms.");
         String name = getRandomName("name");
-        MockNamedHologram hologram = new MockNamedHologram(name);
-        switch(type) {
+        MockNamedHologram hologram = new MockNamedHologram(name, ltm);
+        switch (type) {
             case ALWAYS:
-            return new AlwaysHologram(getPhd(), hologram, name, activationDistance, showTime, true, perms, flashOn, flashOff);
+                return new AlwaysHologram(getPhd(), hologram, name, activationDistance, showTime, true, perms, flashOn,
+                        flashOff);
             case NTIMES:
-            int timesToShow = random.nextInt(18);
-            return new NTimesHologram(getPhd(), hologram, name, activationDistance, showTime, timesToShow, true, perms, flashOn, flashOff);
+                int timesToShow = random.nextInt(18);
+                return new NTimesHologram(getPhd(), hologram, name, activationDistance, showTime, timesToShow, true,
+                        perms, flashOn, flashOff);
             case IRLTIME:
-            long atTime = random.nextLong(86400);
-            return new IRLTimeHologram(getPhd(), hologram, name, activationDistance, showTime, atTime, true, perms, flashOn, flashOff);
+                long atTime = random.nextLong(86400);
+                return new IRLTimeHologram(getPhd(), hologram, name, activationDistance, showTime, atTime, true, perms,
+                        flashOn, flashOff);
             case MCTIME:
-            long time = random.nextLong(24000);
-            return new MCTimeHologram(getPhd(), hologram, name, activationDistance, showTime, time, true, perms, flashOn, flashOff);
+                long time = random.nextLong(24000);
+                return new MCTimeHologram(getPhd(), hologram, name, activationDistance, showTime, time, true, perms,
+                        flashOn, flashOff);
         }
         throw new IllegalArgumentException("Expected PeriodicType, got " + type);
     }

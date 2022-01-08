@@ -1,6 +1,5 @@
 package me.ford.periodicholographicdisplays.commands;
 
-
 import org.bukkit.command.Command;
 import org.junit.After;
 import org.junit.Assert;
@@ -10,6 +9,7 @@ import me.ford.periodicholographicdisplays.commands.subcommands.ManageSub;
 import me.ford.periodicholographicdisplays.commands.subcommands.SetSub;
 import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
+import me.ford.periodicholographicdisplays.mock.MockLineTrackerManager;
 import me.ford.periodicholographicdisplays.mock.MockOPCommandSender;
 import me.ford.periodicholographicdisplays.mock.MockPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.mock.MockPluginManager;
@@ -18,10 +18,12 @@ public abstract class BaseCommandTests {
     protected MockPeriodicHolographicDisplays phd;
     protected PHDCommand command;
     protected MockOPCommandSender sender;
+    protected MockLineTrackerManager ltm;
 
     @Before
     public void setup() {
         phd = new MockPeriodicHolographicDisplays();
+        ltm = new MockLineTrackerManager();
         command = new PHDCommand(phd, new MockPluginManager());
         sender = new MockOPCommandSender(null);
     }
@@ -31,41 +33,45 @@ public abstract class BaseCommandTests {
         phd.clear();
     }
 
-    protected void testSetManageCommonIllegals(FlashingHologram hologram, String holoName, PeriodicType testType, boolean isSet) {
+    protected void testSetManageCommonIllegals(FlashingHologram hologram, String holoName, PeriodicType testType,
+            boolean isSet) {
         String commandName = isSet ? "set" : "manage";
         // /phd set <name>
         String usageMessage;
         SubCommand cmd;
         if (isSet) {
-            cmd = new SetSub(phd.getHolograms(), phd.getLuckPermsHook(), phd.getSettings(), phd.getMessages());
+            cmd = new SetSub(null, phd.getHolograms(), phd.getLuckPermsHook(), phd.getSettings(), phd.getMessages());
         } else {
             cmd = new ManageSub(phd);
         }
-        usageMessage = cmd.getUsage(sender, new String[] {commandName, holoName});
+        usageMessage = cmd.getUsage(sender, new String[] { commandName, holoName });
         String expected = usageMessage;
-        testCommand(sender, null, "phd", new String[] {commandName, holoName}, expected);
+        testCommand(sender, null, "phd", new String[] { commandName, holoName }, expected);
         // /phd set <name> 1
         expected = phd.getMessages().getTypeNotRecognizedMessage("1");
-        testCommand(sender, null, "phd", new String[] {commandName, holoName, "1"}, expected);
+        testCommand(sender, null, "phd", new String[] { commandName, holoName, "1" }, expected);
         // /phd set <name> <wrongtype>
-        expected = cmd.getUsage(sender, new String[] {commandName, holoName, testType.name()});
+        expected = cmd.getUsage(sender, new String[] { commandName, holoName, testType.name() });
         if (!isSet && testType == PeriodicType.ALWAYS) {
             expected = phd.getMessages().getHologramAlreadyManagedMessage(holoName, testType);
         }
-        testCommand(sender, null, "phd", new String[] {commandName, holoName, testType.name()}, expected);
+        testCommand(sender, null, "phd", new String[] { commandName, holoName, testType.name() }, expected);
         // /phd set <name> <type> <option> <value>
         if (isSet) {
             expected = phd.getMessages().getHologramNotTrackedMessage(holoName, testType);
         } else {
             expected = phd.getMessages().getHologramAlreadyManagedMessage(holoName, testType);
         }
-        testCommand(sender, null, "phd", new String[] {commandName, holoName, testType.name(), "option", "value"}, expected);
+        testCommand(sender, null, "phd", new String[] { commandName, holoName, testType.name(), "option", "value" },
+                expected);
         // /phd set <name> <type> <option> <value> <option2> # no value
         expected = phd.getMessages().getNeedPairedOptionsMessage();
-        testCommand(sender, null, "phd", new String[] {commandName, holoName, testType.name(), "option", "value", "option2"}, expected);
+        testCommand(sender, null, "phd",
+                new String[] { commandName, holoName, testType.name(), "option", "value", "option2" }, expected);
     }
 
-    protected void testCommand(MockOPCommandSender sender, Command command, String label, String args[], String expectedMessage) {
+    protected void testCommand(MockOPCommandSender sender, Command command, String label, String args[],
+            String expectedMessage) {
         sender.setMessageConsumer((msg) -> {
             Assert.assertEquals(expectedMessage, msg);
         });

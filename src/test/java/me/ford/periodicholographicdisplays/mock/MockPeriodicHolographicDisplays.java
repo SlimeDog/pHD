@@ -10,8 +10,6 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.gmail.filoghost.holographicdisplays.object.NamedHologram;
-
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -21,6 +19,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
+import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
+import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramManager;
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.ReloadIssue;
@@ -47,7 +47,7 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
     private final Settings settings;
     private final HologramStorage holograms;
     private final UserCache userCache;
-    private final Map<String, NamedHologram> namedHDHolograms = new HashMap<>();
+    private final Map<String, InternalHologram> namedHDHolograms = new HashMap<>();
     private boolean debug = false;
 
     public MockPeriodicHolographicDisplays() {
@@ -242,11 +242,11 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
     }
 
     @Override
-    public NamedHologram getHDHologram(String name) {
+    public InternalHologram getHDHologram(String name) {
         return namedHDHolograms.get(name);
     }
 
-    public void putHDHologram(String name, NamedHologram hologram) {
+    public void putHDHologram(String name, InternalHologram hologram) {
         namedHDHolograms.put(name, hologram);
     }
 
@@ -254,5 +254,10 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
     public File getWorldContainer() {
         return getDataFolder();
     }
-    
+
+    @Override
+    public InternalHologramManager getHDHoloManager() {
+        return null;
+    }
+
 }

@@ -24,7 +24,9 @@ public class CommandSetTests extends BaseCommandTests {
         // /phd set
         sender = new MockOPCommandSender((msg) -> {
             Assert.assertEquals(
-                    new SetSub(phd.getHolograms(), null, phd.getSettings(), phd.getMessages()).getUsage(sender, new String[] {}), msg);
+                    new SetSub(null, phd.getHolograms(), null, phd.getSettings(), phd.getMessages()).getUsage(sender,
+                            new String[] {}),
+                    msg);
         });
         command.onCommand(sender, null, "phd", new String[] { "set" });
         // /phd set 1
@@ -37,7 +39,8 @@ public class CommandSetTests extends BaseCommandTests {
     @Test
     public void testSetCommand2() {
         String holoName = "ALWAYSNAME";
-        AlwaysHologram hologram = new AlwaysHologram(phd, new MockNamedHologram(holoName), holoName, 1.0, -1, true, null, -1, -1);
+        AlwaysHologram hologram = new AlwaysHologram(phd, new MockNamedHologram(holoName, ltm), holoName, 1.0, -1, true,
+                null, -1, -1);
         phd.getHolograms().addHologram(hologram);
         testSetManageCommonIllegals(hologram, holoName, PeriodicType.NTIMES, true);
     }
@@ -45,14 +48,17 @@ public class CommandSetTests extends BaseCommandTests {
     @Test
     public void testSetIllegal() {
         String holoName = "ALWAYSNAME";
-        AlwaysHologram hologram = new AlwaysHologram(phd, new MockNamedHologram(holoName), holoName, 1.0, -1, true, null, -1, -1);
+        AlwaysHologram hologram = new AlwaysHologram(phd, new MockNamedHologram(holoName, ltm), holoName, 1.0, -1, true,
+                null, -1, -1);
         phd.getHolograms().addHologram(hologram);
         // /phd set <name> <type> times <times>
         String expected = phd.getMessages().getNoSuchOptionMessage(PeriodicType.ALWAYS, "times");
-        testCommand(sender, null, "phd", new String[] { "set", holoName, PeriodicType.ALWAYS.name(), "times", "4"}, expected);
+        testCommand(sender, null, "phd", new String[] { "set", holoName, PeriodicType.ALWAYS.name(), "times", "4" },
+                expected);
         // /phd set <name> <type> times <times>
         expected = phd.getMessages().getNoSuchOptionMessage(PeriodicType.ALWAYS, "time");
-        testCommand(sender, null, "phd", new String[] { "set", holoName, PeriodicType.ALWAYS.name(), "time", "14:14"}, expected);
+        testCommand(sender, null, "phd", new String[] { "set", holoName, PeriodicType.ALWAYS.name(), "time", "14:14" },
+                expected);
     }
 
     @Test
@@ -60,7 +66,8 @@ public class CommandSetTests extends BaseCommandTests {
 
         String holoName = "ALWAYSNAME";
         PeriodicType type = PeriodicType.ALWAYS;
-        AlwaysHologram hologram = new AlwaysHologram(phd, new MockNamedHologram(holoName), holoName, 1.0, -1, true, null, -1, -1);
+        AlwaysHologram hologram = new AlwaysHologram(phd, new MockNamedHologram(holoName, ltm), holoName, 1.0, -1, true,
+                null, -1, -1);
         phd.getHolograms().addHologram(hologram);
         testSetForHologramType(hologram, holoName, type);
     }
@@ -72,7 +79,7 @@ public class CommandSetTests extends BaseCommandTests {
         String dist = String.valueOf(distance);
         options.put("distance", dist);
         String expected = phd.getMessages().getSetNewOptionsMessage(holoName, type, options);
-        testCommand(sender, null, "phd", new String[] { "set", holoName, type.name(), "distance", dist}, expected);
+        testCommand(sender, null, "phd", new String[] { "set", holoName, type.name(), "distance", dist }, expected);
         Assert.assertEquals(distance, hologram.getActivationDistance(), 0.01);
         // /phd set <name> <type> seconds <seconds>
         int seconds = 3;
@@ -80,7 +87,7 @@ public class CommandSetTests extends BaseCommandTests {
         options.clear();
         options.put("seconds", secs);
         expected = phd.getMessages().getSetNewOptionsMessage(holoName, type, options);
-        testCommand(sender, null, "phd", new String[] { "set", holoName, type.name(), "seconds", secs}, expected);
+        testCommand(sender, null, "phd", new String[] { "set", holoName, type.name(), "seconds", secs }, expected);
         Assert.assertEquals(seconds, hologram.getShowTime());
 
         // multiple
@@ -94,7 +101,8 @@ public class CommandSetTests extends BaseCommandTests {
         options.put("distance", dist);
         options.put("seconds", secs);
         expected = phd.getMessages().getSetNewOptionsMessage(holoName, type, options);
-        testCommand(sender, null, "phd", new String[] { "set", holoName, type.name(), "seconds", secs, "distance", dist}, expected);
+        testCommand(sender, null, "phd",
+                new String[] { "set", holoName, type.name(), "seconds", secs, "distance", dist }, expected);
         Assert.assertEquals(seconds, hologram.getShowTime());
         Assert.assertEquals(seconds, hologram.getShowTime());
     }
@@ -102,7 +110,9 @@ public class CommandSetTests extends BaseCommandTests {
     @Test
     public void testSetNtimesIllegal() {
         String holoName = "Nt0imeSName";
-        NTimesHologram hologram = new NTimesHologram(phd, new MockNamedHologram(holoName), holoName, 3.0, 10, 5, true, null, 1.2, 1.3);
+        NTimesHologram hologram = new NTimesHologram(phd, new MockNamedHologram(holoName, ltm), holoName, 3.0, 10, 5,
+                true,
+                null, 1.2, 1.3);
         phd.getHolograms().addHologram(hologram);
         testSetManageCommonIllegals(hologram, holoName, PeriodicType.ALWAYS, true);
     }
@@ -112,7 +122,9 @@ public class CommandSetTests extends BaseCommandTests {
 
         String holoName = "NtimeSName";
         PeriodicType type = PeriodicType.NTIMES;
-        NTimesHologram hologram = new NTimesHologram(phd, new MockNamedHologram(holoName), holoName, 3.0, 10, 5, true, null, 1.2, 1.3);
+        NTimesHologram hologram = new NTimesHologram(phd, new MockNamedHologram(holoName, ltm), holoName, 3.0, 10, 5,
+                true,
+                null, 1.2, 1.3);
         phd.getHolograms().addHologram(hologram);
         testSetForHologramType(hologram, holoName, type);
 
@@ -124,14 +136,16 @@ public class CommandSetTests extends BaseCommandTests {
         options.clear();
         options.put("times", tms);
         String expected = phd.getMessages().getSetNewOptionsMessage(holoName, type, options);
-        testCommand(sender, null, "phd", new String[] { "set", holoName, type.name(), "times", tms}, expected);
+        testCommand(sender, null, "phd", new String[] { "set", holoName, type.name(), "times", tms }, expected);
         Assert.assertEquals(times, hologram.getTimesToShow());
     }
 
     @Test
     public void testSetIRLTimeIllegal() {
         String holoName = "iRl";
-        IRLTimeHologram hologram = new IRLTimeHologram(phd, new MockNamedHologram(holoName), holoName, 3.0, 10, 1250, true, null, 1.2, 1.3);
+        IRLTimeHologram hologram = new IRLTimeHologram(phd, new MockNamedHologram(holoName, ltm), holoName, 3.0, 10,
+                1250,
+                true, null, 1.2, 1.3);
         phd.getHolograms().addHologram(hologram);
         testSetManageCommonIllegals(hologram, holoName, PeriodicType.ALWAYS, true);
     }
@@ -141,7 +155,9 @@ public class CommandSetTests extends BaseCommandTests {
 
         String holoName = "inRealLife";
         PeriodicType type = PeriodicType.IRLTIME;
-        IRLTimeHologram hologram = new IRLTimeHologram(phd, new MockNamedHologram(holoName), holoName, 3.0, 4, 2400, true, null, 1.2, 1.3);
+        IRLTimeHologram hologram = new IRLTimeHologram(phd, new MockNamedHologram(holoName, ltm), holoName, 3.0, 4,
+                2400,
+                true, null, 1.2, 1.3);
         phd.getHolograms().addHologram(hologram);
         testSetForHologramType(hologram, holoName, type);
 
@@ -152,14 +168,16 @@ public class CommandSetTests extends BaseCommandTests {
         options.clear();
         options.put("time", time);
         String expected = phd.getMessages().getSetNewOptionsMessage(holoName, type, options);
-        testCommand(sender, null, "phd", new String[] { "set", holoName, type.name(), "time", time}, expected);
+        testCommand(sender, null, "phd", new String[] { "set", holoName, type.name(), "time", time }, expected);
         Assert.assertEquals(TimeUtils.parseHoursAndMinutesToSeconds(time), hologram.getTime());
     }
 
     @Test
     public void testSetMCTimeIllegal() {
         String holoName = "m2theC";
-        MCTimeHologram hologram = new MCTimeHologram(phd, new MockNamedHologram(holoName), holoName, 3.0, 10, 22000, true, null, 1.2, 1.3);
+        MCTimeHologram hologram = new MCTimeHologram(phd, new MockNamedHologram(holoName, ltm), holoName, 3.0, 10,
+                22000,
+                true, null, 1.2, 1.3);
         phd.getHolograms().addHologram(hologram);
         testSetManageCommonIllegals(hologram, holoName, PeriodicType.ALWAYS, true);
     }
@@ -169,7 +187,9 @@ public class CommandSetTests extends BaseCommandTests {
 
         String holoName = "mc4life";
         PeriodicType type = PeriodicType.MCTIME;
-        MCTimeHologram hologram = new MCTimeHologram(phd, new MockNamedHologram(holoName), holoName, 3.0, 4, 2700, true, null, 1.2, 1.3);
+        MCTimeHologram hologram = new MCTimeHologram(phd, new MockNamedHologram(holoName, ltm), holoName, 3.0, 4, 2700,
+                true,
+                null, 1.2, 1.3);
         phd.getHolograms().addHologram(hologram);
         testSetForHologramType(hologram, holoName, type);
 
@@ -180,7 +200,7 @@ public class CommandSetTests extends BaseCommandTests {
         options.clear();
         options.put("time", time);
         String expected = phd.getMessages().getSetNewOptionsMessage(holoName, type, options);
-        testCommand(sender, null, "phd", new String[] { "set", holoName, type.name(), "time", time}, expected);
+        testCommand(sender, null, "phd", new String[] { "set", holoName, type.name(), "time", time }, expected);
         Assert.assertEquals(TimeUtils.parseMCTime(time), hologram.getTime());
     }
 
