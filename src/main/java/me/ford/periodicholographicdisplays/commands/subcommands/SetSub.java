@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramManager;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
 
@@ -28,7 +30,9 @@ public class SetSub extends OptionPairSetSub {
     private final List<String> settables = Arrays.asList("times", "time", "seconds", "distance", "permission", "flash",
             "flashOn", "flashOff");
 
-    public SetSub(HologramStorage storage, LuckPermsHook hook, Settings settings, Messages messages) {
+    public SetSub(InternalHologramManager man, HologramStorage storage, LuckPermsHook hook, Settings settings,
+            Messages messages) {
+        super(man);
         this.storage = storage;
         this.hook = hook;
         this.messages = messages;

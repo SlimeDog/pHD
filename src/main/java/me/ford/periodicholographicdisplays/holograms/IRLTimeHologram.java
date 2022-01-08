@@ -2,14 +2,13 @@ package me.ford.periodicholographicdisplays.holograms;
 
 import java.util.Calendar;
 
-import com.gmail.filoghost.holographicdisplays.api.Hologram;
-
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
+import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 
 /**
@@ -22,7 +21,7 @@ public class IRLTimeHologram extends FlashingHologram {
     private BukkitTask task;
     private long atTime; // in day in seconds
 
-    public IRLTimeHologram(IPeriodicHolographicDisplays phd, Hologram hologram, String name,
+    public IRLTimeHologram(IPeriodicHolographicDisplays phd, InternalHologram hologram, String name,
             double activationDistance, long showTime, long atTime, boolean isNew, String perms, double flashOn,
             double flashOff) {
         super(phd, hologram, name, activationDistance, showTime, PeriodicType.IRLTIME, isNew, perms, flashOn,

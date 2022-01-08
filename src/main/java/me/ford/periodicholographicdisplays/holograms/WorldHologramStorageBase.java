@@ -58,7 +58,7 @@ public abstract class WorldHologramStorageBase {
 
     protected void addHandler(String name, IndividualHologramHandler handler) {
         holograms.put(name, handler);
-        Location loc = handler.getHologram().getLocation();
+        Location loc = handler.getHologram().getPosition().toLocation();
         int x = loc.getBlockX() >> 4;
         int z = loc.getBlockZ() >> 4;
         perChunkHandler.setChunkOf(handler, x, z);

@@ -3,8 +3,8 @@ package me.ford.periodicholographicdisplays.commands.subcommands;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gmail.filoghost.holographicdisplays.commands.CommandValidator;
-import com.gmail.filoghost.holographicdisplays.exception.CommandException;
+import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
+import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramManager;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -28,7 +28,8 @@ public class InfoSub extends SubCommand {
     private final HologramStorage storage;
     private final Messages messages;
 
-    public InfoSub(HologramStorage storage, Messages messages) {
+    public InfoSub(InternalHologramManager man, HologramStorage storage, Messages messages) {
+        super(man);
         this.storage = storage;
         this.messages = messages;
     }
@@ -82,9 +83,8 @@ public class InfoSub extends SubCommand {
                 return true;
             }
         }
-        try {
-            CommandValidator.getNamedHologram(args[0]);
-        } catch (CommandException e) {
+        InternalHologram holo = man.getHologramByName(args[0]);
+        if (holo == null) {
             sender.sendMessage(messages.getHDHologramNotFoundMessage(args[0]));
             return true;
         }

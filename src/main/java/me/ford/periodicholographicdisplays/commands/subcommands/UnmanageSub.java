@@ -3,6 +3,8 @@ package me.ford.periodicholographicdisplays.commands.subcommands;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramManager;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
 
@@ -23,7 +25,8 @@ public class UnmanageSub extends SubCommand {
     private final HologramStorage storage;
     private final Messages messages;
 
-    public UnmanageSub(HologramStorage storage, Messages messages) {
+    public UnmanageSub(InternalHologramManager man, HologramStorage storage, Messages messages) {
+        super(man);
         this.storage = storage;
         this.messages = messages;
     }

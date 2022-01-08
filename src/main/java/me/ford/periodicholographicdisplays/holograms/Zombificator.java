@@ -1,7 +1,5 @@
 package me.ford.periodicholographicdisplays.holograms;
 
-import com.gmail.filoghost.holographicdisplays.HolographicDisplays;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -9,6 +7,7 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import me.filoghost.holographicdisplays.plugin.HolographicDisplays;
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 
 public class Zombificator implements CommandExecutor {

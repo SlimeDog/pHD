@@ -6,6 +6,8 @@ import java.util.Set;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
+import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramManager;
+
 import org.bukkit.command.CommandSender;
 
 import me.ford.periodicholographicdisplays.commands.SubCommand;
@@ -20,6 +22,10 @@ import me.ford.periodicholographicdisplays.util.TimeUtils;
  * OptionPairSub
  */
 public abstract class OptionPairSetSub extends SubCommand {
+
+    protected OptionPairSetSub(InternalHologramManager man) {
+        super(man);
+    }
 
     protected Map<String, String> getOptionPairs(String[] args) {
         if (args.length % 2 != 0)

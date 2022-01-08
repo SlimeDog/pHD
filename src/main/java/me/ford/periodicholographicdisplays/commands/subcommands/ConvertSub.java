@@ -34,6 +34,7 @@ public class ConvertSub extends SubCommand {
     private final List<String> storageTypes = Arrays.asList(SQLITE, YAML);
 
     public ConvertSub(IPeriodicHolographicDisplays phd, PluginManager pm) {
+        super(phd.getHDHoloManager());
         this.phd = phd;
         this.pm = pm;
         this.messages = phd.getMessages();
@@ -173,7 +174,8 @@ public class ConvertSub extends SubCommand {
         public void run() {
             phd.runTask(() -> sender.sendMessage(messages.getDoneConvertingMessage(from, to))); // so it gets sent after
                                                                                                 // the
-                                                                                                // start message (for YAML
+                                                                                                // start message (for
+                                                                                                // YAML
                                                                                                 // mostly)
             closeSqlite(from, to);
         }

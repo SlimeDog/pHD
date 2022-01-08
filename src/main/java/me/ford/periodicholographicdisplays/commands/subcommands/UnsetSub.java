@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramManager;
+
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -33,7 +35,9 @@ public class UnsetSub extends SubCommand {
     private final UserCache userCache;
     private final List<String> optionList = Arrays.asList("seconds", "distance", "permission", "playercount", "flash");
 
-    public UnsetSub(HologramStorage storage, Settings settings, Messages messages, UserCache userCache) {
+    public UnsetSub(InternalHologramManager man, HologramStorage storage, Settings settings, Messages messages,
+            UserCache userCache) {
+        super(man);
         this.storage = storage;
         this.settings = settings;
         this.messages = messages;
@@ -144,7 +148,7 @@ public class UnsetSub extends SubCommand {
                     }
                     break;
                 case "flash":
-                    if(!hologram.flashes()) {
+                    if (!hologram.flashes()) {
                         sender.sendMessage(messages.getOptionNotSetMessage(opt));
                         usedOptions.remove(opt);
                         break;
@@ -183,7 +187,8 @@ public class UnsetSub extends SubCommand {
                         }
                     }
                     if (ntimes.getShownTo().get(player.getUniqueId()) == null) {
-                        sender.sendMessage(messages.getOptionNotSetMessage(String.format("%s (for %s)", opt, player.getName())));
+                        sender.sendMessage(
+                                messages.getOptionNotSetMessage(String.format("%s (for %s)", opt, player.getName())));
                         usedOptions.remove(opt);
                         break;
                     }

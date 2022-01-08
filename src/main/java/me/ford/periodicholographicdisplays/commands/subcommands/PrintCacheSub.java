@@ -14,6 +14,7 @@ public class PrintCacheSub extends SubCommand {
     private static final String PERMS = "phd.printcache";
 
     public PrintCacheSub(IPeriodicHolographicDisplays phd) {
+        super(phd.getHDHoloManager());
         this.phd = phd;
     }
 

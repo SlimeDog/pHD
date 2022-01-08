@@ -5,6 +5,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
+import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramManager;
+
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -31,7 +33,8 @@ public class ReportSub extends SubCommand {
     private final Messages messages;
     private final UserCache userCache;
 
-    public ReportSub(HologramStorage storage, Messages messages, UserCache userCache) {
+    public ReportSub(InternalHologramManager man, HologramStorage storage, Messages messages, UserCache userCache) {
+        super(man);
         this.storage = storage;
         this.messages = messages;
         this.userCache = userCache;

@@ -4,14 +4,14 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import com.gmail.filoghost.holographicdisplays.api.Hologram;
-
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.Settings;
+import me.ford.periodicholographicdisplays.holograms.visbility.VisibilityManager;
 
 /**
  * PeriodicHologram
@@ -19,6 +19,7 @@ import me.ford.periodicholographicdisplays.Settings;
 public abstract class PeriodicHologramBase {
     public static final int NO_SECONDS = -1;
     public static final double NO_DISTANCE = -1.0D;
+    private final VisibilityManager visibilityManager;
     private final IPeriodicHolographicDisplays plugin;
     private final Set<UUID> beingShownTo = new HashSet<>();
     private final String name;
@@ -28,17 +29,20 @@ public abstract class PeriodicHologramBase {
     private long showTimeTicks;
     private boolean hasChanged = false;
     private final PeriodicType type; // in order to change this, I'll create a new instance
-    private final Hologram hologram;
+    private final InternalHologram hologram;
     private String perms;
 
-    public PeriodicHologramBase(IPeriodicHolographicDisplays phd, Hologram hologram, String name, double activationDistance, long showTime,
+    public PeriodicHologramBase(IPeriodicHolographicDisplays phd, InternalHologram hologram, String name,
+            double activationDistance, long showTime,
             PeriodicType type, boolean isNew) {
         this(phd, hologram, name, activationDistance, showTime, type, isNew, null);
     }
 
-    public PeriodicHologramBase(IPeriodicHolographicDisplays phd, Hologram hologram, String name, double activationDistance, long showTime,
+    public PeriodicHologramBase(IPeriodicHolographicDisplays phd, InternalHologram hologram, String name,
+            double activationDistance, long showTime,
             PeriodicType type, boolean isNew, String perms) {
         Validate.notNull(hologram, "Hologram cannot be null!");
+        this.visibilityManager = VisibilityManager.PROVIDER.provide(hologram);
         this.hologram = hologram;
         this.name = name;
         this.plugin = phd;
@@ -55,14 +59,13 @@ public abstract class PeriodicHologramBase {
         this.type = type;
         this.hasChanged = isNew;
         this.perms = perms;
-        hologram.getVisibilityManager().setVisibleByDefault(false);
     }
 
     public String getName() {
         return name;
     }
 
-    Hologram getHologram() {
+    InternalHologram getHologram() {
         return hologram;
     }
 
@@ -124,8 +127,7 @@ public abstract class PeriodicHologramBase {
     }
 
     public void markRemoved() {
-        this.hologram.getVisibilityManager().setVisibleByDefault(true);
-        this.hologram.getVisibilityManager().resetVisibilityAll();
+        visibilityManager.resetVisibilityAll();
         this.beingShownTo.clear();
     }
 
@@ -138,7 +140,7 @@ public abstract class PeriodicHologramBase {
     }
 
     public Location getLocation() {
-        return hologram.getLocation();
+        return hologram.getPosition().toLocation();
     }
 
     public abstract void attemptToShow(Player player);
@@ -163,7 +165,7 @@ public abstract class PeriodicHologramBase {
     }
 
     protected void hideFromInternal(Player player) {
-        hologram.getVisibilityManager().hideTo(player);
+        visibilityManager.hideFrom(player);
     }
 
     public boolean show(Player player) {
@@ -186,7 +188,7 @@ public abstract class PeriodicHologramBase {
     }
 
     protected void showInternal(Player player) {
-        hologram.getVisibilityManager().showTo(player);
+        visibilityManager.showTo(player);
     }
 
     public void defaultDistance(Settings settings) {

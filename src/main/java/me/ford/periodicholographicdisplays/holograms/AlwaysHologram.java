@@ -1,9 +1,8 @@
 package me.ford.periodicholographicdisplays.holograms;
 
-import com.gmail.filoghost.holographicdisplays.api.Hologram;
-
 import org.bukkit.entity.Player;
 
+import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.hooks.NPCHook;
 
@@ -12,9 +11,11 @@ import me.ford.periodicholographicdisplays.hooks.NPCHook;
  */
 public class AlwaysHologram extends NTimesHologram {
 
-    public AlwaysHologram(IPeriodicHolographicDisplays phd, Hologram hologram, String name, double activationDistance, long showTime, boolean isNew,
+    public AlwaysHologram(IPeriodicHolographicDisplays phd, InternalHologram hologram, String name,
+            double activationDistance, long showTime, boolean isNew,
             String perms, double flashOn, double flashOff) {
-        super(phd, hologram, name, activationDistance, showTime, PeriodicType.ALWAYS, -1, isNew, perms, flashOn, flashOff);
+        super(phd, hologram, name, activationDistance, showTime, PeriodicType.ALWAYS, -1, isNew, perms, flashOn,
+                flashOff);
         checkWorldPlayers();
     }
 
@@ -37,7 +38,7 @@ public class AlwaysHologram extends NTimesHologram {
 
     private void checkWorldPlayers() {
         NPCHook hook = getPlugin().getNPCHook();
-        for (Player player : getHologram().getWorld().getEntitiesByClass(Player.class)) {
+        for (Player player : getHologram().getPosition().toLocation().getWorld().getEntitiesByClass(Player.class)) {
             if (hook != null && hook.isNPC(player))
                 continue;
             if (!canSee(player) && isBeingShownTo(player)) {

@@ -5,10 +5,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.Map.Entry;
 
-import com.gmail.filoghost.holographicdisplays.api.Hologram;
-
 import org.bukkit.entity.Player;
 
+import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 
 /**
@@ -19,14 +18,14 @@ public class NTimesHologram extends FlashingHologram {
     private final Map<UUID, Integer> shownTo = new HashMap<>();
     private final Map<UUID, Integer> toSave = new HashMap<>();
 
-    public NTimesHologram(IPeriodicHolographicDisplays phd, Hologram hologram, String name,
+    public NTimesHologram(IPeriodicHolographicDisplays phd, InternalHologram hologram, String name,
             double activationDistance, long showTime, int timesToShow, boolean isNew, String perms, double flashOn,
             double flashOff) {
         this(phd, hologram, name, activationDistance, showTime, PeriodicType.NTIMES, timesToShow, isNew, perms,
                 flashOn, flashOff);
     }
 
-    NTimesHologram(IPeriodicHolographicDisplays phd,  Hologram hologram, String name,
+    NTimesHologram(IPeriodicHolographicDisplays phd, InternalHologram hologram, String name,
             double activationDistance, long showTime, PeriodicType type, int timesToShow, boolean isNew, String perms,
             double flashOn, double flashOff) {
         super(phd, hologram, name, activationDistance, showTime, type, isNew, perms, flashOn, flashOff);

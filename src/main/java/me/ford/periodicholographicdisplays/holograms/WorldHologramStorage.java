@@ -6,13 +6,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.Map.Entry;
 
-import com.gmail.filoghost.holographicdisplays.object.NamedHologram;
-
 import org.apache.commons.lang.Validate;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 
+import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.holograms.storage.HologramInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.Storage;
@@ -64,8 +63,8 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         return names;
     }
 
-    public void loaded(NamedHologram holo, HDHologramInfo info, boolean imported) {
-        if (holo.getWorld() != getWorld())
+    public void loaded(InternalHologram holo, HDHologramInfo info, boolean imported) {
+        if (holo.getWorldIfLoaded() != getWorld())
             return; // don't load
         IndividualHologramHandler handler = null;
         for (HologramInfo hInfo : info.getInfos()) {

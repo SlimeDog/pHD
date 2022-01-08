@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-import com.gmail.filoghost.holographicdisplays.object.NamedHologram;
-
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -15,6 +13,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
+import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
+import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramManager;
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.ReloadIssue;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
@@ -25,6 +25,8 @@ import me.ford.periodicholographicdisplays.users.UserCache;
  * IPeriodicHolographicDisplays
  */
 public interface IPeriodicHolographicDisplays {
+
+    public InternalHologramManager getHDHoloManager();
 
     public File getDataFolder();
 
@@ -46,7 +48,7 @@ public interface IPeriodicHolographicDisplays {
 
     public JavaPlugin asPlugin();
 
-    public NamedHologram getHDHologram(String name);
+    public InternalHologram getHDHologram(String name);
 
     public UserCache getUserCache();
 

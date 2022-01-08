@@ -7,11 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.gmail.filoghost.holographicdisplays.api.Hologram;
-
 import org.apache.commons.lang.Validate;
 import org.bukkit.plugin.PluginManager;
 
+import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
 import me.ford.periodicholographicdisplays.holograms.events.StartedManagingHologramEvent;
 import me.ford.periodicholographicdisplays.holograms.events.StoppedManagingHologramEvent;
 
@@ -20,12 +19,12 @@ import me.ford.periodicholographicdisplays.holograms.events.StoppedManagingHolog
  */
 public class IndividualHologramHandler {
     private final PluginManager pm;
-    private final Hologram hologram;
+    private final InternalHologram hologram;
     private final String name;
     private final Map<PeriodicType, FlashingHologram> holograms = new HashMap<>();
     private final Map<PeriodicType, FlashingHologram> toSave = new HashMap<>();
 
-    public IndividualHologramHandler(PluginManager pm, Hologram hologram, String name) {
+    public IndividualHologramHandler(PluginManager pm, InternalHologram hologram, String name) {
         Validate.notNull(hologram, "Periodic hologram cannot be null");
         this.pm = pm;
         this.hologram = hologram;
@@ -61,7 +60,7 @@ public class IndividualHologramHandler {
             toSave.put(hologram.getType(), null); // i.e to remove
     }
 
-    Hologram getHologram() {
+    InternalHologram getHologram() {
         return hologram;
     }
 

@@ -22,6 +22,7 @@ public class ReloadSub extends SubCommand {
     private final Messages messages;
 
     public ReloadSub(IPeriodicHolographicDisplays phd) {
+        super(phd.getHDHoloManager());
         this.phd = phd;
         this.messages = phd.getMessages();
     }
@@ -59,7 +60,8 @@ public class ReloadSub extends SubCommand {
                 boolean isBeingDisabled = false;
                 for (ReloadIssue issue : issues) {
                     // in these cases, not disabling the plugin, just recreating
-                    if (issue != DefaultReloadIssue.NO_CONFIG && issue != DefaultReloadIssue.NO_FOLDER && issue != DefaultReloadIssue.NO_MESSAGES) {
+                    if (issue != DefaultReloadIssue.NO_CONFIG && issue != DefaultReloadIssue.NO_FOLDER
+                            && issue != DefaultReloadIssue.NO_MESSAGES) {
                         isBeingDisabled = true;
                         break;
                     }

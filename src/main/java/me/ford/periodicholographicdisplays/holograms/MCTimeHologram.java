@@ -1,6 +1,5 @@
 package me.ford.periodicholographicdisplays.holograms;
 
-import com.gmail.filoghost.holographicdisplays.api.Hologram;
 
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -8,6 +7,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
+import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 
 /**
@@ -20,7 +20,7 @@ public class MCTimeHologram extends FlashingHologram {
     private BukkitTask task;
     private long atTime; // between 0 and 23999
 
-    public MCTimeHologram(IPeriodicHolographicDisplays phd, Hologram hologram, String name,
+    public MCTimeHologram(IPeriodicHolographicDisplays phd, InternalHologram hologram, String name,
             double activationDistance, long showTime, long atTime, boolean isNew, String perms, double flashOn,
             double flashOff) {
         super(phd, hologram, name, activationDistance, showTime, PeriodicType.MCTIME, isNew, perms, flashOn,

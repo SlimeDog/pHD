@@ -8,16 +8,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 
-import com.gmail.filoghost.holographicdisplays.commands.CommandValidator;
-import com.gmail.filoghost.holographicdisplays.exception.CommandException;
-import com.gmail.filoghost.holographicdisplays.object.NamedHologram;
-
 import org.apache.commons.lang.Validate;
 import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 
+import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.holograms.WorldHologramStorageBase.HologramSaveReason;
 import me.ford.periodicholographicdisplays.holograms.storage.HologramInfo;
@@ -74,22 +71,17 @@ public class HologramStorage {
         plugin.runTaskLater(() -> {
             if (!danglingInfos.isEmpty()) {
                 plugin.getLogger().warning(
-                        "Some pHD holograms were loaded such that they have not found their corresponding hologram:" + danglingInfos);
+                        "Some pHD holograms were loaded such that they have not found their corresponding hologram:"
+                                + danglingInfos);
             }
         }, 200L);
     }
 
     private void loaded(HDHologramInfo info, boolean imported) {
         danglingInfos.add(info); // removed if not left danlging
-        NamedHologram holo;
-        try {
-            holo = CommandValidator.getNamedHologram(info.getHoloName());
-        } catch (CommandException e) {
-            plugin.getLogger().log(Level.WARNING, "Problem loading hologram " + info.getHoloName()
-                    + ": HD hologram not found (perhaps the world isn't loaded?)");
-            return;
-        }
-        WorldHologramStorage whs = holograms.get(holo.getWorld());
+        InternalHologram holo;
+        holo = plugin.getHDHoloManager().getHologramByName(info.getHoloName());
+        WorldHologramStorage whs = holograms.get(holo.getWorldIfLoaded());
         if (whs == null) {
             plugin.getLogger().info("Loaded hologram before world was initialized: " + holo.getName()
                     + " - it should be sorted out once the world loads");
@@ -139,7 +131,8 @@ public class HologramStorage {
         }
         holograms.clear();
         boolean db = plugin.getSettings().useDatabase();
-        if (storage instanceof SQLStorage) ((SQLStorage) storage).close();
+        if (storage instanceof SQLStorage)
+            ((SQLStorage) storage).close();
         if (db) {
             storage = new SQLStorage(plugin, pm);
         } else {
@@ -311,15 +304,16 @@ public class HologramStorage {
         List<IndividualHologramHandler> toZombie = new ArrayList<>();
         for (WorldHologramStorage storage : holograms.values()) {
             for (IndividualHologramHandler handler : storage.getHandlers(false)) {
-                if (handler.getHologram().isDeleted()) {
-                    plugin.debug("The hologram '" + handler.getName() + "' has been detected as being deleted and thus all its pHD handlers will now be zombified");
+                if (handler.getHologram().isDeleted()) { // DEPRECATED
+                    plugin.debug("The hologram '" + handler.getName()
+                            + "' has been detected as being deleted and thus all its pHD handlers will now be zombified");
                     toZombie.add(handler);
                 }
             }
         }
         for (IndividualHologramHandler handler : toZombie) {
             handler.setAllNeedingSaved();
-            WorldHologramStorage storage = getHolograms(handler.getHologram().getWorld());
+            WorldHologramStorage storage = getHolograms(handler.getHologram().getPosition().toLocation().getWorld());
             danglingInfos.add(storage.getInfo(handler));
             for (FlashingHologram hologram : handler.getHolograms()) {
                 removeHologram(hologram);
@@ -336,21 +330,25 @@ public class HologramStorage {
             }
         }
         if (parent == null) {
-            plugin.getLogger().log(Level.WARNING, "Attempting to remove zombie but did not find it in the list(1):" + info);
+            plugin.getLogger().log(Level.WARNING,
+                    "Attempting to remove zombie but did not find it in the list(1):" + info);
             return;
         }
         if (parent.removeInfo(info)) {
             HDHologramInfo delInfo = new HDHologramInfo(info.getName());
             TypeInfo ti = TypeInfo.of(info.getType(), null);
-            HologramInfo holoInfo = new HologramInfo(delInfo.getHoloName(), info.getType(), -1.0, -1, null, ti, -1.0, -1.0);
+            HologramInfo holoInfo = new HologramInfo(delInfo.getHoloName(), info.getType(), -1.0, -1, null, ti, -1.0,
+                    -1.0);
             delInfo.addInfo(holoInfo);
             Set<HDHologramInfo> set = new HashSet<>();
             set.add(delInfo);
             plugin.debug("Removing 'zombie' hologram: " + info);
             storage.saveHolograms(set, false);
-            if (parent.getInfos().isEmpty()) danglingInfos.remove(parent);
+            if (parent.getInfos().isEmpty())
+                danglingInfos.remove(parent);
         } else {
-            plugin.getLogger().log(Level.WARNING, "Attempting to remove zombie but did not find it in the list(2):" + info);
+            plugin.getLogger().log(Level.WARNING,
+                    "Attempting to remove zombie but did not find it in the list(2):" + info);
         }
     }
 

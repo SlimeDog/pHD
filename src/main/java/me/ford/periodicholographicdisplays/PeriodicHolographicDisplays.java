@@ -1,20 +1,21 @@
 package me.ford.periodicholographicdisplays;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.gmail.filoghost.holographicdisplays.commands.CommandValidator;
-import com.gmail.filoghost.holographicdisplays.exception.CommandException;
-import com.gmail.filoghost.holographicdisplays.object.NamedHologram;
-
 import org.bstats.bukkit.Metrics;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
+import me.filoghost.holographicdisplays.plugin.HolographicDisplays;
+import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
+import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramManager;
 import me.ford.periodicholographicdisplays.Settings.SettingIssue;
 import me.ford.periodicholographicdisplays.Settings.StorageTypeException;
 import me.ford.periodicholographicdisplays.commands.PHDCommand;
@@ -38,6 +39,7 @@ import me.ford.periodicholographicdisplays.users.UserCache;
  * PeriodicHolographicDisplays
  */
 public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisplays {
+    private InternalHologramManager holoManager;
     private HologramStorage holograms;
     private Settings settings;
     private Messages messages;
@@ -72,6 +74,9 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
             disableMe(issues);
             return;
         }
+
+        // setup HD hook
+        holoManager = getHoloManager(JavaPlugin.getPlugin(HolographicDisplays.class));
 
         try {
             holograms = new HologramStorage(this, getServer().getPluginManager());
@@ -365,12 +370,25 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
     }
 
     @Override
-    public NamedHologram getHDHologram(String name) {
+    public InternalHologram getHDHologram(String name) {
+        return holoManager.getHologramByName(name);
+    }
+
+    private static InternalHologramManager getHoloManager(HolographicDisplays hdPlugin) {
+        InternalHologramManager man;
         try {
-            return CommandValidator.getNamedHologram(name);
-        } catch (CommandException e) {
-            return null;
+            Field field = hdPlugin.getClass().getDeclaredField("internalHologramManager");
+            field.setAccessible(true);
+            man = (InternalHologramManager) field.get(hdPlugin);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
+        return man;
+    }
+
+    @Override
+    public InternalHologramManager getHDHoloManager() {
+        return holoManager;
     }
 
 }

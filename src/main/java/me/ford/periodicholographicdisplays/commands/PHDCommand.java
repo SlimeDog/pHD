@@ -26,24 +26,32 @@ public class PHDCommand extends ParentCommand {
     public PHDCommand(IPeriodicHolographicDisplays plugin, PluginManager pm) {
         super(plugin.getMessages());
         this.plugin = plugin;
-        addSubCommand("list", new ListSub(plugin.getHolograms(), this.plugin.getMessages()));
-        addSubCommand("info", new InfoSub(plugin.getHolograms(), this.plugin.getMessages()));
+        addSubCommand("list", new ListSub(plugin.getHDHoloManager(), plugin.getHolograms(), this.plugin.getMessages()));
+        addSubCommand("info", new InfoSub(plugin.getHDHoloManager(), plugin.getHolograms(), this.plugin.getMessages()));
         addSubCommand("manage", new ManageSub(plugin));
-        addSubCommand("report", new ReportSub(plugin.getHolograms(), plugin.getMessages(), plugin.getUserCache()));
-        addSubCommand("set", new SetSub(plugin.getHolograms(), plugin.getLuckPermsHook(), plugin.getSettings(),
-                this.plugin.getMessages()));
-        addSubCommand("unset", new UnsetSub(plugin.getHolograms(), plugin.getSettings(), this.plugin.getMessages(),
+        addSubCommand("report", new ReportSub(plugin.getHDHoloManager(), plugin.getHolograms(), plugin.getMessages(),
                 plugin.getUserCache()));
-        addSubCommand("unmanage", new UnmanageSub(plugin.getHolograms(), this.plugin.getMessages()));
+        addSubCommand("set",
+                new SetSub(plugin.getHDHoloManager(), plugin.getHolograms(), plugin.getLuckPermsHook(),
+                        plugin.getSettings(),
+                        this.plugin.getMessages()));
+        addSubCommand("unset",
+                new UnsetSub(plugin.getHDHoloManager(), plugin.getHolograms(), plugin.getSettings(),
+                        this.plugin.getMessages(),
+                        plugin.getUserCache()));
+        addSubCommand("unmanage",
+                new UnmanageSub(plugin.getHDHoloManager(), plugin.getHolograms(), this.plugin.getMessages()));
         addSubCommand("reload", new ReloadSub(plugin));
         convertSub = new ConvertSub(plugin, pm);
         addSubCommand("convert", convertSub);
-        if(plugin.getSettings().onDebug()) addSubCommand("printcache", new PrintCacheSub(plugin));
+        if (plugin.getSettings().onDebug())
+            addSubCommand("printcache", new PrintCacheSub(plugin));
     }
 
     public void reload() {
         removeSubCommand("printcache");
-        if(plugin.getSettings().onDebug()) addSubCommand("printcache", new PrintCacheSub(plugin));
+        if (plugin.getSettings().onDebug())
+            addSubCommand("printcache", new PrintCacheSub(plugin));
     }
 
     public ConvertSub getConvertSub() {

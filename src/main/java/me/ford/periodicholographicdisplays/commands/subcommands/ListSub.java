@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramManager;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
@@ -24,11 +26,12 @@ import me.ford.periodicholographicdisplays.util.PageUtils;
 public class ListSub extends SubCommand {
     private static final String PERMS = "phd.list";
     private static final String USAGE = "/phd list [type] [page]" + "\n" +
-                                        "/phd list --zombies";
+            "/phd list --zombies";
     private final HologramStorage storage;
     private final Messages messages;
 
-    public ListSub(HologramStorage storage, Messages messages) {
+    public ListSub(InternalHologramManager man, HologramStorage storage, Messages messages) {
+        super(man);
         this.storage = storage;
         this.messages = messages;
     }

@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.gmail.filoghost.holographicdisplays.object.NamedHologramManager;
+import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
+import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramManager;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -12,6 +13,11 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 public abstract class SubCommand implements TabExecutor {
+    protected final InternalHologramManager man;
+
+    protected SubCommand(InternalHologramManager man) {
+        this.man = man;
+    }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
@@ -33,8 +39,8 @@ public abstract class SubCommand implements TabExecutor {
 
     public List<String> getNamedHolograms() {
         List<String> holograms = new ArrayList<>();
-        for (int i = 0; i < NamedHologramManager.size(); i++) {
-            holograms.add(NamedHologramManager.get(i).getName());
+        for (InternalHologram holo : man.getHolograms()) {
+            holograms.add(holo.getName());
         }
         return holograms;
     }
