@@ -12,12 +12,12 @@ import org.bukkit.entity.Player;
 import me.filoghost.holographicdisplays.plugin.hologram.tracking.LineTracker;
 import me.filoghost.holographicdisplays.plugin.hologram.tracking.MutableViewers;
 
-public class LineTrackerWrapper {
+public class LineVisibilityManager {
     private final LineTracker<?> delegate;
     private final Map<Player, Object> delegateViewers; // not really Object
     private final Map<Player, Object> removedViewers = new HashMap<>();
 
-    public LineTrackerWrapper(LineTracker<?> delegate) {
+    public LineVisibilityManager(LineTracker<?> delegate) {
         this.delegate = delegate;
         delegateViewers = NMSPRovider.getViewers(delegate);
         // default behaviour to hide from everyone who isn't explicitly shown

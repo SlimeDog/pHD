@@ -22,37 +22,37 @@ import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologra
 public class VisibilityManager {
     public static final VisibilityManagerRegistry REGISTRY = new VisibilityManagerRegistry();
     public static final Provider PROVIDER = new Provider();
-    private final Collection<LineTrackerWrapper> lineTrackers; // only lines belonging to this hologram
+    private final Collection<LineVisibilityManager> lineTrackers; // only lines belonging to this hologram
 
     public VisibilityManager(
             InternalHologram hologram,
-            Collection<LineTrackerWrapper> lineTrackers) {
+            Collection<LineVisibilityManager> lineTrackers) {
         this.lineTrackers = lineTrackers;
-        for (LineTrackerWrapper wrapper : lineTrackers) {
+        for (LineVisibilityManager wrapper : lineTrackers) {
             REGISTRY.register(wrapper.getDelegate(), wrapper);
         }
     }
 
     public void hideFrom(Player player) {
-        for (LineTrackerWrapper tracker : lineTrackers) {
+        for (LineVisibilityManager tracker : lineTrackers) {
             tracker.stopTracking(player);
         }
     }
 
     public void showTo(Player player) {
-        for (LineTrackerWrapper tracker : lineTrackers) {
+        for (LineVisibilityManager tracker : lineTrackers) {
             tracker.startRetracking(player);
         }
     }
 
     public void resetVisibilityAll() {
-        for (LineTrackerWrapper tracker : lineTrackers) {
+        for (LineVisibilityManager tracker : lineTrackers) {
             tracker.reset();
         }
     }
 
     public void playerLeft(Player player) {
-        for (LineTrackerWrapper tracker : lineTrackers) {
+        for (LineVisibilityManager tracker : lineTrackers) {
             tracker.onQuit(player);
         }
     }
@@ -115,18 +115,18 @@ public class VisibilityManager {
             }
         }
 
-        private Collection<LineTrackerWrapper> getHologramLineTrackers(Collection<LineTracker<?>> allTrackers,
+        private Collection<LineVisibilityManager> getHologramLineTrackers(Collection<LineTracker<?>> allTrackers,
                 InternalHologram hologram) {
             Set<InternalHologramLine> hologramLines = new HashSet<>();
             Iterator<InternalHologramLine> iter = hologram.getLines().iterator();
             while (iter.hasNext()) {
                 hologramLines.add(iter.next());
             }
-            List<LineTrackerWrapper> list = new ArrayList<>();
+            List<LineVisibilityManager> list = new ArrayList<>();
             for (LineTracker<?> tracker : allTrackers) {
                 BaseHologramLine line = getLine(tracker);
                 if (hologramLines.contains(line)) {
-                    list.add(new LineTrackerWrapper(tracker));
+                    list.add(new LineVisibilityManager(tracker));
                 }
 
             }
