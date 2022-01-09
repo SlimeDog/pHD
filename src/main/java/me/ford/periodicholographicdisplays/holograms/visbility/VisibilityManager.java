@@ -121,6 +121,7 @@ public class VisibilityManager {
             }
         }
 
+        @SuppressWarnings("all")
         private Collection<LineVisibilityManager> getHologramLineTrackers(Collection<LineTracker<?>> allTrackers,
                 InternalHologram hologram, PeriodicHologramBase phdHolo) {
             Set<InternalHologramLine> hologramLines = new HashSet<>();
@@ -131,7 +132,7 @@ public class VisibilityManager {
             List<LineVisibilityManager> list = new ArrayList<>();
             for (LineTracker<?> tracker : allTrackers) {
                 BaseHologramLine line = getLine(tracker);
-                if (hologramLines.contains(line)) {
+                if (hologramLines.contains(line)) { // unlikely warning, but works
                     list.add(new LineVisibilityManager(tracker, phdHolo));
                 }
 
