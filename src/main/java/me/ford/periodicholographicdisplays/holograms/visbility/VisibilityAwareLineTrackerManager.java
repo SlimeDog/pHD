@@ -57,10 +57,18 @@ public class VisibilityAwareLineTrackerManager extends LineTrackerManager {
         LineTrackerManager delegate = NMSProvider.getLineTrackerManager(plugin);
         VisibilityAwareLineTrackerManager ltm = new VisibilityAwareLineTrackerManager(delegate);
         NMSProvider.setLineTrackerManager(plugin, ltm);
+        boolean changed = false;
         for (BukkitTask task : plugin.getServer().getScheduler().getPendingTasks()) {
             if (task.getOwner() == plugin && NMSProvider.isTaskOfCorrectType(task)) {
                 NMSProvider.switchLineTrackerManager((TickingTask) NMSProvider.getBukkitTaskRunnable(task), ltm);
+                changed = true;
+                break;
             }
+        }
+        if (!changed) {
+            throw new IllegalStateException(
+                    "Could not change HolographidDisplays' TickingTask "
+                            + " LineTrackerManager to the custom one. The plugin cannot function like this.");
         }
         return ltm;
     }
@@ -72,6 +80,7 @@ public class VisibilityAwareLineTrackerManager extends LineTrackerManager {
         private static final Field LT_MANAGER_FIELD;
         private static final Method SHOULD_BE_REMOVED;
         private static final Method UPDATE;
+        private static final boolean IS_SPIGOT;
         static {
             Field f1, f2, f3, f4;
             Method m1, m2;
@@ -97,6 +106,9 @@ public class VisibilityAwareLineTrackerManager extends LineTrackerManager {
             LT_MANAGER_FIELD = f4;
             SHOULD_BE_REMOVED = m1;
             UPDATE = m2;
+            @SuppressWarnings("deprecation")
+            Package p = Package.getPackage("io.papermc.paper");
+            IS_SPIGOT = p == null;
         }
 
         private static NMSManager getNMSManager(LineTrackerManager delegate) {
@@ -142,9 +154,13 @@ public class VisibilityAwareLineTrackerManager extends LineTrackerManager {
         private static Runnable getBukkitTaskRunnable(BukkitTask task) {
             Runnable runnable;
             try {
-                Field taskField = task.getClass().getField("rTask");
+                Field taskField = IS_SPIGOT ? task.getClass().getDeclaredField("rTask")
+                        : task.getClass().getField("rTask");
+                taskField.setAccessible(true);
                 runnable = (Runnable) taskField.get(task);
-            } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+            } catch (NoSuchFieldException e) {
+                return null; // different type of task (i.e CraftAsyncTask)
+            } catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
             return runnable;
