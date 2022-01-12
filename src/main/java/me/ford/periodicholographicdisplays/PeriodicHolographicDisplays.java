@@ -155,8 +155,8 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
 
     private void injectLineTrackerManager() {
         VisibilityAwareLineTrackerManager.exchangeLineTrackerManager(hdPlugin);
-        getLogger().warning("Replaced HolographicDisplays LineTrackerManager with one that is" +
-                "aware of the visibility managemetn of individual pHD holograms");
+        getLogger().warning("Replacing HolographicDisplays:LineTrackerManager with a modified version"
+                + ", in order to manage individual hologram visibility.");
     }
 
     private void disableMe(List<ReloadIssue> issues) {
