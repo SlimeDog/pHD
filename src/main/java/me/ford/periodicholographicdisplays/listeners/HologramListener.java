@@ -40,7 +40,7 @@ public class HologramListener implements Listener {
                     continue; // ignore
                 }
                 base.attemptToShow(player);
-                showing = base.canSee(player);
+                showing = base.isBeingShownTo(player);
             }
             // handle leaving ALWAYS holograms with activation distance and FOREVER settings
             if (base.getType() == PeriodicType.ALWAYS) {
