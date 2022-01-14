@@ -118,7 +118,9 @@
     <plugin>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-shade-plugin</artifactId>
-      <version>3.1.0</version>
+      <!-- The plugin's version is in a snapshot state because the non-snapshot version does not
+      support Java 16 quite yet.-->
+      <version>3.3.0-SNAPSHOT</version>
       <!-- Do not include the <configuration>...</configuration> part if you are using Sponge! -->
       <configuration>
         <relocations>
