@@ -61,6 +61,7 @@ public class MockWorld implements World {
 
     public MockWorld(String name) {
         this.name = name;
+        MockStarterUtil.getServer().addWorld(this);
     }
 
     @Override

@@ -10,8 +10,13 @@ public class MockNamedHologram extends InternalHologram {
     private static final ThreadLocalRandom rnd = ThreadLocalRandom.current();
 
     public MockNamedHologram(String name, LineTrackerManager ltm) {
-        super(new ImmutablePosition("someMockWorld", rnd.nextDouble(), rnd.nextDouble(), rnd.nextDouble()),
+        super(new ImmutablePosition(mockWorld("someMockWorld"), rnd.nextDouble(), rnd.nextDouble(), rnd.nextDouble()),
                 name, ltm);
+    }
+
+    private static String mockWorld(String name) {
+        new MockWorld(name); // make sure it's registered
+        return name;
     }
 
 }

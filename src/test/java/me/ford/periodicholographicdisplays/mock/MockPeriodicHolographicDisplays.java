@@ -3,9 +3,7 @@ package me.ford.periodicholographicdisplays.mock;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,11 +45,14 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
     private final Settings settings;
     private final HologramStorage holograms;
     private final UserCache userCache;
-    private final Map<String, InternalHologram> namedHDHolograms = new HashMap<>();
+    private final MockLineTrackerManager ltm;
+    private final MockInternalHologramManager ihm;
     private boolean debug = false;
 
-    public MockPeriodicHolographicDisplays() {
+    public MockPeriodicHolographicDisplays(MockLineTrackerManager ltm) {
         logger.setLevel(Level.WARNING);
+        this.ltm = ltm;
+        this.ihm = new MockInternalHologramManager(this.ltm);
         config = YamlConfiguration.loadConfiguration(configFile);
         try {
             messages = new Messages(this);
@@ -243,11 +244,11 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
 
     @Override
     public InternalHologram getHDHologram(String name) {
-        return namedHDHolograms.get(name);
+        return getHDHoloManager().getHologramByName(name);
     }
 
     public void putHDHologram(String name, InternalHologram hologram) {
-        namedHDHolograms.put(name, hologram);
+        ihm.putHDHologram(name, hologram);
     }
 
     @Override
@@ -257,7 +258,7 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
 
     @Override
     public InternalHologramManager getHDHoloManager() {
-        return null;
+        return ihm;
     }
 
 }

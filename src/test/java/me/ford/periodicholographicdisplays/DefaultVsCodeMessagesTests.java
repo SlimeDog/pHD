@@ -22,6 +22,7 @@ import me.ford.periodicholographicdisplays.mock.MockLineTrackerManager;
 import me.ford.periodicholographicdisplays.mock.MockNamedHologram;
 import me.ford.periodicholographicdisplays.mock.MockPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.mock.MockPlayer;
+import me.ford.periodicholographicdisplays.mock.MockStarterUtil;
 
 public class DefaultVsCodeMessagesTests extends TestHelpers {
     private MockPeriodicHolographicDisplays phd;
@@ -31,8 +32,8 @@ public class DefaultVsCodeMessagesTests extends TestHelpers {
 
     @Before
     public void setUp() {
-        phd = new MockPeriodicHolographicDisplays();
-        ltm = new MockLineTrackerManager();
+        MockStarterUtil.startMocking();
+        phd = new MockPeriodicHolographicDisplays(ltm = new MockLineTrackerManager());
         defaults = phd.getMessages(); // in code defaults
         try {
             noDefaults = new DefMessages(phd);
@@ -44,6 +45,7 @@ public class DefaultVsCodeMessagesTests extends TestHelpers {
     @After
     public void tearDown() {
         phd.clear();
+        MockStarterUtil.stopMocking();
     }
 
     @Override

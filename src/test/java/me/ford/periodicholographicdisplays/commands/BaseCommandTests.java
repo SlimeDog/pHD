@@ -13,6 +13,7 @@ import me.ford.periodicholographicdisplays.mock.MockLineTrackerManager;
 import me.ford.periodicholographicdisplays.mock.MockOPCommandSender;
 import me.ford.periodicholographicdisplays.mock.MockPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.mock.MockPluginManager;
+import me.ford.periodicholographicdisplays.mock.MockStarterUtil;
 
 public abstract class BaseCommandTests {
     protected MockPeriodicHolographicDisplays phd;
@@ -22,8 +23,8 @@ public abstract class BaseCommandTests {
 
     @Before
     public void setup() {
-        phd = new MockPeriodicHolographicDisplays();
-        ltm = new MockLineTrackerManager();
+        MockStarterUtil.startMocking();
+        phd = new MockPeriodicHolographicDisplays(ltm = new MockLineTrackerManager());
         command = new PHDCommand(phd, new MockPluginManager());
         sender = new MockOPCommandSender(null);
     }
@@ -31,6 +32,7 @@ public abstract class BaseCommandTests {
     @After
     public void tearDown() {
         phd.clear();
+        MockStarterUtil.stopMocking();
     }
 
     protected void testSetManageCommonIllegals(FlashingHologram hologram, String holoName, PeriodicType testType,
