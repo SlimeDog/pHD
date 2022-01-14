@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -30,6 +31,7 @@ import org.bukkit.WorldBorder;
 import org.bukkit.WorldType;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.boss.DragonBattle;
 import org.bukkit.entity.AbstractArrow;
@@ -41,6 +43,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.generator.BiomeProvider;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.ItemStack;
@@ -302,7 +305,7 @@ public class MockWorld implements World {
     @Override
     public Collection<Entity> getNearbyEntities(Location location, double x, double y, double z,
             Predicate<Entity> filter) {
-                return new ArrayList<>();
+        return new ArrayList<>();
     }
 
     @Override
@@ -1168,6 +1171,283 @@ public class MockWorld implements World {
             throws IllegalArgumentException {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public Biome getBiome(Location location) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setBiome(Location location, Biome biome) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public BlockState getBlockState(Location location) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BlockState getBlockState(int x, int y, int z) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BlockData getBlockData(Location location) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BlockData getBlockData(int x, int y, int z) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Material getType(Location location) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Material getType(int x, int y, int z) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setBlockData(Location location, BlockData blockData) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void setBlockData(int x, int y, int z, BlockData blockData) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void setType(Location location, Material material) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void setType(int x, int y, int z, Material material) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean generateTree(Location location, Random random, TreeType type) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean generateTree(Location location, Random random, TreeType type, Consumer<BlockState> stateConsumer) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean generateTree(Location location, Random random, TreeType type, Predicate<BlockState> statePredicate) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public Entity spawnEntity(Location loc, EntityType type, boolean randomizeData) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public <T extends Entity> T spawn(Location location, Class<T> clazz, boolean randomizeData, Consumer<T> function)
+            throws IllegalArgumentException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public int getMinHeight() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public Item dropItem(Location location, ItemStack item, Consumer<Item> function) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Item dropItemNaturally(Location location, ItemStack item, Consumer<Item> function) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public boolean setSpawnLocation(int x, int y, int z, float angle) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public long getGameTime() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public boolean isClearWeather() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void setClearWeatherDuration(int duration) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public int getClearWeatherDuration() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public BiomeProvider getBiomeProvider() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public int getLogicalHeight() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public boolean isNatural() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isBedWorks() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean hasSkyLight() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean hasCeiling() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isPiglinSafe() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isRespawnAnchorWorks() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean hasRaids() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isUltraWarm() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public long getTicksPerWaterAmbientSpawns() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public void setTicksPerWaterAmbientSpawns(int ticksPerAmbientSpawns) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public long getTicksPerWaterUndergroundCreatureSpawns() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public void setTicksPerWaterUndergroundCreatureSpawns(int ticksPerWaterUndergroundCreatureSpawns) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public int getWaterUndergroundCreatureSpawnLimit() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public void setWaterUndergroundCreatureSpawnLimit(int limit) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public int getWaterAmbientSpawnLimit() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public void setWaterAmbientSpawnLimit(int limit) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void playSound(Entity entity, Sound sound, float volume, float pitch) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void playSound(Entity entity, Sound sound, SoundCategory category, float volume, float pitch) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public int getSimulationDistance() {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
 }

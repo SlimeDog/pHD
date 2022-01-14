@@ -30,11 +30,14 @@ import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.PistonMoveReaction;
+import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityCategory;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Pose;
 import org.bukkit.entity.Projectile;
@@ -43,6 +46,7 @@ import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.InventoryView.Property;
@@ -1541,12 +1545,6 @@ public class MockPlayer extends MockOPCommandSender implements Player {
     }
 
     @Override
-    public boolean sendChunkChange(Location loc, int sx, int sy, int sz, byte[] data) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
     public void sendSignChange(Location loc, String[] lines) throws IllegalArgumentException {
         // TODO Auto-generated method stub
 
@@ -2009,20 +2007,23 @@ public class MockPlayer extends MockOPCommandSender implements Player {
         /**
          * Sends the component to the specified screen position of this player
          *
-         * @param position the screen position
+         * @param position  the screen position
          * @param component the components to send
          */
-        public void sendMessage(net.md_5.bungee.api.ChatMessageType position, net.md_5.bungee.api.chat.BaseComponent component) {
+        public void sendMessage(net.md_5.bungee.api.ChatMessageType position,
+                net.md_5.bungee.api.chat.BaseComponent component) {
 
         }
 
         /**
-         * Sends an array of components as a single message to the specified screen position of this player
+         * Sends an array of components as a single message to the specified screen
+         * position of this player
          *
-         * @param position the screen position
+         * @param position   the screen position
          * @param components the components to send
          */
-        public void sendMessage(net.md_5.bungee.api.ChatMessageType position, net.md_5.bungee.api.chat.BaseComponent... components) {
+        public void sendMessage(net.md_5.bungee.api.ChatMessageType position,
+                net.md_5.bungee.api.chat.BaseComponent... components) {
 
         }
 
@@ -2032,6 +2033,283 @@ public class MockPlayer extends MockOPCommandSender implements Player {
     public float getAttackCooldown() {
         // TODO Auto-generated method stub
         return 0;
+    }
+
+    @Override
+    public ItemStack getItemInUse() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public boolean hasDiscoveredRecipe(NamespacedKey recipe) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public Set<NamespacedKey> getDiscoveredRecipes() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public boolean dropItem(boolean dropAll) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public int getSaturatedRegenRate() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public void setSaturatedRegenRate(int ticks) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public int getUnsaturatedRegenRate() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public void setUnsaturatedRegenRate(int ticks) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public int getStarvationRate() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public void setStarvationRate(int ticks) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public int getArrowCooldown() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public void setArrowCooldown(int ticks) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public int getArrowsInBody() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public void setArrowsInBody(int count) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isClimbing() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public Set<UUID> getCollidableExemptions() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public EntityCategory getCategory() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setInvisible(boolean invisible) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isInvisible() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isInWater() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void setVisualFire(boolean fire) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isVisualFire() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public int getFreezeTicks() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public int getMaxFreezeTicks() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public void setFreezeTicks(int ticks) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isFrozen() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void sendMessage(UUID sender, String message) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void sendMessage(UUID sender, String... messages) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void sendRawMessage(UUID sender, String message) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void playSound(Entity entity, Sound sound, float volume, float pitch) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void playSound(Entity entity, Sound sound, SoundCategory category, float volume, float pitch) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void stopAllSounds() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean breakBlock(Block block) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void sendBlockDamage(Location loc, float progress) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void sendEquipmentChange(LivingEntity entity, EquipmentSlot slot, ItemStack item) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void sendSignChange(Location loc, String[] lines, DyeColor dyeColor, boolean hasGlowingText)
+            throws IllegalArgumentException {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void hideEntity(Plugin plugin, Entity entity) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void showEntity(Plugin plugin, Entity entity) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean canSee(Entity entity) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void setResourcePack(String url, byte[] hash, String prompt) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void setResourcePack(String url, byte[] hash, boolean force) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void setResourcePack(String url, byte[] hash, String prompt, boolean force) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public int getPing() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public void openSign(Sign sign) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void showDemoScreen() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isAllowingServerListings() {
+        // TODO Auto-generated method stub
+        return false;
     }
 
 }

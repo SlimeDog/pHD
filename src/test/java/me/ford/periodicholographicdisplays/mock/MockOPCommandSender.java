@@ -1,6 +1,7 @@
 package me.ford.periodicholographicdisplays.mock;
 
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 import org.bukkit.Server;
@@ -104,7 +105,7 @@ public class MockOPCommandSender implements CommandSender {
     }
 
     @Override
-    public void sendMessage(String[] messages) {
+    public void sendMessage(String... messages) {
         for (String msg : messages) {
             sendMessage(msg);
         }
@@ -125,6 +126,16 @@ public class MockOPCommandSender implements CommandSender {
     public Spigot spigot() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public void sendMessage(UUID sender, String message) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void sendMessage(UUID sender, String... messages) {
+        // TODO Auto-generated method stub
     }
 
 }
