@@ -17,6 +17,7 @@ public final class MockStarterUtil {
         }
         MockServer server;
         Bukkit.setServer(server = new MockServer());
+        server.startLogging(); // avoid version output
         return server;
     }
 

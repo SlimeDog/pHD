@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.BanList;
@@ -65,8 +66,16 @@ public class MockServer implements Server {
     private static final Logger LOGGER = Logger.getLogger("[MockServer]");
     private final Map<String, MockWorld> worlds = new HashMap<>();
 
+    MockServer() {
+        LOGGER.setLevel(Level.OFF);
+    }
+
     public void addWorld(MockWorld world) {
         worlds.put(world.getName(), world);
+    }
+
+    public void startLogging() {
+        LOGGER.setLevel(Level.ALL);
     }
 
     @Override
