@@ -84,7 +84,7 @@ public final class UpdateChecker {
                 InputStreamReader reader = new InputStreamReader(connection.getInputStream());
                 responseCode = connection.getResponseCode();
  
-                JsonElement element = new JsonParser().parse(reader);
+                JsonElement element = JsonParser.parseReader(reader);
                 if (!element.isJsonArray()) {
                     return new UpdateResult(UpdateReason.INVALID_JSON);
                 }

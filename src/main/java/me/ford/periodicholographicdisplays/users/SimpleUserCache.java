@@ -34,7 +34,7 @@ public class SimpleUserCache implements UserCache {
 
     public SimpleUserCache(IPeriodicHolographicDisplays phd) {
         this.phd = phd;
-        populateUserCache(new JsonParser().parse(readUserCache()));
+        populateUserCache(JsonParser.parseString(readUserCache()));
     }
 
     private String readUserCache() {
