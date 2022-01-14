@@ -145,7 +145,7 @@ public class Messages extends CustomConfigHandler {
 
     public String getLegacyMessage() {
         return getMessage("legacy-version-mctime",
-                "MCTIME holograms can behave unpredicably because of the use of a legacy version of MC");
+                "MCTIME holograms can behave unpredictably because of the use of a legacy version of MC");
     }
 
     public String getIllegalStorageMessage(String type) {
