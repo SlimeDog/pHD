@@ -99,7 +99,7 @@ active-storage: "Active storage-type is {storage}"
 type-not-recognized: "Hologram type {type} is not recognized"
 hologram-not-found: "Hologram not found: {name} of type {type}"
 
-legacy-version-mctime: "MCTIME holograms can behave unpredicably because of the use of a legacy version of MC"
+legacy-version-mctime: "MCTIME holograms can behave unpredictably because of the use of a legacy version of MC"
 no-luckperms: "LuckPerms not found - unable to readjust permissions on the fly or tab-complete permissions"
 invalid-page: "Page needs to be between 1 and {max-page}"
 next-page-hint: "TIP: See the next page with &n{command}&r"
