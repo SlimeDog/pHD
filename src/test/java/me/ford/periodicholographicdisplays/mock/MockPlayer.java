@@ -60,6 +60,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.profile.PlayerProfile;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.RayTraceResult;
@@ -2314,6 +2315,12 @@ public class MockPlayer extends MockOPCommandSender implements Player {
 
     @Override
     public GameMode getPreviousGameMode() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public PlayerProfile getPlayerProfile() {
         // TODO Auto-generated method stub
         return null;
     }

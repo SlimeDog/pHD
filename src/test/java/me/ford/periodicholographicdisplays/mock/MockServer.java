@@ -56,6 +56,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.ServicesManager;
 import org.bukkit.plugin.messaging.Messenger;
+import org.bukkit.profile.PlayerProfile;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.structure.StructureManager;
@@ -878,6 +879,24 @@ public class MockServer implements Server {
 
     @Override
     public Spigot spigot() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public PlayerProfile createPlayerProfile(UUID uniqueId, String name) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public PlayerProfile createPlayerProfile(UUID uniqueId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public PlayerProfile createPlayerProfile(String name) {
         // TODO Auto-generated method stub
         return null;
     }
