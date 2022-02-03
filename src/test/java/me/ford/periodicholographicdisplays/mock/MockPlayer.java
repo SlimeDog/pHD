@@ -2312,4 +2312,10 @@ public class MockPlayer extends MockOPCommandSender implements Player {
         return false;
     }
 
+    @Override
+    public GameMode getPreviousGameMode() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
