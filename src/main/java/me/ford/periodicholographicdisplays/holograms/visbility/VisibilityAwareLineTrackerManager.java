@@ -13,8 +13,8 @@ import me.filoghost.holographicdisplays.nms.common.NMSManager;
 import me.filoghost.holographicdisplays.plugin.listener.LineClickListener;
 import me.filoghost.holographicdisplays.plugin.placeholder.tracking.ActivePlaceholderTracker;
 import me.filoghost.holographicdisplays.plugin.tick.TickingTask;
+import me.filoghost.holographicdisplays.plugin.tick.CachedPlayer;
 import me.filoghost.holographicdisplays.plugin.HolographicDisplays;
-import me.filoghost.holographicdisplays.plugin.hologram.tracking.CachedPlayer;
 import me.filoghost.holographicdisplays.plugin.hologram.tracking.LineTracker;
 import me.filoghost.holographicdisplays.plugin.hologram.tracking.LineTrackerManager;
 
