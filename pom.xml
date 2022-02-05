@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>me.ford</groupId>
   <artifactId>periodicholographicdisplays</artifactId>
-  <version>1.2.2-SNAPSHOT</version>
+  <version>1.2.2</version>
   <name>pHD</name>
   <description>An intelligent manager for HolographicDisplays</description>
   <properties>
