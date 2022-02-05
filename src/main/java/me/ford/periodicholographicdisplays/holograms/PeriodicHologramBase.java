@@ -8,10 +8,10 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import me.filoghost.holographicdisplays.api.beta.hologram.VisibilitySettings.Visibility;
 import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.Settings;
-import me.ford.periodicholographicdisplays.holograms.visbility.VisibilityManager;
 
 /**
  * PeriodicHologram
@@ -19,7 +19,6 @@ import me.ford.periodicholographicdisplays.holograms.visbility.VisibilityManager
 public abstract class PeriodicHologramBase {
     public static final int NO_SECONDS = -1;
     public static final double NO_DISTANCE = -1.0D;
-    private final VisibilityManager visibilityManager;
     private final IPeriodicHolographicDisplays plugin;
     private final Set<UUID> beingShownTo = new HashSet<>();
     private final String name;
@@ -42,7 +41,6 @@ public abstract class PeriodicHologramBase {
             double activationDistance, long showTime,
             PeriodicType type, boolean isNew, String perms) {
         Validate.notNull(hologram, "Hologram cannot be null!");
-        this.visibilityManager = VisibilityManager.PROVIDER.provide(hologram, this);
         this.hologram = hologram;
         this.name = name;
         this.plugin = phd;
@@ -59,6 +57,7 @@ public abstract class PeriodicHologramBase {
         this.type = type;
         this.hasChanged = isNew;
         this.perms = perms;
+        hologram.getVisibilitySettings().setGlobalVisibility(Visibility.HIDDEN);
     }
 
     public String getName() {
@@ -127,7 +126,7 @@ public abstract class PeriodicHologramBase {
     }
 
     public void markRemoved() {
-        visibilityManager.resetVisibilityAll();
+        this.hologram.getVisibilitySettings().clearIndividualVisibilities();
         this.beingShownTo.clear();
     }
 
@@ -157,7 +156,8 @@ public abstract class PeriodicHologramBase {
 
     public void hideFrom(Player player) {
         if (plugin.getSettings().onDebug() && this instanceof FlashingHologram) {
-            String info = plugin.getMessages().getHologramInfoMessage((FlashingHologram) this, 1, true).replace("\n", ";");
+            String info = plugin.getMessages().getHologramInfoMessage((FlashingHologram) this, 1, true).replace("\n",
+                    ";");
             plugin.debug(String.format("Hiding from %s: %s", player.getName(), info));
         }
         hideFromInternal(player);
@@ -165,7 +165,7 @@ public abstract class PeriodicHologramBase {
     }
 
     protected void hideFromInternal(Player player) {
-        visibilityManager.hideFrom(player);
+        hologram.getVisibilitySettings().setIndividualVisibility(player, Visibility.HIDDEN);
     }
 
     public boolean show(Player player) {
@@ -175,7 +175,8 @@ public abstract class PeriodicHologramBase {
         if (beingShownTo.contains(id))
             return false;
         if (plugin.getSettings().onDebug() && this instanceof FlashingHologram) {
-            String info = plugin.getMessages().getHologramInfoMessage((FlashingHologram) this, 1, true).replace("\n", ";");
+            String info = plugin.getMessages().getHologramInfoMessage((FlashingHologram) this, 1, true).replace("\n",
+                    ";");
             plugin.debug(String.format("Showing to %s: %s", player.getName(), info));
         }
         showInternal(player);
@@ -188,7 +189,7 @@ public abstract class PeriodicHologramBase {
     }
 
     protected void showInternal(Player player) {
-        visibilityManager.showTo(player);
+        hologram.getVisibilitySettings().setIndividualVisibility(player, Visibility.VISIBLE);
     }
 
     public void defaultDistance(Settings settings) {

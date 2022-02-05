@@ -21,7 +21,6 @@ import me.ford.periodicholographicdisplays.Settings.StorageTypeException;
 import me.ford.periodicholographicdisplays.commands.PHDCommand;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.Zombificator;
-import me.ford.periodicholographicdisplays.holograms.visbility.VisibilityAwareLineTrackerManager;
 import me.ford.periodicholographicdisplays.hooks.DummyNPCHook;
 import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
 import me.ford.periodicholographicdisplays.hooks.NPCHook;
@@ -80,8 +79,7 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
         // HD plugin
         hdPlugin = JavaPlugin.getPlugin(HolographicDisplays.class);
 
-        // setup Visibility aware LineTrackerManager
-        injectLineTrackerManager();
+        // injectLineTrackerManager();
 
         // setup HD hook
         holoManager = getHoloManager(hdPlugin);
@@ -151,12 +149,6 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
                     (result, e) -> getLogger().info(result.getReason() + ": " + result.getNewestVersion()));
         }
         getLogger().info(messages.getActiveStorageMessage(getSettings().useDatabase()));
-    }
-
-    private void injectLineTrackerManager() {
-        VisibilityAwareLineTrackerManager.exchangeLineTrackerManager(hdPlugin);
-        getLogger().warning("Replacing HolographicDisplays:LineTrackerManager with a modified version"
-                + ", in order to manage individual hologram visibility.");
     }
 
     private void disableMe(List<ReloadIssue> issues) {
