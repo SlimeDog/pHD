@@ -41,6 +41,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.SpawnCategory;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.generator.ChunkGenerator.ChunkData;
 import org.bukkit.help.HelpMap;
@@ -899,6 +900,18 @@ public class MockServer implements Server {
     public PlayerProfile createPlayerProfile(String name) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public int getTicksPerSpawns(SpawnCategory spawnCategory) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public int getSpawnLimit(SpawnCategory spawnCategory) {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
 }

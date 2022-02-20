@@ -43,12 +43,14 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.SpawnCategory;
 import org.bukkit.generator.BiomeProvider;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Consumer;
@@ -1449,6 +1451,36 @@ public class MockWorld implements World {
     public int getSimulationDistance() {
         // TODO Auto-generated method stub
         return 0;
+    }
+
+    @Override
+    public PersistentDataContainer getPersistentDataContainer() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public long getTicksPerSpawns(SpawnCategory spawnCategory) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public void setTicksPerSpawns(SpawnCategory spawnCategory, int ticksPerCategorySpawn) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public int getSpawnLimit(SpawnCategory spawnCategory) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public void setSpawnLimit(SpawnCategory spawnCategory, int limit) {
+        // TODO Auto-generated method stub
+        
     }
 
 }

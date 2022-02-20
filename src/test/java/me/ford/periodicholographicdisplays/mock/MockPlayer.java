@@ -41,6 +41,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Pose;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.SpawnCategory;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -2321,6 +2322,12 @@ public class MockPlayer extends MockOPCommandSender implements Player {
 
     @Override
     public PlayerProfile getPlayerProfile() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public SpawnCategory getSpawnCategory() {
         // TODO Auto-generated method stub
         return null;
     }
