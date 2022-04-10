@@ -1,5 +1,5 @@
 ### pHD
-An intelligent manager for HolographicDisplays
+An intelligent manager for holographic display
 
 ### Overview
 pHD manages the display of holograms defined by HolographicDisplays.
