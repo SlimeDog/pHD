@@ -5,6 +5,8 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 
+import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
+import dev.ratas.slimedogcore.impl.messaging.recipient.MessageRecipient;
 import me.ford.periodicholographicdisplays.commands.subcommands.ManageSub;
 import me.ford.periodicholographicdisplays.commands.subcommands.SetSub;
 import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
@@ -19,6 +21,7 @@ public abstract class BaseCommandTests {
     protected MockPeriodicHolographicDisplays phd;
     protected PHDCommand command;
     protected MockOPCommandSender sender;
+    protected SDCRecipient recipient;
     protected MockLineTrackerManager ltm;
 
     @Before
@@ -27,6 +30,7 @@ public abstract class BaseCommandTests {
         phd = new MockPeriodicHolographicDisplays(ltm = new MockLineTrackerManager());
         command = new PHDCommand(phd, new MockPluginManager());
         sender = new MockOPCommandSender(null);
+        recipient = new MessageRecipient(sender);
     }
 
     @After
@@ -40,20 +44,20 @@ public abstract class BaseCommandTests {
         String commandName = isSet ? "set" : "manage";
         // /phd set <name>
         String usageMessage;
-        SubCommand cmd;
+        PHDSubCommand cmd;
         if (isSet) {
             cmd = new SetSub(null, phd.getHolograms(), phd.getLuckPermsHook(), phd.getSettings(), phd.getMessages());
         } else {
             cmd = new ManageSub(phd);
         }
-        usageMessage = cmd.getUsage(sender, new String[] { commandName, holoName });
+        usageMessage = cmd.getUsage(recipient, new String[] { commandName, holoName });
         String expected = usageMessage;
         testCommand(sender, null, "phd", new String[] { commandName, holoName }, expected);
         // /phd set <name> 1
         expected = phd.getMessages().getTypeNotRecognizedMessage("1");
         testCommand(sender, null, "phd", new String[] { commandName, holoName, "1" }, expected);
         // /phd set <name> <wrongtype>
-        expected = cmd.getUsage(sender, new String[] { commandName, holoName, testType.name() });
+        expected = cmd.getUsage(recipient, new String[] { commandName, holoName, testType.name() });
         if (!isSet && testType == PeriodicType.ALWAYS) {
             expected = phd.getMessages().getHologramAlreadyManagedMessage(holoName, testType);
         }

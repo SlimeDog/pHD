@@ -23,7 +23,7 @@ public class CommandManageTests extends BaseCommandTests {
         // add mock hologram
         phd.putHDHologram(name, new MockNamedHologram(name, ltm));
         ManageSub ms = new ManageSub(phd);
-        String usageMessage = ms.getUsage(sender, new String[] {});
+        String usageMessage = ms.getUsage(recipient, new String[] {});
         expectedMessage = usageMessage;
         testCommand(sender, null, "phd", new String[] { "manage", name }, expectedMessage);
 
@@ -34,7 +34,7 @@ public class CommandManageTests extends BaseCommandTests {
 
         // phd manage existing <type> # not ALWAYS
         PeriodicType type = PeriodicType.NTIMES;
-        expectedMessage = ms.getUsage(sender, new String[] { "manage", name, type.name() });
+        expectedMessage = ms.getUsage(recipient, new String[] { "manage", name, type.name() });
         testCommand(sender, null, "phd", new String[] { "manage", name, type.name() }, expectedMessage);
 
         // phd manage existing <type> <option> <value> <option_with_no_value> # not

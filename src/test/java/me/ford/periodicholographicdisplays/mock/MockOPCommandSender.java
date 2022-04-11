@@ -124,8 +124,7 @@ public class MockOPCommandSender implements CommandSender {
 
     @Override
     public Spigot spigot() {
-        // TODO Auto-generated method stub
-        return null;
+        return new MockSpigot();
     }
 
     @Override
@@ -136,6 +135,30 @@ public class MockOPCommandSender implements CommandSender {
     @Override
     public void sendMessage(UUID sender, String... messages) {
         // TODO Auto-generated method stub
+    }
+
+    private class MockSpigot extends Spigot {
+
+        public void sendMessage(net.md_5.bungee.api.chat.BaseComponent component) {
+            messageConsumer.accept(getMessage(component));
+        }
+
+        public void sendMessage(net.md_5.bungee.api.chat.BaseComponent... components) {
+            messageConsumer.accept(getMessage(components));
+        }
+
+        public void sendMessage(UUID sender, net.md_5.bungee.api.chat.BaseComponent component) {
+            messageConsumer.accept(getMessage(component));
+        }
+
+        public void sendMessage(UUID sender, net.md_5.bungee.api.chat.BaseComponent... components) {
+            messageConsumer.accept(getMessage(components));
+        }
+
+        private static String getMessage(net.md_5.bungee.api.chat.BaseComponent... comp) {
+            return net.md_5.bungee.api.ChatColor.stripColor(net.md_5.bungee.api.chat.BaseComponent.toLegacyText(comp));
+        }
+
     }
 
 }
