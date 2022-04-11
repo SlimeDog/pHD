@@ -4,8 +4,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
+import me.ford.periodicholographicdisplays.holograms.wrap.WrappedHologram;
 
 /**
  * FlashingHologram
@@ -20,8 +20,9 @@ public abstract class FlashingHologram extends PeriodicHologramBase {
     private BukkitTask on = null;
     private BukkitTask off = null;
 
-    public FlashingHologram(IPeriodicHolographicDisplays phd, InternalHologram hologram, String name, double activationDistance, long showTime, PeriodicType type,
-            boolean isNew, String perms, double flashOn, double flashOff) {
+    public FlashingHologram(IPeriodicHolographicDisplays phd, WrappedHologram hologram, String name,
+            double activationDistance, long showTime, PeriodicType type, boolean isNew, String perms, double flashOn,
+            double flashOff) {
         super(phd, hologram, name, activationDistance, showTime, type, isNew, perms);
         this.phd = phd;
         if (flashOn != NO_FLASH && flashOff != NO_FLASH) {

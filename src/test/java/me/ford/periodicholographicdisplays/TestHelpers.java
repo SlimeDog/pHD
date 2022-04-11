@@ -12,6 +12,7 @@ import me.ford.periodicholographicdisplays.holograms.IRLTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.MCTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
+import me.ford.periodicholographicdisplays.holograms.wrap.HolographicDisplaysWrapper;
 import me.ford.periodicholographicdisplays.mock.MockLineTrackerManager;
 import me.ford.periodicholographicdisplays.mock.MockNamedHologram;
 
@@ -68,7 +69,8 @@ public abstract class TestHelpers {
         double flashOff = random.nextDouble() * 5;
         String perms = getRandomName("perms.");
         String name = getRandomName("name");
-        MockNamedHologram hologram = new MockNamedHologram(name, ltm);
+        MockNamedHologram holo = new MockNamedHologram(name, ltm);
+        HolographicDisplaysWrapper hologram = new HolographicDisplaysWrapper(holo);
         switch (type) {
             case ALWAYS:
                 return new AlwaysHologram(getPhd(), hologram, name, activationDistance, showTime, true, perms, flashOn,

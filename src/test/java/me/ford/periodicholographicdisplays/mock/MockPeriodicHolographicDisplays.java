@@ -18,7 +18,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
-import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramManager;
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.ReloadIssue;
@@ -26,6 +25,8 @@ import me.ford.periodicholographicdisplays.Settings;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.storage.SQLStorage;
 import me.ford.periodicholographicdisplays.holograms.storage.Storage;
+import me.ford.periodicholographicdisplays.holograms.wrap.provider.HologramProvider;
+import me.ford.periodicholographicdisplays.holograms.wrap.provider.HolographicDisplaysHologramProvider;
 import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
 import me.ford.periodicholographicdisplays.hooks.NPCHook;
 import me.ford.periodicholographicdisplays.users.SimpleUserCache;
@@ -242,11 +243,6 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
         return new ArrayList<>();
     }
 
-    @Override
-    public InternalHologram getHDHologram(String name) {
-        return getHDHoloManager().getHologramByName(name);
-    }
-
     public void putHDHologram(String name, InternalHologram hologram) {
         ihm.putHDHologram(name, hologram);
     }
@@ -257,8 +253,8 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
     }
 
     @Override
-    public InternalHologramManager getHDHoloManager() {
-        return ihm;
+    public HologramProvider getHologramProvider() {
+        return new HolographicDisplaysHologramProvider(ihm);
     }
 
 }

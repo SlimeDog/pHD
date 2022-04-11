@@ -8,10 +8,10 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import me.filoghost.holographicdisplays.api.beta.hologram.VisibilitySettings.Visibility;
-import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.Settings;
+import me.ford.periodicholographicdisplays.holograms.wrap.WrappedHologram;
+import me.ford.periodicholographicdisplays.holograms.wrap.visibility.VisibilityState;
 
 /**
  * PeriodicHologram
@@ -28,16 +28,16 @@ public abstract class PeriodicHologramBase {
     private long showTimeTicks;
     private boolean hasChanged = false;
     private final PeriodicType type; // in order to change this, I'll create a new instance
-    private final InternalHologram hologram;
+    private final WrappedHologram hologram;
     private String perms;
 
-    public PeriodicHologramBase(IPeriodicHolographicDisplays phd, InternalHologram hologram, String name,
+    public PeriodicHologramBase(IPeriodicHolographicDisplays phd, WrappedHologram hologram, String name,
             double activationDistance, long showTime,
             PeriodicType type, boolean isNew) {
         this(phd, hologram, name, activationDistance, showTime, type, isNew, null);
     }
 
-    public PeriodicHologramBase(IPeriodicHolographicDisplays phd, InternalHologram hologram, String name,
+    public PeriodicHologramBase(IPeriodicHolographicDisplays phd, WrappedHologram hologram, String name,
             double activationDistance, long showTime,
             PeriodicType type, boolean isNew, String perms) {
         Validate.notNull(hologram, "Hologram cannot be null!");
@@ -57,14 +57,14 @@ public abstract class PeriodicHologramBase {
         this.type = type;
         this.hasChanged = isNew;
         this.perms = perms;
-        hologram.getVisibilitySettings().setGlobalVisibility(Visibility.HIDDEN);
+        hologram.getVisibilitySettings().setGlobalVisibility(VisibilityState.HIDDEN);
     }
 
     public String getName() {
         return name;
     }
 
-    InternalHologram getHologram() {
+    public WrappedHologram getHologram() {
         return hologram;
     }
 
@@ -139,7 +139,7 @@ public abstract class PeriodicHologramBase {
     }
 
     public Location getLocation() {
-        return hologram.getPosition().toLocation();
+        return hologram.getBukkitLocation();
     }
 
     public abstract void attemptToShow(Player player);
@@ -165,7 +165,7 @@ public abstract class PeriodicHologramBase {
     }
 
     protected void hideFromInternal(Player player) {
-        hologram.getVisibilitySettings().setIndividualVisibility(player, Visibility.HIDDEN);
+        hologram.getVisibilitySettings().setIndividualVisibility(player, VisibilityState.HIDDEN);
     }
 
     public boolean show(Player player) {
@@ -189,7 +189,7 @@ public abstract class PeriodicHologramBase {
     }
 
     protected void showInternal(Player player) {
-        hologram.getVisibilitySettings().setIndividualVisibility(player, Visibility.VISIBLE);
+        hologram.getVisibilitySettings().setIndividualVisibility(player, VisibilityState.VISIBLE);
     }
 
     public void defaultDistance(Settings settings) {

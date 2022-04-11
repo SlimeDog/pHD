@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramManager;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
 
@@ -17,6 +15,7 @@ import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.holograms.WorldHologramStorageBase.HologramSaveReason;
+import me.ford.periodicholographicdisplays.holograms.wrap.provider.HologramProvider;
 import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
 
 /**
@@ -31,9 +30,9 @@ public class SetSub extends OptionPairSetSub {
     private final List<String> settables = Arrays.asList("times", "time", "seconds", "distance", "permission", "flash",
             "flashOn", "flashOff");
 
-    public SetSub(InternalHologramManager man, HologramStorage storage, LuckPermsHook hook, Settings settings,
+    public SetSub(HologramProvider provider, HologramStorage storage, LuckPermsHook hook, Settings settings,
             Messages messages) {
-        super(man, "set", PERMS, USAGE);
+        super(provider, "set", PERMS, USAGE);
         this.storage = storage;
         this.hook = hook;
         this.messages = messages;

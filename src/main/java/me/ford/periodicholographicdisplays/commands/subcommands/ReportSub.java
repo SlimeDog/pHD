@@ -5,8 +5,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
-import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramManager;
-
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -19,6 +17,7 @@ import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
+import me.ford.periodicholographicdisplays.holograms.wrap.provider.HologramProvider;
 import me.ford.periodicholographicdisplays.users.UserCache;
 import me.ford.periodicholographicdisplays.util.HintUtil;
 import me.ford.periodicholographicdisplays.util.PageUtils;
@@ -33,8 +32,8 @@ public class ReportSub extends PHDSubCommand {
     private final Messages messages;
     private final UserCache userCache;
 
-    public ReportSub(InternalHologramManager man, HologramStorage storage, Messages messages, UserCache userCache) {
-        super(man, "report", PERMS, USAGE);
+    public ReportSub(HologramProvider provider, HologramStorage storage, Messages messages, UserCache userCache) {
+        super(provider, "report", PERMS, USAGE);
         this.storage = storage;
         this.messages = messages;
         this.userCache = userCache;

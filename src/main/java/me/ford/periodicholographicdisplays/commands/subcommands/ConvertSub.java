@@ -34,7 +34,7 @@ public class ConvertSub extends PHDSubCommand {
     private final List<String> storageTypes = Arrays.asList(SQLITE, YAML);
 
     public ConvertSub(IPeriodicHolographicDisplays phd, PluginManager pm) {
-        super(phd.getHDHoloManager(), "convert", PERMS, USAGE);
+        super(phd.getHologramProvider(), "convert", PERMS, USAGE);
         this.phd = phd;
         this.pm = pm;
         this.messages = phd.getMessages();

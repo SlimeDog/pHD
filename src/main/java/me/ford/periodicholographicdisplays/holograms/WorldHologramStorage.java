@@ -11,12 +11,12 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 
-import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.holograms.storage.HologramInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.Storage;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.NullTypeInfo;
+import me.ford.periodicholographicdisplays.holograms.wrap.WrappedHologram;
 import me.ford.periodicholographicdisplays.hooks.NPCHook;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.MCTimeTypeInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.IRLTimeTypeInfo;
@@ -63,7 +63,7 @@ public class WorldHologramStorage extends WorldHologramStorageBase {
         return names;
     }
 
-    public void loaded(InternalHologram holo, HDHologramInfo info, boolean imported) {
+    public void loaded(WrappedHologram holo, HDHologramInfo info, boolean imported) {
         if (holo.getWorldIfLoaded() != getWorld())
             return; // don't load
         IndividualHologramHandler handler = null;

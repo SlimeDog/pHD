@@ -3,8 +3,6 @@ package me.ford.periodicholographicdisplays.commands.subcommands;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramManager;
-
 import org.bukkit.util.StringUtil;
 
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
@@ -15,6 +13,7 @@ import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.holograms.storage.HologramInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.Storage.HDHologramInfo;
+import me.ford.periodicholographicdisplays.holograms.wrap.provider.HologramProvider;
 
 /**
  * UnmanageSub
@@ -25,8 +24,8 @@ public class UnmanageSub extends PHDSubCommand {
     private final HologramStorage storage;
     private final Messages messages;
 
-    public UnmanageSub(InternalHologramManager man, HologramStorage storage, Messages messages) {
-        super(man, "unmanage", PERMS, USAGE);
+    public UnmanageSub(HologramProvider provider, HologramStorage storage, Messages messages) {
+        super(provider, "unmanage", PERMS, USAGE);
         this.storage = storage;
         this.messages = messages;
     }

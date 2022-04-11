@@ -13,6 +13,7 @@ import me.ford.periodicholographicdisplays.holograms.IRLTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.MCTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
+import me.ford.periodicholographicdisplays.holograms.wrap.HolographicDisplaysWrapper;
 import me.ford.periodicholographicdisplays.mock.MockNamedHologram;
 import me.ford.periodicholographicdisplays.mock.MockOPCommandSender;
 import me.ford.periodicholographicdisplays.util.TimeUtils;
@@ -39,8 +40,9 @@ public class CommandSetTests extends BaseCommandTests {
     @Test
     public void testSetCommand2() {
         String holoName = "ALWAYSNAME";
-        AlwaysHologram hologram = new AlwaysHologram(phd, new MockNamedHologram(holoName, ltm), holoName, 1.0, -1, true,
-                null, -1, -1);
+        AlwaysHologram hologram = new AlwaysHologram(phd,
+                new HolographicDisplaysWrapper(new MockNamedHologram(holoName, ltm)), holoName, 1.0, -1, true, null, -1,
+                -1);
         phd.getHolograms().addHologram(hologram);
         testSetManageCommonIllegals(hologram, holoName, PeriodicType.NTIMES, true);
     }
@@ -48,8 +50,9 @@ public class CommandSetTests extends BaseCommandTests {
     @Test
     public void testSetIllegal() {
         String holoName = "ALWAYSNAME";
-        AlwaysHologram hologram = new AlwaysHologram(phd, new MockNamedHologram(holoName, ltm), holoName, 1.0, -1, true,
-                null, -1, -1);
+        AlwaysHologram hologram = new AlwaysHologram(phd,
+                new HolographicDisplaysWrapper(new MockNamedHologram(holoName, ltm)), holoName, 1.0, -1, true, null, -1,
+                -1);
         phd.getHolograms().addHologram(hologram);
         // /phd set <name> <type> times <times>
         String expected = phd.getMessages().getNoSuchOptionMessage(PeriodicType.ALWAYS, "times");
@@ -66,8 +69,9 @@ public class CommandSetTests extends BaseCommandTests {
 
         String holoName = "ALWAYSNAME";
         PeriodicType type = PeriodicType.ALWAYS;
-        AlwaysHologram hologram = new AlwaysHologram(phd, new MockNamedHologram(holoName, ltm), holoName, 1.0, -1, true,
-                null, -1, -1);
+        AlwaysHologram hologram = new AlwaysHologram(phd,
+                new HolographicDisplaysWrapper(new MockNamedHologram(holoName, ltm)), holoName, 1.0, -1, true, null, -1,
+                -1);
         phd.getHolograms().addHologram(hologram);
         testSetForHologramType(hologram, holoName, type);
     }
@@ -110,9 +114,9 @@ public class CommandSetTests extends BaseCommandTests {
     @Test
     public void testSetNtimesIllegal() {
         String holoName = "Nt0imeSName";
-        NTimesHologram hologram = new NTimesHologram(phd, new MockNamedHologram(holoName, ltm), holoName, 3.0, 10, 5,
-                true,
-                null, 1.2, 1.3);
+        NTimesHologram hologram = new NTimesHologram(phd,
+                new HolographicDisplaysWrapper(new MockNamedHologram(holoName, ltm)), holoName, 3.0, 10, 5, true, null,
+                1.2, 1.3);
         phd.getHolograms().addHologram(hologram);
         testSetManageCommonIllegals(hologram, holoName, PeriodicType.ALWAYS, true);
     }
@@ -122,9 +126,9 @@ public class CommandSetTests extends BaseCommandTests {
 
         String holoName = "NtimeSName";
         PeriodicType type = PeriodicType.NTIMES;
-        NTimesHologram hologram = new NTimesHologram(phd, new MockNamedHologram(holoName, ltm), holoName, 3.0, 10, 5,
-                true,
-                null, 1.2, 1.3);
+        NTimesHologram hologram = new NTimesHologram(phd,
+                new HolographicDisplaysWrapper(new MockNamedHologram(holoName, ltm)), holoName, 3.0, 10, 5, true, null,
+                1.2, 1.3);
         phd.getHolograms().addHologram(hologram);
         testSetForHologramType(hologram, holoName, type);
 
@@ -143,9 +147,9 @@ public class CommandSetTests extends BaseCommandTests {
     @Test
     public void testSetIRLTimeIllegal() {
         String holoName = "iRl";
-        IRLTimeHologram hologram = new IRLTimeHologram(phd, new MockNamedHologram(holoName, ltm), holoName, 3.0, 10,
-                1250,
-                true, null, 1.2, 1.3);
+        IRLTimeHologram hologram = new IRLTimeHologram(phd,
+                new HolographicDisplaysWrapper(new MockNamedHologram(holoName, ltm)), holoName, 3.0, 10, 1250, true,
+                null, 1.2, 1.3);
         phd.getHolograms().addHologram(hologram);
         testSetManageCommonIllegals(hologram, holoName, PeriodicType.ALWAYS, true);
     }
@@ -155,9 +159,9 @@ public class CommandSetTests extends BaseCommandTests {
 
         String holoName = "inRealLife";
         PeriodicType type = PeriodicType.IRLTIME;
-        IRLTimeHologram hologram = new IRLTimeHologram(phd, new MockNamedHologram(holoName, ltm), holoName, 3.0, 4,
-                2400,
-                true, null, 1.2, 1.3);
+        IRLTimeHologram hologram = new IRLTimeHologram(phd,
+                new HolographicDisplaysWrapper(new MockNamedHologram(holoName, ltm)), holoName, 3.0, 4, 2400, true,
+                null, 1.2, 1.3);
         phd.getHolograms().addHologram(hologram);
         testSetForHologramType(hologram, holoName, type);
 
@@ -175,9 +179,9 @@ public class CommandSetTests extends BaseCommandTests {
     @Test
     public void testSetMCTimeIllegal() {
         String holoName = "m2theC";
-        MCTimeHologram hologram = new MCTimeHologram(phd, new MockNamedHologram(holoName, ltm), holoName, 3.0, 10,
-                22000,
-                true, null, 1.2, 1.3);
+        MCTimeHologram hologram = new MCTimeHologram(phd,
+                new HolographicDisplaysWrapper(new MockNamedHologram(holoName, ltm)), holoName, 3.0, 10, 22000, true,
+                null, 1.2, 1.3);
         phd.getHolograms().addHologram(hologram);
         testSetManageCommonIllegals(hologram, holoName, PeriodicType.ALWAYS, true);
     }
@@ -187,8 +191,8 @@ public class CommandSetTests extends BaseCommandTests {
 
         String holoName = "mc4life";
         PeriodicType type = PeriodicType.MCTIME;
-        MCTimeHologram hologram = new MCTimeHologram(phd, new MockNamedHologram(holoName, ltm), holoName, 3.0, 4, 2700,
-                true,
+        MCTimeHologram hologram = new MCTimeHologram(phd,
+                new HolographicDisplaysWrapper(new MockNamedHologram(holoName, ltm)), holoName, 3.0, 4, 2700, true,
                 null, 1.2, 1.3);
         phd.getHolograms().addHologram(hologram);
         testSetForHologramType(hologram, holoName, type);

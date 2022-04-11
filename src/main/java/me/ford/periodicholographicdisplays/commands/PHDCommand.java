@@ -27,16 +27,16 @@ public class PHDCommand extends BukkitFacingParentCommand {
     public PHDCommand(IPeriodicHolographicDisplays plugin, PluginManager pm) {
         super();
         this.plugin = plugin;
-        addSubCommand(new ListSub(plugin.getHDHoloManager(), plugin.getHolograms(), this.plugin.getMessages()));
-        addSubCommand(new InfoSub(plugin.getHDHoloManager(), plugin.getHolograms(), this.plugin.getMessages()));
+        addSubCommand(new ListSub(plugin.getHologramProvider(), plugin.getHolograms(), this.plugin.getMessages()));
+        addSubCommand(new InfoSub(plugin.getHologramProvider(), plugin.getHolograms(), this.plugin.getMessages()));
         addSubCommand(new ManageSub(plugin));
-        addSubCommand(new ReportSub(plugin.getHDHoloManager(), plugin.getHolograms(), plugin.getMessages(),
+        addSubCommand(new ReportSub(plugin.getHologramProvider(), plugin.getHolograms(), plugin.getMessages(),
                 plugin.getUserCache()));
-        addSubCommand(new SetSub(plugin.getHDHoloManager(), plugin.getHolograms(), plugin.getLuckPermsHook(),
+        addSubCommand(new SetSub(plugin.getHologramProvider(), plugin.getHolograms(), plugin.getLuckPermsHook(),
                 plugin.getSettings(), this.plugin.getMessages()));
-        addSubCommand(new UnsetSub(plugin.getHDHoloManager(), plugin.getHolograms(), plugin.getSettings(),
+        addSubCommand(new UnsetSub(plugin.getHologramProvider(), plugin.getHolograms(), plugin.getSettings(),
                 this.plugin.getMessages(), plugin.getUserCache()));
-        addSubCommand(new UnmanageSub(plugin.getHDHoloManager(), plugin.getHolograms(), this.plugin.getMessages()));
+        addSubCommand(new UnmanageSub(plugin.getHologramProvider(), plugin.getHolograms(), this.plugin.getMessages()));
         addSubCommand(new ReloadSub(plugin));
         convertSub = new ConvertSub(plugin, pm);
         addSubCommand(convertSub);

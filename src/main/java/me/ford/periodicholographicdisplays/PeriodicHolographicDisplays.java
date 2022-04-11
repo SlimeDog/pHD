@@ -14,13 +14,14 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.filoghost.holographicdisplays.plugin.HolographicDisplays;
-import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
 import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramManager;
 import me.ford.periodicholographicdisplays.Settings.SettingIssue;
 import me.ford.periodicholographicdisplays.Settings.StorageTypeException;
 import me.ford.periodicholographicdisplays.commands.PHDCommand;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.Zombificator;
+import me.ford.periodicholographicdisplays.holograms.wrap.provider.HologramProvider;
+import me.ford.periodicholographicdisplays.holograms.wrap.provider.HolographicDisplaysHologramProvider;
 import me.ford.periodicholographicdisplays.hooks.DummyNPCHook;
 import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
 import me.ford.periodicholographicdisplays.hooks.NPCHook;
@@ -41,6 +42,7 @@ import me.ford.periodicholographicdisplays.users.UserCache;
 public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisplays {
     private HolographicDisplays hdPlugin;
     private InternalHologramManager holoManager;
+    private HologramProvider hologramProvider;
     private HologramStorage holograms;
     private Settings settings;
     private Messages messages;
@@ -83,6 +85,7 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
 
         // setup HD hook
         holoManager = getHoloManager(hdPlugin);
+        hologramProvider = new HolographicDisplaysHologramProvider(holoManager);
 
         try {
             holograms = new HologramStorage(this, getServer().getPluginManager());
@@ -375,11 +378,6 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
 
     }
 
-    @Override
-    public InternalHologram getHDHologram(String name) {
-        return holoManager.getHologramByName(name);
-    }
-
     private static InternalHologramManager getHoloManager(HolographicDisplays hdPlugin) {
         InternalHologramManager man;
         try {
@@ -393,8 +391,8 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
     }
 
     @Override
-    public InternalHologramManager getHDHoloManager() {
-        return holoManager;
+    public HologramProvider getHologramProvider() {
+        return hologramProvider;
     }
 
 }

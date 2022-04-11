@@ -14,7 +14,6 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 
-import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.holograms.WorldHologramStorageBase.HologramSaveReason;
 import me.ford.periodicholographicdisplays.holograms.storage.HologramInfo;
@@ -23,6 +22,8 @@ import me.ford.periodicholographicdisplays.holograms.storage.Storage;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.YAMLStorage;
 import me.ford.periodicholographicdisplays.holograms.storage.Storage.HDHologramInfo;
+import me.ford.periodicholographicdisplays.holograms.wrap.WrappedHologram;
+import me.ford.periodicholographicdisplays.holograms.wrap.provider.HologramProvider;
 import me.ford.periodicholographicdisplays.hooks.NPCHook;
 
 /**
@@ -31,6 +32,7 @@ import me.ford.periodicholographicdisplays.hooks.NPCHook;
 public class HologramStorage {
     private Storage storage;
     private final IPeriodicHolographicDisplays plugin;
+    private final HologramProvider provider;
     private final PluginManager pm;
     private final NPCHook hook;
     private final Map<World, WorldHologramStorage> holograms = new HashMap<>();
@@ -43,6 +45,7 @@ public class HologramStorage {
             this.storage = new YAMLStorage(plugin, pm);
         }
         this.plugin = plugin;
+        this.provider = plugin.getHologramProvider();
         this.pm = pm;
         hook = plugin.getNPCHook();
         initWorldStorage();
@@ -79,8 +82,7 @@ public class HologramStorage {
 
     private void loaded(HDHologramInfo info, boolean imported) {
         danglingInfos.add(info); // removed if not left danlging
-        InternalHologram holo;
-        holo = plugin.getHDHoloManager().getHologramByName(info.getHoloName());
+        WrappedHologram holo = provider.getByName(info.getHoloName());
         WorldHologramStorage whs = holograms.get(holo.getWorldIfLoaded());
         if (whs == null) {
             plugin.getLogger().info("Loaded hologram before world was initialized: " + holo.getName()
@@ -313,7 +315,7 @@ public class HologramStorage {
         }
         for (IndividualHologramHandler handler : toZombie) {
             handler.setAllNeedingSaved();
-            WorldHologramStorage storage = getHolograms(handler.getHologram().getPosition().toLocation().getWorld());
+            WorldHologramStorage storage = getHolograms(handler.getHologram().getBukkitLocation().getWorld());
             danglingInfos.add(storage.getInfo(handler));
             for (FlashingHologram hologram : handler.getHolograms()) {
                 removeHologram(hologram);

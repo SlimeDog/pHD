@@ -6,8 +6,6 @@ import java.util.Set;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
-import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramManager;
-
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 import me.ford.periodicholographicdisplays.commands.PHDSubCommand;
 import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
@@ -15,6 +13,7 @@ import me.ford.periodicholographicdisplays.holograms.IRLTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.MCTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
+import me.ford.periodicholographicdisplays.holograms.wrap.provider.HologramProvider;
 import me.ford.periodicholographicdisplays.util.TimeUtils;
 
 /**
@@ -22,8 +21,8 @@ import me.ford.periodicholographicdisplays.util.TimeUtils;
  */
 public abstract class OptionPairSetSub extends PHDSubCommand {
 
-    protected OptionPairSetSub(InternalHologramManager man, String name, String perms, String usage) {
-        super(man, name, perms, usage);
+    protected OptionPairSetSub(HologramProvider provider, String name, String perms, String usage) {
+        super(provider, name, perms, usage);
     }
 
     protected Map<String, String> getOptionPairs(String[] args) {

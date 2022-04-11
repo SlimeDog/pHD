@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramManager;
-
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.util.StringUtil;
@@ -21,6 +19,7 @@ import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.holograms.WorldHologramStorageBase.HologramSaveReason;
+import me.ford.periodicholographicdisplays.holograms.wrap.provider.HologramProvider;
 import me.ford.periodicholographicdisplays.users.UserCache;
 
 /**
@@ -35,9 +34,9 @@ public class UnsetSub extends PHDSubCommand {
     private final UserCache userCache;
     private final List<String> optionList = Arrays.asList("seconds", "distance", "permission", "playercount", "flash");
 
-    public UnsetSub(InternalHologramManager man, HologramStorage storage, Settings settings, Messages messages,
+    public UnsetSub(HologramProvider provider, HologramStorage storage, Settings settings, Messages messages,
             UserCache userCache) {
-        super(man, "unset", PERMS, USAGE);
+        super(provider, "unset", PERMS, USAGE);
         this.storage = storage;
         this.settings = settings;
         this.messages = messages;

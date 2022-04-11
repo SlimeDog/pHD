@@ -6,8 +6,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramManager;
-
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
@@ -17,6 +15,7 @@ import me.ford.periodicholographicdisplays.commands.PHDSubCommand;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.holograms.storage.Storage.HDHologramInfo;
+import me.ford.periodicholographicdisplays.holograms.wrap.provider.HologramProvider;
 import me.ford.periodicholographicdisplays.util.HintUtil;
 import me.ford.periodicholographicdisplays.util.PageUtils;
 
@@ -30,8 +29,8 @@ public class ListSub extends PHDSubCommand {
     private final HologramStorage storage;
     private final Messages messages;
 
-    public ListSub(InternalHologramManager man, HologramStorage storage, Messages messages) {
-        super(man, "list", PERMS, USAGE);
+    public ListSub(HologramProvider provider, HologramStorage storage, Messages messages) {
+        super(provider, "list", PERMS, USAGE);
         this.storage = storage;
         this.messages = messages;
     }

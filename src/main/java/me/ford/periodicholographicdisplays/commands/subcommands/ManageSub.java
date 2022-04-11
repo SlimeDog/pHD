@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
 
@@ -23,6 +21,7 @@ import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicHologramBase;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.holograms.WorldHologramStorage;
+import me.ford.periodicholographicdisplays.holograms.wrap.WrappedHologram;
 import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
 import me.ford.periodicholographicdisplays.util.TimeUtils;
 
@@ -68,7 +67,7 @@ public class ManageSub extends OptionPairSetSub {
             "flashOn", "flashOff");
 
     public ManageSub(IPeriodicHolographicDisplays phd) {
-        super(phd.getHDHoloManager(), "manage", PERMS, USAGE);
+        super(phd.getHologramProvider(), "manage", PERMS, USAGE);
         this.phd = phd;
         this.storage = phd.getHolograms();
         this.hook = phd.getLuckPermsHook();
@@ -137,7 +136,7 @@ public class ManageSub extends OptionPairSetSub {
         if (args.length < 1) {
             return false;
         }
-        InternalHologram holo = man.getHologramByName(args[0]);
+        WrappedHologram holo = provider.getByName(args[0]);
         if (holo == null) {
             sender.sendRawMessage(messages.getHDHologramNotFoundMessage(args[0]));
             return true;
@@ -167,7 +166,7 @@ public class ManageSub extends OptionPairSetSub {
                 return true;
             }
         }
-        WorldHologramStorage worldStorage = storage.getHolograms(holo.getPosition().toLocation().getWorld());
+        WorldHologramStorage worldStorage = storage.getHolograms(holo.getBukkitLocation().getWorld());
         FlashingHologram existing = worldStorage.getHologram(holo.getName(), type);
         if (existing != null) { // already managed
             sender.sendRawMessage(messages.getHologramAlreadyManagedMessage(holo.getName(), type));
@@ -224,7 +223,7 @@ public class ManageSub extends OptionPairSetSub {
 
     // TODO - SRP - this should throw exceptions that are caught and the appropriate
     // message sent in onCommand
-    private FlashingHologram adoptHologram(SDCRecipient sender, InternalHologram holo, PeriodicType type,
+    private FlashingHologram adoptHologram(SDCRecipient sender, WrappedHologram holo, PeriodicType type,
             Map<String, String> optionPairs) {
         FlashingHologram existing;
         double defaultDistance = PeriodicHologramBase.NO_DISTANCE;

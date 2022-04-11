@@ -3,9 +3,6 @@ package me.ford.periodicholographicdisplays.commands.subcommands;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
-import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramManager;
-
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
@@ -16,6 +13,8 @@ import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
+import me.ford.periodicholographicdisplays.holograms.wrap.WrappedHologram;
+import me.ford.periodicholographicdisplays.holograms.wrap.provider.HologramProvider;
 import me.ford.periodicholographicdisplays.util.HintUtil;
 import me.ford.periodicholographicdisplays.util.PageUtils;
 
@@ -28,8 +27,8 @@ public class InfoSub extends PHDSubCommand {
     private final HologramStorage storage;
     private final Messages messages;
 
-    public InfoSub(InternalHologramManager man, HologramStorage storage, Messages messages) {
-        super(man, "info", PERMS, USAGE);
+    public InfoSub(HologramProvider provider, HologramStorage storage, Messages messages) {
+        super(provider, "info", PERMS, USAGE);
         this.storage = storage;
         this.messages = messages;
     }
@@ -83,7 +82,7 @@ public class InfoSub extends PHDSubCommand {
                 return true;
             }
         }
-        InternalHologram holo = man.getHologramByName(args[0]);
+        WrappedHologram holo = provider.getByName(args[0]);
         if (holo == null) {
             sender.sendRawMessage(messages.getHDHologramNotFoundMessage(args[0]));
             return true;

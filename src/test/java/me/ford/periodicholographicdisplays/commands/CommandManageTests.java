@@ -8,10 +8,12 @@ import me.ford.periodicholographicdisplays.holograms.IRLTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.MCTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
+import me.ford.periodicholographicdisplays.holograms.wrap.HolographicDisplaysWrapper;
 import me.ford.periodicholographicdisplays.mock.MockNamedHologram;
 
 public class CommandManageTests extends BaseCommandTests {
-    // USAGE = "/phd manage <hologram> <type> times <integer> time <hh:mm> [<options...>]";
+    // USAGE = "/phd manage <hologram> <type> times <integer> time <hh:mm>
+    // [<options...>]";
 
     @Test
     public void testManageIllegal() {
@@ -44,7 +46,8 @@ public class CommandManageTests extends BaseCommandTests {
                 expectedMessage);
 
         // phd manage existing <type> <option> <value> # hologram already managed
-        NTimesHologram hologram = new NTimesHologram(phd, phd.getHDHologram(name), name, 2, 4, 5, true, null, -1, -1);
+        NTimesHologram hologram = new NTimesHologram(phd, phd.getHologramProvider().getByName(name), name, 2, 4, 5,
+                true, null, -1, -1);
         phd.getHolograms().addHologram(hologram);
         expectedMessage = phd.getMessages().getHologramAlreadyManagedMessage(name, type);
         testCommand(sender, null, "phd", new String[] { "manage", name, type.name(), "opt", "val" }, expectedMessage);
@@ -55,7 +58,8 @@ public class CommandManageTests extends BaseCommandTests {
         String name = "hdHol0gram";
         MockNamedHologram mnh = new MockNamedHologram(name, ltm);
         phd.putHDHologram(name, mnh);
-        NTimesHologram hologram = new NTimesHologram(phd, mnh, name, 2.2, 6, 4, true, "super.perms", 4, 2);
+        NTimesHologram hologram = new NTimesHologram(phd, new HolographicDisplaysWrapper(mnh), name, 2.2, 6, 4, true,
+                "super.perms", 4, 2);
         phd.getHolograms().addHologram(hologram);
         this.testSetManageCommonIllegals(hologram, name, PeriodicType.NTIMES, false);
     }
@@ -65,7 +69,8 @@ public class CommandManageTests extends BaseCommandTests {
         String name = "ALW4YS";
         MockNamedHologram mnh = new MockNamedHologram(name, ltm);
         phd.putHDHologram(name, mnh);
-        AlwaysHologram hologram = new AlwaysHologram(phd, mnh, name, 2.2, 6, true, null, 4, 2);
+        AlwaysHologram hologram = new AlwaysHologram(phd, new HolographicDisplaysWrapper(mnh), name, 2.2, 6, true, null,
+                4, 2);
         phd.getHolograms().addHologram(hologram);
         this.testSetManageCommonIllegals(hologram, name, PeriodicType.ALWAYS, false);
     }
@@ -75,7 +80,8 @@ public class CommandManageTests extends BaseCommandTests {
         String name = "4realTime";
         MockNamedHologram mnh = new MockNamedHologram(name, ltm);
         phd.putHDHologram(name, mnh);
-        IRLTimeHologram hologram = new IRLTimeHologram(phd, mnh, name, 5.1, 3, 26440, true, null, -1, -1);
+        IRLTimeHologram hologram = new IRLTimeHologram(phd, new HolographicDisplaysWrapper(mnh), name, 5.1, 3, 26440,
+                true, null, -1, -1);
         phd.getHolograms().addHologram(hologram);
         this.testSetManageCommonIllegals(hologram, name, PeriodicType.IRLTIME, false);
     }
@@ -85,7 +91,8 @@ public class CommandManageTests extends BaseCommandTests {
         String name = "mcTimeWeHave";
         MockNamedHologram mnh = new MockNamedHologram(name, ltm);
         phd.putHDHologram(name, mnh);
-        MCTimeHologram hologram = new MCTimeHologram(phd, mnh, name, 5.1, 3, 15000, true, null, -1, -1);
+        MCTimeHologram hologram = new MCTimeHologram(phd, new HolographicDisplaysWrapper(mnh), name, 5.1, 3, 15000,
+                true, null, -1, -1);
         phd.getHolograms().addHologram(hologram);
         this.testSetManageCommonIllegals(hologram, name, PeriodicType.MCTIME, false);
     }

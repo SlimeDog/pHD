@@ -17,6 +17,7 @@ import me.ford.periodicholographicdisplays.holograms.AlwaysHologram;
 import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
+import me.ford.periodicholographicdisplays.holograms.wrap.HolographicDisplaysWrapper;
 import me.ford.periodicholographicdisplays.mock.MockLineTrackerManager;
 import me.ford.periodicholographicdisplays.mock.MockNamedHologram;
 import me.ford.periodicholographicdisplays.mock.MockPeriodicHolographicDisplays;
@@ -190,8 +191,8 @@ public class MessagesTests extends TestHelpers {
     public void hologramInfo_fills_placeholders_no_pages_no_perms() {
         String name = getRandomName("name");
         MockNamedHologram holo = new MockNamedHologram(name, ltm);
-        AlwaysHologram hologram = new AlwaysHologram(phd, holo, name, 5.55, 4, false, null, FlashingHologram.NO_FLASH,
-                FlashingHologram.NO_FLASH);
+        AlwaysHologram hologram = new AlwaysHologram(phd, new HolographicDisplaysWrapper(holo), name, 5.55, 4, false,
+                null, FlashingHologram.NO_FLASH, FlashingHologram.NO_FLASH);
         String msg = messages.getHologramInfoMessage(hologram, 1, false);
         assertContains(msg, name, hologram.getActivationDistance(), hologram.getShowTime(),
                 holo.getPosition().toLocation());
@@ -203,8 +204,8 @@ public class MessagesTests extends TestHelpers {
         String name = getRandomName("name");
         String perms = getRandomName();
         MockNamedHologram holo = new MockNamedHologram(name, ltm);
-        AlwaysHologram hologram = new AlwaysHologram(phd, holo, name, 5.55, 4, false, perms, FlashingHologram.NO_FLASH,
-                FlashingHologram.NO_FLASH);
+        AlwaysHologram hologram = new AlwaysHologram(phd, new HolographicDisplaysWrapper(holo), name, 5.55, 4, false,
+                perms, FlashingHologram.NO_FLASH, FlashingHologram.NO_FLASH);
         String msg = messages.getHologramInfoMessage(hologram, 1, false);
         assertContains(msg, name, perms, hologram.getActivationDistance(), hologram.getShowTime(),
                 holo.getPosition().toLocation());
@@ -215,8 +216,8 @@ public class MessagesTests extends TestHelpers {
     public void hologramInfo_fills_placeholders_with_pages_no_perms() {
         String name = getRandomName("name");
         MockNamedHologram holo = new MockNamedHologram(name, ltm);
-        AlwaysHologram hologram = new AlwaysHologram(phd, holo, name, 5.55, 4, false, null, FlashingHologram.NO_FLASH,
-                FlashingHologram.NO_FLASH);
+        AlwaysHologram hologram = new AlwaysHologram(phd, new HolographicDisplaysWrapper(holo), name, 5.55, 4, false,
+                null, FlashingHologram.NO_FLASH, FlashingHologram.NO_FLASH);
         String msg = messages.getHologramInfoMessage(hologram, 1, false);
         assertContains(msg, name, hologram.getActivationDistance(), hologram.getShowTime(),
                 holo.getPosition().toLocation());
@@ -228,8 +229,8 @@ public class MessagesTests extends TestHelpers {
         String name = getRandomName("name");
         String perms = getRandomName();
         MockNamedHologram holo = new MockNamedHologram(name, ltm);
-        AlwaysHologram hologram = new AlwaysHologram(phd, holo, name, 5.55, 4, false, perms, FlashingHologram.NO_FLASH,
-                FlashingHologram.NO_FLASH);
+        AlwaysHologram hologram = new AlwaysHologram(phd, new HolographicDisplaysWrapper(holo), name, 5.55, 4, false,
+                perms, FlashingHologram.NO_FLASH, FlashingHologram.NO_FLASH);
         String msg = messages.getHologramInfoMessage(hologram, 1, false);
         assertContains(msg, name, perms, hologram.getActivationDistance(), hologram.getShowTime(),
                 holo.getPosition().toLocation());
@@ -243,7 +244,8 @@ public class MessagesTests extends TestHelpers {
         MockNamedHologram holo = new MockNamedHologram(name, ltm);
         double flashOn = 2.1;
         double flashOff = 2.2;
-        AlwaysHologram hologram = new AlwaysHologram(phd, holo, name, 5.55, 4, false, perms, flashOn, flashOff);
+        AlwaysHologram hologram = new AlwaysHologram(phd, new HolographicDisplaysWrapper(holo), name, 5.55, 4, false,
+                perms, flashOn, flashOff);
         String msg = messages.getHologramInfoMessage(hologram, 1, false);
         assertContains(msg, name, perms, hologram.getActivationDistance(), hologram.getShowTime(),
                 holo.getPosition().toLocation(),
@@ -366,7 +368,8 @@ public class MessagesTests extends TestHelpers {
     public void ntimesTypeInfo_no_placeholders_1() {
         String name = getRandomName("name");
         MockNamedHologram holo = new MockNamedHologram(name, ltm);
-        NTimesHologram hologram = new NTimesHologram(phd, holo, name, 7.6, 9, 3, false, "s.perms", 4.4, 3.3);
+        NTimesHologram hologram = new NTimesHologram(phd, new HolographicDisplaysWrapper(holo), name, 7.6, 9, 3, false,
+                "s.perms", 4.4, 3.3);
         String msg = messages.getNTimesTypeInfo(hologram, false, 1, false);
         assertNoPlaceholder(msg);
     }
@@ -375,7 +378,8 @@ public class MessagesTests extends TestHelpers {
     public void ntimesTypeInfo_no_placeholders_2() {
         String name = getRandomName("name");
         MockNamedHologram holo = new MockNamedHologram(name, ltm);
-        NTimesHologram hologram = new NTimesHologram(phd, holo, name, 6.7, 8, 3, false, "s.perms",
+        NTimesHologram hologram = new NTimesHologram(phd, new HolographicDisplaysWrapper(holo), name, 6.7, 8, 3, false,
+                "s.perms",
                 FlashingHologram.NO_FLASH, FlashingHologram.NO_FLASH);
         String msg = messages.getNTimesTypeInfo(hologram, false, 1, false);
         assertNoPlaceholder(msg);
@@ -385,7 +389,8 @@ public class MessagesTests extends TestHelpers {
     public void ntimesTypeInfo_no_placeholders_3() {
         String name = getRandomName("name");
         MockNamedHologram holo = new MockNamedHologram(name, ltm);
-        NTimesHologram hologram = new NTimesHologram(phd, holo, name, 1.2, 5, 3, false, "s.perms", 4.4, 3.3);
+        NTimesHologram hologram = new NTimesHologram(phd, new HolographicDisplaysWrapper(holo), name, 1.2, 5, 3, false,
+                "s.perms", 4.4, 3.3);
         String msg = messages.getNTimesTypeInfo(hologram, false, 1, false);
         assertNoPlaceholder(msg);
     }
@@ -394,7 +399,8 @@ public class MessagesTests extends TestHelpers {
     public void ntimesTypeInfo_fills_placeholders_with_info() {
         String name = getRandomName("name");
         MockNamedHologram holo = new MockNamedHologram(name, ltm);
-        NTimesHologram hologram = new NTimesHologram(phd, holo, name, 0.1, 2, 5, false, null, 4.4, 3.3);
+        NTimesHologram hologram = new NTimesHologram(phd, new HolographicDisplaysWrapper(holo), name, 0.1, 2, 5, false,
+                null, 4.4, 3.3);
         UUID id = UUID.randomUUID(); // UNKOWNPLAYER
         int times = 4;
         hologram.addShownTo(id, times);
@@ -408,7 +414,8 @@ public class MessagesTests extends TestHelpers {
     public void ntimesTypeInfo_fills_placeholders_with_multiple_info() {
         String name = getRandomName("name");
         MockNamedHologram holo = new MockNamedHologram(name, ltm);
-        NTimesHologram hologram = new NTimesHologram(phd, holo, name, 0.1, 2, 5, false, null, 4.4, 3.3);
+        NTimesHologram hologram = new NTimesHologram(phd, new HolographicDisplaysWrapper(holo), name, 0.1, 2, 5, false,
+                null, 4.4, 3.3);
         UUID id1 = UUID.randomUUID(); // UNKOWNPLAYER
         int times1 = 4;
         UUID id2 = UUID.randomUUID();

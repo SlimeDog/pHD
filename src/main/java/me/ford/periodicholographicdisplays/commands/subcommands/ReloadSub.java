@@ -22,7 +22,7 @@ public class ReloadSub extends PHDSubCommand {
     private final Messages messages;
 
     public ReloadSub(IPeriodicHolographicDisplays phd) {
-        super(phd.getHDHoloManager(), "reload", PERMS, USAGE);
+        super(phd.getHologramProvider(), "reload", PERMS, USAGE);
         this.phd = phd;
         this.messages = phd.getMessages();
     }
