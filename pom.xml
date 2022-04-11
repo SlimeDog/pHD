@@ -4,7 +4,7 @@
   <artifactId>periodicholographicdisplays</artifactId>
   <version>1.2.2</version>
   <name>pHD</name>
-  <description>An intelligent manager for HolographicDisplays</description>
+  <description>Manage holograms with intelligence</description>
   <properties>
     <maven.compiler.source>1.17</maven.compiler.source>
     <maven.compiler.target>1.17</maven.compiler.target>
