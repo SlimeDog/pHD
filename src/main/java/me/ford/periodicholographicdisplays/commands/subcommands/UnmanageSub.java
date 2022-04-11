@@ -5,11 +5,11 @@ import java.util.List;
 
 import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramManager;
 
-import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
 
+import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 import me.ford.periodicholographicdisplays.Messages;
-import me.ford.periodicholographicdisplays.commands.SubCommand;
+import me.ford.periodicholographicdisplays.commands.PHDSubCommand;
 import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
@@ -19,20 +19,20 @@ import me.ford.periodicholographicdisplays.holograms.storage.Storage.HDHologramI
 /**
  * UnmanageSub
  */
-public class UnmanageSub extends SubCommand {
+public class UnmanageSub extends PHDSubCommand {
     private static final String PERMS = "phd.unmanage";
     private static final String USAGE = "/phd unmanage <hologram> <type>";
     private final HologramStorage storage;
     private final Messages messages;
 
     public UnmanageSub(InternalHologramManager man, HologramStorage storage, Messages messages) {
-        super(man);
+        super(man, "unmanage", PERMS, USAGE);
         this.storage = storage;
         this.messages = messages;
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, String[] args) {
+    public List<String> onTabComplete(SDCRecipient sender, String[] args) {
         List<String> list = new ArrayList<>();
         switch (args.length) {
             case 1:
@@ -48,7 +48,7 @@ public class UnmanageSub extends SubCommand {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, String[] args) {
+    public boolean onCommand(SDCRecipient sender, String[] args, List<String> options) {
         if (args.length < 2) {
             return false;
         }
@@ -56,7 +56,7 @@ public class UnmanageSub extends SubCommand {
         try {
             type = PeriodicType.valueOf(args[1].toUpperCase());
         } catch (IllegalArgumentException e) {
-            sender.sendMessage(messages.getTypeNotRecognizedMessage(args[1]));
+            sender.sendRawMessage(messages.getTypeNotRecognizedMessage(args[1]));
             return true;
         }
         FlashingHologram holo = storage.getHologram(args[0], type);
@@ -74,28 +74,18 @@ public class UnmanageSub extends SubCommand {
                 }
             }
             if (zombie == null) {
-                sender.sendMessage(messages.getHologramNotFoundMessage(args[0], type));
+                sender.sendRawMessage(messages.getHologramNotFoundMessage(args[0], type));
                 return true;
             }
         }
         if (holo != null) {
             storage.removeHologram(holo);
-            sender.sendMessage(messages.getUnmanagedHologramMessage(holo.getName(), type));
+            sender.sendRawMessage(messages.getUnmanagedHologramMessage(holo.getName(), type));
         } else {
             storage.removeZombie(zombie);
-            sender.sendMessage(messages.getUnmanagedHologramMessage(zombie.getName(), type));
+            sender.sendRawMessage(messages.getUnmanagedHologramMessage(zombie.getName(), type));
         }
         return true;
-    }
-
-    @Override
-    public boolean hasPermission(CommandSender sender) {
-        return sender.hasPermission(PERMS);
-    }
-
-    @Override
-    public String getUsage(CommandSender sender, String[] args) {
-        return USAGE;
     }
 
 }

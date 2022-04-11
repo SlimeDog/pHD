@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.util.StringUtil;
 
+import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
-import me.ford.periodicholographicdisplays.commands.SubCommand;
+import me.ford.periodicholographicdisplays.commands.PHDSubCommand;
 import me.ford.periodicholographicdisplays.holograms.storage.SQLStorage;
 import me.ford.periodicholographicdisplays.holograms.storage.Storage;
 import me.ford.periodicholographicdisplays.holograms.storage.YAMLStorage;
@@ -22,7 +22,7 @@ import me.ford.periodicholographicdisplays.storage.sqlite.SQLStorageBase;
 /**
  * ImportSub
  */
-public class ConvertSub extends SubCommand {
+public class ConvertSub extends PHDSubCommand {
     private static final String SQLITE = "SQLITE";
     private static final String YAML = "YAML";
     private static final String PERMS = "phd.convert";
@@ -34,14 +34,14 @@ public class ConvertSub extends SubCommand {
     private final List<String> storageTypes = Arrays.asList(SQLITE, YAML);
 
     public ConvertSub(IPeriodicHolographicDisplays phd, PluginManager pm) {
-        super(phd.getHDHoloManager());
+        super(phd.getHDHoloManager(), "convert", PERMS, USAGE);
         this.phd = phd;
         this.pm = pm;
         this.messages = phd.getMessages();
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, String[] args) {
+    public List<String> onTabComplete(SDCRecipient sender, String[] args) {
         List<String> list = new ArrayList<>();
         if (args.length == 1) {
             return StringUtil.copyPartialMatches(args[0], storageTypes, list);
@@ -54,14 +54,14 @@ public class ConvertSub extends SubCommand {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, String[] args) {
+    public boolean onCommand(SDCRecipient sender, String[] args, List<String> options) {
         if (args.length < 2) {
             return false;
         }
         String from = args[0];
         String to = args[1];
         if (from.equalsIgnoreCase(to)) {
-            sender.sendMessage(messages.getCannotConvertSameMessage(from));
+            sender.sendRawMessage(messages.getCannotConvertSameMessage(from));
             return true;
         }
         ConvertTypes type;
@@ -70,7 +70,7 @@ public class ConvertSub extends SubCommand {
         } else if (from.equalsIgnoreCase(YAML) && to.equalsIgnoreCase(SQLITE)) {
             type = ConvertTypes.YAML_TO_SQLITE;
         } else {
-            sender.sendMessage(messages.getUnrecognizedStorageTypeMessage(from, to));
+            sender.sendRawMessage(messages.getUnrecognizedStorageTypeMessage(from, to));
             return true;
         }
 
@@ -78,7 +78,7 @@ public class ConvertSub extends SubCommand {
         File sourceFile = new File(phd.getDataFolder(),
                 type == ConvertTypes.SQLITE_TO_YAML ? SQLStorageBase.DATABSE_NAME : YAMLStorage.FILE_NAME);
         if (!sourceFile.exists()) {
-            sender.sendMessage(messages.getStorageTypeDoesNotExistMessage(from));
+            sender.sendRawMessage(messages.getStorageTypeDoesNotExistMessage(from));
             return true;
         }
 
@@ -89,7 +89,7 @@ public class ConvertSub extends SubCommand {
             try {
                 yamlStorage = new YAMLStorage(phd, pm);
             } catch (InvalidConfigurationException e) {
-                sender.sendMessage("Unable to create YAML storage");
+                sender.sendRawMessage("Unable to create YAML storage");
                 e.printStackTrace();
                 return true;
             }
@@ -112,14 +112,14 @@ public class ConvertSub extends SubCommand {
                 targetStorage = yamlStorage;
                 break;
             default:
-                sender.sendMessage(messages.getUnrecognizedStorageTypeMessage(from, to));
+                sender.sendRawMessage(messages.getUnrecognizedStorageTypeMessage(from, to));
                 return true;
         }
 
         // find out if there is a previous instance of target storage type
         boolean hasData = targetStorage.hasData();
         if (hasData) {
-            sender.sendMessage(messages.getAlreadyHasDataMessage(to, targetStorage instanceof SQLStorage));
+            sender.sendRawMessage(messages.getAlreadyHasDataMessage(to, targetStorage instanceof SQLStorage));
             return true;
         }
 
@@ -127,7 +127,7 @@ public class ConvertSub extends SubCommand {
         StorageConverter<Storage, Storage> converter;
         converter = new StorageConverter<Storage, Storage>(sourceStorage, targetStorage, whenDone);
         converter.startConvert();
-        sender.sendMessage(messages.getStartedConvertingMessage(from, to));
+        sender.sendRawMessage(messages.getStartedConvertingMessage(from, to));
         return true;
     }
 
@@ -150,21 +150,11 @@ public class ConvertSub extends SubCommand {
         return sqlStorage;
     }
 
-    @Override
-    public boolean hasPermission(CommandSender sender) {
-        return sender.hasPermission(PERMS);
-    }
-
-    @Override
-    public String getUsage(CommandSender sender, String[] args) {
-        return USAGE;
-    }
-
     private final class WhenDone implements Runnable {
-        private final CommandSender sender;
+        private final SDCRecipient sender;
         private final String from, to;
 
-        private WhenDone(CommandSender sender, String from, String to) {
+        private WhenDone(SDCRecipient sender, String from, String to) {
             this.sender = sender;
             this.from = from;
             this.to = to;
@@ -172,11 +162,10 @@ public class ConvertSub extends SubCommand {
 
         @Override
         public void run() {
-            phd.runTask(() -> sender.sendMessage(messages.getDoneConvertingMessage(from, to))); // so it gets sent after
-                                                                                                // the
-                                                                                                // start message (for
-                                                                                                // YAML
-                                                                                                // mostly)
+            phd.runTask(() -> sender.sendRawMessage(messages.getDoneConvertingMessage(from, to))); // so it gets sent
+                                                                                                   // after the start
+                                                                                                   // message (for YAML
+                                                                                                   // mostly)
             closeSqlite(from, to);
         }
 

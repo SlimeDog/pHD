@@ -8,12 +8,12 @@ import java.util.TreeMap;
 
 import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramManager;
 
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
+import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 import me.ford.periodicholographicdisplays.Messages;
-import me.ford.periodicholographicdisplays.commands.SubCommand;
+import me.ford.periodicholographicdisplays.commands.PHDSubCommand;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.holograms.storage.Storage.HDHologramInfo;
@@ -23,7 +23,7 @@ import me.ford.periodicholographicdisplays.util.PageUtils;
 /**
  * ListSub
  */
-public class ListSub extends SubCommand {
+public class ListSub extends PHDSubCommand {
     private static final String PERMS = "phd.list";
     private static final String USAGE = "/phd list [type] [page]" + "\n" +
             "/phd list --zombies";
@@ -31,13 +31,13 @@ public class ListSub extends SubCommand {
     private final Messages messages;
 
     public ListSub(InternalHologramManager man, HologramStorage storage, Messages messages) {
-        super(man);
+        super(man, "list", PERMS, USAGE);
         this.storage = storage;
         this.messages = messages;
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, String[] args) {
+    public List<String> onTabComplete(SDCRecipient sender, String[] args) {
         List<String> list = new ArrayList<>();
         ;
         if (args.length == 1) {
@@ -51,7 +51,7 @@ public class ListSub extends SubCommand {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, String[] args) {
+    public boolean onCommand(SDCRecipient sender, String[] args, List<String> opts) {
         String pageStr = null;
         String typeStr = null;
         boolean fuzzy = args.length == 1;
@@ -78,13 +78,13 @@ public class ListSub extends SubCommand {
                 gotPage = false;
             }
             if (fuzzy && holoType == null && !gotPage && !zombies) {
-                sender.sendMessage(messages.getNeedTypeOrPageMessage(typeStr));
+                sender.sendRawMessage(messages.getNeedTypeOrPageMessage(typeStr));
                 return true;
             } else if (!fuzzy && holoType == null) {
-                sender.sendMessage(messages.getTypeNotRecognizedMessage(typeStr));
+                sender.sendRawMessage(messages.getTypeNotRecognizedMessage(typeStr));
                 return true;
             } else if (!fuzzy && !gotPage) {
-                sender.sendMessage(messages.getNeedAnIntegerMessage(pageStr));
+                sender.sendRawMessage(messages.getNeedAnIntegerMessage(pageStr));
                 return true;
             }
         }
@@ -97,7 +97,7 @@ public class ListSub extends SubCommand {
         if (maxPage == 0)
             maxPage++;
         if (page <= 0 || page > maxPage) {
-            sender.sendMessage(messages.getInvalidPageMessage(maxPage));
+            sender.sendRawMessage(messages.getInvalidPageMessage(maxPage));
             return true;
         }
         names.sort(String.CASE_INSENSITIVE_ORDER);
@@ -111,7 +111,7 @@ public class ListSub extends SubCommand {
             typesStr.sort(String.CASE_INSENSITIVE_ORDER);
             hologramTypes.put(name, String.join(", ", typesStr));
         }
-        sender.sendMessage(messages.getHologramListMessage(hologramTypes, page, sender instanceof Player));
+        sender.sendRawMessage(messages.getHologramListMessage(hologramTypes, page, sender instanceof Player));
         String typeName = holoType == null ? "" : " " + holoType.name();
         if (page < maxPage && sender instanceof Player)
             HintUtil.sendHint(sender, messages.getNextPageHint("{command}"),
@@ -119,26 +119,16 @@ public class ListSub extends SubCommand {
         return true;
     }
 
-    private void showZombies(CommandSender sender, PeriodicType type, int page) {
+    private void showZombies(SDCRecipient sender, PeriodicType type, int page) {
         Set<HDHologramInfo> zombies = storage.getZombies();
         int maxPage = PageUtils.getNumberOfPages(zombies.size(), PageUtils.HOLOGRAMS_PER_PAGE);
         if (maxPage == 0)
             maxPage++;
         if (page <= 0 || page > maxPage) {
-            sender.sendMessage(messages.getInvalidPageMessage(maxPage));
+            sender.sendRawMessage(messages.getInvalidPageMessage(maxPage));
             return;
         }
-        sender.sendMessage(messages.getZombieListMessage(zombies, page, sender instanceof Player));
-    }
-
-    @Override
-    public boolean hasPermission(CommandSender sender) {
-        return sender.hasPermission(PERMS);
-    }
-
-    @Override
-    public String getUsage(CommandSender sender, String[] args) {
-        return USAGE;
+        sender.sendRawMessage(messages.getZombieListMessage(zombies, page, sender instanceof Player));
     }
 
 }

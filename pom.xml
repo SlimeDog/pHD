@@ -28,6 +28,10 @@
       <id>sqlite-repo</id>
       <url>https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc</url>
     </repository>
+    <repository>
+      <id>jitpack.io</id> <!-- For automated building of SlimeDogCore-->
+      <url>https://jitpack.io</url>
+    </repository>
   </repositories>
   
   <dependencies>
@@ -36,6 +40,12 @@
       <artifactId>spigot-api</artifactId>
       <version>1.18.1-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.SlimeDog</groupId>
+      <artifactId>SlimeDogCore</artifactId>
+      <version>0.1.6-SNAPSHOT</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
         <groupId>org.bstats</groupId>

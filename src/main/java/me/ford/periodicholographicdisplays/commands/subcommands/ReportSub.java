@@ -10,11 +10,11 @@ import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologra
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 import me.ford.periodicholographicdisplays.Messages;
-import me.ford.periodicholographicdisplays.commands.SubCommand;
+import me.ford.periodicholographicdisplays.commands.PHDSubCommand;
 import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
@@ -26,7 +26,7 @@ import me.ford.periodicholographicdisplays.util.PageUtils;
 /**
  * ReportSub
  */
-public class ReportSub extends SubCommand {
+public class ReportSub extends PHDSubCommand {
     private static final String PERMS = "phd.report";
     private static final String USAGE = "/phd report NTIMES <player> [page]";
     private final HologramStorage storage;
@@ -34,14 +34,14 @@ public class ReportSub extends SubCommand {
     private final UserCache userCache;
 
     public ReportSub(InternalHologramManager man, HologramStorage storage, Messages messages, UserCache userCache) {
-        super(man);
+        super(man, "report", PERMS, USAGE);
         this.storage = storage;
         this.messages = messages;
         this.userCache = userCache;
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, String[] args) {
+    public List<String> onTabComplete(SDCRecipient sender, String[] args) {
         List<String> list = new ArrayList<>();
         switch (args.length) {
             case 1:
@@ -57,7 +57,7 @@ public class ReportSub extends SubCommand {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, String[] args) {
+    public boolean onCommand(SDCRecipient sender, String[] args, List<String> options) {
         if (args.length < 2) {
             return false;
         }
@@ -76,7 +76,7 @@ public class ReportSub extends SubCommand {
                 player = Bukkit.getOfflinePlayer(id);
             }
             if (player == null || !player.hasPlayedBefore()) {
-                sender.sendMessage(messages.getPlayerNotFoundMessage(args[1]));
+                sender.sendRawMessage(messages.getPlayerNotFoundMessage(args[1]));
                 return true;
             }
         }
@@ -86,7 +86,7 @@ public class ReportSub extends SubCommand {
             try {
                 page = Integer.parseInt(args[2]);
             } catch (NumberFormatException e) {
-                sender.sendMessage(messages.getNeedAnIntegerMessage(args[2]));
+                sender.sendRawMessage(messages.getNeedAnIntegerMessage(args[2]));
                 return true;
             }
         }
@@ -111,26 +111,16 @@ public class ReportSub extends SubCommand {
         if (maxPage == 0)
             maxPage++;
         if (page < 1 || page > maxPage) {
-            sender.sendMessage(messages.getInvalidPageMessage(maxPage));
+            sender.sendRawMessage(messages.getInvalidPageMessage(maxPage));
             return true;
         }
 
-        sender.sendMessage(messages.getNtimesReportMessage(player, holograms, page, sender instanceof Player));
+        sender.sendRawMessage(messages.getNtimesReportMessage(player, holograms, page, sender instanceof Player));
         if (page < maxPage && sender instanceof Player) {
             HintUtil.sendHint(sender, messages.getNextPageHint("{command}"), "{command}",
                     String.format("/phd report NTIMES %s %d", player.getName(), page + 1));
         }
         return true;
-    }
-
-    @Override
-    public boolean hasPermission(CommandSender sender) {
-        return sender.hasPermission(PERMS);
-    }
-
-    @Override
-    public String getUsage(CommandSender sender, String[] args) {
-        return USAGE;
     }
 
 }

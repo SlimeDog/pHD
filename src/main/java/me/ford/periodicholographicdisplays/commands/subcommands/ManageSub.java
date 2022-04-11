@@ -11,6 +11,7 @@ import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologra
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
 
+import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.holograms.AlwaysHologram;
@@ -67,7 +68,7 @@ public class ManageSub extends OptionPairSetSub {
             "flashOn", "flashOff");
 
     public ManageSub(IPeriodicHolographicDisplays phd) {
-        super(phd.getHDHoloManager());
+        super(phd.getHDHoloManager(), "manage", PERMS, USAGE);
         this.phd = phd;
         this.storage = phd.getHolograms();
         this.hook = phd.getLuckPermsHook();
@@ -75,7 +76,7 @@ public class ManageSub extends OptionPairSetSub {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, String[] args) {
+    public List<String> onTabComplete(SDCRecipient sender, String[] args) {
         List<String> list = new ArrayList<>();
         switch (args.length) {
             case 1:
@@ -124,20 +125,21 @@ public class ManageSub extends OptionPairSetSub {
                 if (args[args.length - 2].equalsIgnoreCase("permission")) {
                     if (hook == null)
                         return list;
-                    return hook.tabCompletePermissions(sender, args[args.length - 1]);
+                    // TODO - fix
+                    return hook.tabCompletePermissions((CommandSender) sender, args[args.length - 1]);
                 }
         }
         return list;
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, String[] args) {
+    public boolean onCommand(SDCRecipient sender, String[] args, List<String> options) {
         if (args.length < 1) {
             return false;
         }
         InternalHologram holo = man.getHologramByName(args[0]);
         if (holo == null) {
-            sender.sendMessage(messages.getHDHologramNotFoundMessage(args[0]));
+            sender.sendRawMessage(messages.getHDHologramNotFoundMessage(args[0]));
             return true;
         }
         if (args.length < 2) {
@@ -147,7 +149,7 @@ public class ManageSub extends OptionPairSetSub {
         try {
             type = PeriodicType.valueOf(args[1].toUpperCase());
         } catch (IllegalArgumentException e) {
-            sender.sendMessage(messages.getTypeNotRecognizedMessage(args[1]));
+            sender.sendRawMessage(messages.getTypeNotRecognizedMessage(args[1]));
             return true;
         }
         boolean defaultedAlways = args.length == 2 && type == PeriodicType.ALWAYS;
@@ -161,14 +163,14 @@ public class ManageSub extends OptionPairSetSub {
             try {
                 optionPairs = getOptionPairs(Arrays.copyOfRange(args, 2, args.length));
             } catch (IllegalArgumentException e) {
-                sender.sendMessage(messages.getNeedPairedOptionsMessage());
+                sender.sendRawMessage(messages.getNeedPairedOptionsMessage());
                 return true;
             }
         }
         WorldHologramStorage worldStorage = storage.getHolograms(holo.getPosition().toLocation().getWorld());
         FlashingHologram existing = worldStorage.getHologram(holo.getName(), type);
         if (existing != null) { // already managed
-            sender.sendMessage(messages.getHologramAlreadyManagedMessage(holo.getName(), type));
+            sender.sendRawMessage(messages.getHologramAlreadyManagedMessage(holo.getName(), type));
             return true;
         }
         existing = adoptHologram(sender, holo, type, optionPairs);
@@ -181,34 +183,34 @@ public class ManageSub extends OptionPairSetSub {
             } catch (OptionPairException e) {
                 switch (e.getType()) {
                     case NEED_A_NUMBER:
-                        sender.sendMessage(messages.getNeedANumberMessage(e.getExtra()));
+                        sender.sendRawMessage(messages.getNeedANumberMessage(e.getExtra()));
                         break;
                     case NEED_AN_INTEGER:
-                        sender.sendMessage(messages.getNeedAnIntegerMessage(e.getExtra()));
+                        sender.sendRawMessage(messages.getNeedAnIntegerMessage(e.getExtra()));
                         break;
                     case INCORRECT_TIME:
-                        sender.sendMessage(messages.getIncorrectTimeMessage(e.getExtra()));
+                        sender.sendRawMessage(messages.getIncorrectTimeMessage(e.getExtra()));
                         break;
                     case NO_SUCH_OPTION:
-                        sender.sendMessage(messages.getNoSuchOptionMessage(type, e.getExtra()));
+                        sender.sendRawMessage(messages.getNoSuchOptionMessage(type, e.getExtra()));
                         break;
                     case DISTANCE_NEGATIVE:
-                        sender.sendMessage(messages.getDistanceTooSmallMessage(e.getExtra()));
+                        sender.sendRawMessage(messages.getDistanceTooSmallMessage(e.getExtra()));
                         break;
                     case SECONDS_NEGATIVE:
-                        sender.sendMessage(messages.getSecondsTooSmallMessage(e.getExtra()));
+                        sender.sendRawMessage(messages.getSecondsTooSmallMessage(e.getExtra()));
                         break;
                     case FLASH_ONLY_ONE:
-                        sender.sendMessage(messages.getFlashMustHaveBothMessage(e.getExtra()));
+                        sender.sendRawMessage(messages.getFlashMustHaveBothMessage(e.getExtra()));
                         break;
                     case FLASH_TOO_SMALL:
-                        sender.sendMessage(messages.getFlashTimeTooSmallMessage(e.getExtra()));
+                        sender.sendRawMessage(messages.getFlashTimeTooSmallMessage(e.getExtra()));
                         break;
                     case TIMES_TOO_SMALL:
-                        sender.sendMessage(messages.getNegativeTimesMessage(e.getExtra()));
+                        sender.sendRawMessage(messages.getNegativeTimesMessage(e.getExtra()));
                         break;
                     default:
-                        sender.sendMessage("Unusual problem: " + e);
+                        sender.sendRawMessage("Unusual problem: " + e);
                 }
                 if (worldStorage.getHologram(holo.getName(), type) == null)
                     existing.markRemoved(); // nothing managed before -> not adding
@@ -216,13 +218,13 @@ public class ManageSub extends OptionPairSetSub {
             }
         }
         storage.addHologram(existing);
-        sender.sendMessage(messages.getStartedManagingMessage(holo.getName(), type, optionPairs));
+        sender.sendRawMessage(messages.getStartedManagingMessage(holo.getName(), type, optionPairs));
         return true;
     }
 
     // TODO - SRP - this should throw exceptions that are caught and the appropriate
     // message sent in onCommand
-    private FlashingHologram adoptHologram(CommandSender sender, InternalHologram holo, PeriodicType type,
+    private FlashingHologram adoptHologram(SDCRecipient sender, InternalHologram holo, PeriodicType type,
             Map<String, String> optionPairs) {
         FlashingHologram existing;
         double defaultDistance = PeriodicHologramBase.NO_DISTANCE;
@@ -255,14 +257,14 @@ public class ManageSub extends OptionPairSetSub {
             case IRLTIME:
                 String tResult = optionPairs.get("time");
                 if (tResult == null) {
-                    sender.sendMessage(messages.getOptionMissingMessage(type, "time"));
+                    sender.sendRawMessage(messages.getOptionMissingMessage(type, "time"));
                     return null;
                 }
                 long time;
                 try {
                     time = TimeUtils.parseHoursAndMinutesToSeconds(tResult);
                 } catch (IllegalArgumentException e) {
-                    sender.sendMessage(messages.getIncorrectTimeMessage(tResult));
+                    sender.sendRawMessage(messages.getIncorrectTimeMessage(tResult));
                     return null;
                 }
                 existing = new IRLTimeHologram(phd, holo, holo.getName(), defaultDistance, showTime, time, true, perms,
@@ -271,14 +273,14 @@ public class ManageSub extends OptionPairSetSub {
             case MCTIME:
                 String timeResult = optionPairs.get("time");
                 if (timeResult == null) {
-                    sender.sendMessage(messages.getOptionMissingMessage(type, "time"));
+                    sender.sendRawMessage(messages.getOptionMissingMessage(type, "time"));
                     return null;
                 }
                 long timeAt;
                 try {
                     timeAt = TimeUtils.parseMCTime(timeResult);
                 } catch (IllegalArgumentException e) {
-                    sender.sendMessage(messages.getIncorrectTimeMessage(timeResult));
+                    sender.sendRawMessage(messages.getIncorrectTimeMessage(timeResult));
                     return null;
                 }
                 existing = new MCTimeHologram(phd, holo, holo.getName(), defaultDistance, showTime, timeAt, true, perms,
@@ -297,11 +299,11 @@ public class ManageSub extends OptionPairSetSub {
                     try {
                         timesToShow = Integer.parseInt(timesResult);
                     } catch (NumberFormatException e) {
-                        sender.sendMessage(messages.getNeedAnIntegerMessage(timesResult));
+                        sender.sendRawMessage(messages.getNeedAnIntegerMessage(timesResult));
                         return null;
                     }
                 } else {
-                    sender.sendMessage(messages.getOptionMissingMessage(type, "times"));
+                    sender.sendRawMessage(messages.getOptionMissingMessage(type, "times"));
                     return null;
                 }
                 existing = new NTimesHologram(phd, holo, holo.getName(), defaultDistance, showTime, timesToShow, true,
@@ -310,25 +312,6 @@ public class ManageSub extends OptionPairSetSub {
                 break;
         }
         return existing;
-    }
-
-    @Override
-    public boolean hasPermission(CommandSender sender) {
-        return sender.hasPermission(PERMS);
-    }
-
-    @Override
-    public String getUsage(CommandSender sender, String[] args) {
-        if (args.length > 2) {
-            PeriodicType type;
-            try {
-                type = PeriodicType.valueOf(args[2].toUpperCase());
-            } catch (IllegalArgumentException e) {
-                return USAGE;
-            }
-            return getUsage(type);
-        }
-        return USAGE;
     }
 
 }

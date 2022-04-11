@@ -8,9 +8,8 @@ import java.util.Map.Entry;
 
 import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramManager;
 
-import org.bukkit.command.CommandSender;
-
-import me.ford.periodicholographicdisplays.commands.SubCommand;
+import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
+import me.ford.periodicholographicdisplays.commands.PHDSubCommand;
 import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
 import me.ford.periodicholographicdisplays.holograms.IRLTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.MCTimeHologram;
@@ -21,10 +20,10 @@ import me.ford.periodicholographicdisplays.util.TimeUtils;
 /**
  * OptionPairSub
  */
-public abstract class OptionPairSetSub extends SubCommand {
+public abstract class OptionPairSetSub extends PHDSubCommand {
 
-    protected OptionPairSetSub(InternalHologramManager man) {
-        super(man);
+    protected OptionPairSetSub(InternalHologramManager man, String name, String perms, String usage) {
+        super(man, name, perms, usage);
     }
 
     protected Map<String, String> getOptionPairs(String[] args) {
@@ -51,7 +50,7 @@ public abstract class OptionPairSetSub extends SubCommand {
         return map;
     }
 
-    protected void setAll(CommandSender sender, FlashingHologram holo, Map<String, String> options, boolean doSpecial)
+    protected void setAll(SDCRecipient sender, FlashingHologram holo, Map<String, String> options, boolean doSpecial)
             throws OptionPairException {
         Set<String> invalidOptions = new HashSet<>();
         for (Entry<String, String> entry : options.entrySet()) {
