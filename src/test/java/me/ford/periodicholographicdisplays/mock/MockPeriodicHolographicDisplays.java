@@ -25,6 +25,8 @@ import me.ford.periodicholographicdisplays.Settings;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.storage.SQLStorage;
 import me.ford.periodicholographicdisplays.holograms.storage.Storage;
+import me.ford.periodicholographicdisplays.holograms.wrap.command.CommandWrapper;
+import me.ford.periodicholographicdisplays.holograms.wrap.platform.HologramPlatform;
 import me.ford.periodicholographicdisplays.holograms.wrap.provider.HologramProvider;
 import me.ford.periodicholographicdisplays.holograms.wrap.provider.HolographicDisplaysHologramProvider;
 import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
@@ -255,6 +257,23 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
     @Override
     public HologramProvider getHologramProvider() {
         return new HolographicDisplaysHologramProvider(ihm);
+    }
+
+    @Override
+    public HologramPlatform getHologramPlatform() {
+        return new HologramPlatform() {
+
+            @Override
+            public HologramProvider getHologramProvider() {
+                return MockPeriodicHolographicDisplays.this.getHologramProvider();
+            }
+
+            @Override
+            public CommandWrapper getHologramCommand() {
+                return null;
+            }
+
+        };
     }
 
 }

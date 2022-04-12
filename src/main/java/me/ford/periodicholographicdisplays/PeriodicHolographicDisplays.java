@@ -1,7 +1,6 @@
 package me.ford.periodicholographicdisplays;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,17 +10,15 @@ import java.util.Map.Entry;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import me.filoghost.holographicdisplays.plugin.HolographicDisplays;
-import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramManager;
 import me.ford.periodicholographicdisplays.Settings.SettingIssue;
 import me.ford.periodicholographicdisplays.Settings.StorageTypeException;
 import me.ford.periodicholographicdisplays.commands.PHDCommand;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.Zombificator;
+import me.ford.periodicholographicdisplays.holograms.wrap.platform.HologramPlatform;
+import me.ford.periodicholographicdisplays.holograms.wrap.platform.PlatformProvider;
 import me.ford.periodicholographicdisplays.holograms.wrap.provider.HologramProvider;
-import me.ford.periodicholographicdisplays.holograms.wrap.provider.HolographicDisplaysHologramProvider;
 import me.ford.periodicholographicdisplays.hooks.DummyNPCHook;
 import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
 import me.ford.periodicholographicdisplays.hooks.NPCHook;
@@ -40,9 +37,7 @@ import me.ford.periodicholographicdisplays.users.UserCache;
  * PeriodicHolographicDisplays
  */
 public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisplays {
-    private HolographicDisplays hdPlugin;
-    private InternalHologramManager holoManager;
-    private HologramProvider hologramProvider;
+    private HologramPlatform platform;
     private HologramStorage holograms;
     private Settings settings;
     private Messages messages;
@@ -78,14 +73,8 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
             return;
         }
 
-        // HD plugin
-        hdPlugin = JavaPlugin.getPlugin(HolographicDisplays.class);
-
-        // injectLineTrackerManager();
-
         // setup HD hook
-        holoManager = getHoloManager(hdPlugin);
-        hologramProvider = new HolographicDisplaysHologramProvider(holoManager);
+        platform = new PlatformProvider(this).getHologramProvider();
 
         try {
             holograms = new HologramStorage(this, getServer().getPluginManager());
@@ -378,21 +367,14 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
 
     }
 
-    private static InternalHologramManager getHoloManager(HolographicDisplays hdPlugin) {
-        InternalHologramManager man;
-        try {
-            Field field = hdPlugin.getClass().getDeclaredField("internalHologramManager");
-            field.setAccessible(true);
-            man = (InternalHologramManager) field.get(hdPlugin);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return man;
+    @Override
+    public HologramProvider getHologramProvider() {
+        return platform.getHologramProvider();
     }
 
     @Override
-    public HologramProvider getHologramProvider() {
-        return hologramProvider;
+    public HologramPlatform getHologramPlatform() {
+        return platform;
     }
 
 }

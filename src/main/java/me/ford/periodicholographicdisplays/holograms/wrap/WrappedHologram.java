@@ -17,4 +17,6 @@ public interface WrappedHologram {
 
     World getWorldIfLoaded();
 
+    void setVisibilityDistance(double dist);
+
 }

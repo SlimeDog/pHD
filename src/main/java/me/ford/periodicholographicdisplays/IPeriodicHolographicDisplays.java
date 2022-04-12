@@ -15,6 +15,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.ReloadIssue;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
+import me.ford.periodicholographicdisplays.holograms.wrap.platform.HologramPlatform;
 import me.ford.periodicholographicdisplays.holograms.wrap.provider.HologramProvider;
 import me.ford.periodicholographicdisplays.hooks.LuckPermsHook;
 import me.ford.periodicholographicdisplays.hooks.NPCHook;
@@ -26,6 +27,8 @@ import me.ford.periodicholographicdisplays.users.UserCache;
 public interface IPeriodicHolographicDisplays {
 
     public HologramProvider getHologramProvider();
+
+    public HologramPlatform getHologramPlatform();
 
     public File getDataFolder();
 

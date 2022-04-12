@@ -62,6 +62,12 @@
     </dependency>
     <!-- END LOCAL DEPENDENCY-->
     <dependency>
+      <groupId>com.github.decentsoftware-eu</groupId>
+      <artifactId>decentholograms</artifactId>
+      <version>2.3.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
         <groupId>net.luckperms</groupId>
         <artifactId>api</artifactId>
         <version>5.0</version>

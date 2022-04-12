@@ -41,4 +41,9 @@ public class HolographicDisplaysWrapper implements WrappedHologram {
         return delegate.getWorldIfLoaded();
     }
 
+    @Override
+    public void setVisibilityDistance(double dist) {
+        // ignore
+    }
+
 }

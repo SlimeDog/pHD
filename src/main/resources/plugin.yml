@@ -9,8 +9,7 @@ main: ${project.groupId}.${project.artifactId}.PeriodicHolographicDisplays
 description: ${project.description}
 website: ${website}
 authors: [drives_a_ford, SlimeDog]
-depend: [HolographicDisplays, ProtocolLib]
-softdepend: [Citizens, LuckPerms, Multiverse-Core, MultiWorld]
+softdepend: [Citizens, LuckPerms, Multiverse-Core, MultiWorld, HolographicDisplays, DecentHolograms, ProtocolLib]
 
 commands:
   phd:

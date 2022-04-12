@@ -70,6 +70,7 @@ public abstract class PeriodicHologramBase {
 
     public void setActivationDistance(double distance) {
         setActivationDistance(distance, distance * distance);
+        hologram.setVisibilityDistance(distance);
     }
 
     private void setActivationDistance(double distance, double distanceSquared) {
