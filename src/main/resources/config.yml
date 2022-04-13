@@ -1,8 +1,9 @@
 # pHD
 # This file must contain valid YAML code. A YAML checker may be found at http://www.yamllint.com
 #
-# pHD is an add-on for HolographicDisplays
-# https://dev.bukkit.org/projects/holographic-displays
+# pHD is an add-on for hologram providers:
+# - DecentHolograms       https://www.spigotmc.org/resources/96927/
+# - HolographicDisplays   https://dev.bukkit.org/projects/holographic-displays
 #
 # Design: SlimeDog
 # Implementation: drives_a_ford
@@ -12,6 +13,7 @@
 #   pHD 1.0.0     Spigot 1.13.2, 1.14.4, 1.15.2
 #   pHD 1.0.4     Spigot and Paper 1.16.5
 #   pHD 1.1.0     Spigot and Paper 1.17.x
+#   pHD 1.2.2     Spigot and Paper 1.18.x
 #
 
 # ========== DEFAULT PARAMETER VALUES ==============================================================
