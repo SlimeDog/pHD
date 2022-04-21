@@ -75,6 +75,11 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
 
         // setup HD hook
         platform = new PlatformProvider(this).getHologramProvider();
+        if (platform == null) {
+            issues.add(DefaultReloadIssue.NO_PLATFORM);
+            disableMe(issues);
+            return;
+        }
 
         try {
             holograms = new HologramStorage(this, getServer().getPluginManager());
@@ -313,7 +318,9 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
         NO_MESSAGES("the messages file had to be recreated"), ILLEGA_STORAGE_TYPE("storage type not understood"),
         INVALID_CONFIGURATION("config.yml was incorrectly formatted"),
         INVALID_MESSAGES("messages.yml was incorrectly formatted"),
-        INVALID_HOLOGRAMS("database.yml was incorrectly formatted");
+        INVALID_HOLOGRAMS("database.yml was incorrectly formatted"),
+        NO_PLATFORM("no holgoram platform found. Currently supported:" + PlatformProvider.getSupportedPlatformNames()),
+        ;
 
         private final String issue;
         private String extra = null;

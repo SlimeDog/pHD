@@ -1,6 +1,9 @@
 package me.ford.periodicholographicdisplays.holograms.wrap.platform;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -21,6 +24,8 @@ import me.ford.periodicholographicdisplays.holograms.wrap.provider.HologramProvi
 import me.ford.periodicholographicdisplays.holograms.wrap.provider.HolographicDisplaysHologramProvider;
 
 public class PlatformProvider {
+    private static final List<String> SUPPORTED_PLATFORMS = Collections
+            .unmodifiableList(Arrays.asList("HolographicDisplays", "DecentHolgorams"));
     private final HologramPlatform platform;
 
     public PlatformProvider(JavaPlugin plugin) {
@@ -32,6 +37,10 @@ public class PlatformProvider {
 
     public HologramPlatform getHologramProvider() {
         return platform;
+    }
+
+    public static List<String> getSupportedPlatformNames() {
+        return SUPPORTED_PLATFORMS;
     }
 
     private static HologramPlatform findPlatform(JavaPlugin plugin) {
