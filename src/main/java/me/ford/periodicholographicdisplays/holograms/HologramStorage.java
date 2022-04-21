@@ -87,6 +87,7 @@ public class HologramStorage {
         if (whs == null) {
             plugin.getLogger().info("Loaded hologram before world was initialized: " + holo.getName()
                     + " - it should be sorted out once the world loads");
+            return;
         } else {
             danglingInfos.remove(info);
         }
