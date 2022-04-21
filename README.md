@@ -2,7 +2,8 @@
 Manage holograms with intelligence
 
 ### Overview
-pHD manages the display of holograms defined by HolographicDisplays.
+Vanilla hologram providers display holograms whenever a player is within the standard Minecraft view distance.
+pHD adds capabilities to manage individual hologram visibility.
 It adds fine control over hologram visibility and duration, plus permission-based restrictions.
 pHD does not modify the content of the holograms themselves.
 
