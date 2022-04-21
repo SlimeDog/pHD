@@ -43,7 +43,7 @@ public class DecentHologramWrapper implements WrappedHologram {
 
     @Override
     public void setVisibilityDistance(double dist) {
-        delegate.setDisplayRange((int) dist);
+        // Don't do anything
     }
 
 }
