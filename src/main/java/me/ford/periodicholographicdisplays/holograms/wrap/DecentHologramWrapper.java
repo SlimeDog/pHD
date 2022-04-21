@@ -38,7 +38,7 @@ public class DecentHologramWrapper implements WrappedHologram {
 
     @Override
     public World getWorldIfLoaded() {
-        return delegate.isEnabled() ? getBukkitLocation().getWorld() : null;
+        return getBukkitLocation().getWorld();
     }
 
     @Override
