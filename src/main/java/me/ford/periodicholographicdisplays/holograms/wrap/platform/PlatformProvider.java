@@ -25,7 +25,7 @@ import me.ford.periodicholographicdisplays.holograms.wrap.provider.HolographicDi
 
 public class PlatformProvider {
     private static final List<String> SUPPORTED_PLATFORMS = Collections
-            .unmodifiableList(Arrays.asList("HolographicDisplays", "DecentHolgorams"));
+            .unmodifiableList(Arrays.asList(HDPlatform.NAME, DHPlatform.NAME));
     private final HologramPlatform platform;
 
     public PlatformProvider(JavaPlugin plugin) {
