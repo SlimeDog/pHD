@@ -9,4 +9,6 @@ public interface HologramPlatform {
 
     CommandWrapper getHologramCommand();
 
+    String getName();
+
 }

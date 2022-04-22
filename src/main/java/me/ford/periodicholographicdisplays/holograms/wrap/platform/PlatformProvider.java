@@ -59,11 +59,13 @@ public class PlatformProvider {
         return null;
     }
 
-    private static class HDPlatform implements HologramPlatform {
+    private static class HDPlatform extends AbstractHologramPlatform {
+        private static final String NAME = "HolographicDisplays";
         private final HolographicDisplays plugin;
         private final HolographicDisplaysHologramProvider provider;
 
         private HDPlatform(HolographicDisplaysHologramProvider provider) {
+            super(NAME);
             this.provider = provider;
             this.plugin = JavaPlugin.getPlugin(HolographicDisplays.class);
         }
@@ -96,9 +98,11 @@ public class PlatformProvider {
             }
             return man;
         }
+
     }
 
-    private static class DHPlatform implements HologramPlatform {
+    private static class DHPlatform extends AbstractHologramPlatform {
+        private static final String NAME = "DecentHolgorams";
         private static final Class<?> CRAFT_SERVER_CLASS;
         private static final ReflectMethod GET_COMMAND_MAP_METHOD;
 
@@ -110,6 +114,7 @@ public class PlatformProvider {
         private final DecentHologramsProvider provider;
 
         private DHPlatform(DecentHologramsProvider provider) {
+            super(NAME);
             this.provider = provider;
             this.plugin = JavaPlugin.getPlugin(DecentHologramsPlugin.class);
         }
