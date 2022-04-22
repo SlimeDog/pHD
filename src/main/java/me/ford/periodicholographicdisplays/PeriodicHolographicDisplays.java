@@ -134,7 +134,7 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
         // metrics
         if (settings.enableMetrics()) {
             Metrics metrics = new Metrics(this, 7234);
-            metrics.addCustomChart(new SimplePie("hologam_provider", () -> platform.getName()));
+            metrics.addCustomChart(new SimplePie("hologram_provider", () -> platform.getName()));
         }
 
         // commands
