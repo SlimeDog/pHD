@@ -23,6 +23,7 @@ import org.bukkit.SoundCategory;
 import org.bukkit.Statistic;
 import org.bukkit.WeatherType;
 import org.bukkit.World;
+import org.bukkit.WorldBorder;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.attribute.Attribute;
@@ -2330,6 +2331,18 @@ public class MockPlayer extends MockOPCommandSender implements Player {
     public SpawnCategory getSpawnCategory() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public WorldBorder getWorldBorder() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setWorldBorder(WorldBorder border) {
+        // TODO Auto-generated method stub
+        
     }
 
 }

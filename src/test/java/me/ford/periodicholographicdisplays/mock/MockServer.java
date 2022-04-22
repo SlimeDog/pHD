@@ -27,6 +27,7 @@ import org.bukkit.Tag;
 import org.bukkit.UnsafeValues;
 import org.bukkit.Warning.WarningState;
 import org.bukkit.World;
+import org.bukkit.WorldBorder;
 import org.bukkit.WorldCreator;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.block.data.BlockData;
@@ -912,6 +913,12 @@ public class MockServer implements Server {
     public int getSpawnLimit(SpawnCategory spawnCategory) {
         // TODO Auto-generated method stub
         return 0;
+    }
+
+    @Override
+    public WorldBorder createWorldBorder() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }
