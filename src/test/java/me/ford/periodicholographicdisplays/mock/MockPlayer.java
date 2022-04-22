@@ -2342,7 +2342,7 @@ public class MockPlayer extends MockOPCommandSender implements Player {
     @Override
     public void setWorldBorder(WorldBorder border) {
         // TODO Auto-generated method stub
-        
+
     }
 
 }
