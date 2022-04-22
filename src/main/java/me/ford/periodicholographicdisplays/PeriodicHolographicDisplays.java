@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bstats.bukkit.Metrics;
+import org.bstats.bukkit.Metrics.SimplePie;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -132,7 +133,8 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
 
         // metrics
         if (settings.enableMetrics()) {
-            new Metrics(this, 7234);
+            Metrics metrics = new Metrics(this, 7234);
+            metrics.addCustomChart(new SimplePie("hologam_provider", () -> platform.getName()));
         }
 
         // commands
