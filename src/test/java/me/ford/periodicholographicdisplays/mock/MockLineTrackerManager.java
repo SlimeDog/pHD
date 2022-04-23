@@ -5,7 +5,7 @@ import me.filoghost.holographicdisplays.plugin.hologram.tracking.LineTrackerMana
 public class MockLineTrackerManager extends LineTrackerManager {
 
     public MockLineTrackerManager() {
-        super(null, null, null);
+        super(null, null, null, null);
     }
     
 }
