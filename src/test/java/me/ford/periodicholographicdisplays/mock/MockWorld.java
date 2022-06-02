@@ -20,6 +20,7 @@ import org.bukkit.GameRule;
 import org.bukkit.HeightMap;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Raid;
 import org.bukkit.Sound;
@@ -1481,6 +1482,12 @@ public class MockWorld implements World {
     public void setSpawnLimit(SpawnCategory spawnCategory, int limit) {
         // TODO Auto-generated method stub
         
+    }
+
+    @Override
+    public NamespacedKey getKey() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }
