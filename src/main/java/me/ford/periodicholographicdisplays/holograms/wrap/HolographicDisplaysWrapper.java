@@ -3,17 +3,20 @@ package me.ford.periodicholographicdisplays.holograms.wrap;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import me.filoghost.holographicdisplays.api.beta.hologram.Hologram;
 import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
 import me.ford.periodicholographicdisplays.holograms.wrap.visibility.HolographicDisplaysVisibilitySettings;
 import me.ford.periodicholographicdisplays.holograms.wrap.visibility.VisibilitySettings;
 
 public class HolographicDisplaysWrapper implements WrappedHologram {
     private final InternalHologram delegate;
+    private final Hologram rendered;
     private final HolographicDisplaysVisibilitySettings visibilitySettings;
 
     public HolographicDisplaysWrapper(InternalHologram delegate) {
         this.delegate = delegate;
-        this.visibilitySettings = new HolographicDisplaysVisibilitySettings(delegate.getVisibilitySettings());
+        this.rendered = delegate.getRenderedHologram();
+        this.visibilitySettings = new HolographicDisplaysVisibilitySettings(rendered.getVisibilitySettings());
     }
 
     @Override
@@ -33,12 +36,12 @@ public class HolographicDisplaysWrapper implements WrappedHologram {
 
     @Override
     public boolean isDeleted() {
-        return delegate.isDeleted();
+        return rendered.isDeleted();
     }
 
     @Override
     public World getWorldIfLoaded() {
-        return delegate.getWorldIfLoaded();
+        return delegate.getPosition().getWorldIfLoaded();
     }
 
     @Override
