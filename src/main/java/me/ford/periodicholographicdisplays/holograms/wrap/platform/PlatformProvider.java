@@ -102,7 +102,7 @@ public class PlatformProvider {
     }
 
     private static class DHPlatform extends AbstractHologramPlatform {
-        private static final String NAME = "DecentHolgorams";
+        private static final String NAME = "DecentHolograms";
         private static final Class<?> CRAFT_SERVER_CLASS;
         private static final ReflectMethod GET_COMMAND_MAP_METHOD;
 
