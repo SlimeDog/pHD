@@ -57,7 +57,7 @@
     <dependency>
       <groupId>me.filoghost.holographicdisplays</groupId>
       <artifactId>holographicdisplays-local</artifactId>
-      <version>3.0.0-SNAPSHOT-b205</version>
+      <version>3.0.0-SNAPSHOT-b218</version>
       <scope>provided</scope>
     </dependency>
     <!-- END LOCAL DEPENDENCY-->
