@@ -9,6 +9,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.util.StringUtil;
 
+import dev.ratas.slimedogcore.api.commands.SDCCommandOptionSet;
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
@@ -54,7 +55,7 @@ public class ConvertSub extends PHDSubCommand {
     }
 
     @Override
-    public boolean onCommand(SDCRecipient sender, String[] args, List<String> options) {
+    public boolean onOptionedCommand(SDCRecipient sender, String[] args, SDCCommandOptionSet options) {
         if (args.length < 2) {
             return false;
         }

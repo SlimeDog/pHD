@@ -3,6 +3,7 @@ package me.ford.periodicholographicdisplays.commands.subcommands;
 import java.util.ArrayList;
 import java.util.List;
 
+import dev.ratas.slimedogcore.api.commands.SDCCommandOptionSet;
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.commands.PHDSubCommand;
@@ -23,7 +24,7 @@ public class PrintCacheSub extends PHDSubCommand {
     }
 
     @Override
-    public boolean onCommand(SDCRecipient sender, String[] args, List<String> options) {
+    public boolean onOptionedCommand(SDCRecipient sender, String[] args, SDCCommandOptionSet options) {
         sender.sendRawMessage("CACHE:\n" + phd.getUserCache().getEntireCache());
         return true;
     }

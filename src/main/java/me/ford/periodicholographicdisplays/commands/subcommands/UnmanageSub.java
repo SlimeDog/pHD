@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.util.StringUtil;
 
+import dev.ratas.slimedogcore.api.commands.SDCCommandOptionSet;
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.commands.PHDSubCommand;
@@ -47,7 +48,7 @@ public class UnmanageSub extends PHDSubCommand {
     }
 
     @Override
-    public boolean onCommand(SDCRecipient sender, String[] args, List<String> options) {
+    public boolean onOptionedCommand(SDCRecipient sender, String[] args, SDCCommandOptionSet options) {
         if (args.length < 2) {
             return false;
         }
