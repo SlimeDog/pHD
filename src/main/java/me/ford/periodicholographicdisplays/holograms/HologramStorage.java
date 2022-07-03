@@ -60,18 +60,18 @@ public class HologramStorage {
             plugin.getLogger().warning(plugin.getMessages().getLowSaveDelayMessage(seconds));
         }
         long delay = seconds * 20L;
-        plugin.runTaskTimer(() -> save(HologramSaveReason.PERIODIC, false), delay,
+        plugin.getScheduler().runTaskTimer(() -> save(HologramSaveReason.PERIODIC, false), delay,
                 delay);
     }
 
     private void scheduleLoad() {
-        plugin.runTaskLater(() -> {
+        plugin.getScheduler().runTaskLater(() -> {
             storage.loadHolograms((info) -> loaded(info, false));
         }, 40L); // need to do this later so the holograms are loaded
     }
 
     private void scheduleDanglingCheck() {
-        plugin.runTaskLater(() -> {
+        plugin.getScheduler().runTaskLater(() -> {
             if (!danglingInfos.isEmpty()) {
                 plugin.getLogger().warning(
                         "Some pHD holograms were loaded such that they have not found their corresponding hologram:"

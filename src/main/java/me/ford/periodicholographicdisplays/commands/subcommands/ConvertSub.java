@@ -136,7 +136,7 @@ public class ConvertSub extends PHDSubCommand {
             return;
         if (to.equals(SQLITE)) {
             // TODO - perhaps an event?
-            phd.runTaskLater(() -> closeSqlite(from, "..."), 40L);
+            phd.getScheduler().runTaskLater(() -> closeSqlite(from, "..."), 40L);
             return; // not saved yet
         }
         if (sqlStorage == null) {
@@ -162,10 +162,8 @@ public class ConvertSub extends PHDSubCommand {
 
         @Override
         public void run() {
-            phd.runTask(() -> sender.sendRawMessage(messages.getDoneConvertingMessage(from, to))); // so it gets sent
-                                                                                                   // after the start
-                                                                                                   // message (for YAML
-                                                                                                   // mostly)
+            phd.getScheduler().runTask(() -> sender.sendRawMessage(messages.getDoneConvertingMessage(from, to)));
+            // so it gets sent after the start message (for YAML mostly)
             closeSqlite(from, to);
         }
 

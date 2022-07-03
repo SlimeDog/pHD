@@ -184,7 +184,7 @@ public abstract class PeriodicHologramBase {
         beingShownTo.add(id);
         boolean scheduleHide = !specialDisable();
         if (scheduleHide) {
-            plugin.runTaskLater(() -> hideFrom(player), showTimeTicks);
+            plugin.getScheduler().runTaskLater(() -> hideFrom(player), showTimeTicks);
         }
         return true;
     }

@@ -4,8 +4,8 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
 
+import dev.ratas.slimedogcore.api.scheduler.SDCTask;
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.holograms.wrap.WrappedHologram;
 
@@ -16,7 +16,7 @@ public class MCTimeHologram extends FlashingHologram {
     private static final long DELAY = 20 * 60 * 20; // 20 minutes, 60 seconds, 20 ticks
     private final IPeriodicHolographicDisplays plugin;
     private final MCTimeHologramDisplayer displayer;
-    private BukkitTask task;
+    private SDCTask task;
     private long atTime; // between 0 and 23999
 
     public MCTimeHologram(IPeriodicHolographicDisplays phd, WrappedHologram hologram, String name,
@@ -51,7 +51,17 @@ public class MCTimeHologram extends FlashingHologram {
             task.cancel();
         long newTime = (getLocation().getWorld().getTime() + amount + TIME_FIX) % 24000;
         long curDelay = (atTime - newTime) % 24000;// in MC time = ticks
-        task = plugin.runTaskTimer(displayer, curDelay, DELAY);
+        plugin.getScheduler().runTaskTimer(task -> runDisplayer(task), curDelay, DELAY);
+    }
+
+    private void runDisplayer(SDCTask task) {
+        if (this.task == null) {
+            this.task = task;
+        } else if (this.task != task) {
+            task.cancel();
+            return; // there's been a new task that's been scheduled
+        }
+        displayer.run();
     }
 
     public void setTime(long time) {

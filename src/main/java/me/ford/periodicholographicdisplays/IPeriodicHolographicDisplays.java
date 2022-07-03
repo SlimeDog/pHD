@@ -11,8 +11,8 @@ import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 
+import dev.ratas.slimedogcore.api.SlimeDogPlugin;
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.ReloadIssue;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.wrap.platform.HologramPlatform;
@@ -24,7 +24,7 @@ import me.ford.periodicholographicdisplays.users.UserCache;
 /**
  * IPeriodicHolographicDisplays
  */
-public interface IPeriodicHolographicDisplays {
+public interface IPeriodicHolographicDisplays extends SlimeDogPlugin {
 
     public HologramProvider getHologramProvider();
 
@@ -67,17 +67,4 @@ public interface IPeriodicHolographicDisplays {
     public Messages getMessages();
 
     public void debug(String message);
-
-    public BukkitTask runTask(Runnable runnable);
-
-    public BukkitTask runTaskLater(Runnable runnable, long delay);
-
-    public BukkitTask runTaskTimer(Runnable runnable, long delay, long period);
-
-    public BukkitTask runTaskAsynchronously(Runnable runnable);
-
-    public BukkitTask runTaskLaterAsynchronously(Runnable runnable, long delay);
-
-    public BukkitTask runTaskTimerAsynchronously(Runnable runnable, long delay, long period);
-
 }

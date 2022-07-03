@@ -49,7 +49,7 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
     private CustomConfigHandler config;
 
     @Override
-    public void onEnable() {
+    public void pluginEnabled() {
         List<ReloadIssue> issues = new ArrayList<>();
         try {
             config = new CustomConfigHandler(this, "config.yml");
@@ -149,6 +149,10 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
                     (result, e) -> getLogger().info(result.getReason() + ": " + result.getNewestVersion()));
         }
         getLogger().info(messages.getActiveStorageMessage(getSettings().useDatabase()));
+    }
+
+    @Override
+    public void pluginDisabled() {
     }
 
     private void disableMe(List<ReloadIssue> issues) {

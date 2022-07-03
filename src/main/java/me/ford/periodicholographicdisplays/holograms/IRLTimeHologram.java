@@ -6,8 +6,8 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
 
+import dev.ratas.slimedogcore.api.scheduler.SDCTask;
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.holograms.wrap.WrappedHologram;
 
@@ -18,7 +18,7 @@ public class IRLTimeHologram extends FlashingHologram {
     private static final long DELAY = 24 * 60 * 60 * 20; // 24 hours, 60 minutes, 60 seconds, 20 ticks
     private final IPeriodicHolographicDisplays plugin;
     private final IRLTimeHologramDisplayer displayer;
-    private BukkitTask task;
+    private SDCTask task;
     private long atTime; // in day in seconds
 
     public IRLTimeHologram(IPeriodicHolographicDisplays phd, WrappedHologram hologram, String name,
@@ -37,7 +37,17 @@ public class IRLTimeHologram extends FlashingHologram {
         long curTimeSeconds = calendar.get(Calendar.HOUR_OF_DAY) * 3600 + calendar.get(Calendar.MINUTE) * 60
                 + calendar.get(Calendar.SECOND);
         long curDelay = ((atTime - curTimeSeconds) * 20) % DELAY; // in ticks
-        task = plugin.runTaskTimer(displayer, curDelay, DELAY);
+        plugin.getScheduler().runTaskTimer((task) -> runDisplayer(task), curDelay, DELAY);
+    }
+
+    private void runDisplayer(SDCTask task) {
+        if (this.task == null) {
+            this.task = task;
+        } else if (this.task != task) {
+            task.cancel();
+            return; // there's been a new task that's been scheduled
+        }
+        displayer.run();
     }
 
     public long getTime() {
@@ -48,7 +58,9 @@ public class IRLTimeHologram extends FlashingHologram {
         if (atTime == time)
             return;
         this.atTime = time;
-        task.cancel();
+        if (task != null) {
+            task.cancel();
+        }
         initTask();
         markChanged();
     }

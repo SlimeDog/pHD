@@ -44,7 +44,7 @@ public class SQLStorage extends SQLStorageBase implements Storage {
         if (inSync) {
             saveHologramsAsync(holograms);
         } else {
-            phd.runTaskAsynchronously(() -> saveHologramsAsync(holograms));
+            phd.getScheduler().runTaskAsync(() -> saveHologramsAsync(holograms));
         }
     }
 
@@ -128,7 +128,8 @@ public class SQLStorage extends SQLStorageBase implements Storage {
             executeUpdate(deleteQuery, holoName, info.getType().name());
             return;
         }
-        String deleteQuery = "DELETE FROM " + playerTableName + " WHERE player_UUID=? AND hologram_name=? AND hologram_type=?;";
+        String deleteQuery = "DELETE FROM " + playerTableName
+                + " WHERE player_UUID=? AND hologram_name=? AND hologram_type=?;";
         switch (info.getType()) {
             case NTIMES:
                 NTimesTypeInfo ninfo = (NTimesTypeInfo) info;
@@ -170,7 +171,7 @@ public class SQLStorage extends SQLStorageBase implements Storage {
 
     @Override
     public void loadHolograms(Consumer<HDHologramInfo> consumer) {
-        phd.runTaskAsynchronously(() -> loadHologramsAsync(consumer));
+        phd.getScheduler().runTaskAsync(() -> loadHologramsAsync(consumer));
     }
 
     // hologram_name, hologram_type, activation_distance, display_seconds,
@@ -237,7 +238,7 @@ public class SQLStorage extends SQLStorageBase implements Storage {
             }
         }
 
-        phd.runTask(() -> {
+        phd.getScheduler().runTask(() -> {
             for (HDHologramInfo info : infos.values()) {
                 consumer.accept(info);
             }
@@ -364,7 +365,7 @@ public class SQLStorage extends SQLStorageBase implements Storage {
 
     @Override
     public void clear() {
-        phd.runTaskAsynchronously(() -> {
+        phd.getScheduler().runTaskAsync(() -> {
             String delHologramTable = "DELETE FROM " + hologramTableName + ";";
             executeUpdate(delHologramTable);
             String delPlayerTable = "DELETE FROM " + playerTableName + ";";
