@@ -123,7 +123,7 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
         WorldTimeListener worldTimeListener;
         String version = getServer().getBukkitVersion();
         if (version.contains("1.15") || version.contains("1.16")
-                || version.contains("1.17") || version.contains("1.18")) {
+                || version.contains("1.17") || version.contains("1.18") || version.contains("1.19")) {
             worldTimeListener = new SimpleWorldTimeListener(holograms);
         } else {
             getLogger().warning(messages.getLegacyMessage());
