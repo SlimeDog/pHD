@@ -12,6 +12,7 @@ import org.bstats.bukkit.Metrics.SimplePie;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import dev.ratas.slimedogcore.impl.utils.UpdateChecker;
 import me.ford.periodicholographicdisplays.Settings.SettingIssue;
 import me.ford.periodicholographicdisplays.Settings.StorageTypeException;
 import me.ford.periodicholographicdisplays.commands.PHDCommand;
@@ -38,6 +39,7 @@ import me.ford.periodicholographicdisplays.users.UserCache;
  * PeriodicHolographicDisplays
  */
 public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisplays {
+    private static final int SPIGOT_RESOURCE_ID = 77631;
     private HologramPlatform platform;
     private HologramStorage holograms;
     private Settings settings;
@@ -143,10 +145,20 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
         // listen to /holo delete/remove
         new Zombificator(this);
 
-        int resourceId = 77631;
-        if (settings.checkForUpdates() && resourceId != -1) {
-            UpdateChecker.init(this, resourceId).requestUpdateCheck().whenComplete(
-                    (result, e) -> getLogger().info(result.getReason() + ": " + result.getNewestVersion()));
+        if (settings.checkForUpdates()) {
+            new UpdateChecker(this, (response, ver) -> {
+                switch (response) {
+                    case LATEST:
+                        getLogger().info("Using latest version of pHD");
+                        break;
+                    case FOUND_NEW:
+                        getLogger().info("A new version of pHD is available: " + ver);
+                        break;
+                    case UNAVAILABLE:
+                        getLogger().info("Version information currently unavailable");
+                        break;
+                }
+            }, SPIGOT_RESOURCE_ID).check();
         }
         getLogger().info(messages.getActiveStorageMessage(getSettings().useDatabase()));
     }
