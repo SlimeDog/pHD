@@ -17,7 +17,12 @@ public class PermissionHandler {
     private PermissionAttachment getOrCreateAttachment(Permissible permissible, Permission permission, boolean value) {
         for (PermissionAttachmentInfo info : permissible.getEffectivePermissions()) {
             if (info.getPermission().equals(permission.getName())) {
-                return info.getAttachment();
+                PermissionAttachment attached = info.getAttachment();
+                if (attached == null) { // in case of default permissions (apparently)
+                    break;
+                } else {
+                    return attached;
+                }
             }
         }
         return permissible.addAttachment(PLUGIN, permission.getName(), value);
