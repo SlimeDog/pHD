@@ -21,3 +21,6 @@ Supported data storage types include SQLITE (default) and YAML. Conversion betwe
 ### The Wiki
 pHD is completely documented on The Wiki. Please start there when you have questions.
 https://github.com/SlimeDog/pHD/wiki
+
+### How to build with the ever-changing version of HolographicDisplays
+https://www.spigotmc.org/goto/convMessage?id=2359227#convMessage-2359227
