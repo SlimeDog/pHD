@@ -13,8 +13,8 @@ import me.ford.periodicholographicdisplays.holograms.MCTimeHologram;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.holograms.wrap.HolographicDisplaysWrapper;
-import me.ford.periodicholographicdisplays.mock.MockLineTrackerManager;
 import me.ford.periodicholographicdisplays.mock.MockNamedHologram;
+import me.ford.periodicholographicdisplays.mock.MockPeriodicHolographicDisplays;
 
 public abstract class TestHelpers {
     private final ThreadLocalRandom random = ThreadLocalRandom.current();
@@ -62,14 +62,14 @@ public abstract class TestHelpers {
         return builder.toString();
     }
 
-    protected FlashingHologram getRandomHolgram(PeriodicType type, MockLineTrackerManager ltm) {
+    protected FlashingHologram getRandomHolgram(MockPeriodicHolographicDisplays phd, PeriodicType type) {
         double activationDistance = random.nextDouble() * 10;
         int showTime = random.nextInt(20);
         double flashOn = random.nextDouble() * 5;
         double flashOff = random.nextDouble() * 5;
         String perms = getRandomName("perms.");
         String name = getRandomName("name");
-        MockNamedHologram holo = new MockNamedHologram(name, ltm);
+        MockNamedHologram holo = new MockNamedHologram(phd.api, name);
         HolographicDisplaysWrapper hologram = new HolographicDisplaysWrapper(holo);
         switch (type) {
             case ALWAYS:

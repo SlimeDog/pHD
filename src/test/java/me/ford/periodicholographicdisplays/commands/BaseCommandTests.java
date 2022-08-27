@@ -11,7 +11,6 @@ import me.ford.periodicholographicdisplays.commands.subcommands.ManageSub;
 import me.ford.periodicholographicdisplays.commands.subcommands.SetSub;
 import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
-import me.ford.periodicholographicdisplays.mock.MockLineTrackerManager;
 import me.ford.periodicholographicdisplays.mock.MockOPCommandSender;
 import me.ford.periodicholographicdisplays.mock.MockPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.mock.MockPluginManager;
@@ -22,12 +21,11 @@ public abstract class BaseCommandTests {
     protected PHDCommand command;
     protected MockOPCommandSender sender;
     protected SDCRecipient recipient;
-    protected MockLineTrackerManager ltm;
 
     @Before
     public void setup() {
         MockStarterUtil.startMocking();
-        phd = new MockPeriodicHolographicDisplays(ltm = new MockLineTrackerManager());
+        phd = new MockPeriodicHolographicDisplays();
         command = new PHDCommand(phd, new MockPluginManager());
         sender = new MockOPCommandSender(null);
         recipient = new MessageRecipient(sender);

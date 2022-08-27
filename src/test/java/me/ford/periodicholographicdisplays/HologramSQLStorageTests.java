@@ -17,7 +17,6 @@ import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.NTimesType
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.IRLTimeTypeInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.TypeInfo.MCTimeTypeInfo;
 import me.ford.periodicholographicdisplays.holograms.storage.Storage.HDHologramInfo;
-import me.ford.periodicholographicdisplays.mock.MockLineTrackerManager;
 import me.ford.periodicholographicdisplays.mock.MockPeriodicHolographicDisplays;
 
 /**
@@ -28,7 +27,7 @@ public class HologramSQLStorageTests {
 
     @Before
     public void setUp() {
-        phd = new MockPeriodicHolographicDisplays(new MockLineTrackerManager());
+        phd = new MockPeriodicHolographicDisplays();
     }
 
     @After

@@ -15,8 +15,18 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 
+import dev.ratas.slimedogcore.api.config.SDCCustomConfigManager;
+import dev.ratas.slimedogcore.api.config.settings.SDCBaseSettings;
+import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
+import dev.ratas.slimedogcore.api.reload.SDCReloadManager;
+import dev.ratas.slimedogcore.api.scheduler.SDCScheduler;
+import dev.ratas.slimedogcore.api.utils.logger.SDCDebugLogger;
+import dev.ratas.slimedogcore.api.wrappers.SDCOnlinePlayerProvider;
+import dev.ratas.slimedogcore.api.wrappers.SDCPluginInformation;
+import dev.ratas.slimedogcore.api.wrappers.SDCPluginManager;
+import dev.ratas.slimedogcore.api.wrappers.SDCResourceProvider;
+import dev.ratas.slimedogcore.api.wrappers.SDCWorldProvider;
 import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.Messages;
@@ -48,14 +58,15 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
     private final Settings settings;
     private final HologramStorage holograms;
     private final UserCache userCache;
-    private final MockLineTrackerManager ltm;
     private final MockInternalHologramManager ihm;
     private boolean debug = false;
+    public final MockHolographicsDisplaysAPI api;
+    private final MockScheduler scheduler;
 
-    public MockPeriodicHolographicDisplays(MockLineTrackerManager ltm) {
+    public MockPeriodicHolographicDisplays() {
         logger.setLevel(Level.WARNING);
-        this.ltm = ltm;
-        this.ihm = new MockInternalHologramManager(this.ltm);
+        this.scheduler = new MockScheduler();
+        this.ihm = new MockInternalHologramManager(api = new MockHolographicsDisplaysAPI());
         config = YamlConfiguration.loadConfiguration(configFile);
         try {
             messages = new Messages(this);
@@ -163,59 +174,6 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
             logger.info(String.format("[DEBUG] %s", message));
     }
 
-    @Override
-    public BukkitTask runTask(Runnable runnable) {
-        // TODO Auto-generated method stub
-        debug("Usually would run this a tick later, but just running now ...");
-        return runNow(runnable);
-    }
-
-    @Override
-    public BukkitTask runTaskLater(Runnable runnable, long delay) {
-        // TODO Auto-generated method stub
-        debug("Was supposed to run task later, but just running now ...");
-        return runNow(runnable);
-    }
-
-    @Override
-    public BukkitTask runTaskTimer(Runnable runnable, long delay, long period) {
-        // TODO Auto-generated method stub
-        debug("Was supposed to run task timer, but just running now ...");
-        return runNow(runnable);
-    }
-
-    @Override
-    public BukkitTask runTaskAsynchronously(Runnable runnable) {
-        // TODO Auto-generated method stub
-        debug("Was supposed to run task async, but just running in sync ...");
-        return runNow(runnable);
-    }
-
-    @Override
-    public BukkitTask runTaskLaterAsynchronously(Runnable runnable, long delay) {
-        // TODO Auto-generated method stub
-        debug("Was supposed to run task later async, but just running now ...");
-        return runNow(runnable);
-    }
-
-    @Override
-    public BukkitTask runTaskTimerAsynchronously(Runnable runnable, long delay, long period) {
-        // TODO Auto-generated method stub
-        debug("Was supposed to run task timer async, but just running now ...");
-        return runNow(runnable);
-    }
-
-    private MockBukkitTask runNow(Runnable runnable) {
-        try {
-            runnable.run();
-        } catch (Throwable e) {
-            if (e instanceof AssertionError)
-                throw e;
-            getLogger().log(Level.SEVERE, "Unexpected error while running task:", e);
-        }
-        return new MockBukkitTask();
-    }
-
     public void clear() {
         debug = false;
         holograms.getStorage().clear();
@@ -279,6 +237,89 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
             }
 
         };
+    }
+
+    @Override
+    public SDCBaseSettings getBaseSettings() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public SDCRecipient getConsoleRecipient() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public SDCCustomConfigManager getCustomConfigManager() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public SDCDebugLogger getDebugLogger() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public SDCOnlinePlayerProvider getOnlinePlayerProvider() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public SDCPluginInformation getPluginInformation() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public SDCPluginManager getPluginManager() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public SDCReloadManager getReloadManager() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public SDCResourceProvider getResourceProvider() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public SDCScheduler getScheduler() {
+        return scheduler;
+    }
+
+    @Override
+    public File getWorldFolder() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public SDCWorldProvider getWorldProvider() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void pluginDisabled() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void pluginEnabled() {
+        // TODO Auto-generated method stub
+
     }
 
 }

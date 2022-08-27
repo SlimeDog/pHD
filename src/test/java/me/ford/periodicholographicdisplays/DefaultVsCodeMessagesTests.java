@@ -19,7 +19,6 @@ import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
 import me.ford.periodicholographicdisplays.holograms.NTimesHologram;
 import me.ford.periodicholographicdisplays.holograms.PeriodicType;
 import me.ford.periodicholographicdisplays.holograms.wrap.HolographicDisplaysWrapper;
-import me.ford.periodicholographicdisplays.mock.MockLineTrackerManager;
 import me.ford.periodicholographicdisplays.mock.MockNamedHologram;
 import me.ford.periodicholographicdisplays.mock.MockPeriodicHolographicDisplays;
 import me.ford.periodicholographicdisplays.mock.MockPlayer;
@@ -27,14 +26,13 @@ import me.ford.periodicholographicdisplays.mock.MockStarterUtil;
 
 public class DefaultVsCodeMessagesTests extends TestHelpers {
     private MockPeriodicHolographicDisplays phd;
-    private MockLineTrackerManager ltm;
     private Messages defaults;
     private Messages noDefaults;
 
     @Before
     public void setUp() {
         MockStarterUtil.startMocking();
-        phd = new MockPeriodicHolographicDisplays(ltm = new MockLineTrackerManager());
+        phd = new MockPeriodicHolographicDisplays();
         defaults = phd.getMessages(); // in code defaults
         try {
             noDefaults = new DefMessages(phd);
@@ -201,7 +199,7 @@ public class DefaultVsCodeMessagesTests extends TestHelpers {
     @Test
     public void hologramInfo_fills_placeholders_no_pages_no_perms() {
         String name = getRandomName("name");
-        MockNamedHologram holo = new MockNamedHologram(name, ltm);
+        MockNamedHologram holo = new MockNamedHologram(phd.api, name);
         AlwaysHologram hologram = new AlwaysHologram(phd, new HolographicDisplaysWrapper(holo), name, 5.55, 4, false,
                 null, FlashingHologram.NO_FLASH, FlashingHologram.NO_FLASH);
         String msg1 = defaults.getHologramInfoMessage(hologram, 1, false);
@@ -213,7 +211,7 @@ public class DefaultVsCodeMessagesTests extends TestHelpers {
     public void hologramInfo_fills_placeholders_no_pages_with_perms() {
         String name = getRandomName("name");
         String perms = getRandomName();
-        MockNamedHologram holo = new MockNamedHologram(name, ltm);
+        MockNamedHologram holo = new MockNamedHologram(phd.api, name);
         AlwaysHologram hologram = new AlwaysHologram(phd, new HolographicDisplaysWrapper(holo), name, 5.55, 4, false,
                 perms, FlashingHologram.NO_FLASH, FlashingHologram.NO_FLASH);
         String msg1 = defaults.getHologramInfoMessage(hologram, 1, false);
@@ -224,7 +222,7 @@ public class DefaultVsCodeMessagesTests extends TestHelpers {
     @Test
     public void hologramInfo_fills_placeholders_with_pages_no_perms() {
         String name = getRandomName("name");
-        MockNamedHologram holo = new MockNamedHologram(name, ltm);
+        MockNamedHologram holo = new MockNamedHologram(phd.api, name);
         AlwaysHologram hologram = new AlwaysHologram(phd, new HolographicDisplaysWrapper(holo), name, 5.55, 4, false,
                 null, FlashingHologram.NO_FLASH, FlashingHologram.NO_FLASH);
         String msg1 = defaults.getHologramInfoMessage(hologram, 1, false);
@@ -236,7 +234,7 @@ public class DefaultVsCodeMessagesTests extends TestHelpers {
     public void hologramInfo_fills_placeholders_with_pages_with_perms() {
         String name = getRandomName("name");
         String perms = getRandomName();
-        MockNamedHologram holo = new MockNamedHologram(name, ltm);
+        MockNamedHologram holo = new MockNamedHologram(phd.api, name);
         AlwaysHologram hologram = new AlwaysHologram(phd, new HolographicDisplaysWrapper(holo), name, 5.55, 4, false,
                 perms, FlashingHologram.NO_FLASH, FlashingHologram.NO_FLASH);
         String msg1 = defaults.getHologramInfoMessage(hologram, 1, false);
@@ -248,7 +246,7 @@ public class DefaultVsCodeMessagesTests extends TestHelpers {
     public void hologramInfo_fills_placeholders_with_pages_with_perms_with_flash() {
         String name = getRandomName("name");
         String perms = getRandomName();
-        MockNamedHologram holo = new MockNamedHologram(name, ltm);
+        MockNamedHologram holo = new MockNamedHologram(phd.api, name);
         double flashOn = 2.1;
         double flashOff = 2.2;
         AlwaysHologram hologram = new AlwaysHologram(phd, new HolographicDisplaysWrapper(holo), name, 5.55, 4, false,
@@ -375,7 +373,7 @@ public class DefaultVsCodeMessagesTests extends TestHelpers {
     @Test
     public void ntimesTypeInfo_no_placeholders_1() {
         String name = getRandomName("name");
-        MockNamedHologram holo = new MockNamedHologram(name, ltm);
+        MockNamedHologram holo = new MockNamedHologram(phd.api, name);
         NTimesHologram hologram = new NTimesHologram(phd, new HolographicDisplaysWrapper(holo), name, 7.6, 9, 3, false,
                 "s.perms", 4.4, 3.3);
         String msg1 = defaults.getNTimesTypeInfo(hologram, false, 1, false);
@@ -386,7 +384,7 @@ public class DefaultVsCodeMessagesTests extends TestHelpers {
     @Test
     public void ntimesTypeInfo_no_placeholders_2() {
         String name = getRandomName("name");
-        MockNamedHologram holo = new MockNamedHologram(name, ltm);
+        MockNamedHologram holo = new MockNamedHologram(phd.api, name);
         NTimesHologram hologram = new NTimesHologram(phd, new HolographicDisplaysWrapper(holo), name, 6.7, 8, 3, false,
                 "s.perms", FlashingHologram.NO_FLASH, FlashingHologram.NO_FLASH);
         String msg1 = defaults.getNTimesTypeInfo(hologram, false, 1, false);
@@ -397,7 +395,7 @@ public class DefaultVsCodeMessagesTests extends TestHelpers {
     @Test
     public void ntimesTypeInfo_no_placeholders_3() {
         String name = getRandomName("name");
-        MockNamedHologram holo = new MockNamedHologram(name, ltm);
+        MockNamedHologram holo = new MockNamedHologram(phd.api, name);
         NTimesHologram hologram = new NTimesHologram(phd, new HolographicDisplaysWrapper(holo), name, 1.2, 5, 3, false,
                 "s.perms", 4.4, 3.3);
         String msg1 = defaults.getNTimesTypeInfo(hologram, false, 1, false);
@@ -408,7 +406,7 @@ public class DefaultVsCodeMessagesTests extends TestHelpers {
     @Test
     public void ntimesTypeInfo_fills_placeholders_with_info() {
         String name = getRandomName("name");
-        MockNamedHologram holo = new MockNamedHologram(name, ltm);
+        MockNamedHologram holo = new MockNamedHologram(phd.api, name);
         NTimesHologram hologram = new NTimesHologram(phd, new HolographicDisplaysWrapper(holo), name, 0.1, 2, 5, false,
                 null, 4.4, 3.3);
         UUID id = UUID.randomUUID(); // UNKOWNPLAYER
@@ -423,7 +421,7 @@ public class DefaultVsCodeMessagesTests extends TestHelpers {
     @Test
     public void ntimesTypeInfo_fills_placeholders_with_multiple_info() {
         String name = getRandomName("name");
-        MockNamedHologram holo = new MockNamedHologram(name, ltm);
+        MockNamedHologram holo = new MockNamedHologram(phd.api, name);
         NTimesHologram hologram = new NTimesHologram(phd, new HolographicDisplaysWrapper(holo), name, 0.1, 2, 5, false,
                 null, 4.4, 3.3);
         UUID id1 = UUID.randomUUID(); // UNKOWNPLAYER
@@ -527,7 +525,7 @@ public class DefaultVsCodeMessagesTests extends TestHelpers {
         String name = getRandomName("name");
         MockPlayer player = new MockPlayer(name);
         List<NTimesHologram> holos = new ArrayList<>();
-        holos.add((NTimesHologram) getRandomHolgram(PeriodicType.NTIMES, ltm));
+        holos.add((NTimesHologram) getRandomHolgram(phd, PeriodicType.NTIMES));
         int page = 1;
         String msg1 = defaults.getNtimesReportMessage(player, holos, page, false);
         String msg2 = noDefaults.getNtimesReportMessage(player, holos, page, false);
@@ -539,8 +537,8 @@ public class DefaultVsCodeMessagesTests extends TestHelpers {
         String name = getRandomName("name");
         MockPlayer player = new MockPlayer(name);
         List<NTimesHologram> holos = new ArrayList<>();
-        holos.add((NTimesHologram) getRandomHolgram(PeriodicType.NTIMES, ltm));
-        holos.add((NTimesHologram) getRandomHolgram(PeriodicType.NTIMES, ltm));
+        holos.add((NTimesHologram) getRandomHolgram(phd, PeriodicType.NTIMES));
+        holos.add((NTimesHologram) getRandomHolgram(phd, PeriodicType.NTIMES));
         int page = 1;
         String msg1 = defaults.getNtimesReportMessage(player, holos, page, false);
         String msg2 = noDefaults.getNtimesReportMessage(player, holos, page, false);

@@ -23,7 +23,7 @@ public class CommandManageTests extends BaseCommandTests {
         testCommand(sender, null, "phd", new String[] { "manage", name }, expectedMessage);
         // phd manage existing
         // add mock hologram
-        phd.putHDHologram(name, new MockNamedHologram(name, ltm));
+        phd.putHDHologram(name, new MockNamedHologram(phd.api, name));
         ManageSub ms = new ManageSub(phd);
         String usageMessage = ms.getUsage(recipient, new String[] {});
         expectedMessage = usageMessage;
@@ -56,7 +56,7 @@ public class CommandManageTests extends BaseCommandTests {
     @Test
     public void testManageIllegalNtimes() {
         String name = "hdHol0gram";
-        MockNamedHologram mnh = new MockNamedHologram(name, ltm);
+        MockNamedHologram mnh = new MockNamedHologram(phd.api, name);
         phd.putHDHologram(name, mnh);
         NTimesHologram hologram = new NTimesHologram(phd, new HolographicDisplaysWrapper(mnh), name, 2.2, 6, 4, true,
                 "super.perms", 4, 2);
@@ -67,7 +67,7 @@ public class CommandManageTests extends BaseCommandTests {
     @Test
     public void testManageIllegalAlways() {
         String name = "ALW4YS";
-        MockNamedHologram mnh = new MockNamedHologram(name, ltm);
+        MockNamedHologram mnh = new MockNamedHologram(phd.api, name);
         phd.putHDHologram(name, mnh);
         AlwaysHologram hologram = new AlwaysHologram(phd, new HolographicDisplaysWrapper(mnh), name, 2.2, 6, true, null,
                 4, 2);
@@ -78,7 +78,7 @@ public class CommandManageTests extends BaseCommandTests {
     @Test
     public void testManageIllegalIRLTime() {
         String name = "4realTime";
-        MockNamedHologram mnh = new MockNamedHologram(name, ltm);
+        MockNamedHologram mnh = new MockNamedHologram(phd.api, name);
         phd.putHDHologram(name, mnh);
         IRLTimeHologram hologram = new IRLTimeHologram(phd, new HolographicDisplaysWrapper(mnh), name, 5.1, 3, 26440,
                 true, null, -1, -1);
@@ -89,7 +89,7 @@ public class CommandManageTests extends BaseCommandTests {
     @Test
     public void testManageIllegalMCTime() {
         String name = "mcTimeWeHave";
-        MockNamedHologram mnh = new MockNamedHologram(name, ltm);
+        MockNamedHologram mnh = new MockNamedHologram(phd.api, name);
         phd.putHDHologram(name, mnh);
         MCTimeHologram hologram = new MCTimeHologram(phd, new HolographicDisplaysWrapper(mnh), name, 5.1, 3, 15000,
                 true, null, -1, -1);
