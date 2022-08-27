@@ -2,7 +2,7 @@ package me.ford.periodicholographicdisplays.mock;
 
 import org.bukkit.entity.Player;
 
-import me.filoghost.holographicdisplays.api.beta.hologram.VisibilitySettings;
+import me.filoghost.holographicdisplays.api.hologram.VisibilitySettings;
 
 public class MockVisibilitySettings implements VisibilitySettings {
 

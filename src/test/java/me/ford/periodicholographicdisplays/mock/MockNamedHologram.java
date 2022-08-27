@@ -2,7 +2,7 @@ package me.ford.periodicholographicdisplays.mock;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import me.filoghost.holographicdisplays.api.beta.HolographicDisplaysAPI;
+import me.filoghost.holographicdisplays.api.HolographicDisplaysAPI;
 import me.filoghost.holographicdisplays.core.base.ImmutablePosition;
 import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
 

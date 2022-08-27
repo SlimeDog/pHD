@@ -3,7 +3,7 @@ package me.ford.periodicholographicdisplays.holograms.wrap;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import me.filoghost.holographicdisplays.api.beta.hologram.Hologram;
+import me.filoghost.holographicdisplays.api.hologram.Hologram;
 import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
 import me.ford.periodicholographicdisplays.holograms.wrap.visibility.HolographicDisplaysVisibilitySettings;
 import me.ford.periodicholographicdisplays.holograms.wrap.visibility.VisibilitySettings;

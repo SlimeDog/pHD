@@ -3,11 +3,11 @@ package me.ford.periodicholographicdisplays.mock;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import me.filoghost.holographicdisplays.api.beta.Position;
-import me.filoghost.holographicdisplays.api.beta.hologram.Hologram;
-import me.filoghost.holographicdisplays.api.beta.hologram.HologramLines;
-import me.filoghost.holographicdisplays.api.beta.hologram.PlaceholderSetting;
-import me.filoghost.holographicdisplays.api.beta.hologram.VisibilitySettings;
+import me.filoghost.holographicdisplays.api.Position;
+import me.filoghost.holographicdisplays.api.hologram.Hologram;
+import me.filoghost.holographicdisplays.api.hologram.HologramLines;
+import me.filoghost.holographicdisplays.api.hologram.PlaceholderSetting;
+import me.filoghost.holographicdisplays.api.hologram.VisibilitySettings;
 
 public class FakeHologram implements Hologram {
     private final Position pos;

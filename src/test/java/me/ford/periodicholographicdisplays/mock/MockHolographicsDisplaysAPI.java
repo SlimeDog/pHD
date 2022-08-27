@@ -4,15 +4,15 @@ import java.util.Collection;
 
 import org.bukkit.Location;
 
-import me.filoghost.holographicdisplays.api.beta.HolographicDisplaysAPI;
-import me.filoghost.holographicdisplays.api.beta.Position;
-import me.filoghost.holographicdisplays.api.beta.hologram.Hologram;
-import me.filoghost.holographicdisplays.api.beta.placeholder.GlobalPlaceholder;
-import me.filoghost.holographicdisplays.api.beta.placeholder.GlobalPlaceholderFactory;
-import me.filoghost.holographicdisplays.api.beta.placeholder.GlobalPlaceholderReplaceFunction;
-import me.filoghost.holographicdisplays.api.beta.placeholder.IndividualPlaceholder;
-import me.filoghost.holographicdisplays.api.beta.placeholder.IndividualPlaceholderFactory;
-import me.filoghost.holographicdisplays.api.beta.placeholder.IndividualPlaceholderReplaceFunction;
+import me.filoghost.holographicdisplays.api.HolographicDisplaysAPI;
+import me.filoghost.holographicdisplays.api.Position;
+import me.filoghost.holographicdisplays.api.hologram.Hologram;
+import me.filoghost.holographicdisplays.api.placeholder.GlobalPlaceholder;
+import me.filoghost.holographicdisplays.api.placeholder.GlobalPlaceholderFactory;
+import me.filoghost.holographicdisplays.api.placeholder.GlobalPlaceholderReplaceFunction;
+import me.filoghost.holographicdisplays.api.placeholder.IndividualPlaceholder;
+import me.filoghost.holographicdisplays.api.placeholder.IndividualPlaceholderFactory;
+import me.filoghost.holographicdisplays.api.placeholder.IndividualPlaceholderReplaceFunction;
 
 public class MockHolographicsDisplaysAPI implements HolographicDisplaysAPI {
 

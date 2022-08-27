@@ -2,13 +2,13 @@ package me.ford.periodicholographicdisplays.holograms.wrap.visibility;
 
 import org.bukkit.entity.Player;
 
-import me.filoghost.holographicdisplays.api.beta.hologram.VisibilitySettings.Visibility;
+import me.filoghost.holographicdisplays.api.hologram.VisibilitySettings.Visibility;
 
 public class HolographicDisplaysVisibilitySettings implements VisibilitySettings {
-    private final me.filoghost.holographicdisplays.api.beta.hologram.VisibilitySettings delegate;
+    private final me.filoghost.holographicdisplays.api.hologram.VisibilitySettings delegate;
 
     public HolographicDisplaysVisibilitySettings(
-            me.filoghost.holographicdisplays.api.beta.hologram.VisibilitySettings delegate) {
+            me.filoghost.holographicdisplays.api.hologram.VisibilitySettings delegate) {
         this.delegate = delegate;
     }
 

@@ -3,7 +3,7 @@ package me.ford.periodicholographicdisplays.mock;
 import java.util.HashMap;
 import java.util.Map;
 
-import me.filoghost.holographicdisplays.api.beta.HolographicDisplaysAPI;
+import me.filoghost.holographicdisplays.api.HolographicDisplaysAPI;
 import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologram;
 import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramManager;
 
