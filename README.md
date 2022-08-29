@@ -22,6 +22,8 @@ Supported data storage types include SQLITE (default) and YAML. Conversion betwe
 pHD is completely documented on The Wiki. Please start there when you have questions.
 https://github.com/SlimeDog/pHD/wiki
 
+<a href="https://www.spigotmc.org/resources/77631/">![download-on-spigot](https://user-images.githubusercontent.com/17748923/187102011-b72e0f1d-ba74-4cb2-a69e-46f48cb364b5.png)</a>
+
 ### How to build with the ever-changing version of HolographicDisplays
 ```
 The main issue is that filoghost keeps releasing the same version (3.0.0-SNAPSHOT) even though they're adding
