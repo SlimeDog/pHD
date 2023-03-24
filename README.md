@@ -1,4 +1,4 @@
-# pHD &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="https://hangar.papermc.io/SlimeDog/pHD">![download-hangar](https://user-images.githubusercontent.com/17748923/227314671-471467da-7bf9-4186-ac1b-94332b62c796.png)</a> <a href="https://www.spigotmc.org/resources/77631/">![download-spigot](https://user-images.githubusercontent.com/17748923/227314677-6cf2244d-aaa1-4366-85d7-3d92c8834360.png)</a>
+# pHD &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="https://hangar.papermc.io/SlimeDog/pHD">![download-on-hangar](https://user-images.githubusercontent.com/17748923/187102194-00e910e6-ee8e-42cb-bfe1-d2f9e657ef4b.png)</a> <a href="https://www.spigotmc.org/resources/77631/">![download-on-spigot](https://user-images.githubusercontent.com/17748923/187102011-b72e0f1d-ba74-4cb2-a69e-46f48cb364b5.png)</a>
 
 Manage holograms with intelligence
 
