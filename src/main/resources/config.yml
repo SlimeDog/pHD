@@ -9,13 +9,10 @@
 # Implementation: drives_a_ford
 # Testing: SlimeDog
 #
-# Minecraft version support:
-#   pHD 1.0.0     Spigot 1.13.2, 1.14.4, 1.15.2
-#   pHD 1.0.4     Spigot and Paper 1.16.5
-#   pHD 1.1.0     Spigot and Paper 1.17.2
-#   pHD 1.2.2     Spigot and Paper 1.18.x
-#   pHD 1.3.0     Spigot and Paper 1.18.2 for DecentHolograms and HolographicDisplays
-#
+# Supported MC versions:
+# https://github.com/SlimeDog/pHD/wiki/Technical-Details
+# Default configuration:
+# https://github.com/SlimeDog/pHD/master/src/main/resources/config.yml
 
 # ========== DEFAULT PARAMETER VALUES ==============================================================
 # If parameter values are not specified, the default values will be used.
