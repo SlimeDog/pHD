@@ -1,11 +1,10 @@
 # messages.yml
+# Both legacy and MiniMessage format codes are supported.
+# See https://github.com/SlimeDog/SlimeDogCore/wiki/Formatting-Codes.
 #
 # All messages produced by pHD may be localized here.
 # This file must contain valid YAML code.
 # A YAML checker may be found at http://www.yamllint.com
-#
-# Message may contain color codes and other format codes. Both & and § are recognized.
-# A list of valid formatting codes may be found at https://minecraft.gamepedia.com/Formatting_codes
 #
 # Message placeholders are indicated by {PLACEHOLDER}.
 # PlaceholderAPI variables are not supported.
