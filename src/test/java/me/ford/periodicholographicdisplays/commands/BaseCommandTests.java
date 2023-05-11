@@ -1,5 +1,9 @@
 package me.ford.periodicholographicdisplays.commands;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InaccessibleObjectException;
+import java.lang.reflect.Modifier;
+
 import org.bukkit.command.Command;
 import org.junit.After;
 import org.junit.Assert;
@@ -7,6 +11,8 @@ import org.junit.Before;
 
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 import dev.ratas.slimedogcore.impl.messaging.recipient.MessageRecipient;
+import dev.ratas.slimedogcore.impl.messaging.recipient.MessageRecipient;
+import dev.ratas.slimedogcore.impl.wrappers.BukkitAdapter;
 import me.ford.periodicholographicdisplays.commands.subcommands.ManageSub;
 import me.ford.periodicholographicdisplays.commands.subcommands.SetSub;
 import me.ford.periodicholographicdisplays.holograms.FlashingHologram;
@@ -22,13 +28,24 @@ public abstract class BaseCommandTests {
     protected MockOPCommandSender sender;
     protected SDCRecipient recipient;
 
+    static {
+        try {
+            Field field = BukkitAdapter.class.getDeclaredField("ALLOW_MINI_MESSAGES");
+            field.setAccessible(true);
+            field.set(null, false);
+        } catch (NoSuchFieldException | IllegalAccessException | SecurityException | InaccessibleObjectException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Before
     public void setup() {
         MockStarterUtil.startMocking();
         phd = new MockPeriodicHolographicDisplays();
         command = new PHDCommand(phd, new MockPluginManager());
         sender = new MockOPCommandSender(null);
-        recipient = new MessageRecipient(sender);
+        // allowing mini messages at test time breaks the testss
+        recipient = new MessageRecipient(sender, false);
     }
 
     @After
