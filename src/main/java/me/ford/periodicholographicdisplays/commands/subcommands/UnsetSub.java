@@ -108,12 +108,12 @@ public class UnsetSub extends PHDSubCommand {
         try {
             type = PeriodicType.valueOf(args[1].toUpperCase());
         } catch (IllegalArgumentException e) {
-            sender.sendRawMessage(messages.getTypeNotRecognizedMessage(args[1]));
+            sender.sendMessage(messages.getTypeNotRecognizedMessage().createWith(args[1]));
             return true;
         }
         FlashingHologram hologram = storage.getHologram(args[0], type);
         if (hologram == null) {
-            sender.sendRawMessage(messages.getHologramNotFoundMessage(args[0], type));
+            sender.sendMessage(messages.getHologramNotFoundMessage().createWith(args[0], type));
             return true;
         }
         String[] opts = Arrays.copyOfRange(args, 2, args.length);
@@ -125,7 +125,7 @@ public class UnsetSub extends PHDSubCommand {
             switch (opt) {
                 case "distance":
                     if (hologram.getActivationDistance() == PeriodicHologramBase.NO_DISTANCE) {
-                        sender.sendRawMessage(messages.getOptionNotSetMessage(opt));
+                        sender.sendMessage(messages.getOptionNotSetMessage().createWith(opt));
                         usedOptions.remove(opt);
                     } else {
                         hologram.defaultDistance(settings);
@@ -133,7 +133,7 @@ public class UnsetSub extends PHDSubCommand {
                     break;
                 case "seconds":
                     if (hologram.getShowTime() == PeriodicHologramBase.NO_SECONDS) {
-                        sender.sendRawMessage(messages.getOptionNotSetMessage(opt));
+                        sender.sendMessage(messages.getOptionNotSetMessage().createWith(opt));
                         usedOptions.remove(opt);
                     } else {
                         hologram.defaultShowtime(settings);
@@ -141,7 +141,7 @@ public class UnsetSub extends PHDSubCommand {
                     break;
                 case "permission":
                     if (hologram.getPermissions() == null) {
-                        sender.sendRawMessage(messages.getOptionNotSetMessage(opt));
+                        sender.sendMessage(messages.getOptionNotSetMessage().createWith(opt));
                         usedOptions.remove(opt);
                     } else {
                         hologram.setPermissions(null);
@@ -149,7 +149,7 @@ public class UnsetSub extends PHDSubCommand {
                     break;
                 case "flash":
                     if (!hologram.flashes()) {
-                        sender.sendRawMessage(messages.getOptionNotSetMessage(opt));
+                        sender.sendMessage(messages.getOptionNotSetMessage().createWith(opt));
                         usedOptions.remove(opt);
                         break;
                     }
@@ -187,8 +187,9 @@ public class UnsetSub extends PHDSubCommand {
                         }
                     }
                     if (ntimes.getShownTo().get(player.getUniqueId()) == null) {
-                        sender.sendRawMessage(
-                                messages.getOptionNotSetMessage(String.format("%s (for %s)", opt, player.getName())));
+                        sender.sendMessage(
+                                messages.getOptionNotSetMessage()
+                                        .createWith(String.format("%s (for %s)", opt, player.getName())));
                         usedOptions.remove(opt);
                         break;
                     }
@@ -199,13 +200,13 @@ public class UnsetSub extends PHDSubCommand {
                     break;
                 case "time":
                     if (type == PeriodicType.MCTIME || type == PeriodicType.IRLTIME) {
-                        sender.sendRawMessage(messages.getCannotUnSetRequiredMessage(opt, type));
+                        sender.sendMessage(messages.getCannotUnSetRequiredMessage().createWith(opt, type));
                         usedOptions.remove(opt);
                         break;
                     }
                 case "times":
                     if (type == PeriodicType.NTIMES) {
-                        sender.sendRawMessage(messages.getCannotUnSetRequiredMessage(opt, type));
+                        sender.sendMessage(messages.getCannotUnSetRequiredMessage().createWith(opt, type));
                         usedOptions.remove(opt);
                         break;
                     }
@@ -220,7 +221,7 @@ public class UnsetSub extends PHDSubCommand {
         }
         if (usedOptions.isEmpty()) {
             if (!unsetPlayerCount && !unsetFlash) {
-                sender.sendRawMessage(messages.getNothingToUnsetMessage());
+                sender.sendMessage(messages.getNothingToUnsetMessage().getMessage());
             } else {
                 hologram.resetVisibility();
                 storage.save(HologramSaveReason.CHANGE, false);

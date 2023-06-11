@@ -139,7 +139,7 @@ public class ManageSub extends OptionPairSetSub {
         }
         WrappedHologram holo = provider.getByName(args[0]);
         if (holo == null) {
-            sender.sendRawMessage(messages.getHDHologramNotFoundMessage(args[0]));
+            sender.sendMessage(messages.getHDHologramNotFoundMessage().createWith(args[0]));
             return true;
         }
         if (args.length < 2) {
@@ -149,7 +149,7 @@ public class ManageSub extends OptionPairSetSub {
         try {
             type = PeriodicType.valueOf(args[1].toUpperCase());
         } catch (IllegalArgumentException e) {
-            sender.sendRawMessage(messages.getTypeNotRecognizedMessage(args[1]));
+            sender.sendMessage(messages.getTypeNotRecognizedMessage().createWith(args[1]));
             return true;
         }
         boolean defaultedAlways = args.length == 2 && type == PeriodicType.ALWAYS;
@@ -170,7 +170,7 @@ public class ManageSub extends OptionPairSetSub {
         WorldHologramStorage worldStorage = storage.getHolograms(holo.getBukkitLocation().getWorld());
         FlashingHologram existing = worldStorage.getHologram(holo.getName(), type);
         if (existing != null) { // already managed
-            sender.sendRawMessage(messages.getHologramAlreadyManagedMessage(holo.getName(), type));
+            sender.sendMessage(messages.getHologramAlreadyManagedMessage().createWith(holo.getName(), type));
             return true;
         }
         existing = adoptHologram(sender, holo, type, optionPairs);
@@ -183,10 +183,10 @@ public class ManageSub extends OptionPairSetSub {
             } catch (OptionPairException e) {
                 switch (e.getType()) {
                     case NEED_A_NUMBER:
-                        sender.sendRawMessage(messages.getNeedANumberMessage(e.getExtra()));
+                        sender.sendMessage(messages.getNeedANumberMessage().createWith(e.getExtra()));
                         break;
                     case NEED_AN_INTEGER:
-                        sender.sendRawMessage(messages.getNeedAnIntegerMessage(e.getExtra()));
+                        sender.sendMessage(messages.getNeedAnIntegerMessage().createWith(e.getExtra()));
                         break;
                     case INCORRECT_TIME:
                         sender.sendRawMessage(messages.getIncorrectTimeMessage(e.getExtra()));
@@ -195,19 +195,19 @@ public class ManageSub extends OptionPairSetSub {
                         sender.sendRawMessage(messages.getNoSuchOptionMessage(type, e.getExtra()));
                         break;
                     case DISTANCE_NEGATIVE:
-                        sender.sendRawMessage(messages.getDistanceTooSmallMessage(e.getExtra()));
+                        sender.sendMessage(messages.getDistanceTooSmallMessage().createWith(e.getExtra()));
                         break;
                     case SECONDS_NEGATIVE:
-                        sender.sendRawMessage(messages.getSecondsTooSmallMessage(e.getExtra()));
+                        sender.sendMessage(messages.getSecondsTooSmallMessage().createWith(e.getExtra()));
                         break;
                     case FLASH_ONLY_ONE:
-                        sender.sendRawMessage(messages.getFlashMustHaveBothMessage(e.getExtra()));
+                        sender.sendMessage(messages.getFlashMustHaveBothMessage().createWith(e.getExtra()));
                         break;
                     case FLASH_TOO_SMALL:
-                        sender.sendRawMessage(messages.getFlashTimeTooSmallMessage(e.getExtra()));
+                        sender.sendMessage(messages.getFlashTimeTooSmallMessage().createWith(e.getExtra()));
                         break;
                     case TIMES_TOO_SMALL:
-                        sender.sendRawMessage(messages.getNegativeTimesMessage(e.getExtra()));
+                        sender.sendMessage(messages.getNegativeTimesMessage().createWith(e.getExtra()));
                         break;
                     default:
                         sender.sendRawMessage("Unusual problem: " + e);
@@ -218,7 +218,7 @@ public class ManageSub extends OptionPairSetSub {
             }
         }
         storage.addHologram(existing);
-        sender.sendRawMessage(messages.getStartedManagingMessage(holo.getName(), type, optionPairs));
+        sender.sendMessage(messages.getStartedManagingMessage().createWith(holo.getName(), type, optionPairs));
         return true;
     }
 
@@ -299,7 +299,7 @@ public class ManageSub extends OptionPairSetSub {
                     try {
                         timesToShow = Integer.parseInt(timesResult);
                     } catch (NumberFormatException e) {
-                        sender.sendRawMessage(messages.getNeedAnIntegerMessage(timesResult));
+                        sender.sendMessage(messages.getNeedAnIntegerMessage().createWith(timesResult));
                         return null;
                     }
                 } else {

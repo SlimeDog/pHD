@@ -86,7 +86,7 @@ public class ReportSub extends PHDSubCommand {
             try {
                 page = Integer.parseInt(args[2]);
             } catch (NumberFormatException e) {
-                sender.sendRawMessage(messages.getNeedAnIntegerMessage(args[2]));
+                sender.sendMessage(messages.getNeedAnIntegerMessage().createWith(args[2]));
                 return true;
             }
         }
@@ -111,13 +111,13 @@ public class ReportSub extends PHDSubCommand {
         if (maxPage == 0)
             maxPage++;
         if (page < 1 || page > maxPage) {
-            sender.sendRawMessage(messages.getInvalidPageMessage(maxPage));
+            sender.sendMessage(messages.getInvalidPageMessage().createWith(maxPage));
             return true;
         }
 
         sender.sendRawMessage(messages.getNtimesReportMessage(player, holograms, page, sender instanceof Player));
         if (page < maxPage && sender instanceof Player) {
-            HintUtil.sendHint(sender, messages.getNextPageHint("{command}"), "{command}",
+            HintUtil.sendHint(sender, messages.getNextPageHint().createWith("{command}").getFilled(), "{command}",
                     String.format("/phd report NTIMES %s %d", player.getName(), page + 1));
         }
         return true;

@@ -104,7 +104,7 @@ public class SetSub extends OptionPairSetSub {
         }
         String holoName = args[0];
         if (storage.getAvailableTypes(holoName).size() == 0) {
-            sender.sendRawMessage(messages.getHologramNotManagedMessage(holoName));
+            sender.sendMessage(messages.getHologramNotManagedMessage().createWith(holoName));
             return true;
         }
         if (args.length < 2) {
@@ -114,7 +114,7 @@ public class SetSub extends OptionPairSetSub {
         try {
             type = PeriodicType.valueOf(args[1].toUpperCase());
         } catch (IllegalArgumentException e) {
-            sender.sendRawMessage(messages.getTypeNotRecognizedMessage(args[1]));
+            sender.sendMessage(messages.getTypeNotRecognizedMessage().createWith(args[1]));
             return true;
         }
         if (args.length < 4) {
@@ -129,7 +129,7 @@ public class SetSub extends OptionPairSetSub {
         }
         FlashingHologram existing = storage.getHologram(holoName, type);
         if (existing == null) {
-            sender.sendRawMessage(messages.getHologramNotTrackedMessage(holoName, type));
+            sender.sendMessage(messages.getHologramNotTrackedMessage().createWith(holoName, type));
             return true;
         }
         try {
@@ -137,10 +137,10 @@ public class SetSub extends OptionPairSetSub {
         } catch (OptionPairException e) {
             switch (e.getType()) {
                 case NEED_A_NUMBER:
-                    sender.sendRawMessage(messages.getNeedANumberMessage(e.getExtra()));
+                    sender.sendMessage(messages.getNeedANumberMessage().createWith(e.getExtra()));
                     break;
                 case NEED_AN_INTEGER:
-                    sender.sendRawMessage(messages.getNeedAnIntegerMessage(e.getExtra()));
+                    sender.sendMessage(messages.getNeedAnIntegerMessage().createWith(e.getExtra()));
                     break;
                 case INCORRECT_TIME:
                     sender.sendRawMessage(messages.getIncorrectTimeMessage(e.getExtra()));
@@ -149,19 +149,19 @@ public class SetSub extends OptionPairSetSub {
                     sender.sendRawMessage(messages.getNoSuchOptionMessage(type, e.getExtra()));
                     break;
                 case DISTANCE_NEGATIVE:
-                    sender.sendRawMessage(messages.getDistanceTooSmallMessage(e.getExtra()));
+                    sender.sendMessage(messages.getDistanceTooSmallMessage().createWith(e.getExtra()));
                     break;
                 case SECONDS_NEGATIVE:
-                    sender.sendRawMessage(messages.getSecondsTooSmallMessage(e.getExtra()));
+                    sender.sendMessage(messages.getSecondsTooSmallMessage().createWith(e.getExtra()));
                     break;
                 case FLASH_ONLY_ONE:
-                    sender.sendRawMessage(messages.getFlashMustHaveBothMessage(e.getExtra()));
+                    sender.sendMessage(messages.getFlashMustHaveBothMessage().createWith(e.getExtra()));
                     break;
                 case FLASH_TOO_SMALL:
-                    sender.sendRawMessage(messages.getFlashTimeTooSmallMessage(e.getExtra()));
+                    sender.sendMessage(messages.getFlashTimeTooSmallMessage().createWith(e.getExtra()));
                     break;
                 case TIMES_TOO_SMALL:
-                    sender.sendRawMessage(messages.getNegativeTimesMessage(e.getExtra()));
+                    sender.sendMessage(messages.getNegativeTimesMessage().createWith(e.getExtra()));
                     break;
                 default:
                     sender.sendRawMessage("Unusual problem: " + e);

@@ -1,5 +1,6 @@
 package me.ford.periodicholographicdisplays;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -361,11 +362,11 @@ public class Messages extends MessagesBase {
         return needAnInteger;
     }
 
-    public SDCSingleContextMessageFactory<String> getNeedANumberMessage(String msg) {
+    public SDCSingleContextMessageFactory<String> getNeedANumberMessage() {
         return needANumber;
     }
 
-    public SDCSingleContextMessageFactory<String> getIllegalTimeMessage(String msg) {
+    public SDCSingleContextMessageFactory<String> getIllegalTimeMessage() {
         return illegalTime;
     }
 
@@ -827,6 +828,14 @@ public class Messages extends MessagesBase {
     public void reloadConfig() {
         super.reloadConfig();
         loadMessages();
+    }
+
+    public File getFile() {
+        return getConfig().getFile();
+    }
+
+    public void saveDefaultConfig() {
+        getConfig().saveDefaultConfig();
     }
 
 }

@@ -6,6 +6,8 @@ import java.util.List;
 import org.bukkit.entity.Player;
 
 import dev.ratas.slimedogcore.api.commands.SDCCommandOptionSet;
+import dev.ratas.slimedogcore.api.messaging.SDCMessage;
+import dev.ratas.slimedogcore.api.messaging.context.SDCSingleContext;
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
@@ -41,10 +43,11 @@ public class ReloadSub extends PHDSubCommand {
                 sender.sendRawMessage(messages.getSqlConnectionMessage());
             }
             sender.sendRawMessage(messages.getConfigReloadedMessage());
-            String typeMessage = messages.getActiveStorageMessage(phd.getSettings().useDatabase());
-            sender.sendRawMessage(typeMessage);
+            SDCMessage<SDCSingleContext<Boolean>> typeMessage = messages.getActiveStorageMessage()
+                    .createWith(phd.getSettings().useDatabase());
+            sender.sendMessage(typeMessage);
             if (sender instanceof Player) {
-                phd.getLogger().info(typeMessage);
+                phd.getLogger().info(typeMessage.getFilled());
             }
             if (phd.getConfig().isSet("debug")) {
                 String debug = "DEBUG is " + phd.getSettings().onDebug();
@@ -68,7 +71,7 @@ public class ReloadSub extends PHDSubCommand {
                     }
                 }
                 if (isBeingDisabled) {
-                    sender.sendRawMessage(messages.getDisablingMessage());
+                    sender.sendMessage(messages.getDisablingMessage().getMessage());
                 }
             }
         }

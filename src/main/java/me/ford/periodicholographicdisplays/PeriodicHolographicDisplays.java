@@ -101,9 +101,9 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
 
         // check messages
         try {
-            messages.getConfig();
+            messages.reloadConfig();
         } catch (IllegalStateException e) {
-            getLogger().severe(messages.getDisablingMessage());
+            getLogger().severe(messages.getDisablingMessage().getMessage().getFilled());
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
@@ -112,7 +112,7 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
         try {
             lpHook = new LuckPermsHook(this);
         } catch (IllegalStateException | NoClassDefFoundError e) {
-            getLogger().warning(messages.getNoLPMessage());
+            getLogger().warning(messages.getNoLPMessage().getMessage().getFilled());
         }
         // Citizens hoook if possible
         try {
@@ -131,7 +131,7 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
                 || version.contains("1.17") || version.contains("1.18") || version.contains("1.19")) {
             worldTimeListener = new SimpleWorldTimeListener(holograms);
         } else {
-            getLogger().warning(messages.getLegacyMessage());
+            getLogger().warning(messages.getLegacyMessage().getMessage().getFilled());
             worldTimeListener = new LegacyWorldTimeListener(holograms);
         }
         this.getServer().getPluginManager().registerEvents(worldTimeListener, this);
@@ -171,7 +171,7 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
             }
             checker.check();
         }
-        getLogger().info(messages.getActiveStorageMessage(getSettings().useDatabase()));
+        getLogger().info(messages.getActiveStorageMessage().createWith(getSettings().useDatabase()).getFilled());
     }
 
     @Override
@@ -182,7 +182,7 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
         boolean canMessage = false;
         if (messages == null) {
             try {
-                messages = new Messages(this, true);
+                messages = new Messages(this);
                 canMessage = true;
             } catch (InvalidConfigurationException e) {
                 e.printStackTrace();
@@ -190,7 +190,7 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
         }
         if (canMessage) {
             getLogger().severe(messages.getProblemsReloadingConfigMessage(issues));
-            getLogger().severe(messages.getDisablingMessage());
+            getLogger().severe(messages.getDisablingMessage().getMessage().getFilled());
         } else {
             getLogger().severe("Disabling plugins. Problems: " + issues);
         }
@@ -222,7 +222,7 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
         List<ReloadIssue> issues = new ArrayList<>();
         File df = getDataFolder();
         if (!df.exists() || !df.canRead()) {
-            getLogger().warning(messages.getNoPluginFolderMessage());
+            getLogger().warning(messages.getNoPluginFolderMessage().getMessage().getFilled());
             boolean wasCreated = df.mkdir();
             DefaultReloadIssue dri = DefaultReloadIssue.NO_FOLDER;
             dri.setExtra(String.valueOf(wasCreated));
@@ -240,15 +240,7 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
             issues.add(DefaultReloadIssue.NO_MESSAGES);
         }
         boolean disablePlugin = false;
-        try {
-            if (!messages.reloadConfig()) {
-                issues.add(new SimpleReloadIssue(messages.getIncorrectMessages(), null));
-                disablePlugin = true;
-            }
-        } catch (InvalidConfigurationException e) {
-            issues.add(DefaultReloadIssue.INVALID_MESSAGES);
-            disablePlugin = true;
-        }
+        messages.reloadConfig();
         List<ReloadIssue> settingIssues = getSettingIssues();
         issues.addAll(settingIssues);
         if (!settingIssues.isEmpty()) {

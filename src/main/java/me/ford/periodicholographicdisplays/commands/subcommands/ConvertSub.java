@@ -62,7 +62,7 @@ public class ConvertSub extends PHDSubCommand {
         String from = args[0];
         String to = args[1];
         if (from.equalsIgnoreCase(to)) {
-            sender.sendRawMessage(messages.getCannotConvertSameMessage(from));
+            sender.sendMessage(messages.getCannotConvertSameMessage().createWith(from));
             return true;
         }
         ConvertTypes type;
@@ -71,7 +71,7 @@ public class ConvertSub extends PHDSubCommand {
         } else if (from.equalsIgnoreCase(YAML) && to.equalsIgnoreCase(SQLITE)) {
             type = ConvertTypes.YAML_TO_SQLITE;
         } else {
-            sender.sendRawMessage(messages.getUnrecognizedStorageTypeMessage(from, to));
+            sender.sendMessage(messages.getUnrecognizedStorageTypeMessage().createWith(from, to));
             return true;
         }
 
@@ -79,7 +79,7 @@ public class ConvertSub extends PHDSubCommand {
         File sourceFile = new File(phd.getDataFolder(),
                 type == ConvertTypes.SQLITE_TO_YAML ? SQLStorageBase.DATABSE_NAME : YAMLStorage.FILE_NAME);
         if (!sourceFile.exists()) {
-            sender.sendRawMessage(messages.getStorageTypeDoesNotExistMessage(from));
+            sender.sendMessage(messages.getStorageTypeDoesNotExistMessage().createWith(from));
             return true;
         }
 
@@ -113,14 +113,14 @@ public class ConvertSub extends PHDSubCommand {
                 targetStorage = yamlStorage;
                 break;
             default:
-                sender.sendRawMessage(messages.getUnrecognizedStorageTypeMessage(from, to));
+                sender.sendMessage(messages.getUnrecognizedStorageTypeMessage().createWith(from, to));
                 return true;
         }
 
         // find out if there is a previous instance of target storage type
         boolean hasData = targetStorage.hasData();
         if (hasData) {
-            sender.sendRawMessage(messages.getAlreadyHasDataMessage(to, targetStorage instanceof SQLStorage));
+            sender.sendMessage(messages.getAlreadyHasDataMessage().createWith(to, targetStorage instanceof SQLStorage));
             return true;
         }
 
@@ -128,7 +128,7 @@ public class ConvertSub extends PHDSubCommand {
         StorageConverter<Storage, Storage> converter;
         converter = new StorageConverter<Storage, Storage>(sourceStorage, targetStorage, whenDone);
         converter.startConvert();
-        sender.sendRawMessage(messages.getStartedConvertingMessage(from, to));
+        sender.sendMessage(messages.getStartedConvertingMessage().createWith(from, to));
         return true;
     }
 
@@ -163,7 +163,7 @@ public class ConvertSub extends PHDSubCommand {
 
         @Override
         public void run() {
-            phd.getScheduler().runTask(() -> sender.sendRawMessage(messages.getDoneConvertingMessage(from, to)));
+            phd.getScheduler().runTask(() -> sender.sendMessage(messages.getDoneConvertingMessage().createWith(from, to)));
             // so it gets sent after the start message (for YAML mostly)
             closeSqlite(from, to);
         }
