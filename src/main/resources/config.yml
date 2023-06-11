@@ -34,6 +34,8 @@ storage-type: SQLITE
 # ========== CHECK FOR UPDATES =====================================================================
 # If you do not want notification of available updates in the console log, you may disable it here.
 check-for-updates: true
+# Update source may be either Hangar (default) or SpigotMC.
+update-source: Hangar
 
 # ========== BSTATS METRICS ========================================================================
 # By default, the plugin collects and transmits anonymous statistics to bstats.org.

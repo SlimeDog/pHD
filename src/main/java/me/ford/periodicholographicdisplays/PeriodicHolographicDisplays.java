@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.BiConsumer;
 
 import org.bstats.bukkit.Metrics;
 import org.bstats.bukkit.Metrics.SimplePie;
@@ -40,6 +41,8 @@ import me.ford.periodicholographicdisplays.users.UserCache;
  */
 public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisplays {
     private static final int SPIGOT_RESOURCE_ID = 77631;
+    private static final String HANGAR_AUTHOR = "SlimeDog";
+    private static final String HANGAR_SLUG = "pHD";
     private HologramPlatform platform;
     private HologramStorage holograms;
     private Settings settings;
@@ -146,7 +149,8 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
         new Zombificator(this);
 
         if (settings.checkForUpdates()) {
-            new UpdateChecker(this, (response, ver) -> {
+            String source = getDefaultConfig().getConfig().getString("update-source", "Hangar");
+            BiConsumer<UpdateChecker.VersionResponse, String> consumer = (response, ver) -> {
                 switch (response) {
                     case LATEST:
                         getLogger().info("Using latest version of pHD");
@@ -158,7 +162,14 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
                         getLogger().info("Version information currently unavailable");
                         break;
                 }
-            }, SPIGOT_RESOURCE_ID).check();
+            };
+            UpdateChecker checker;
+            if (source.equalsIgnoreCase("Hangar")) {
+                checker = UpdateChecker.forHangar(this, consumer, HANGAR_AUTHOR, HANGAR_SLUG);
+            } else {
+                checker = UpdateChecker.forSpigot(this, consumer, SPIGOT_RESOURCE_ID);
+            }
+            checker.check();
         }
         getLogger().info(messages.getActiveStorageMessage(getSettings().useDatabase()));
     }
