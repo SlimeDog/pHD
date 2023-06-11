@@ -76,7 +76,7 @@ public class ReportSub extends PHDSubCommand {
                 player = Bukkit.getOfflinePlayer(id);
             }
             if (player == null || !player.hasPlayedBefore()) {
-                sender.sendRawMessage(messages.getPlayerNotFoundMessage(args[1]));
+                sender.sendMessage(messages.getPlayerNotFoundMessage().createWith(args[1]));
                 return true;
             }
         }
@@ -115,7 +115,7 @@ public class ReportSub extends PHDSubCommand {
             return true;
         }
 
-        sender.sendRawMessage(messages.getNtimesReportMessage(player, holograms, page, sender instanceof Player));
+        sender.sendMessage(messages.getNtimesReportMessage(player, holograms, page, sender instanceof Player));
         if (page < maxPage && sender instanceof Player) {
             HintUtil.sendHint(sender, messages.getNextPageHint().createWith("{command}").getFilled(), "{command}",
                     String.format("/phd report NTIMES %s %d", player.getName(), page + 1));

@@ -155,12 +155,12 @@ public class UnsetSub extends PHDSubCommand {
                     }
                     hologram.setNoFlash();
                     usedOptions.remove(opt);
-                    sender.sendRawMessage(messages.getUnsetFlashMessage());
+                    sender.sendMessage(messages.getUnsetFlashMessage().getMessage());
                     unsetFlash = true;
                     break;
                 case "playercount":
                     if (hologram.getType() != PeriodicType.NTIMES) {
-                        sender.sendRawMessage(messages.getNoSuchOptionMessage(type, opt));
+                        sender.sendMessage(messages.getNoSuchOptionMessage().createWith(type, opt));
                         return true;
                     }
                     NTimesHologram ntimes = (NTimesHologram) hologram;
@@ -171,7 +171,7 @@ public class UnsetSub extends PHDSubCommand {
                         optAt++;
                     }
                     if (opts.length < optAt + 2) {
-                        sender.sendRawMessage(messages.getNeedCountAfterPlayercount());
+                        sender.sendMessage(messages.getNeedCountAfterPlayercount().getMessage());
                         return true;
                     }
                     String playerName = opts[optAt + 1];
@@ -182,7 +182,7 @@ public class UnsetSub extends PHDSubCommand {
                             player = Bukkit.getOfflinePlayer(id);
                         }
                         if (player == null || !player.hasPlayedBefore()) {
-                            sender.sendRawMessage(messages.getPlayerNotFoundMessage(playerName));
+                            sender.sendMessage(messages.getPlayerNotFoundMessage().createWith(playerName));
                             return true;
                         }
                     }
@@ -196,7 +196,7 @@ public class UnsetSub extends PHDSubCommand {
                     ntimes.resetShownTo(player.getUniqueId());
                     unsetPlayerCount = true;
                     usedOptions.remove(opt);
-                    sender.sendRawMessage(messages.getUnsetPlayerCountMessage(player));
+                    sender.sendMessage(messages.getUnsetPlayerCountMessage().createWith(player));
                     break;
                 case "time":
                     if (type == PeriodicType.MCTIME || type == PeriodicType.IRLTIME) {
@@ -212,7 +212,7 @@ public class UnsetSub extends PHDSubCommand {
                     }
                 default:
                     if (!prevOpt.equalsIgnoreCase("playercount")) {
-                        sender.sendRawMessage(messages.getNoSuchOptionMessage(type, opt));
+                        sender.sendMessage(messages.getNoSuchOptionMessage().createWith(type, opt));
                     }
                     usedOptions.remove(opt);
                     break;
@@ -228,7 +228,7 @@ public class UnsetSub extends PHDSubCommand {
             }
             return true;
         }
-        sender.sendRawMessage(messages.getUnsetOptionsMessage(usedOptions));
+        sender.sendMessage(messages.getUnsetOptionsMessage().createWith(usedOptions));
         hologram.resetVisibility();
         storage.save(HologramSaveReason.CHANGE, false);
         return true;

@@ -189,7 +189,7 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
             }
         }
         if (canMessage) {
-            getLogger().severe(messages.getProblemsReloadingConfigMessage(issues));
+            getLogger().severe(messages.getProblemsReloadingConfigMessage().createWith(issues).getFilled());
             getLogger().severe(messages.getDisablingMessage().getMessage().getFilled());
         } else {
             getLogger().severe("Disabling plugins. Problems: " + issues);
@@ -293,7 +293,9 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
                     issues.add(issue);
                 } else {
                     issues.add(new SimpleReloadIssue(
-                            messages.getProblemWithConfigMessage(entry.getKey(), entry.getValue()), null));
+                            messages.getProblemWithConfigMessage().createWith(entry.getKey(), entry.getValue())
+                                    .getFilled(),
+                            null));
                 }
             }
         }

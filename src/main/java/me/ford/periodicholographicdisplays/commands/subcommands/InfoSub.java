@@ -100,7 +100,7 @@ public class InfoSub extends PHDSubCommand {
             sender.sendMessage(messages.getInvalidPageMessage().createWith(maxPage));
             return true;
         }
-        sender.sendRawMessage(messages.getHologramInfoMessage(hologram, page, sender instanceof Player));
+        sender.sendMessage(messages.getHologramInfoMessage(hologram, page, sender instanceof Player));
         if (page < maxPage && sender instanceof Player)
             HintUtil.sendHint(sender, messages.getNextPageHint().createWith("{command}").getFilled(),
                     String.format("/phd info %s %s %d", hologram.getName(), type.name(), page + 1));

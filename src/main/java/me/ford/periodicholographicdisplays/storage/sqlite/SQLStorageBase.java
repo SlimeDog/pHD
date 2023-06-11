@@ -39,7 +39,7 @@ public abstract class SQLStorageBase {
             String url = "jdbc:sqlite:" + phd.getDataFolder().getAbsolutePath() + "/" + DATABSE_NAME;
             // create a connection to the database
             conn = DriverManager.getConnection(url);
-            phd.getLogger().info(phd.getMessages().getSqlConnectionMessage());
+            phd.getLogger().info(phd.getMessages().getSqlConnectionMessage().getMessage().getFilled());
         } catch (SQLException e) {
             phd.getLogger().log(Level.SEVERE, "Problem connecting to database", e);
         }

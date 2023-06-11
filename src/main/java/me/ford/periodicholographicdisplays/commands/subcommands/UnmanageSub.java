@@ -80,10 +80,10 @@ public class UnmanageSub extends PHDSubCommand {
         }
         if (holo != null) {
             storage.removeHologram(holo);
-            sender.sendRawMessage(messages.getUnmanagedHologramMessage(holo.getName(), type));
+            sender.sendMessage(messages.getUnmanagedHologramMessage().createWith(holo.getName(), type));
         } else {
             storage.removeZombie(zombie);
-            sender.sendRawMessage(messages.getUnmanagedHologramMessage(zombie.getName(), type));
+            sender.sendMessage(messages.getUnmanagedHologramMessage().createWith(zombie.getName(), type));
         }
         return true;
     }

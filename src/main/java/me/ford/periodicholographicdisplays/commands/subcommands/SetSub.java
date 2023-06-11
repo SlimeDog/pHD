@@ -124,7 +124,7 @@ public class SetSub extends OptionPairSetSub {
         try {
             optionPairs = getOptionPairs(Arrays.copyOfRange(args, 2, args.length));
         } catch (IllegalArgumentException e) {
-            sender.sendRawMessage(messages.getNeedPairedOptionsMessage());
+            sender.sendMessage(messages.getNeedPairedOptionsMessage().getMessage());
             return true;
         }
         FlashingHologram existing = storage.getHologram(holoName, type);
@@ -143,10 +143,10 @@ public class SetSub extends OptionPairSetSub {
                     sender.sendMessage(messages.getNeedAnIntegerMessage().createWith(e.getExtra()));
                     break;
                 case INCORRECT_TIME:
-                    sender.sendRawMessage(messages.getIncorrectTimeMessage(e.getExtra()));
+                    sender.sendMessage(messages.getIncorrectTimeMessage().createWith(e.getExtra()));
                     break;
                 case NO_SUCH_OPTION:
-                    sender.sendRawMessage(messages.getNoSuchOptionMessage(type, e.getExtra()));
+                    sender.sendMessage(messages.getNoSuchOptionMessage().createWith(type, e.getExtra()));
                     break;
                 case DISTANCE_NEGATIVE:
                     sender.sendMessage(messages.getDistanceTooSmallMessage().createWith(e.getExtra()));
@@ -170,7 +170,7 @@ public class SetSub extends OptionPairSetSub {
         }
         existing.resetVisibility();
         storage.save(HologramSaveReason.CHANGE, false);
-        sender.sendRawMessage(messages.getSetNewOptionsMessage(holoName, type, optionPairs));
+        sender.sendMessage(messages.getSetNewOptionsMessage().createWith(holoName, type, optionPairs));
         return true;
     }
 

@@ -810,7 +810,7 @@ public class Messages extends MessagesBase {
 
     }
 
-    public SDCTripleContextFactory<FlashingHologram, Integer, Boolean> getHologramInfoMessage(FlashingHologram hologram,
+    public SDCTripleContextMessage<FlashingHologram, Integer, Boolean> getHologramInfoMessage(FlashingHologram hologram,
             int page, boolean doPages) {
         HologramInfoHelper helper = new HologramInfoHelper(hologram, page, doPages);
         SDCSingleContextFactory<FlashingHologram> delegate1 = new DelegatingMultipleToOneContextFactory<>(
@@ -822,7 +822,13 @@ public class Messages extends MessagesBase {
         SDCSingleContextFactory<Integer> delegate2 = new SingleContextFactory<>("{distance}",
                 fake -> helper.distanceRepl);
         SDCSingleContextFactory<Boolean> delegate3 = new SingleContextFactory<>("{flash}", fake -> helper.flashRepl);
-        return new DelegatingTripleContextFactory<>(delegate1, delegate2, delegate3);
+        SDCTripleContextFactory<FlashingHologram, Integer, Boolean> contextFactory = new DelegatingTripleContextFactory<>(
+                delegate1, delegate2, delegate3);
+        return (SDCTripleContextMessage<FlashingHologram, Integer, Boolean>) new TripleContextMessageFactory<>(
+                contextFactory,
+                getRawMessage("hologram-info",
+                        "Hologram {name}:\nWorld: {world}\nLocation: {location}\nType: {type}\nShowTime: {time}\nFlash: {flash}\nActivationDistance: {distance}\nPermission: {perms}\nTypeInfo: {typeinfo}"),
+                MessageTarget.TEXT).createWith(hologram, page, doPages);
     }
 
     private String getShowTimeString(PeriodicHologramBase hologram) {

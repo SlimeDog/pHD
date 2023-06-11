@@ -163,7 +163,7 @@ public class ManageSub extends OptionPairSetSub {
             try {
                 optionPairs = getOptionPairs(Arrays.copyOfRange(args, 2, args.length));
             } catch (IllegalArgumentException e) {
-                sender.sendRawMessage(messages.getNeedPairedOptionsMessage());
+                sender.sendMessage(messages.getNeedPairedOptionsMessage().getMessage());
                 return true;
             }
         }
@@ -189,10 +189,10 @@ public class ManageSub extends OptionPairSetSub {
                         sender.sendMessage(messages.getNeedAnIntegerMessage().createWith(e.getExtra()));
                         break;
                     case INCORRECT_TIME:
-                        sender.sendRawMessage(messages.getIncorrectTimeMessage(e.getExtra()));
+                        sender.sendMessage(messages.getIncorrectTimeMessage().createWith(e.getExtra()));
                         break;
                     case NO_SUCH_OPTION:
-                        sender.sendRawMessage(messages.getNoSuchOptionMessage(type, e.getExtra()));
+                        sender.sendMessage(messages.getNoSuchOptionMessage().createWith(type, e.getExtra()));
                         break;
                     case DISTANCE_NEGATIVE:
                         sender.sendMessage(messages.getDistanceTooSmallMessage().createWith(e.getExtra()));
@@ -257,14 +257,14 @@ public class ManageSub extends OptionPairSetSub {
             case IRLTIME:
                 String tResult = optionPairs.get("time");
                 if (tResult == null) {
-                    sender.sendRawMessage(messages.getOptionMissingMessage(type, "time"));
+                    sender.sendMessage(messages.getOptionMissingMessage().createWith(type, "time"));
                     return null;
                 }
                 long time;
                 try {
                     time = TimeUtils.parseHoursAndMinutesToSeconds(tResult);
                 } catch (IllegalArgumentException e) {
-                    sender.sendRawMessage(messages.getIncorrectTimeMessage(tResult));
+                    sender.sendMessage(messages.getIncorrectTimeMessage().createWith(tResult));
                     return null;
                 }
                 existing = new IRLTimeHologram(phd, holo, holo.getName(), defaultDistance, showTime, time, true, perms,
@@ -273,14 +273,14 @@ public class ManageSub extends OptionPairSetSub {
             case MCTIME:
                 String timeResult = optionPairs.get("time");
                 if (timeResult == null) {
-                    sender.sendRawMessage(messages.getOptionMissingMessage(type, "time"));
+                    sender.sendMessage(messages.getOptionMissingMessage().createWith(type, "time"));
                     return null;
                 }
                 long timeAt;
                 try {
                     timeAt = TimeUtils.parseMCTime(timeResult);
                 } catch (IllegalArgumentException e) {
-                    sender.sendRawMessage(messages.getIncorrectTimeMessage(timeResult));
+                    sender.sendMessage(messages.getIncorrectTimeMessage().createWith(timeResult));
                     return null;
                 }
                 existing = new MCTimeHologram(phd, holo, holo.getName(), defaultDistance, showTime, timeAt, true, perms,
@@ -303,7 +303,7 @@ public class ManageSub extends OptionPairSetSub {
                         return null;
                     }
                 } else {
-                    sender.sendRawMessage(messages.getOptionMissingMessage(type, "times"));
+                    sender.sendMessage(messages.getOptionMissingMessage().createWith(type, "times"));
                     return null;
                 }
                 existing = new NTimesHologram(phd, holo, holo.getName(), defaultDistance, showTime, timesToShow, true,
