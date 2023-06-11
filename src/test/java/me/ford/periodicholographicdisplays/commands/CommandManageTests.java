@@ -19,7 +19,7 @@ public class CommandManageTests extends BaseCommandTests {
     public void testManageIllegal() {
         // phd manage NonExisting
         String name = "hdHologram";
-        String expectedMessage = phd.getMessages().getHDHologramNotFoundMessage(name);
+        String expectedMessage = phd.getMessages().getHDHologramNotFoundMessage().createWith(name).getFilled();
         testCommand(sender, null, "phd", new String[] { "manage", name }, expectedMessage);
         // phd manage existing
         // add mock hologram
@@ -31,7 +31,7 @@ public class CommandManageTests extends BaseCommandTests {
 
         // phd manage existing <incorrectType>
         String fakeType = "FAKE";
-        expectedMessage = phd.getMessages().getTypeNotRecognizedMessage(fakeType);
+        expectedMessage = phd.getMessages().getTypeNotRecognizedMessage().createWith(fakeType).getFilled();
         testCommand(sender, null, "phd", new String[] { "manage", name, fakeType }, expectedMessage);
 
         // phd manage existing <type> # not ALWAYS
@@ -41,7 +41,7 @@ public class CommandManageTests extends BaseCommandTests {
 
         // phd manage existing <type> <option> <value> <option_with_no_value> # not
         // ALWAYS
-        expectedMessage = phd.getMessages().getNeedPairedOptionsMessage();
+        expectedMessage = phd.getMessages().getNeedPairedOptionsMessage().getMessage().getFilled();
         testCommand(sender, null, "phd", new String[] { "manage", name, type.name(), "opt", "val", "opt2" },
                 expectedMessage);
 
@@ -49,7 +49,7 @@ public class CommandManageTests extends BaseCommandTests {
         NTimesHologram hologram = new NTimesHologram(phd, phd.getHologramProvider().getByName(name), name, 2, 4, 5,
                 true, null, -1, -1);
         phd.getHolograms().addHologram(hologram);
-        expectedMessage = phd.getMessages().getHologramAlreadyManagedMessage(name, type);
+        expectedMessage = phd.getMessages().getHologramAlreadyManagedMessage().createWith(name, type).getFilled();
         testCommand(sender, null, "phd", new String[] { "manage", name, type.name(), "opt", "val" }, expectedMessage);
     }
 

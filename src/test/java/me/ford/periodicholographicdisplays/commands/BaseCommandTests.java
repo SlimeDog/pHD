@@ -2,7 +2,6 @@ package me.ford.periodicholographicdisplays.commands;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InaccessibleObjectException;
-import java.lang.reflect.Modifier;
 
 import org.bukkit.command.Command;
 import org.junit.After;
@@ -10,7 +9,6 @@ import org.junit.Assert;
 import org.junit.Before;
 
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
-import dev.ratas.slimedogcore.impl.messaging.recipient.MessageRecipient;
 import dev.ratas.slimedogcore.impl.messaging.recipient.MessageRecipient;
 import dev.ratas.slimedogcore.impl.wrappers.BukkitAdapter;
 import me.ford.periodicholographicdisplays.commands.subcommands.ManageSub;
@@ -69,24 +67,24 @@ public abstract class BaseCommandTests {
         String expected = usageMessage;
         testCommand(sender, null, "phd", new String[] { commandName, holoName }, expected);
         // /phd set <name> 1
-        expected = phd.getMessages().getTypeNotRecognizedMessage("1");
+        expected = phd.getMessages().getTypeNotRecognizedMessage().createWith("1").getFilled();
         testCommand(sender, null, "phd", new String[] { commandName, holoName, "1" }, expected);
         // /phd set <name> <wrongtype>
         expected = cmd.getUsage(recipient, new String[] { commandName, holoName, testType.name() });
         if (!isSet && testType == PeriodicType.ALWAYS) {
-            expected = phd.getMessages().getHologramAlreadyManagedMessage(holoName, testType);
+            expected = phd.getMessages().getHologramAlreadyManagedMessage().createWith(holoName, testType).getFilled();
         }
         testCommand(sender, null, "phd", new String[] { commandName, holoName, testType.name() }, expected);
         // /phd set <name> <type> <option> <value>
         if (isSet) {
-            expected = phd.getMessages().getHologramNotTrackedMessage(holoName, testType);
+            expected = phd.getMessages().getHologramNotTrackedMessage().createWith(holoName, testType).getFilled();
         } else {
-            expected = phd.getMessages().getHologramAlreadyManagedMessage(holoName, testType);
+            expected = phd.getMessages().getHologramAlreadyManagedMessage().createWith(holoName, testType).getFilled();
         }
         testCommand(sender, null, "phd", new String[] { commandName, holoName, testType.name(), "option", "value" },
                 expected);
         // /phd set <name> <type> <option> <value> <option2> # no value
-        expected = phd.getMessages().getNeedPairedOptionsMessage();
+        expected = phd.getMessages().getNeedPairedOptionsMessage().getMessage().getFilled();
         testCommand(sender, null, "phd",
                 new String[] { commandName, holoName, testType.name(), "option", "value", "option2" }, expected);
     }

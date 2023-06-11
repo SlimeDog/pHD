@@ -32,7 +32,7 @@ public class CommandSetTests extends BaseCommandTests {
         command.onCommand(sender, null, "phd", new String[] { "set" });
         // /phd set 1
         sender = new MockOPCommandSender((msg) -> {
-            Assert.assertEquals(phd.getMessages().getHologramNotManagedMessage("1"), msg);
+            Assert.assertEquals(phd.getMessages().getHologramNotManagedMessage().createWith("1").getFilled(), msg);
         });
         command.onCommand(sender, null, "phd", new String[] { "set", "1" });
     }
@@ -57,11 +57,12 @@ public class CommandSetTests extends BaseCommandTests {
                 -1);
         phd.getHolograms().addHologram(hologram);
         // /phd set <name> <type> times <times>
-        String expected = phd.getMessages().getNoSuchOptionMessage(PeriodicType.ALWAYS, "times");
+        String expected = phd.getMessages().getNoSuchOptionMessage().createWith(PeriodicType.ALWAYS, "times")
+                .getFilled();
         testCommand(sender, null, "phd", new String[] { "set", holoName, PeriodicType.ALWAYS.name(), "times", "4" },
                 expected);
         // /phd set <name> <type> times <times>
-        expected = phd.getMessages().getNoSuchOptionMessage(PeriodicType.ALWAYS, "time");
+        expected = phd.getMessages().getNoSuchOptionMessage().createWith(PeriodicType.ALWAYS, "time").getFilled();
         testCommand(sender, null, "phd", new String[] { "set", holoName, PeriodicType.ALWAYS.name(), "time", "14:14" },
                 expected);
     }
@@ -85,7 +86,7 @@ public class CommandSetTests extends BaseCommandTests {
         double distance = 5;
         String dist = String.valueOf(distance);
         options.put("distance", dist);
-        String expected = phd.getMessages().getSetNewOptionsMessage(holoName, type, options);
+        String expected = phd.getMessages().getSetNewOptionsMessage().createWith(holoName, type, options).getFilled();
         testCommand(sender, null, "phd", new String[] { "set", holoName, type.name(), "distance", dist }, expected);
         Assert.assertEquals(distance, hologram.getActivationDistance(), 0.01);
         // /phd set <name> <type> seconds <seconds>
@@ -93,7 +94,7 @@ public class CommandSetTests extends BaseCommandTests {
         String secs = String.valueOf(seconds);
         options.clear();
         options.put("seconds", secs);
-        expected = phd.getMessages().getSetNewOptionsMessage(holoName, type, options);
+        expected = phd.getMessages().getSetNewOptionsMessage().createWith(holoName, type, options).getFilled();
         testCommand(sender, null, "phd", new String[] { "set", holoName, type.name(), "seconds", secs }, expected);
         Assert.assertEquals(seconds, hologram.getShowTime());
 
@@ -107,7 +108,7 @@ public class CommandSetTests extends BaseCommandTests {
 
         options.put("distance", dist);
         options.put("seconds", secs);
-        expected = phd.getMessages().getSetNewOptionsMessage(holoName, type, options);
+        expected = phd.getMessages().getSetNewOptionsMessage().createWith(holoName, type, options).getFilled();
         testCommand(sender, null, "phd",
                 new String[] { "set", holoName, type.name(), "seconds", secs, "distance", dist }, expected);
         Assert.assertEquals(seconds, hologram.getShowTime());
@@ -144,7 +145,7 @@ public class CommandSetTests extends BaseCommandTests {
         Map<String, String> options = new HashMap<>();
         options.clear();
         options.put("times", tms);
-        String expected = phd.getMessages().getSetNewOptionsMessage(holoName, type, options);
+        String expected = phd.getMessages().getSetNewOptionsMessage().createWith(holoName, type, options).getFilled();
         testCommand(sender, null, "phd", new String[] { "set", holoName, type.name(), "times", tms }, expected);
         Assert.assertEquals(times, hologram.getTimesToShow());
     }
@@ -176,7 +177,7 @@ public class CommandSetTests extends BaseCommandTests {
         Map<String, String> options = new HashMap<>();
         options.clear();
         options.put("time", time);
-        String expected = phd.getMessages().getSetNewOptionsMessage(holoName, type, options);
+        String expected = phd.getMessages().getSetNewOptionsMessage().createWith(holoName, type, options).getFilled();
         testCommand(sender, null, "phd", new String[] { "set", holoName, type.name(), "time", time }, expected);
         Assert.assertEquals(TimeUtils.parseHoursAndMinutesToSeconds(time), hologram.getTime());
     }
@@ -209,7 +210,7 @@ public class CommandSetTests extends BaseCommandTests {
         Map<String, String> options = new HashMap<>();
         options.clear();
         options.put("time", time);
-        String expected = phd.getMessages().getSetNewOptionsMessage(holoName, type, options);
+        String expected = phd.getMessages().getSetNewOptionsMessage().createWith(holoName, type, options).getFilled();
         testCommand(sender, null, "phd", new String[] { "set", holoName, type.name(), "time", time }, expected);
         Assert.assertEquals(TimeUtils.parseMCTime(time), hologram.getTime());
     }
