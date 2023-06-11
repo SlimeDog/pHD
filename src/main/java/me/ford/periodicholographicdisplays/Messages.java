@@ -9,24 +9,31 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.Map.Entry;
 
-import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 
+import dev.ratas.slimedogcore.api.messaging.SDCQuadrupleContextMessage;
 import dev.ratas.slimedogcore.api.messaging.SDCTripleContextMessage;
+import dev.ratas.slimedogcore.api.messaging.context.factory.SDCDoubleContextFactory;
+import dev.ratas.slimedogcore.api.messaging.context.factory.SDCQuadrupleContextFactory;
 import dev.ratas.slimedogcore.api.messaging.context.factory.SDCSingleContextFactory;
 import dev.ratas.slimedogcore.api.messaging.context.factory.SDCTripleContextFactory;
 import dev.ratas.slimedogcore.api.messaging.delivery.MessageTarget;
 import dev.ratas.slimedogcore.api.messaging.factory.SDCDoubleContextMessageFactory;
+import dev.ratas.slimedogcore.api.messaging.factory.SDCQuadrupleContextMessageFactory;
 import dev.ratas.slimedogcore.api.messaging.factory.SDCSingleContextMessageFactory;
 import dev.ratas.slimedogcore.api.messaging.factory.SDCTripleContextMessageFactory;
 import dev.ratas.slimedogcore.api.messaging.factory.SDCVoidContextMessageFactory;
 import dev.ratas.slimedogcore.impl.messaging.MessagesBase;
 import dev.ratas.slimedogcore.impl.messaging.context.factory.SingleContextFactory;
+import dev.ratas.slimedogcore.impl.messaging.context.factory.delegating.DelegatingDoubleContextFactory;
 import dev.ratas.slimedogcore.impl.messaging.context.factory.delegating.DelegatingMultipleToOneContextFactory;
+import dev.ratas.slimedogcore.impl.messaging.context.factory.delegating.DelegatingQuadrupleContextFactory;
 import dev.ratas.slimedogcore.impl.messaging.context.factory.delegating.DelegatingTripleContextFactory;
+import dev.ratas.slimedogcore.impl.messaging.factory.DoubleContextMessageFactory;
 import dev.ratas.slimedogcore.impl.messaging.factory.MsgUtil;
+import dev.ratas.slimedogcore.impl.messaging.factory.QuadrupleContextMessageFactory;
 import dev.ratas.slimedogcore.impl.messaging.factory.TripleContextMessageFactory;
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.DefaultReloadIssue;
 import me.ford.periodicholographicdisplays.PeriodicHolographicDisplays.ReloadIssue;
@@ -90,6 +97,22 @@ public class Messages extends MessagesBase {
     private SDCSingleContextMessageFactory<String> needAnInteger;
     private SDCSingleContextMessageFactory<String> needANumber;
     private SDCSingleContextMessageFactory<String> illegalTime;
+    private SDCDoubleContextMessageFactory<String, PeriodicType> unmanagedHologram;
+    private SDCDoubleContextMessageFactory<PeriodicType, String> noSuchOption;
+    private SDCVoidContextMessageFactory needPairedOptions;
+    private SDCDoubleContextMessageFactory<PeriodicType, String> optionMissing;
+    private SDCSingleContextMessageFactory<String> incorrectTime;
+    private SDCVoidContextMessageFactory needCountAfterPlayercount;
+    private SDCSingleContextMessageFactory<String> playerNotFound;
+    private SDCVoidContextMessageFactory unsetFlash;
+    private SDCSingleContextMessageFactory<OfflinePlayer> unsetPlayerCount;
+    private SDCSingleContextMessageFactory<List<String>> unsetOptions;
+    private SDCDoubleContextMessageFactory<SettingIssue, String> problemWithConfig;
+    private SDCVoidContextMessageFactory configReloaded;
+    private SDCVoidContextMessageFactory sqlConnection;
+    private SDCSingleContextMessageFactory<List<ReloadIssue>> reloadIssues;
+    private SDCTripleContextMessageFactory<String, PeriodicType, Map<String, String>> setNewOptions;
+    private SDCSingleContextMessageFactory<Long> lowFrequency;
 
     public Messages(IPeriodicHolographicDisplays phd) throws InvalidConfigurationException {
         super(phd.getCustomConfigManager().getConfig(FILE_NAME));
@@ -208,6 +231,87 @@ public class Messages extends MessagesBase {
                 getRawMessage("need-a-number", "Value must be a number, got {msg}"));
         illegalTime = MsgUtil.singleContext("{msg}", msg -> msg, getRawMessage("illega-time",
                 "Time must be specified as e.g '1d' or '10h30m'. Available units: y, mo, d, h, m, s. Got {msg} instead"));
+        unmanagedHologram = MsgUtil.doubleContext("{name}", name -> name, "{type}", type -> type.name(),
+                getRawMessage("unmanaged-hologram", "Unmanaged hologram {name} of type {type}"));
+        noSuchOption = MsgUtil.doubleContext("{type}", type -> type.name(), "{option}", option -> option,
+                getRawMessage("no-such-option", "{type} holograms have no {option} option"));
+        needPairedOptions = MsgUtil.voidContext(getRawMessage("incorrect-set-options",
+                "Need a set of key-value pairs to set, got an odd number of arguments"));
+        optionMissing = MsgUtil.doubleContext("{type}", type -> type.name(), "{option}", option -> option,
+                getRawMessage("option-missing", "Need to set {option} for a {type} hologram"));
+        incorrectTime = MsgUtil.singleContext("{time}", time -> time,
+                getRawMessage("incorrect-time", "Time format is hh:mm (24-hour), got {time}"));
+        needCountAfterPlayercount = MsgUtil.voidContext(
+                getRawMessage("need-player-after-playercount", "Need to specify a player after 'playercount'"));
+        playerNotFound = MsgUtil.singleContext("{player}", name -> name,
+                getRawMessage("player-not-found", "Player not found: {player}"));
+        unsetFlash = MsgUtil.voidContext(getRawMessage("unset-flash", "Unset flash"));
+        unsetPlayerCount = MsgUtil.singleContext("{player}", player -> player.getName(),
+                getRawMessage("unset-playercount", "Unset playercount of {player}; now 0"));
+        unsetOptions = MsgUtil.singleContext("{options}", options -> String.join(", ", options),
+                getRawMessage("unset-options", "Unset {options}; now using default"));
+        SDCDoubleContextFactory<SettingIssue, String> problemWithConfigContextFactory = new DelegatingDoubleContextFactory<>(
+                new DelegatingMultipleToOneContextFactory<SettingIssue>(
+                        new SingleContextFactory<>("{key}", issue -> issue.getPath()),
+                        new SingleContextFactory<>("{type}", issue -> issue.getType().getName())),
+                new SingleContextFactory<>("{value}", value -> value));
+        problemWithConfig = new DoubleContextMessageFactory<>(problemWithConfigContextFactory,
+                getRawMessage("problem-in-config", "Problem in config for {key}; expected {type}, got {value}"),
+                MessageTarget.TEXT);
+        configReloaded = MsgUtil.voidContext(
+                getRawMessage("config-reloaded", "Successfully reloaded configuration, messages, and data"));
+        sqlConnection = MsgUtil.voidContext(
+                getRawMessage("sqlite-connection-established", "Connection to SQLite has been established"));
+        reloadIssues = MsgUtil.singleContext("{problems}", issues -> {
+
+            StringBuilder problems = new StringBuilder();
+            for (ReloadIssue issue : issues) {
+                String desc = null;
+                problems.append("\n");
+                if (issue instanceof DefaultReloadIssue) {
+                    DefaultReloadIssue dri = (DefaultReloadIssue) issue;
+                    switch (dri) {
+                        case NO_FOLDER:
+                            desc = getNoPluginFolderMessage().getMessage().getFilled();
+                            problems.append(desc);
+                            problems.append("\n");
+                            desc = Boolean.valueOf(dri.getExtra())
+                                    ? getPluginFolderRecreatedMessage().getMessage().getFilled()
+                                    : getProblemRecreatingPluginFolder().getMessage().getFilled();
+                            break;
+                        case ILLEGA_STORAGE_TYPE:
+                            desc = getIllegalStorageMessage().createWith(dri.getExtra()).getFilled();
+                            break;
+                        case NO_CONFIG:
+                            desc = getConfigRecreatedMessage().getMessage().getFilled();
+                            break;
+                        case NO_MESSAGES:
+                            desc = getMessagesRecreatedMessage().getMessage().getFilled();
+                            break;
+                        default:
+                    }
+                }
+                if (desc == null) {
+                    desc = issue.getExtra() == null ? issue.getIssue()
+                            : String.format("%s: %s", issue.getIssue(), issue.getExtra());
+                    ;
+                }
+                problems.append(desc);
+            }
+            return problems.toString();
+        }, getRawMessage("problems-reloading-config", "Problems reloading config: {problems}"));
+        setNewOptions = MsgUtil.tripleContext("{name}", name -> name, "{type}", type -> type.name(), "{options}",
+                options -> {
+                    List<String> opts = new ArrayList<>();
+                    for (Entry<String, String> entry : options.entrySet()) {
+                        opts.add(String.format("%s=%s", entry.getKey(), entry.getValue()));
+                    }
+                    return String.join(", ", opts);
+                },
+                getRawMessage("set-new-values", "Set new values for hologram {name} of type {type}: {options}"));
+        lowFrequency = MsgUtil.singleContext("{value}", seconds -> String.valueOf(seconds),
+                getRawMessage("save-frequency-low",
+                        "Configuration save-frequency set to {value} seconds may result in decreased performance"));
     }
 
     public SDCSingleContextMessageFactory<Player> getAddedToCacheMessage() {
@@ -523,181 +627,202 @@ public class Messages extends MessagesBase {
 
     }
 
-    public String getUnmanagedHologramMessage(String name, PeriodicType type) {
-        return getRawMessage("unmanaged-hologram", "Unmanaged hologram {name} of type {type}").replace("{name}", name)
-                .replace("{type}", type.name());
+    public SDCDoubleContextMessageFactory<String, PeriodicType> getUnmanagedHologramMessage() {
+        return unmanagedHologram;
     }
 
-    public String getNoSuchOptionMessage(PeriodicType type, String option) {
-        return getRawMessage("no-such-option", "{type} holograms have no {option} option")
-                .replace("{type}", type.name())
-                .replace("{option}", option);
+    public SDCDoubleContextMessageFactory<PeriodicType, String> getNoSuchOptionMessage() {
+        return noSuchOption;
     }
 
-    public String getNeedPairedOptionsMessage() {
-        return getRawMessage("incorrect-set-options",
-                "Need a set of key-value pairs to set, got an odd number of arguments");
+    public SDCVoidContextMessageFactory getNeedPairedOptionsMessage() {
+        return needPairedOptions;
     }
 
-    public String getOptionMissingMessage(PeriodicType type, String option) {
-        return getRawMessage("option-missing", "Need to set {option} for a {type} hologram")
-                .replace("{type}", type.name())
-                .replace("{option}", option);
+    public SDCDoubleContextMessageFactory<PeriodicType, String> getOptionMissingMessage() {
+        return optionMissing;
     }
 
-    public String getIncorrectTimeMessage(String msg) {
-        return getRawMessage("incorrect-time", "Time format is hh:mm (24-hour), got {time}").replace("{time}", msg);
+    public SDCSingleContextMessageFactory<String> getIncorrectTimeMessage() {
+        return incorrectTime;
     }
 
-    public String getNeedCountAfterPlayercount() {
-        return getRawMessage("need-player-after-playercount", "Need to specify a player after 'playercount'");
+    public SDCVoidContextMessageFactory getNeedCountAfterPlayercount() {
+        return needCountAfterPlayercount;
     }
 
-    public String getPlayerNotFoundMessage(String name) {
-        return getRawMessage("player-not-found", "Player not found: {player}").replace("{player}", name);
+    public SDCSingleContextMessageFactory<String> getPlayerNotFoundMessage() {
+        return playerNotFound;
     }
 
-    public String getUnsetFlashMessage() {
-        return getRawMessage("unset-flash", "Unset flash");
+    public SDCVoidContextMessageFactory getUnsetFlashMessage() {
+        return unsetFlash;
     }
 
-    public String getUnsetPlayerCountMessage(OfflinePlayer player) {
-        return getRawMessage("unset-playercount", "Unset playercount of {player}; now 0").replace("{player}",
-                player.getName());
+    public SDCSingleContextMessageFactory<OfflinePlayer> getUnsetPlayerCountMessage() {
+        return unsetPlayerCount;
     }
 
-    public String getUnsetOptionsMessage(List<String> opts) {
-        return getRawMessage("unset-options", "Unset {options}; now using default").replace("{options}",
-                String.join(", ", opts));
+    public SDCSingleContextMessageFactory<List<String>> getUnsetOptionsMessage() {
+        return unsetOptions;
     }
 
-    public String getProblemWithConfigMessage(SettingIssue issue, String value) {
-        return getRawMessage("problem-in-config", "Problem in config for {key}; expected {type}, got {value}")
-                .replace("{key}", issue.getPath()).replace("{type}", issue.getType().getName())
-                .replace("{value}", value);
+    public SDCDoubleContextMessageFactory<SettingIssue, String> getProblemWithConfigMessage() {
+        return problemWithConfig;
     }
 
-    public String getConfigReloadedMessage() {
-        return getRawMessage("config-reloaded", "Successfully reloaded configuration, messages, and data");
+    public SDCVoidContextMessageFactory getConfigReloadedMessage() {
+        return configReloaded;
     }
 
-    public String getSqlConnectionMessage() {
-        return getRawMessage("sqlite-connection-established", "Connection to SQLite has been established");
+    public SDCVoidContextMessageFactory getSqlConnectionMessage() {
+        return sqlConnection;
     }
 
-    public String getProblemsReloadingConfigMessage(List<ReloadIssue> issues) {
-        StringBuilder problems = new StringBuilder();
-        for (ReloadIssue issue : issues) {
-            String desc = null;
-            problems.append("\n");
-            if (issue instanceof DefaultReloadIssue) {
-                DefaultReloadIssue dri = (DefaultReloadIssue) issue;
-                switch (dri) {
-                    case NO_FOLDER:
-                        desc = getNoPluginFolderMessage().getMessage().getFilled();
-                        problems.append(desc);
-                        problems.append("\n");
-                        desc = Boolean.valueOf(dri.getExtra())
-                                ? getPluginFolderRecreatedMessage().getMessage().getFilled()
-                                : getProblemRecreatingPluginFolder().getMessage().getFilled();
-                        break;
-                    case ILLEGA_STORAGE_TYPE:
-                        desc = getIllegalStorageMessage().createWith(dri.getExtra()).getFilled();
-                        break;
-                    case NO_CONFIG:
-                        desc = getConfigRecreatedMessage().getMessage().getFilled();
-                        break;
-                    case NO_MESSAGES:
-                        desc = getMessagesRecreatedMessage().getMessage().getFilled();
-                        break;
-                    default:
+    public SDCSingleContextMessageFactory<List<ReloadIssue>> getProblemsReloadingConfigMessage() {
+        return reloadIssues;
+    }
+
+    public SDCTripleContextMessageFactory<String, PeriodicType, Map<String, String>> getSetNewOptionsMessage() {
+        return setNewOptions;
+    }
+
+    private static String timesString = "%s %d/%d";
+
+    private static final class NTimesReportHelper {
+        private final OfflinePlayer player;
+        private final List<NTimesHologram> holograms;
+        private final int page;
+        private final boolean doPages;
+        private String playerRepl;
+        private String hologramsRepl;
+        private String pageRepl;
+        private String maxPageRepl;
+        private String page1Repl;
+        private String timesRepl;
+
+        public NTimesReportHelper(OfflinePlayer player, List<NTimesHologram> holograms, int page, boolean doPages) {
+            this.player = player;
+            this.holograms = holograms;
+            this.page = page;
+            this.doPages = doPages;
+            calculate();
+        }
+
+        private void calculate() {
+            playerRepl = player.getName();
+
+            PageInfo pageInfo = PageUtils.getPageInfo(holograms.size(), PageUtils.HOLOGRAMS_PER_PAGE, page, doPages);
+            int startNr = pageInfo.getStartNumber();
+            int endNr = pageInfo.getEndNumber();
+            String numbers;
+            if (endNr <= startNr && startNr == 1) {
+                numbers = String.valueOf(endNr);
+            } else {
+                numbers = String.format("%d-%d", startNr, endNr);
+            }
+            hologramsRepl = numbers;
+            // msg = msg.replace("{holograms}", numbers);
+            pageRepl = String.valueOf(page);
+            maxPageRepl = String.valueOf(pageInfo.getNumberOfPages());
+
+            StringBuilder builder = new StringBuilder();
+            int i = 0;
+            for (NTimesHologram hologram : holograms) {
+                i++;
+                if (i < pageInfo.getStartNumber() || i > pageInfo.getEndNumber()) {
+                    continue;
                 }
+                Integer amount = hologram.getShownTo().get(player.getUniqueId());
+                if (amount == null)
+                    amount = 0;
+                if (builder.length() != 0)
+                    builder.append("\n");
+                builder.append(String.format(timesString, hologram.getName(), amount, hologram.getTimesToShow()));
             }
-            if (desc == null) {
-                desc = issue.getExtra() == null ? issue.getIssue()
-                        : String.format("%s: %s", issue.getIssue(), issue.getExtra());
-                ;
+            if (builder.length() == 0) {
+                builder.append("None");
             }
-            problems.append(desc);
+            if (!doPages) {
+                page1Repl = "";
+            } else {
+                page1Repl = ", page 1/1";
+            }
+            timesRepl = builder.toString();
         }
-        return getRawMessage("problems-reloading-config", "Problems reloading config: {problems}").replace("{problems}",
-                problems.toString());
     }
 
-    public String getSetNewOptionsMessage(String name, PeriodicType type, Map<String, String> options) {
-        List<String> opts = new ArrayList<>();
-        for (Entry<String, String> entry : options.entrySet()) {
-            opts.add(String.format("%s=%s", entry.getKey(), entry.getValue()));
-        }
-        return getRawMessage("set-new-values", "Set new values for hologram {name} of type {type}: {options}")
-                .replace("{name}", name).replace("{type}", type.name()).replace("{options}", String.join(", ", opts));
+    public SDCQuadrupleContextMessage<OfflinePlayer, List<NTimesHologram>, Integer, Boolean> getNtimesReportMessage(
+            OfflinePlayer player, List<NTimesHologram> holograms, int page, boolean doPages) {
+        NTimesReportHelper helper = new NTimesReportHelper(player, holograms, page, doPages);
+        SDCSingleContextFactory<OfflinePlayer> delegate1 = new SingleContextFactory<>("{player}",
+                fake -> helper.playerRepl);
+        SDCSingleContextFactory<List<NTimesHologram>> delegate2 = new SingleContextFactory<>("{holograms}",
+                fake -> helper.hologramsRepl);
+        SDCSingleContextFactory<Integer> delegate3 = new DelegatingMultipleToOneContextFactory<>(
+                new SingleContextFactory<>("{page}", fake -> helper.pageRepl),
+                new SingleContextFactory<>("{max-page}", fake -> helper.maxPageRepl),
+                new SingleContextFactory<>(", page 1/1", fake -> helper.page1Repl));
+        SDCSingleContextFactory<Boolean> delegate4 = new SingleContextFactory<>("{times}", fake -> helper.timesRepl);
+        SDCQuadrupleContextFactory<OfflinePlayer, List<NTimesHologram>, Integer, Boolean> contextFactory = new DelegatingQuadrupleContextFactory<>(
+                delegate1, delegate2, delegate3, delegate4);
+        SDCQuadrupleContextMessageFactory<OfflinePlayer, List<NTimesHologram>, Integer, Boolean> factory = new QuadrupleContextMessageFactory<>(
+                contextFactory, getRawMessage("ntimes-report",
+                        "{player} has seen the following NTIMES holograms (holograms {holograms}, page {page}/{max-pages}):\n{times}"),
+                MessageTarget.TEXT);
+        return (SDCQuadrupleContextMessage<OfflinePlayer, List<NTimesHologram>, Integer, Boolean>) factory
+                .createWith(player, holograms, page, doPages);
     }
 
-    private String timesString = "%s %d/%d";
+    private final class HologramInfoHelper {
+        private final FlashingHologram hologram;
+        private final int page;
+        private final boolean doPages;
+        private String nameRepl;
+        private String worldRepl;
+        private String typeRepl;
+        private String timeRepl;
+        private String typeInfoRepl;
+        private String distanceRepl;
+        private String flashRepl;
 
-    public String getNtimesReportMessage(OfflinePlayer player, List<NTimesHologram> holos, int page, boolean doPages) {
-        String msg = getRawMessage("ntimes-report",
-                "{player} has seen the following NTIMES holograms (holograms {holograms}, page {page}/{max-pages}):\n{times}");
-        msg = msg.replace("{player}", player.getName());
+        private HologramInfoHelper(FlashingHologram hologram, int page, boolean doPages) {
+            this.hologram = hologram;
+            this.page = page;
+            this.doPages = doPages;
+            calculate();
+        }
 
-        PageInfo pageInfo = PageUtils.getPageInfo(holos.size(), PageUtils.HOLOGRAMS_PER_PAGE, page, doPages);
-        int startNr = pageInfo.getStartNumber();
-        int endNr = pageInfo.getEndNumber();
-        String numbers;
-        if (endNr <= startNr && startNr == 1) {
-            numbers = String.valueOf(endNr);
-        } else {
-            numbers = String.format("%d-%d", startNr, endNr);
-        }
-        msg = msg.replace("{holograms}", numbers);
-        msg = msg.replace("{page}", String.valueOf(page)).replace("{max-pages}",
-                String.valueOf(pageInfo.getNumberOfPages()));
+        public void calculate() {
+            nameRepl = hologram.getName();
+            worldRepl = hologram.getLocation().getWorld().getName();
+            typeRepl = (hologram.getType() == PeriodicType.NTIMES
+                    && ((NTimesHologram) hologram).getTimesToShow() < 0) ? PeriodicType.ALWAYS.name()
+                            : hologram.getType().name();
+            timeRepl = getShowTimeString(hologram);
+            typeInfoRepl = getTypeInfo(hologram, page, doPages);
+            distanceRepl = getDistanceString(hologram);
+            flashRepl = (hologram.flashes())
+                    ? String.format("%3.2f/%3.2f", hologram.getFlashOn(), hologram.getFlashOff())
+                    : "None";
 
-        StringBuilder builder = new StringBuilder();
-        int i = 0;
-        for (NTimesHologram hologram : holos) {
-            i++;
-            if (i < pageInfo.getStartNumber() || i > pageInfo.getEndNumber()) {
-                continue;
-            }
-            Integer amount = hologram.getShownTo().get(player.getUniqueId());
-            if (amount == null)
-                amount = 0;
-            if (builder.length() != 0)
-                builder.append("\n");
-            builder.append(String.format(timesString, hologram.getName(), amount, hologram.getTimesToShow()));
         }
-        if (builder.length() == 0) {
-            builder.append("None");
-        }
-        if (!doPages) {
-            msg = msg.replace(", page 1/1", "");
-        }
-        return msg.replace("{times}", builder.toString());
+
     }
 
-    public String getHologramInfoMessage(FlashingHologram hologram, int page, boolean doPages) {
-        String typeinfo = getTypeInfo(hologram, page, doPages);
-        String typeName = (hologram.getType() == PeriodicType.NTIMES
-                && ((NTimesHologram) hologram).getTimesToShow() < 0) ? PeriodicType.ALWAYS.name()
-                        : hologram.getType().name();
-        String time = getShowTimeString(hologram);
-        String distance = getDistanceString(hologram);
-        String flash;
-        if (hologram.flashes()) {
-            flash = String.format("%3.2f/%3.2f", hologram.getFlashOn(), hologram.getFlashOff());
-        } else {
-            flash = "None";
-        }
-        Location loc = hologram.getLocation();
-        return getRawMessage("hologram-info",
-                "Hologram {name}:\nWorld: {world}\nLocation: {location}\nType: {type}\nShowTime: {time}\nFlash: {flash}\nActivationDistance: {distance}\nPermission: {perms}\nTypeInfo: {typeinfo}")
-                .replace("{name}", hologram.getName())
-                .replace("{world}", hologram.getLocation().getWorld().getName()).replace("{type}", typeName)
-                .replace("{time}", time).replace("{typeinfo}", typeinfo).replace("{distance}", distance)
-                .replace("{flash}", flash)
-                .replace("{location}", String.format("%.1f %.1f %.1f", loc.getX(), loc.getY(), loc.getZ()))
-                .replace("{perms}", hologram.hasPermissions() ? hologram.getPermissions() : "");
+    public SDCTripleContextFactory<FlashingHologram, Integer, Boolean> getHologramInfoMessage(FlashingHologram hologram,
+            int page, boolean doPages) {
+        HologramInfoHelper helper = new HologramInfoHelper(hologram, page, doPages);
+        SDCSingleContextFactory<FlashingHologram> delegate1 = new DelegatingMultipleToOneContextFactory<>(
+                new SingleContextFactory<>("{name}", fake -> helper.nameRepl),
+                new SingleContextFactory<>("{world}", fake -> helper.worldRepl),
+                new SingleContextFactory<>("{type}", fake -> helper.typeRepl),
+                new SingleContextFactory<>("{typeinfo}", fake -> helper.typeInfoRepl),
+                new SingleContextFactory<>("{time}", fake -> helper.timeRepl));
+        SDCSingleContextFactory<Integer> delegate2 = new SingleContextFactory<>("{distance}",
+                fake -> helper.distanceRepl);
+        SDCSingleContextFactory<Boolean> delegate3 = new SingleContextFactory<>("{flash}", fake -> helper.flashRepl);
+        return new DelegatingTripleContextFactory<>(delegate1, delegate2, delegate3);
     }
 
     private String getShowTimeString(PeriodicHologramBase hologram) {
@@ -818,10 +943,8 @@ public class Messages extends MessagesBase {
         return msg;
     }
 
-    public String getLowSaveDelayMessage(long seconds) {
-        return getRawMessage("save-frequency-low",
-                "Configuration save-frequency set to {value} seconds may result in decreased performance")
-                .replace("{value}", String.valueOf(seconds));
+    public SDCSingleContextMessageFactory<Long> getLowSaveDelayMessage() {
+        return lowFrequency;
     }
 
     @Override
