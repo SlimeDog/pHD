@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.Map.Entry;
 
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
@@ -783,6 +784,8 @@ public class Messages extends MessagesBase {
         private String typeInfoRepl;
         private String distanceRepl;
         private String flashRepl;
+        private String locationRepl;
+        private String permsRepl;
 
         private HologramInfoHelper(FlashingHologram hologram, int page, boolean doPages) {
             this.hologram = hologram;
@@ -803,7 +806,9 @@ public class Messages extends MessagesBase {
             flashRepl = (hologram.flashes())
                     ? String.format("%3.2f/%3.2f", hologram.getFlashOn(), hologram.getFlashOff())
                     : "None";
-
+            Location loc = hologram.getLocation();
+            locationRepl = String.format("%.1f %.1f %.1f", loc.getX(), loc.getY(), loc.getZ());
+            permsRepl = hologram.hasPermissions() ? hologram.getPermissions() : "";
         }
 
     }
@@ -817,7 +822,9 @@ public class Messages extends MessagesBase {
                 new SingleContextFactory<>("{world}", fake -> helper.worldRepl),
                 new SingleContextFactory<>("{type}", fake -> helper.typeRepl),
                 new SingleContextFactory<>("{typeinfo}", fake -> helper.typeInfoRepl),
-                new SingleContextFactory<>("{time}", fake -> helper.timeRepl));
+                new SingleContextFactory<>("{time}", fake -> helper.timeRepl),
+                new SingleContextFactory<>("{location}", fake -> helper.locationRepl),
+                new SingleContextFactory<>("{perms}", fake -> helper.permsRepl));
         SDCSingleContextFactory<Integer> delegate2 = new SingleContextFactory<>("{distance}",
                 fake -> helper.distanceRepl);
         SDCSingleContextFactory<Boolean> delegate3 = new SingleContextFactory<>("{flash}", fake -> helper.flashRepl);
