@@ -761,7 +761,7 @@ public class Messages extends MessagesBase {
                 fake -> helper.hologramsRepl);
         SDCSingleContextFactory<Integer> delegate3 = new DelegatingMultipleToOneContextFactory<>(
                 new SingleContextFactory<>("{page}", fake -> helper.pageRepl),
-                new SingleContextFactory<>("{max-page}", fake -> helper.maxPageRepl),
+                new SingleContextFactory<>("{max-pages}", fake -> helper.maxPageRepl),
                 new SingleContextFactory<>(", page 1/1", fake -> helper.page1Repl));
         SDCSingleContextFactory<Boolean> delegate4 = new SingleContextFactory<>("{times}", fake -> helper.timesRepl);
         SDCQuadrupleContextFactory<OfflinePlayer, List<NTimesHologram>, Integer, Boolean> contextFactory = new DelegatingQuadrupleContextFactory<>(
