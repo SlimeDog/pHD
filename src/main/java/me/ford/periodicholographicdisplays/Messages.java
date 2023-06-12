@@ -572,7 +572,7 @@ public class Messages extends MessagesBase {
         private void calculate() {
 
             PageInfo pageInfo = PageUtils.getPageInfo(holograms.size(), PageUtils.HOLOGRAMS_PER_PAGE, page, doPages);
-            int i = 0;
+            int i = 1;
             int startNr = pageInfo.getStartNumber();
             int endNr = pageInfo.getEndNumber();
             List<String> lines = new ArrayList<>();
