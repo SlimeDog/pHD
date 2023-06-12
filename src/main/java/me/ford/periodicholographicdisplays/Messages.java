@@ -153,7 +153,7 @@ public class Messages extends MessagesBase {
                 getRawMessage("next-page-hint", "TIP: See the next page with &n{command}&r"));
         invalidPage = MsgUtil.singleContext("{max-page}", maxPage -> String.valueOf(maxPage),
                 getRawMessage("invalid-page", "Page needs to be between 1 and {max-page}"));
-        availableTypes = MsgUtil.doubleContext("{hologram}", name -> name, "", availableTypes -> {
+        availableTypes = MsgUtil.doubleContext("{hologram}", name -> name, "{types}", availableTypes -> {
             List<String> types = new ArrayList<>();
             for (PeriodicType type : availableTypes) {
                 types.add(type.name());
