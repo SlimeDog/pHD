@@ -13,8 +13,9 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 
-import dev.ratas.slimedogcore.api.messaging.SDCQuadrupleContextMessage;
-import dev.ratas.slimedogcore.api.messaging.SDCTripleContextMessage;
+import dev.ratas.slimedogcore.api.messaging.SDCMessage;
+import dev.ratas.slimedogcore.api.messaging.context.SDCQuadrupleContext;
+import dev.ratas.slimedogcore.api.messaging.context.SDCTripleContext;
 import dev.ratas.slimedogcore.api.messaging.context.factory.SDCDoubleContextFactory;
 import dev.ratas.slimedogcore.api.messaging.context.factory.SDCQuadrupleContextFactory;
 import dev.ratas.slimedogcore.api.messaging.context.factory.SDCSingleContextFactory;
@@ -527,7 +528,7 @@ public class Messages extends MessagesBase {
 
     }
 
-    public SDCTripleContextMessage<Set<HDHologramInfo>, Integer, Boolean> getZombieListMessage(
+    public SDCMessage<SDCTripleContext<Set<HDHologramInfo>, Integer, Boolean>> getZombieListMessage(
             Set<HDHologramInfo> holograms, int page, boolean doPages) {
         final ZombiesHelper tuple = new ZombiesHelper(holograms, page, doPages);
         SingleContextFactory<Set<HDHologramInfo>> delegate01 = new SingleContextFactory<>("{max-pages}",
@@ -544,11 +545,10 @@ public class Messages extends MessagesBase {
                 fake -> tuple.page1Repl);
         SDCTripleContextFactory<Set<HDHologramInfo>, Integer, Boolean> contextFactory = new DelegatingTripleContextFactory<>(
                 delegate1, delegate2, delegate3);
-        return (SDCTripleContextMessage<Set<HDHologramInfo>, Integer, Boolean>) new TripleContextMessageFactory<>(
-                contextFactory, getRawMessage("hologram-list",
+        return new TripleContextMessageFactory<>(contextFactory,
+                getRawMessage("hologram-list",
                         "Holograms (holograms {numbers}, page {page}/{max-pages}): \n{holograms}"),
-                MessageTarget.TEXT)
-                .createWith(holograms, page, doPages);
+                MessageTarget.TEXT).createWith(holograms, page, doPages);
     }
 
     private static final class HologramsHelper {
@@ -602,7 +602,7 @@ public class Messages extends MessagesBase {
 
     }
 
-    public SDCTripleContextMessage<Map<String, String>, Integer, Boolean> getHologramListMessage(
+    public SDCMessage<SDCTripleContext<Map<String, String>, Integer, Boolean>> getHologramListMessage(
             Map<String, String> holograms, int page, boolean doPages) {
         final HologramsHelper tuple = new HologramsHelper(holograms, page, doPages);
         SingleContextFactory<Map<String, String>> delegate01 = new SingleContextFactory<>("{max-pages}",
@@ -619,11 +619,10 @@ public class Messages extends MessagesBase {
                 fake -> tuple.page1Repl);
         SDCTripleContextFactory<Map<String, String>, Integer, Boolean> contextFactory = new DelegatingTripleContextFactory<>(
                 delegate1, delegate2, delegate3);
-        return (SDCTripleContextMessage<Map<String, String>, Integer, Boolean>) new TripleContextMessageFactory<>(
-                contextFactory, getRawMessage("hologram-list",
+        return new TripleContextMessageFactory<>(contextFactory,
+                getRawMessage("hologram-list",
                         "Holograms (holograms {numbers}, page {page}/{max-pages}): \n{holograms}"),
-                MessageTarget.TEXT)
-                .createWith(holograms, page, doPages);
+                MessageTarget.TEXT).createWith(holograms, page, doPages);
 
     }
 
@@ -752,7 +751,7 @@ public class Messages extends MessagesBase {
         }
     }
 
-    public SDCQuadrupleContextMessage<OfflinePlayer, List<NTimesHologram>, Integer, Boolean> getNtimesReportMessage(
+    public SDCMessage<SDCQuadrupleContext<OfflinePlayer, List<NTimesHologram>, Integer, Boolean>> getNtimesReportMessage(
             OfflinePlayer player, List<NTimesHologram> holograms, int page, boolean doPages) {
         NTimesReportHelper helper = new NTimesReportHelper(player, holograms, page, doPages);
         SDCSingleContextFactory<OfflinePlayer> delegate1 = new SingleContextFactory<>("{player}",
@@ -770,8 +769,7 @@ public class Messages extends MessagesBase {
                 contextFactory, getRawMessage("ntimes-report",
                         "{player} has seen the following NTIMES holograms (holograms {holograms}, page {page}/{max-pages}):\n{times}"),
                 MessageTarget.TEXT);
-        return (SDCQuadrupleContextMessage<OfflinePlayer, List<NTimesHologram>, Integer, Boolean>) factory
-                .createWith(player, holograms, page, doPages);
+        return factory.createWith(player, holograms, page, doPages);
     }
 
     private final class HologramInfoHelper {
@@ -810,7 +808,8 @@ public class Messages extends MessagesBase {
 
     }
 
-    public SDCTripleContextMessage<FlashingHologram, Integer, Boolean> getHologramInfoMessage(FlashingHologram hologram,
+    public SDCMessage<SDCTripleContext<FlashingHologram, Integer, Boolean>> getHologramInfoMessage(
+            FlashingHologram hologram,
             int page, boolean doPages) {
         HologramInfoHelper helper = new HologramInfoHelper(hologram, page, doPages);
         SDCSingleContextFactory<FlashingHologram> delegate1 = new DelegatingMultipleToOneContextFactory<>(
@@ -824,10 +823,8 @@ public class Messages extends MessagesBase {
         SDCSingleContextFactory<Boolean> delegate3 = new SingleContextFactory<>("{flash}", fake -> helper.flashRepl);
         SDCTripleContextFactory<FlashingHologram, Integer, Boolean> contextFactory = new DelegatingTripleContextFactory<>(
                 delegate1, delegate2, delegate3);
-        return (SDCTripleContextMessage<FlashingHologram, Integer, Boolean>) new TripleContextMessageFactory<>(
-                contextFactory,
-                getRawMessage("hologram-info",
-                        "Hologram {name}:\nWorld: {world}\nLocation: {location}\nType: {type}\nShowTime: {time}\nFlash: {flash}\nActivationDistance: {distance}\nPermission: {perms}\nTypeInfo: {typeinfo}"),
+        return new TripleContextMessageFactory<>(contextFactory, getRawMessage("hologram-info",
+                "Hologram {name}:\nWorld: {world}\nLocation: {location}\nType: {type}\nShowTime: {time}\nFlash: {flash}\nActivationDistance: {distance}\nPermission: {perms}\nTypeInfo: {typeinfo}"),
                 MessageTarget.TEXT).createWith(hologram, page, doPages);
     }
 
