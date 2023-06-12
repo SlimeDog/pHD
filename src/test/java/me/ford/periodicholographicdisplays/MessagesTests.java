@@ -156,7 +156,7 @@ public class MessagesTests extends TestHelpers {
 
     @Test
     public void flashMustHaveBoth_fills_placeholders() {
-        String msg = messages.getFlashMustHaveBothMessage().createWith(null).getFilled(); // irrelevant argument
+        String msg = messages.getFlashMustHaveBothMessage().createWith("smth").getFilled(); // irrelevant argument
         assertNoPlaceholder(msg);
     }
 
