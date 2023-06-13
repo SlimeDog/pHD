@@ -126,6 +126,7 @@ public class Messages extends MessagesBase {
     Messages(IPeriodicHolographicDisplays phd, String name) throws InvalidConfigurationException {
         super(phd.getCustomConfigManager().getConfig(name));
         this.phd = phd;
+        loadMessages();
     }
 
     private void loadMessages() {

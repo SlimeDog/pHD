@@ -166,8 +166,8 @@ public class DefaultVsCodeMessagesTests extends TestHelpers {
 
     @Test
     public void flashMustHaveBoth_fills_placeholders() {
-        String msg1 = defaults.getFlashMustHaveBothMessage().createWith(null).getFilled(); // irrelevant argument
-        String msg2 = noDefaults.getFlashMustHaveBothMessage().createWith(null).getFilled(); // irrelevant argument
+        String msg1 = defaults.getFlashMustHaveBothMessage().createWith("rndm").getFilled(); // irrelevant argument
+        String msg2 = noDefaults.getFlashMustHaveBothMessage().createWith("repl").getFilled(); // irrelevant argument
         Assert.assertEquals(msg1, msg2);
     }
 
