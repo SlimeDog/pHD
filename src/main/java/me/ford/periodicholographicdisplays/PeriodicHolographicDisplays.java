@@ -20,6 +20,7 @@ import me.ford.periodicholographicdisplays.commands.PHDCommand;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.Zombificator;
 import me.ford.periodicholographicdisplays.holograms.wrap.platform.HologramPlatform;
+import me.ford.periodicholographicdisplays.holograms.wrap.platform.NoPlatformException;
 import me.ford.periodicholographicdisplays.holograms.wrap.platform.PlatformProvider;
 import me.ford.periodicholographicdisplays.holograms.wrap.provider.HologramProvider;
 import me.ford.periodicholographicdisplays.hooks.DummyNPCHook;
@@ -80,8 +81,9 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
         }
 
         // setup HD hook
-        platform = new PlatformProvider(this).getHologramProvider();
-        if (platform == null) {
+        try {
+            platform = new PlatformProvider(this).getHologramProvider();
+        } catch (NoPlatformException e) {
             issues.add(DefaultReloadIssue.NO_PLATFORM);
             disableMe(issues);
             return;
