@@ -46,6 +46,9 @@ public class PlatformProvider {
     private static HologramPlatform findPlatform(JavaPlugin plugin) {
         try {
             Class.forName("me.filoghost.holographicdisplays.plugin.HolographicDisplays");
+            if (!plugin.getServer().getPluginManager().isPluginEnabled("HolographicDisplays")) {
+                return null;
+            }
             return HDPlatform.getHologramPlatform(plugin);
         } catch (ClassNotFoundException e) {
             // try DecentHolograms
