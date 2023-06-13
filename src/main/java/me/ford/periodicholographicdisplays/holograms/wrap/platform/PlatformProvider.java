@@ -31,7 +31,7 @@ public class PlatformProvider {
     public PlatformProvider(JavaPlugin plugin) {
         platform = findPlatform(plugin);
         if (platform == null) {
-            throw new IllegalStateException("Did not find a platform that provides holograms");
+            throw new NoPlatformException("Did not find a platform that provides holograms");
         }
     }
 
