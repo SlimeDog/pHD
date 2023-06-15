@@ -6,6 +6,8 @@ import java.util.List;
 import org.bukkit.entity.Player;
 
 import dev.ratas.slimedogcore.api.commands.SDCCommandOptionSet;
+import dev.ratas.slimedogcore.api.messaging.SDCMessage;
+import dev.ratas.slimedogcore.api.messaging.context.SDCSingleContext;
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 import me.ford.periodicholographicdisplays.Messages;
 import me.ford.periodicholographicdisplays.IPeriodicHolographicDisplays;
@@ -38,13 +40,14 @@ public class ReloadSub extends PHDSubCommand {
         List<ReloadIssue> issues = phd.reload();
         if (issues.isEmpty()) {
             if (phd.getSettings().useDatabase() && (sender instanceof Player)) {
-                sender.sendRawMessage(messages.getSqlConnectionMessage());
+                sender.sendMessage(messages.getSqlConnectionMessage().getMessage());
             }
-            sender.sendRawMessage(messages.getConfigReloadedMessage());
-            String typeMessage = messages.getActiveStorageMessage(phd.getSettings().useDatabase());
-            sender.sendRawMessage(typeMessage);
+            sender.sendMessage(messages.getConfigReloadedMessage().getMessage());
+            SDCMessage<SDCSingleContext<Boolean>> typeMessage = messages.getActiveStorageMessage()
+                    .createWith(phd.getSettings().useDatabase());
+            sender.sendMessage(typeMessage);
             if (sender instanceof Player) {
-                phd.getLogger().info(typeMessage);
+                phd.getLogger().info(typeMessage.getFilled());
             }
             if (phd.getConfig().isSet("debug")) {
                 String debug = "DEBUG is " + phd.getSettings().onDebug();
@@ -54,10 +57,10 @@ public class ReloadSub extends PHDSubCommand {
                 }
             }
         } else {
-            String msg = messages.getProblemsReloadingConfigMessage(issues);
-            phd.getLogger().severe(msg);
+            SDCMessage<?> msg = messages.getProblemsReloadingConfigMessage().createWith(issues);
+            phd.getLogger().severe(msg.getFilled());
             if (sender instanceof Player) {
-                sender.sendRawMessage(msg);
+                sender.sendMessage(msg);
                 boolean isBeingDisabled = false;
                 for (ReloadIssue issue : issues) {
                     // in these cases, not disabling the plugin, just recreating
@@ -68,7 +71,7 @@ public class ReloadSub extends PHDSubCommand {
                     }
                 }
                 if (isBeingDisabled) {
-                    sender.sendRawMessage(messages.getDisablingMessage());
+                    sender.sendMessage(messages.getDisablingMessage().getMessage());
                 }
             }
         }

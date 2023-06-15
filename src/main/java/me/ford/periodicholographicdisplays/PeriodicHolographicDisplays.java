@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.BiConsumer;
 
 import org.bstats.bukkit.Metrics;
 import org.bstats.bukkit.Metrics.SimplePie;
@@ -19,6 +20,7 @@ import me.ford.periodicholographicdisplays.commands.PHDCommand;
 import me.ford.periodicholographicdisplays.holograms.HologramStorage;
 import me.ford.periodicholographicdisplays.holograms.Zombificator;
 import me.ford.periodicholographicdisplays.holograms.wrap.platform.HologramPlatform;
+import me.ford.periodicholographicdisplays.holograms.wrap.platform.NoPlatformException;
 import me.ford.periodicholographicdisplays.holograms.wrap.platform.PlatformProvider;
 import me.ford.periodicholographicdisplays.holograms.wrap.provider.HologramProvider;
 import me.ford.periodicholographicdisplays.hooks.DummyNPCHook;
@@ -40,6 +42,8 @@ import me.ford.periodicholographicdisplays.users.UserCache;
  */
 public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisplays {
     private static final int SPIGOT_RESOURCE_ID = 77631;
+    private static final String HANGAR_AUTHOR = "SlimeDog";
+    private static final String HANGAR_SLUG = "pHD";
     private HologramPlatform platform;
     private HologramStorage holograms;
     private Settings settings;
@@ -77,8 +81,9 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
         }
 
         // setup HD hook
-        platform = new PlatformProvider(this).getHologramProvider();
-        if (platform == null) {
+        try {
+            platform = new PlatformProvider(this).getHologramProvider();
+        } catch (NoPlatformException e) {
             issues.add(DefaultReloadIssue.NO_PLATFORM);
             disableMe(issues);
             return;
@@ -98,9 +103,9 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
 
         // check messages
         try {
-            messages.getConfig();
+            messages.reloadConfig();
         } catch (IllegalStateException e) {
-            getLogger().severe(messages.getDisablingMessage());
+            getLogger().severe(messages.getDisablingMessage().getMessage().getFilled());
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
@@ -109,7 +114,7 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
         try {
             lpHook = new LuckPermsHook(this);
         } catch (IllegalStateException | NoClassDefFoundError e) {
-            getLogger().warning(messages.getNoLPMessage());
+            getLogger().warning(messages.getNoLPMessage().getMessage().getFilled());
         }
         // Citizens hoook if possible
         try {
@@ -125,10 +130,11 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
         WorldTimeListener worldTimeListener;
         String version = getServer().getBukkitVersion();
         if (version.contains("1.15") || version.contains("1.16")
-                || version.contains("1.17") || version.contains("1.18") || version.contains("1.19")) {
+                || version.contains("1.17") || version.contains("1.18") || version.contains("1.19")
+                || version.contains("1.20") || version.contains("1.21") || version.contains("1.22")) {
             worldTimeListener = new SimpleWorldTimeListener(holograms);
         } else {
-            getLogger().warning(messages.getLegacyMessage());
+            getLogger().warning(messages.getLegacyMessage().getMessage().getFilled());
             worldTimeListener = new LegacyWorldTimeListener(holograms);
         }
         this.getServer().getPluginManager().registerEvents(worldTimeListener, this);
@@ -146,7 +152,8 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
         new Zombificator(this);
 
         if (settings.checkForUpdates()) {
-            new UpdateChecker(this, (response, ver) -> {
+            String source = getDefaultConfig().getConfig().getString("update-source", "Hangar");
+            BiConsumer<UpdateChecker.VersionResponse, String> consumer = (response, ver) -> {
                 switch (response) {
                     case LATEST:
                         getLogger().info("Using latest version of pHD");
@@ -158,9 +165,16 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
                         getLogger().info("Version information currently unavailable");
                         break;
                 }
-            }, SPIGOT_RESOURCE_ID).check();
+            };
+            UpdateChecker checker;
+            if (source.equalsIgnoreCase("Hangar")) {
+                checker = UpdateChecker.forHangar(this, consumer, HANGAR_AUTHOR, HANGAR_SLUG);
+            } else {
+                checker = UpdateChecker.forSpigot(this, consumer, SPIGOT_RESOURCE_ID);
+            }
+            checker.check();
         }
-        getLogger().info(messages.getActiveStorageMessage(getSettings().useDatabase()));
+        getLogger().info(messages.getActiveStorageMessage().createWith(getSettings().useDatabase()).getFilled());
     }
 
     @Override
@@ -171,15 +185,15 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
         boolean canMessage = false;
         if (messages == null) {
             try {
-                messages = new Messages(this, true);
+                messages = new Messages(this);
                 canMessage = true;
             } catch (InvalidConfigurationException e) {
                 e.printStackTrace();
             }
         }
         if (canMessage) {
-            getLogger().severe(messages.getProblemsReloadingConfigMessage(issues));
-            getLogger().severe(messages.getDisablingMessage());
+            getLogger().severe(messages.getProblemsReloadingConfigMessage().createWith(issues).getFilled());
+            getLogger().severe(messages.getDisablingMessage().getMessage().getFilled());
         } else {
             getLogger().severe("Disabling plugins. Problems: " + issues);
         }
@@ -211,7 +225,7 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
         List<ReloadIssue> issues = new ArrayList<>();
         File df = getDataFolder();
         if (!df.exists() || !df.canRead()) {
-            getLogger().warning(messages.getNoPluginFolderMessage());
+            getLogger().warning(messages.getNoPluginFolderMessage().getMessage().getFilled());
             boolean wasCreated = df.mkdir();
             DefaultReloadIssue dri = DefaultReloadIssue.NO_FOLDER;
             dri.setExtra(String.valueOf(wasCreated));
@@ -229,15 +243,7 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
             issues.add(DefaultReloadIssue.NO_MESSAGES);
         }
         boolean disablePlugin = false;
-        try {
-            if (!messages.reloadConfig()) {
-                issues.add(new SimpleReloadIssue(messages.getIncorrectMessages(), null));
-                disablePlugin = true;
-            }
-        } catch (InvalidConfigurationException e) {
-            issues.add(DefaultReloadIssue.INVALID_MESSAGES);
-            disablePlugin = true;
-        }
+        messages.reloadConfig();
         List<ReloadIssue> settingIssues = getSettingIssues();
         issues.addAll(settingIssues);
         if (!settingIssues.isEmpty()) {
@@ -290,7 +296,9 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
                     issues.add(issue);
                 } else {
                     issues.add(new SimpleReloadIssue(
-                            messages.getProblemWithConfigMessage(entry.getKey(), entry.getValue()), null));
+                            messages.getProblemWithConfigMessage().createWith(entry.getKey(), entry.getValue())
+                                    .getFilled(),
+                            null));
                 }
             }
         }

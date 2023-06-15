@@ -78,13 +78,13 @@ public class ListSub extends PHDSubCommand {
                 gotPage = false;
             }
             if (fuzzy && holoType == null && !gotPage && !zombies) {
-                sender.sendRawMessage(messages.getNeedTypeOrPageMessage(typeStr));
+                sender.sendMessage(messages.getNeedTypeOrPageMessage().createWith(typeStr));
                 return true;
             } else if (!fuzzy && holoType == null) {
-                sender.sendRawMessage(messages.getTypeNotRecognizedMessage(typeStr));
+                sender.sendMessage(messages.getTypeNotRecognizedMessage().createWith(typeStr));
                 return true;
             } else if (!fuzzy && !gotPage) {
-                sender.sendRawMessage(messages.getNeedAnIntegerMessage(pageStr));
+                sender.sendMessage(messages.getNeedAnIntegerMessage().createWith(pageStr));
                 return true;
             }
         }
@@ -97,7 +97,7 @@ public class ListSub extends PHDSubCommand {
         if (maxPage == 0)
             maxPage++;
         if (page <= 0 || page > maxPage) {
-            sender.sendRawMessage(messages.getInvalidPageMessage(maxPage));
+            sender.sendMessage(messages.getInvalidPageMessage().createWith(maxPage));
             return true;
         }
         names.sort(String.CASE_INSENSITIVE_ORDER);
@@ -111,10 +111,10 @@ public class ListSub extends PHDSubCommand {
             typesStr.sort(String.CASE_INSENSITIVE_ORDER);
             hologramTypes.put(name, String.join(", ", typesStr));
         }
-        sender.sendRawMessage(messages.getHologramListMessage(hologramTypes, page, sender instanceof Player));
+        sender.sendMessage(messages.getHologramListMessage(hologramTypes, page, sender instanceof Player));
         String typeName = holoType == null ? "" : " " + holoType.name();
         if (page < maxPage && sender instanceof Player)
-            HintUtil.sendHint(sender, messages.getNextPageHint("{command}"),
+            HintUtil.sendHint(sender, messages.getNextPageHint().createWith("{command}").getFilled(),
                     String.format("/phd list%s %d", typeName, page + 1));
         return true;
     }
@@ -125,10 +125,10 @@ public class ListSub extends PHDSubCommand {
         if (maxPage == 0)
             maxPage++;
         if (page <= 0 || page > maxPage) {
-            sender.sendRawMessage(messages.getInvalidPageMessage(maxPage));
+            sender.sendMessage(messages.getInvalidPageMessage().createWith(maxPage));
             return;
         }
-        sender.sendRawMessage(messages.getZombieListMessage(zombies, page, sender instanceof Player));
+        sender.sendMessage(messages.getZombieListMessage(zombies, page, sender instanceof Player));
     }
 
 }

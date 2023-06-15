@@ -56,7 +56,7 @@ public class UnmanageSub extends PHDSubCommand {
         try {
             type = PeriodicType.valueOf(args[1].toUpperCase());
         } catch (IllegalArgumentException e) {
-            sender.sendRawMessage(messages.getTypeNotRecognizedMessage(args[1]));
+            sender.sendMessage(messages.getTypeNotRecognizedMessage().createWith(args[1]));
             return true;
         }
         FlashingHologram holo = storage.getHologram(args[0], type);
@@ -74,16 +74,16 @@ public class UnmanageSub extends PHDSubCommand {
                 }
             }
             if (zombie == null) {
-                sender.sendRawMessage(messages.getHologramNotFoundMessage(args[0], type));
+                sender.sendMessage(messages.getHologramNotFoundMessage().createWith(args[0], type));
                 return true;
             }
         }
         if (holo != null) {
             storage.removeHologram(holo);
-            sender.sendRawMessage(messages.getUnmanagedHologramMessage(holo.getName(), type));
+            sender.sendMessage(messages.getUnmanagedHologramMessage().createWith(holo.getName(), type));
         } else {
             storage.removeZombie(zombie);
-            sender.sendRawMessage(messages.getUnmanagedHologramMessage(zombie.getName(), type));
+            sender.sendMessage(messages.getUnmanagedHologramMessage().createWith(zombie.getName(), type));
         }
         return true;
     }

@@ -157,8 +157,8 @@ public abstract class PeriodicHologramBase {
 
     public void hideFrom(Player player) {
         if (plugin.getSettings().onDebug() && this instanceof FlashingHologram) {
-            String info = plugin.getMessages().getHologramInfoMessage((FlashingHologram) this, 1, true).replace("\n",
-                    ";");
+            String info = plugin.getMessages().getHologramInfoMessage((FlashingHologram) this, 1, true).getFilled()
+                    .replace("\n", ";");
             plugin.debug(String.format("Hiding from %s: %s", player.getName(), info));
         }
         hideFromInternal(player);
@@ -176,8 +176,8 @@ public abstract class PeriodicHologramBase {
         if (beingShownTo.contains(id))
             return false;
         if (plugin.getSettings().onDebug() && this instanceof FlashingHologram) {
-            String info = plugin.getMessages().getHologramInfoMessage((FlashingHologram) this, 1, true).replace("\n",
-                    ";");
+            String info = plugin.getMessages().getHologramInfoMessage((FlashingHologram) this, 1, true).getFilled()
+                    .replace("\n", ";");
             plugin.debug(String.format("Showing to %s: %s", player.getName(), info));
         }
         showInternal(player);

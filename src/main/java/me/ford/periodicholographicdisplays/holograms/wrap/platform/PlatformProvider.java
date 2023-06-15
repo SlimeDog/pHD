@@ -31,7 +31,7 @@ public class PlatformProvider {
     public PlatformProvider(JavaPlugin plugin) {
         platform = findPlatform(plugin);
         if (platform == null) {
-            throw new IllegalStateException("Did not find a platform that provides holograms");
+            throw new NoPlatformException("Did not find a platform that provides holograms");
         }
     }
 
@@ -46,6 +46,9 @@ public class PlatformProvider {
     private static HologramPlatform findPlatform(JavaPlugin plugin) {
         try {
             Class.forName("me.filoghost.holographicdisplays.plugin.HolographicDisplays");
+            if (!plugin.getServer().getPluginManager().isPluginEnabled("HolographicDisplays")) {
+                return null;
+            }
             return HDPlatform.getHologramPlatform(plugin);
         } catch (ClassNotFoundException e) {
             // try DecentHolograms

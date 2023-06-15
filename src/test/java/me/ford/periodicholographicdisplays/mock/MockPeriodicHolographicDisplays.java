@@ -62,11 +62,13 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
     private boolean debug = false;
     public final MockHolographicsDisplaysAPI api;
     private final MockScheduler scheduler;
+    private final MockCustomConfigManager configManager;
 
     public MockPeriodicHolographicDisplays() {
         logger.setLevel(Level.WARNING);
         this.scheduler = new MockScheduler();
         this.ihm = new MockInternalHologramManager(api = new MockHolographicsDisplaysAPI());
+        configManager = new MockCustomConfigManager(this);
         config = YamlConfiguration.loadConfiguration(configFile);
         try {
             messages = new Messages(this);
@@ -253,8 +255,7 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
 
     @Override
     public SDCCustomConfigManager getCustomConfigManager() {
-        // TODO Auto-generated method stub
-        return null;
+        return configManager;
     }
 
     @Override

@@ -61,9 +61,9 @@ public class InfoSub extends PHDSubCommand {
         if (args.length == 1) {
             List<PeriodicType> availableTypes = storage.getAvailableTypes(args[0]);
             if (availableTypes.isEmpty()) {
-                sender.sendRawMessage(messages.getHDHologramNotFoundMessage(args[0]));
+                sender.sendMessage(messages.getHDHologramNotFoundMessage().createWith(args[0]));
             } else {
-                sender.sendRawMessage(messages.getAvailableTypesMessage(args[0], availableTypes));
+                sender.sendMessage(messages.getAvailableTypesMessage().createWith(args[0], availableTypes));
             }
             return true;
         }
@@ -71,7 +71,7 @@ public class InfoSub extends PHDSubCommand {
         try {
             type = PeriodicType.valueOf(args[1].toUpperCase());
         } catch (IllegalArgumentException e) {
-            sender.sendRawMessage(messages.getTypeNotRecognizedMessage(args[1]));
+            sender.sendMessage(messages.getTypeNotRecognizedMessage().createWith(args[1]));
             return true;
         }
         int page = 1;
@@ -79,30 +79,30 @@ public class InfoSub extends PHDSubCommand {
             try {
                 page = Integer.parseInt(args[2]);
             } catch (NumberFormatException e) {
-                sender.sendRawMessage(messages.getNeedAnIntegerMessage(args[2]));
+                sender.sendMessage(messages.getNeedAnIntegerMessage().createWith(args[2]));
                 return true;
             }
         }
         WrappedHologram holo = provider.getByName(args[0]);
         if (holo == null) {
-            sender.sendRawMessage(messages.getHDHologramNotFoundMessage(args[0]));
+            sender.sendMessage(messages.getHDHologramNotFoundMessage().createWith(args[0]));
             return true;
         }
         FlashingHologram hologram = storage.getHologram(args[0], type);
         if (hologram == null) {
-            sender.sendRawMessage(messages.getHologramNotFoundMessage(args[0], type));
+            sender.sendMessage(messages.getHologramNotFoundMessage().createWith(args[0], type));
             return true;
         }
         int maxPage = getMaxPages(hologram);
         if (maxPage == 0)
             maxPage++;
         if (page <= 0 || page > maxPage) {
-            sender.sendRawMessage(messages.getInvalidPageMessage(maxPage));
+            sender.sendMessage(messages.getInvalidPageMessage().createWith(maxPage));
             return true;
         }
-        sender.sendRawMessage(messages.getHologramInfoMessage(hologram, page, sender instanceof Player));
+        sender.sendMessage(messages.getHologramInfoMessage(hologram, page, sender instanceof Player));
         if (page < maxPage && sender instanceof Player)
-            HintUtil.sendHint(sender, messages.getNextPageHint("{command}"),
+            HintUtil.sendHint(sender, messages.getNextPageHint().createWith("{command}").getFilled(),
                     String.format("/phd info %s %s %d", hologram.getName(), type.name(), page + 1));
         return true;
     }

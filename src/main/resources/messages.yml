@@ -102,5 +102,4 @@ legacy-version-mctime: "MCTIME holograms can behave unpredictably because of the
 no-luckperms: "LuckPerms not found - unable to readjust permissions on the fly or tab-complete permissions"
 invalid-page: "Page needs to be between 1 and {max-page}"
 next-page-hint: "TIP: See the next page with &n{command}&r"
-unrecognized-command: "Unrecognized command; try /phd help"
 added-to-cache: "Adding player {name} UUID {uuid} to cache"
