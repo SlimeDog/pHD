@@ -67,7 +67,7 @@ public class HologramStorage {
     private void scheduleLoad() {
         plugin.getScheduler().runTaskLater(() -> {
             storage.loadHolograms((info) -> loaded(info, false));
-        }, 40L); // need to do this later so the holograms are loaded
+        }, 150L); // need to do this later so the holograms are loaded
     }
 
     private void scheduleDanglingCheck() {
