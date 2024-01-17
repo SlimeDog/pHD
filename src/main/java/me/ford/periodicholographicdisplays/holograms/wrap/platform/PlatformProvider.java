@@ -214,6 +214,10 @@ public class PlatformProvider {
             return new FHPlatform();
         }
 
+        public boolean requiresLongerLoadDelay() {
+            return true;
+        }
+
     }
 
 }

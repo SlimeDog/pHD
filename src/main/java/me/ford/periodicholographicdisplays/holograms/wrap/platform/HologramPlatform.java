@@ -11,4 +11,8 @@ public interface HologramPlatform {
 
     String getName();
 
+    default boolean requiresLongerLoadDelay() {
+        return false;
+    }
+
 }
