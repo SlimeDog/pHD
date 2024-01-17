@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.oliver.fancyholograms.api.FancyHologramsPlugin;
 import eu.decentsoftware.holograms.api.commands.CommandManager;
 import eu.decentsoftware.holograms.api.utils.reflect.ReflectMethod;
 import eu.decentsoftware.holograms.api.utils.reflect.ReflectionUtil;
@@ -20,12 +21,13 @@ import me.ford.periodicholographicdisplays.holograms.Zombificator;
 import me.ford.periodicholographicdisplays.holograms.wrap.command.CommandWrapper;
 import me.ford.periodicholographicdisplays.holograms.wrap.command.ExecutorWrapper;
 import me.ford.periodicholographicdisplays.holograms.wrap.provider.DecentHologramsProvider;
+import me.ford.periodicholographicdisplays.holograms.wrap.provider.FancyHologramProvider;
 import me.ford.periodicholographicdisplays.holograms.wrap.provider.HologramProvider;
 import me.ford.periodicholographicdisplays.holograms.wrap.provider.HolographicDisplaysHologramProvider;
 
 public class PlatformProvider {
     private static final List<String> SUPPORTED_PLATFORMS = Collections
-            .unmodifiableList(Arrays.asList(HDPlatform.NAME, DHPlatform.NAME));
+            .unmodifiableList(Arrays.asList(HDPlatform.NAME, DHPlatform.NAME, FHPlatform.NAME));
     private final HologramPlatform platform;
 
     public PlatformProvider(JavaPlugin plugin) {
@@ -56,6 +58,12 @@ public class PlatformProvider {
         try {
             Class.forName("eu.decentsoftware.holograms.plugin.DecentHologramsPlugin");
             return DHPlatform.getHologramPlatform(plugin);
+        } catch (ClassNotFoundException e) {
+            // try fancy holograms
+        }
+        try {
+            Class.forName("de.oliver.fancyholograms.FancyHolograms");
+            return FHPlatform.getHologramPlatform(plugin);
         } catch (ClassNotFoundException e) {
             // try something else in the future?
         }
@@ -176,6 +184,34 @@ public class PlatformProvider {
                 return response;
             }
 
+        }
+
+    }
+
+    private static class FHPlatform extends AbstractHologramPlatform {
+        private static final String NAME = "FancyHolograms";
+        private final FancyHologramsPlugin plugin;
+        private final FancyHologramProvider provider;
+
+        private FHPlatform() {
+            super(NAME);
+            JavaPlugin jp = (JavaPlugin) JavaPlugin.getProvidingPlugin(getClass()).getServer().getPluginManager().getPlugin(NAME);
+            plugin = (FancyHologramsPlugin) jp;
+            provider = new FancyHologramProvider(plugin);
+        }
+
+        @Override
+        public HologramProvider getHologramProvider() {
+            return provider;
+        }
+
+        @Override
+        public CommandWrapper getHologramCommand() {
+            return new ExecutorWrapper(plugin.getPlugin().getCommand("holograms"));
+        }
+
+        private static FHPlatform getHologramPlatform(JavaPlugin plugin) {
+            return new FHPlatform();
         }
 
     }
