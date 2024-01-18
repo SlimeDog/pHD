@@ -13,6 +13,7 @@ import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.oliver.fancyholograms.api.FancyHologramsPlugin;
+import eu.decentsoftware.holograms.plugin.DecentHologramsPlugin;
 import me.filoghost.holographicdisplays.plugin.HolographicDisplays;
 import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramManager;
 import me.ford.periodicholographicdisplays.holograms.Zombificator;
@@ -70,13 +71,12 @@ public class PlatformProvider {
 
     private static class HDPlatform extends AbstractHologramPlatform {
         private static final String NAME = "HolographicDisplays";
-        private final HolographicDisplays plugin;
+        private static final HolographicDisplays PLUGIN = JavaPlugin.getPlugin(HolographicDisplays.class);
         private final HolographicDisplaysHologramProvider provider;
 
         private HDPlatform(HolographicDisplaysHologramProvider provider) {
-            super(NAME);
+            super(PLUGIN, NAME);
             this.provider = provider;
-            this.plugin = JavaPlugin.getPlugin(HolographicDisplays.class);
         }
 
         @Override
@@ -86,7 +86,7 @@ public class PlatformProvider {
 
         @Override
         public CommandWrapper getHologramCommand() {
-            return new ExecutorWrapper(plugin.getCommand("holograms"));
+            return new ExecutorWrapper(PLUGIN.getCommand("holograms"));
         }
 
         private static HologramPlatform getHologramPlatform(JavaPlugin plugin) {
@@ -139,6 +139,7 @@ public class PlatformProvider {
     }
 
     private static class WrappedCommand extends Command implements CommandWrapper {
+        private static final JavaPlugin PROVIDER = JavaPlugin.getProvidingPlugin(PlatformProvider.class);
         private final Command delegate;
         private Zombificator zombificator;
 
@@ -162,8 +163,7 @@ public class PlatformProvider {
                 response = delegate.execute(sender, commandLabel, args);
             } catch (Exception e) {
                 response = false;
-                JavaPlugin.getProvidingPlugin(ExecutorWrapper.class).getLogger()
-                        .severe("Problem while executing DecentHolograms command");
+                PROVIDER.getLogger().severe("Problem while executing DecentHolograms command");
                 e.printStackTrace();
             }
             if (response && args.length > 1
@@ -176,11 +176,12 @@ public class PlatformProvider {
     }
 
     private static class DHPlatform extends AbstractHologramPlatform {
+        private static final DecentHologramsPlugin PLUGIN = JavaPlugin.getPlugin(DecentHologramsPlugin.class);
         private static final String NAME = "DecentHolograms";
         private final DecentHologramsProvider provider;
 
         private DHPlatform(DecentHologramsProvider provider) {
-            super(NAME);
+            super(PLUGIN, NAME);
             this.provider = provider;
         }
 
@@ -206,13 +207,16 @@ public class PlatformProvider {
     }
 
     private static class FHPlatform extends AbstractHologramPlatform {
+        private static final FancyHologramsPlugin PLUGIN = (FancyHologramsPlugin) JavaPlugin
+                .getProvidingPlugin(FancyHologramsPlugin.class);
         private static final String NAME = "FancyHolograms";
         private final FancyHologramsPlugin plugin;
         private final FancyHologramProvider provider;
 
         private FHPlatform() {
-            super(NAME);
-            JavaPlugin jp = (JavaPlugin) JavaPlugin.getProvidingPlugin(getClass()).getServer().getPluginManager().getPlugin(NAME);
+            super((JavaPlugin) PLUGIN, NAME);
+            JavaPlugin jp = (JavaPlugin) JavaPlugin.getProvidingPlugin(getClass()).getServer().getPluginManager()
+                    .getPlugin(NAME);
             plugin = (FancyHologramsPlugin) jp;
             provider = new FancyHologramProvider(plugin);
         }

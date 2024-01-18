@@ -238,6 +238,11 @@ public class MockPeriodicHolographicDisplays implements IPeriodicHolographicDisp
                 return "MockHologramPlatform";
             }
 
+            @Override
+            public JavaPlugin getProvidingPlugin() {
+                return null;
+            }
+
         };
     }
 
