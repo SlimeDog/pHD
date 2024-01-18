@@ -1,6 +1,8 @@
 package me.ford.periodicholographicdisplays.holograms.wrap.platform;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -11,10 +13,6 @@ import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.oliver.fancyholograms.api.FancyHologramsPlugin;
-import eu.decentsoftware.holograms.api.commands.CommandManager;
-import eu.decentsoftware.holograms.api.utils.reflect.ReflectMethod;
-import eu.decentsoftware.holograms.api.utils.reflect.ReflectionUtil;
-import eu.decentsoftware.holograms.plugin.DecentHologramsPlugin;
 import me.filoghost.holographicdisplays.plugin.HolographicDisplays;
 import me.filoghost.holographicdisplays.plugin.internal.hologram.InternalHologramManager;
 import me.ford.periodicholographicdisplays.holograms.Zombificator;
@@ -112,22 +110,78 @@ public class PlatformProvider {
 
     }
 
+    private static final class CommandGetter {
+        private static final JavaPlugin PROVIDER = JavaPlugin.getProvidingPlugin(PlatformProvider.class);
+        private static final Class<?> CRAFT_SERVER_CLASS;
+        private static final Method GET_COMMAND_MAP_METHOD;
+        private static final SimpleCommandMap COMMAND_MAP;
+        static {
+            CRAFT_SERVER_CLASS = PROVIDER.getServer().getClass();
+            try {
+                GET_COMMAND_MAP_METHOD = CRAFT_SERVER_CLASS.getMethod("getCommandMap");
+            } catch (NoSuchMethodException | SecurityException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                COMMAND_MAP = (SimpleCommandMap) GET_COMMAND_MAP_METHOD.invoke(PROVIDER.getServer());
+            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        private static Command getCommand(String fullName) {
+            Command cmd = COMMAND_MAP.getCommand(fullName);
+            if (cmd == null) {
+                throw new IllegalStateException("Could not find command: " + fullName);
+            }
+            return cmd;
+        }
+    }
+
+    private static class WrappedCommand extends Command implements CommandWrapper {
+        private final Command delegate;
+        private Zombificator zombificator;
+
+        private WrappedCommand(Command delegate, String fallbackPrefix) {
+            super(delegate.getName());
+            this.delegate = delegate;
+            // CommandManager.register(this);
+            CommandGetter.COMMAND_MAP.register(fallbackPrefix, this);
+
+        }
+
+        @Override
+        public void wrapWith(Zombificator zombificator) {
+            this.zombificator = zombificator;
+        }
+
+        @Override
+        public boolean execute(CommandSender sender, String commandLabel, String[] args) {
+            boolean response;
+            try {
+                response = delegate.execute(sender, commandLabel, args);
+            } catch (Exception e) {
+                response = false;
+                JavaPlugin.getProvidingPlugin(ExecutorWrapper.class).getLogger()
+                        .severe("Problem while executing DecentHolograms command");
+                e.printStackTrace();
+            }
+            if (response && args.length > 1
+                    && (args[0].equalsIgnoreCase("delete") || args[0].equalsIgnoreCase("remove"))) {
+                zombificator.foundRemoved(args[1]);
+            }
+            return response;
+        }
+
+    }
+
     private static class DHPlatform extends AbstractHologramPlatform {
         private static final String NAME = "DecentHolograms";
-        private static final Class<?> CRAFT_SERVER_CLASS;
-        private static final ReflectMethod GET_COMMAND_MAP_METHOD;
-
-        static {
-            CRAFT_SERVER_CLASS = ReflectionUtil.getObcClass("CraftServer");
-            GET_COMMAND_MAP_METHOD = new ReflectMethod(CRAFT_SERVER_CLASS, "getCommandMap");
-        }
-        private final DecentHologramsPlugin plugin;
         private final DecentHologramsProvider provider;
 
         private DHPlatform(DecentHologramsProvider provider) {
             super(NAME);
             this.provider = provider;
-            this.plugin = JavaPlugin.getPlugin(DecentHologramsPlugin.class);
         }
 
         @Override
@@ -137,53 +191,16 @@ public class PlatformProvider {
 
         @Override
         public CommandWrapper getHologramCommand() {
-            return new WrappedCommand(getMainCommand());
+            return new WrappedCommand(getMainCommand(), "DecentHolograms");
         }
 
         private Command getMainCommand() {
-            SimpleCommandMap commandMap = GET_COMMAND_MAP_METHOD.invoke(plugin.getServer());
-            return commandMap.getCommand("decentholograms:decentholograms");
+            return CommandGetter.getCommand("decentholograms:decentholograms");
         }
 
         private static HologramPlatform getHologramPlatform(JavaPlugin plugin) {
             DecentHologramsProvider provider = new DecentHologramsProvider();
             return new DHPlatform(provider);
-        }
-
-        private class WrappedCommand extends Command implements CommandWrapper {
-            private final Command delegate;
-            private Zombificator zombificator;
-
-            private WrappedCommand(Command delegate) {
-                super(delegate.getName());
-                this.delegate = delegate;
-                CommandManager.register(this);
-
-            }
-
-            @Override
-            public void wrapWith(Zombificator zombificator) {
-                this.zombificator = zombificator;
-            }
-
-            @Override
-            public boolean execute(CommandSender sender, String commandLabel, String[] args) {
-                boolean response;
-                try {
-                    response = delegate.execute(sender, commandLabel, args);
-                } catch (Exception e) {
-                    response = false;
-                    JavaPlugin.getProvidingPlugin(ExecutorWrapper.class).getLogger()
-                            .severe("Problem while executing DecentHolograms command");
-                    e.printStackTrace();
-                }
-                if (response && args.length > 1
-                        && (args[0].equalsIgnoreCase("delete") || args[0].equalsIgnoreCase("remove"))) {
-                    zombificator.foundRemoved(args[1]);
-                }
-                return response;
-            }
-
         }
 
     }
@@ -207,7 +224,7 @@ public class PlatformProvider {
 
         @Override
         public CommandWrapper getHologramCommand() {
-            return new ExecutorWrapper(plugin.getPlugin().getCommand("holograms"));
+            return new WrappedCommand(getMainCommand(), "fancyholograms");
         }
 
         private static FHPlatform getHologramPlatform(JavaPlugin plugin) {
@@ -216,6 +233,10 @@ public class PlatformProvider {
 
         public boolean requiresLongerLoadDelay() {
             return true;
+        }
+
+        private Command getMainCommand() {
+            return CommandGetter.getCommand("fancyholograms:hologram");
         }
 
     }
