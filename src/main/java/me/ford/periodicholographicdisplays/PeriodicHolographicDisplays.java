@@ -88,7 +88,8 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
             disableMe(issues);
             return;
         }
-        getLogger().info("Hologram provider: " + platform.getName());
+        getLogger().info("Hologram provider: " + platform.getName() + " v"
+                + platform.getProvidingPlugin().getDescription().getVersion());
 
         try {
             holograms = new HologramStorage(this, getServer().getPluginManager());
