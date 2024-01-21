@@ -372,6 +372,11 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
             this.extra = extra;
         }
 
+        @Override
+        public String toString() {
+            return this.name() + ": " + this.issue;
+        }
+
     }
 
     public static class SimpleReloadIssue implements ReloadIssue {
