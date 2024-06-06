@@ -8,7 +8,7 @@ Completed tasks:
 - Posted update to SpigotMC
 - Updated `Version Support` page of SlimeDog/pHD wiki on Github
 - Posted end-of-life notices
-  - `Overview` and `Documentation` pages of SlimeDog/pHD on SpigotMC
+  - `Overview` page of SlimeDog/pHD on SpigotMC
   - `README` for SlimeDog/pHD repository on Github
   - `Home` page of SlimeDog/pHD wiki on Github
 - Archived SlimeDog/pHD Github repository
@@ -20,9 +20,7 @@ Support for future Minecraft versions:
 - Anyone may fork pHD to support future Minecraft versions, or for any other purpose permitted under the GPL3 license
 </td></tr></table>
 
-# pHD &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="https://hangar.papermc.io/SlimeDog/pHD">![download-on-hangar](https://user-images.githubusercontent.com/17748923/187102194-00e910e6-ee8e-42cb-bfe1-d2f9e657ef4b.png)</a> <a href="https://www.spigotmc.org/resources/77631/">![download-on-spigot](https://user-images.githubusercontent.com/17748923/187102011-b72e0f1d-ba74-4cb2-a69e-46f48cb364b5.png)</a>
-
-Manage holograms with intelligence
+# pHD &mdash; Manage holograms with intelligence
 
 ### Overview
 Vanilla hologram providers display holograms whenever a player is within the standard Minecraft view distance.
