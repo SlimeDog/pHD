@@ -12,7 +12,6 @@ Completed tasks:
   - `README` for SlimeDog/pHD repository on Github
   - `Home` page of SlimeDog/pHD wiki on Github
 - Archived SlimeDog/pHD Github repository
-- Removed SlimeDog/pHD from bStats
 - Removed SlimeDog/pHD from Hangar
 
 Support for future Minecraft versions:
