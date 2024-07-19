@@ -3,6 +3,7 @@ package me.ford.periodicholographicdisplays.holograms.wrap.visibility;
 import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.bukkit.entity.Player;
@@ -15,12 +16,15 @@ public class FancyHologramsVisibilitySettings implements VisibilitySettings {
     private final Function<UUID, Player> playerGetter;
     private final Supplier<Collection<Player>> allPlayersGetter;
     private final Hologram hologram;
+    private final Consumer<Runnable> asyncScheduler;
 
     public FancyHologramsVisibilitySettings(Function<UUID, Player> playerGetter,
-            Supplier<Collection<Player>> allPlayersGetter, Hologram hologram) {
+            Supplier<Collection<Player>> allPlayersGetter, Hologram hologram,
+            Consumer<Runnable> asyncScheduler) {
         this.playerGetter = playerGetter;
         this.allPlayersGetter = allPlayersGetter;
         this.hologram = hologram;
+        this.asyncScheduler = asyncScheduler;
     }
 
     @Override
@@ -50,9 +54,9 @@ public class FancyHologramsVisibilitySettings implements VisibilitySettings {
     @Override
     public void setIndividualVisibility(Player player, VisibilityState setting) {
         if (setting == VisibilityState.HIDDEN) {
-            hologram.hideHologram(player);
+            asyncScheduler.accept(() -> hologram.forceHideHologram(player));
         } else {
-            hologram.showHologram(player);
+            asyncScheduler.accept(() -> hologram.forceShowHologram(player));
         }
         hologram.refreshHologram(player);
     }

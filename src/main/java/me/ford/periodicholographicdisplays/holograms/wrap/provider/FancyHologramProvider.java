@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.bukkit.entity.Player;
@@ -25,26 +26,28 @@ public class FancyHologramProvider implements HologramProvider {
     private final PeriodicHolographicDisplays phd;
     private final Function<UUID, Player> playerProvider;
     private final Supplier<Collection<Player>> allPlayersProvider;
+    private final Consumer<Runnable> asyncScheduler;
 
     public FancyHologramProvider(FancyHologramsPlugin plugin) {
         fhPlugin = plugin;
         phd = PeriodicHolographicDisplays.getPlugin(PeriodicHolographicDisplays.class);
         playerProvider = (id) -> fhPlugin.getPlugin().getServer().getPlayer(id);
         allPlayersProvider = () -> new ArrayList<>(fhPlugin.getPlugin().getServer().getOnlinePlayers());
+        asyncScheduler = (runnable) -> phd.getScheduler().runTaskAsync(runnable);
         phd.getServer().getPluginManager().registerEvents(new HologramStatusListener(), phd);
     }
 
     @Override
     public WrappedHologram getByName(String name) {
         return new FancyHologramWrapper(playerProvider, allPlayersProvider,
-                fhPlugin.getHologramManager().getHologram(name).get());
+                fhPlugin.getHologramManager().getHologram(name).get(), asyncScheduler);
     }
 
     @Override
     public List<WrappedHologram> getAllHolograms() {
         List<WrappedHologram> allHolograms = new ArrayList<>();
         for (Hologram holo : fhPlugin.getHologramManager().getHolograms()) {
-            allHolograms.add(new FancyHologramWrapper(playerProvider, allPlayersProvider, holo));
+            allHolograms.add(new FancyHologramWrapper(playerProvider, allPlayersProvider, holo, asyncScheduler));
         }
         return allHolograms;
     }

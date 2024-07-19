@@ -2,6 +2,7 @@ package me.ford.periodicholographicdisplays.holograms.wrap;
 
 import java.util.Collection;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.bukkit.Location;
@@ -19,9 +20,11 @@ public class FancyHologramWrapper implements WrappedHologram {
     private final FancyHologramsVisibilitySettings visibilitySettings;
 
     public FancyHologramWrapper(Function<UUID, Player> playerGetter,
-            Supplier<Collection<Player>> allPlayersGetter, Hologram delegate) {
+            Supplier<Collection<Player>> allPlayersGetter, Hologram delegate,
+            Consumer<Runnable> asyncScheduler) {
         this.delegate = delegate;
-        this.visibilitySettings = new FancyHologramsVisibilitySettings(playerGetter, allPlayersGetter, delegate);
+        this.visibilitySettings = new FancyHologramsVisibilitySettings(playerGetter, allPlayersGetter, delegate,
+                asyncScheduler);
     }
 
     @Override
