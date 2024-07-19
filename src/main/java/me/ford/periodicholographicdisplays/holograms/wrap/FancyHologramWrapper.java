@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 import com.google.common.base.Supplier;
 
-import de.oliver.fancyholograms.api.Hologram;
+import de.oliver.fancyholograms.api.hologram.Hologram;
 import me.ford.periodicholographicdisplays.holograms.wrap.visibility.FancyHologramsVisibilitySettings;
 import me.ford.periodicholographicdisplays.holograms.wrap.visibility.VisibilitySettings;
 
@@ -26,7 +26,7 @@ public class FancyHologramWrapper implements WrappedHologram {
 
     @Override
     public Location getBukkitLocation() {
-        return delegate.getData().getDisplayData().getLocation();
+        return delegate.getData().getLocation();
     }
 
     @Override
@@ -52,7 +52,7 @@ public class FancyHologramWrapper implements WrappedHologram {
 
     @Override
     public void setVisibilityDistance(double dist) {
-        delegate.getData().getDisplayData().setVisibilityDistance((int) dist);
+        delegate.getData().setVisibilityDistance((int) dist);
     }
 
 }

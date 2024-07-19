@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 
 import com.google.common.base.Supplier;
 
-import de.oliver.fancyholograms.api.Hologram;
+import de.oliver.fancyholograms.api.hologram.Hologram;
 
 public class FancyHologramsVisibilitySettings implements VisibilitySettings {
     private final Function<UUID, Player> playerGetter;
@@ -26,13 +26,13 @@ public class FancyHologramsVisibilitySettings implements VisibilitySettings {
     @Override
     public void setGlobalVisibility(VisibilityState setting) {
         if (setting == VisibilityState.HIDDEN) {
-            for (UUID id : hologram.getShownToPlayers()) {
+            for (UUID id : hologram.getViewers()) {
                 Player player = playerGetter.apply(id);
                 hologram.hideHologram(player);
                 hologram.refreshHologram(player);
             }
         } else if (setting == VisibilityState.VISIBLE) {
-            Set<UUID> shown = hologram.getShownToPlayers();
+            Set<UUID> shown = hologram.getViewers();
             for (Player player : allPlayersGetter.get()) {
                 if (!shown.contains(player.getUniqueId())) {
                     hologram.showHologram(player);
