@@ -180,8 +180,8 @@ public abstract class PeriodicHologramBase {
                     .replace("\n", ";");
             plugin.debug(String.format("Showing to %s: %s", player.getName(), info));
         }
-        showInternal(player);
         beingShownTo.add(id);
+        showInternal(player);
         boolean scheduleHide = !specialDisable();
         if (scheduleHide) {
             plugin.getScheduler().runTaskLater(() -> hideFrom(player), showTimeTicks);

@@ -88,7 +88,8 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
             disableMe(issues);
             return;
         }
-        getLogger().info("Hologram provider: " + platform.getName());
+        getLogger().info("Hologram provider: " + platform.getName() + " v"
+                + platform.getProvidingPlugin().getDescription().getVersion());
 
         try {
             holograms = new HologramStorage(this, getServer().getPluginManager());
@@ -124,7 +125,8 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
         }
 
         // listeners
-        this.getServer().getPluginManager().registerEvents(new HologramListener(holograms, citizensHook), this);
+        this.getServer().getPluginManager().registerEvents(new HologramListener(holograms, getScheduler(),
+                getOnlinePlayerProvider(), (id) -> getPlayer(id), citizensHook), this);
         this.getServer().getPluginManager().registerEvents(new JoinLeaveListener(this, holograms), this);
         this.getServer().getPluginManager().registerEvents(new WorldListener(holograms), this);
         WorldTimeListener worldTimeListener;
@@ -368,6 +370,11 @@ public class PeriodicHolographicDisplays extends AbstractPeriodicHolographicDisp
 
         public void setExtra(String extra) {
             this.extra = extra;
+        }
+
+        @Override
+        public String toString() {
+            return this.name() + ": " + this.issue;
         }
 
     }

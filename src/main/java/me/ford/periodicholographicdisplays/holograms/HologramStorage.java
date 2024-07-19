@@ -65,9 +65,13 @@ public class HologramStorage {
     }
 
     private void scheduleLoad() {
+        long delayTicks = 40L;
+        if (plugin.getHologramPlatform().requiresLongerLoadDelay()) {
+            delayTicks = 150L;
+        }
         plugin.getScheduler().runTaskLater(() -> {
             storage.loadHolograms((info) -> loaded(info, false));
-        }, 40L); // need to do this later so the holograms are loaded
+        }, delayTicks); // need to do this later so the holograms are loaded
     }
 
     private void scheduleDanglingCheck() {
