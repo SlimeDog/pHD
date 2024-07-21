@@ -3,6 +3,7 @@ package me.ford.periodicholographicdisplays.holograms.wrap.provider;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -39,8 +40,16 @@ public class FancyHologramProvider implements HologramProvider {
 
     @Override
     public WrappedHologram getByName(String name) {
-        return new FancyHologramWrapper(playerProvider, allPlayersProvider,
-                fhPlugin.getHologramManager().getHologram(name).get(), asyncScheduler);
+        Hologram hologram;
+        try {
+            hologram = fhPlugin.getHologramManager().getHologram(name).get();
+        } catch (NoSuchElementException e) {
+            return null;
+        }
+        if (hologram == null) {
+            return null;
+        }
+        return new FancyHologramWrapper(playerProvider, allPlayersProvider, hologram, asyncScheduler);
     }
 
     @Override

@@ -87,6 +87,10 @@ public class HologramStorage {
     private void loaded(HDHologramInfo info, boolean imported) {
         danglingInfos.add(info); // removed if not left danlging
         WrappedHologram holo = provider.getByName(info.getHoloName());
+        if (holo == null) {
+            plugin.getLogger().warning("Could not find hologram: " + info.getHoloName());
+            return;
+        }
         WorldHologramStorage whs = holograms.get(holo.getWorldIfLoaded());
         if (whs == null) {
             plugin.getLogger().info("Loaded hologram before world was initialized: " + holo.getName()
