@@ -39,8 +39,11 @@ public class FancyHologramProvider implements HologramProvider {
 
     @Override
     public WrappedHologram getByName(String name) {
-        return new FancyHologramWrapper(playerProvider, allPlayersProvider,
-                fhPlugin.getHologramManager().getHologram(name).get(), asyncScheduler);
+        Hologram hologram = fhPlugin.getHologramManager().getHologram(name).get();
+        if (hologram == null) {
+            return null;
+        }
+        return new FancyHologramWrapper(playerProvider, allPlayersProvider, hologram, asyncScheduler);
     }
 
     @Override
